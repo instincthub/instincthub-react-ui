@@ -1,0 +1,81 @@
+/* CSS for custom play button */
+.custom-play-button button {
+	background-color: #0077ff !important;
+	border: none;
+	color: #fff;
+	padding: 8px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+/* CSS for custom progress bar */
+.custom-progress-bar {
+	height: 8px;
+	background-color: #ccc;
+	border-radius: 4px;
+}
+
+.custom-progress-bar .video-react-progress-holder {
+	height: 100%;
+	background-color: #0077ff;
+	border-radius: 4px;
+}
+
+/* Progress bar */
+.vjs-progress-control .vjs-play-progress,
+.vjs-progress-control .vjs-load-progress {
+	background-color: #ff7f00;
+}
+
+.vjs-progress-control .vjs-mouse-display {
+	background-color: #ff7f00;
+}
+
+.vjs-progress-control .vjs-mouse-display:before {
+	border-color: transparent #ff7f00 transparent transparent;
+}
+
+/* Play/Pause button */
+.vjs-play-control:before {
+	content: "\f04b";
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}
+
+.vjs-paused .vjs-play-control:before {
+	content: "\f04c";
+}
+
+/* Volume button */
+.vjs-volume-menu-button:before {
+	content: "\f027";
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}
+
+.vjs-mute:before,
+.vjs-volume-level:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}
+
+.vjs-mute:before {
+	content: "\f6a9";
+}
+
+.vjs-volume-level:before {
+	content: "\f028";
+}
+
+/* Fullscreen button */
+.vjs-fullscreen-control:before {
+	content: "\f065";
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}
+
+.vjs-fullscreen-exit-control:before {
+	content: "\f066";
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}

@@ -1,0 +1,57 @@
+.DarkMode {
+	--White: #212121;
+	--Magnolia: #ffffff;
+	--Gunmetal: #ffffff;
+	--filter: brightness(0) invert(1);
+	--borderDefault: 1px solid #212121;
+	--Gray: rgba(107, 104, 104, 0.2);
+	--shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	--borderDefault: 1px solid rgba(183, 205, 226, 0.2);
+	--FadeGlass: #000;
+	--DarkCyan: #009ba2;
+	--nesgBlueOpacity: #01010154;
+}
+
+.DarkMode .mainBanner {
+	background: rgb(0, 0, 0);
+	background: var(--Dark-Gradient);
+}
+.DarkMode input {
+	color: #fff;
+}
+.DarkMode form .text_label {
+	color: #fff !important;
+}
+.DarkMode #dy_svg_white path {
+	fill: rgb(154, 160, 166);
+}
+.DarkMode .select__item {
+	color: #d8d8d8;
+	background-color: #2c333a;
+}
+.DarkMode .select__item:hover {
+	color: var(--White);
+}
+.DarkMode textarea {
+	color: #fff;
+	background-color: var(--White);
+}
+.DarkMode .password_symbols {
+	fill: #d8d8d8;
+}
+.DarkMode .important-btn {
+	color: #fff;
+}
+.DarkMode .delete_modal .modal {
+	background-color: #2c333a !important;
+}
+
+.DarkMode .ul-2 li.active-link a::before {
+	border-color: #fff !important;
+}
+.DarkMode .ul-2 li.active-link a {
+	color: #fff !important;
+}
+.DarkMode .reset-link a {
+	color: #fff !important;
+}

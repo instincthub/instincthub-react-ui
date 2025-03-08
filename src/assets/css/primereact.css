@@ -1,0 +1,368 @@
+.p-button {
+	background: var(--Gunmetal);
+	border: 1px solid var(--Gunmetal);
+}
+.p-button:enabled:hover,
+.p-button:not(button):not(a):not(.p-disabled):hover {
+	background: var(--Gunmetal);
+	border-color: var(--Gunmetal);
+}
+
+.p-button:focus {
+	box-shadow: 0 0 0 0.2rem #c6d6d6;
+}
+.p-fileupload-file-thumbnail {
+	width: 100px;
+}
+
+.card.primereact {
+	max-width: 600px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.p-progressbar .p-progressbar-value {
+	background: var(--Gunmetal);
+}
+.p-button.p-button-text {
+	color: var(--DarkCyan);
+}
+.p-fileupload-buttonbar{
+	padding: 10px;
+}
+.p-button{
+	padding: 10px;
+}
+.p-fileupload-choose .p-button-icon-left{
+	margin-right: 10px;
+	color: #fff;
+}
+.p-fileupload .p-fileupload-buttonbar .p-button {
+	margin-top: 0px;
+}
+.p-button.p-disabled {
+	background-color: transparent;
+}
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+	border-color: var(--DarkCyan);
+	color: var(--DarkCyan);
+}
+.p-button.p-button-outlined {
+	color: var(--Gunmetal);
+}
+.p-tabmenu-nav .p-menuitem-text {
+	font-weight: 600;
+}
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+	background-color: transparent;
+}
+.DarkMode .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+	color: var(--white);
+}
+.p-tabmenu .p-tabmenu-nav {
+	background: transparent;
+}
+.card.step_option_tabs {
+	background-color: transparent;
+}
+.card.step_option_tabs .p-tabmenuitem .p-menuitem-link {
+	background-color: transparent !important;
+	/* color: var(--white); */
+}
+.p-tabmenu
+	.p-tabmenu-nav
+	.p-tabmenuitem:not(.p-highlight):not(.p-disabled):hover
+	.p-menuitem-link {
+	background: #ffffff !important;
+	border-color: #adb5bd;
+	color: #6c757d;
+}
+.card.step_option_tabs .p-tabmenuitem.p-highlight .p-menuitem-link {
+	/* border-color: #00ffd2; */
+	/* color: #00ffd2; */
+}
+.p-tabmenu
+	.p-tabmenu-nav
+	.p-tabmenuitem
+	.p-menuitem-link:not(.p-disabled):focus {
+	outline: 0 none;
+	outline-offset: 0;
+	box-shadow: inset 0 0 0 0.2rem #c6d6d6;
+}
+.card.step_option_tabs .p-tabmenu .p-tabmenu-nav {
+	border: none;
+}
+.p-toast-message-content {
+	z-index: 10000 !important;
+}
+
+.p-button.p-button-text:enabled:hover,
+.p-button.p-button-text:not(button):not(a):not(.p-disabled):hover {
+	background: rgba(99, 102, 241, 0.04);
+	color: #35a8a0;
+	border-color: transparent;
+}
+.DarkMode .p-button.p-button-text:enabled:hover,
+.DarkMode .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover {
+	background: #f8f6f420;
+	color: var(--white);
+	border-color: transparent;
+}
+
+.p-editor-container .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.p-editor-container .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.p-editor-container .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke {
+	stroke: var(--DarkCyan);
+}
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+	color: var(--DarkCyan);
+}
+
+.p-editor-container .ql-snow.ql-toolbar button.ql-active,
+.p-editor-container .ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.p-editor-container .ql-snow.ql-toolbar .ql-picker-item.ql-selected {
+	color: var(--DarkCyan);
+}
+
+.p-datepicker
+	.p-datepicker-header
+	.p-datepicker-title
+	.p-datepicker-year:enabled:hover,
+.p-datepicker
+	.p-datepicker-header
+	.p-datepicker-title
+	.p-datepicker-month:enabled:hover {
+	color: var(--DarkCyan);
+}
+
+.p-datepicker table td.p-datepicker-today > span {
+	background: #d6f2ee;
+}
+
+.p-calendar-w-btn-right .p-datepicker-trigger {
+	margin-top: 0px;
+}
+
+.p-button {
+	background: var(--DarkCyan);
+	border: 1px solid var(--DarkCyan);
+}
+
+.p-button:enabled:hover,
+.p-button:not(button):not(a):not(.p-disabled):hover {
+	background: var(--Gunmetal);
+	border-color: var(--Gunmetal);
+}
+
+.p-inputtext:enabled:hover {
+	border-color: var(--DarkCyan);
+}
+
+.p-datepicker table tbody tr {
+	border: transparent;
+	font-size: inherit;
+	font-weight: inherit;
+}
+.p-datepicker table thead tr:nth-of-type(1) {
+	background-color: transparent;
+	border: inherit;
+	color: var(--Gunmetal);
+}
+.p-datepicker table td > span.p-highlight {
+	color: var(--DarkCyan);
+	background: #eef2ff;
+	font-weight: 700;
+}
+
+.p-inputtext:enabled:focus {
+	outline: 0 none;
+	outline-offset: 0;
+	box-shadow: 0 0 0 0.2rem #c6d6d6;
+	border-color: var(--DarkCyan);
+}
+
+.p-datepicker .p-datepicker-header button.p-datepicker-prev,
+.p-datepicker .p-datepicker-header button.p-datepicker-next {
+	padding: 0px;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
+	border-color: #04a5b3;
+	background: #04a5b3;
+	color: #ffffff;
+}
+
+.p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+	border-color: #04a5b3;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+	border-color: var(--DarkCyan);
+	background: var(--DarkCyan);
+}
+
+.p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+	outline: 0 none;
+	outline-offset: 0;
+	box-shadow: 0 0 0 0.2rem #c6d6d6;
+	border-color: var(--DarkCyan);
+}
+
+.search_courses {
+	position: relative;
+	margin-bottom: 30px;
+	display: inline-block;
+}
+
+.search_courses .p-progress-spinner {
+	margin: 0 auto;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	position: absolute;
+	right: 16px;
+	top: 14px;
+}
+.p-chips .p-chips-multiple-container {
+	padding: 0.75rem 0.75rem;
+}
+.p-chips .p-chips-multiple-container li {
+	margin: 0px;
+}
+
+.p-chips .p-chips-multiple-container:not(.p-disabled):hover {
+	border-color: var(--DarkCyan);
+}
+.p-chips .p-chips-multiple-container .p-chips-input-token {
+	padding: 0px;
+}
+.p-chips .p-chips-multiple-container .p-chips-input-token input {
+	padding: 15px 0px;
+	border-color: var(--borderDefault);
+	background-color: transparent !important;
+}
+.DarkMode .p-chips .p-chips-multiple-container .p-chips-input-token input {
+	color: var(--white) !important;
+}
+.p-chips .p-chips-multiple-container:not(.p-disabled).p-focus {
+	box-shadow: none;
+	border-color: var(--borderDefault);
+}
+.p-inputtext {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 1rem;
+	background: var(--OpacityBackground);
+	padding: 0.75rem 0.75rem;
+	border: var(--borderDefault);
+	transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+		box-shadow 0.2s;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border-radius: 6px;
+}
+.DarkMode .p-inputtext,
+.DarkMode .p-fileupload-row div span,
+.DarkMode .p-fileupload-filename {
+	color: var(--white) !important;
+}
+
+.p-button:enabled:hover,
+.p-button:not(button):not(a):not(.p-disabled):hover {
+	color: var(--DarkCyan);
+}
+.p-fileupload .p-fileupload-content {
+	background-color: var(--OpacityBackground) !important;
+	min-height: 100px;
+	padding: 15px;
+}
+.p-editor-toolbar button {
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
+.DarkMode .p-editor-toolbar {
+	background-color: var(--OpacityBackground);
+	border-color: var(--OpacityBackground) !important;
+}
+
+.DarkMode .p-editor-container .p-editor-toolbar.ql-snow .ql-stroke {
+	stroke: var(--white);
+}
+
+.DarkMode .ql-snow.ql-toolbar button:hover:not(.ql-active),
+.DarkMode .ql-snow .ql-toolbar button:hover:not(.ql-active) {
+	color: var(--DarkCyan) !important;
+}
+
+.DarkMode .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.DarkMode .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.DarkMode .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
+.DarkMode .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
+	stroke: var(--DarkCyan) !important;
+}
+
+/* .ql-editor p,
+.ql-editor ol,
+.ql-editor ul,
+.ql-editor pre,
+.ql-editor blockquote,
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+	min-height: 92px;
+} */
+
+.ql-snow .ql-tooltip {
+	background-color: var(--White);
+	border: 1px solid #ccc;
+	box-shadow: 0 0 5px #ddd;
+	color: #444;
+	padding: 5px 12px;
+	white-space: nowrap;
+	z-index: 999;
+}
+
+.ql-snow .ql-tooltip input[type="text"] {
+	border: 1px solid var(--White);
+}
+
+.ql-snow .ql-tooltip::before {
+	color: var(--Gunmetal);
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+	color: var(--DarkCyan);
+}
+
+.p-chips .p-chips-multiple-container .p-chips-token {
+	padding: 0.375rem 0.75rem;
+	margin-right: 0.5rem;
+	background: var(--OpacityBackground);
+	color: var(--Gunmetal);
+	border-radius: 16px;
+	margin-bottom: 10px;
+}
+
+
+/* Tabs */
+.p-tabview-nav li a{
+	padding: 10px 20px;
+}
+.p-tabview .p-tabview-nav {
+    border: none;
+}

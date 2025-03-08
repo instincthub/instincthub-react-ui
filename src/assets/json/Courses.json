@@ -1,0 +1,40 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Introduction to React",
+      "description": "Learn the basics of React and how to build web applications using this popular JavaScript library.",
+      "tags": ["Beginner", "React", "JavaScript"]
+    },
+    {
+      "id": 2,
+      "title": "Advanced React Techniques",
+      "description": "Take your React skills to the next level with this advanced course on advanced techniques like server-side rendering and hooks.",
+      "tags": ["Advanced", "React", "JavaScript"]
+    },
+    {
+      "id": 3,
+      "title": "React Native Fundamentals",
+      "description": "Discover how to build cross-platform mobile apps using React Native, a powerful and popular framework for mobile development.",
+      "tags": ["Beginner", "React", "Mobile"]
+    },
+    {
+      "id": 4,
+      "title": "Node.js for Beginners",
+      "description": "Learn how to build scalable and efficient server-side applications using Node.js, a popular and powerful JavaScript runtime.",
+      "tags": ["Beginner", "Node.js", "JavaScript"]
+    },
+    {
+      "id": 5,
+      "title": "Advanced Node.js Concepts",
+      "description": "Take your Node.js skills to the next level with this advanced course on topics like concurrency, event loops, and memory management.",
+      "tags": ["Advanced", "Node.js", "JavaScript"]
+    },
+    {
+      "id": 6,
+      "title": "JavaScript Fundamentals",
+      "description": "Master the basics of JavaScript and learn how to build web applications and interactive user interfaces using this powerful programming language.",
+      "tags": ["Beginner", "JavaScript"]
+    }
+  ]
+}

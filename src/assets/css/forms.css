@@ -1,0 +1,146 @@
+.empty-box {
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  background-color: var(--DarkCyan);
+  border-radius: 8px;
+  opacity: 0; /* Initially hide the box */
+  transition: opacity 0.5s ease-in-out;
+}
+.empty-box.animate {
+  opacity: 1; /* Show the box with fade-in animation */
+}
+
+.manipulateCheckboxes {
+  margin: 30px 0px;
+}
+.manipulateCheckboxes h3 {
+  font-size: 1em;
+  margin-bottom: 0px;
+}
+.manipulateCheckboxes .checkbox_wrapper {
+  max-height: 200px;
+  overflow: scroll;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+
+/* ========================================================================== */
+/* contryInput */
+
+.form-input .wrapper,
+.wrapper {
+  position: relative;
+  margin-top: 25px;
+}
+
+.form-input .wrapper span,
+.wrapper span {
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-size: 16px;
+  color: var(--Gunmetal);
+  font-family: var(--Nunito);
+}
+
+.form-input .wrapper input,
+.wrapper input {
+  border: var(--borderDefault);
+  /* Chrome, Safari, Edge, Opera */
+}
+
+.form-input .wrapper input::-webkit-outer-spin-button,
+.wrapper input::-webkit-outer-spin-button,
+.wrapper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  font-family: var(--Nunito);
+}
+
+/* Firefox */
+.form-input .wrapper input[type="number"],
+.wrapper input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.form-input .wrapper input:disabled,
+.form-input .wrapper input:read-only,
+.wrapper input:disabled,
+.wrapper input:read-only {
+  background: #f4f4f4;
+}
+
+.form-input .wrapper input:focus + span,
+.form-input .wrapper.value span,
+.wrapper input:focus + span,
+.wrapper.value span {
+  background: var(--White);
+  top: -10px;
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  pointer-events: initial;
+  left: 15px;
+  line-height: 10px;
+  width: auto;
+  font-family: var(--Nunito);
+}
+
+.form-input .wrapper input.width_auto,
+.wrapper input.width_auto {
+  width: auto;
+}
+
+.form-input .notes,
+.notes {
+  font-size: 12px;
+}
+
+.form-input .list-items,
+.list-items {
+  position: relative;
+  max-height: 300px;
+  max-width: 500px;
+  overflow: scroll;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.form-input .list-items li,
+.list-items li {
+  cursor: pointer;
+  padding: 10px;
+  transition: 0.3s ease-in;
+}
+
+.form-input .list-items li:hover,
+.list-items li:hover {
+  font-weight: 700;
+}
+
+.form-input .list-items li.bottom_line,
+.list-items li.bottom_line {
+  border-bottom: var(--borderDefault);
+}
+
+.form-input .list-items .close_icon,
+.list-items .close_icon {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  cursor: pointer;
+  transition: 0.3s ease-in;
+}
+
+.form-input .list-items .close_icon:hover svg path,
+.list-items .close_icon:hover svg path {
+  fill: #303030;
+}
