@@ -1,3 +1,4 @@
+"use client";
 /*
 	<TextField
 		// names="school_name"
@@ -62,7 +63,7 @@ const TextField = (props) => {
     }
 
     if (props.setValues) props.setValues(inputValue);
-    if (props.inputEvent) props.inputEvent(e);
+    if (props.onChange) props.onChange(e);
     if (props.inputTarget) props.inputTarget(e.target);
     if (props.setNameValue) props.setNameValue(props.names, inputValue);
     if (props.setArrayProps) props.setArrayProps(props.arrayProps, inputValue);

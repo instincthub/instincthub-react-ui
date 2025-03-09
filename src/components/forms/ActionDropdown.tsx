@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 // Define interface for dropdown items

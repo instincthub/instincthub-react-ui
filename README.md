@@ -7,18 +7,18 @@ A comprehensive React component library with built-in assets and utilities for b
 
 ## Overview
 
-InstinctHub UI provides a collection of reusable React components, styling assets, and utility functions that make it easy to build consistent user interfaces. Originally developed for InstinctHub's internal projects, this package is now available for anyone to use in their React and Next.js projects.
+InstinctHub React UI provides a collection of reusable React components, styling assets, and utility functions that make it easy to build consistent user interfaces. Originally developed for InstinctHub's internal projects, this package is now available for anyone to use in their React and Next.js projects.
 
 ## Installation
 
 ```bash
-npm install instincthub-react-ui
+npm install @instincthub/react-ui
 ```
 
 or
 
 ```bash
-yarn add instincthub-react-ui
+yarn add @instincthub/react-ui
 ```
 
 ## Core Features
@@ -33,7 +33,7 @@ yarn add instincthub-react-ui
 ### Importing Components
 
 ```jsx
-import { TextField, PasswordField, NewSubmitBtn } from "instincthub-react-ui";
+import { TextField, PasswordField, NewSubmitBtn } from "@instincthub/react-ui";
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -75,7 +75,7 @@ function LoginForm() {
 ### Using Utility Functions
 
 ```jsx
-import { openToast, fetchAPI } from "instincthub-react-ui";
+import { openToast, fetchAPI } from "@instincthub/react-ui";
 
 // Display a toast notification
 openToast("Operation successful!", "success");
@@ -258,7 +258,7 @@ This package works seamlessly with Next.js applications. For optimal performance
 
 ```jsx
 // In your _app.js or layout.js
-import "instincthub-react-ui/dist/styles.css"; // Import styles once at the application root
+import "@instincthub/react-ui/dist/styles.css"; // Import styles once at the application root
 ```
 
 ## TypeScript Support
@@ -266,7 +266,7 @@ import "instincthub-react-ui/dist/styles.css"; // Import styles once at the appl
 InstinctHub UI is built with TypeScript and includes full type definitions for all components and utilities.
 
 ```tsx
-import { TextField, TextFieldProps } from "instincthub-react-ui";
+import { TextField, TextFieldProps } from "@instincthub/react-ui";
 
 // Types are available for all props
 const CustomTextField: React.FC<TextFieldProps> = (props) => {
