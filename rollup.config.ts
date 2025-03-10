@@ -51,5 +51,5 @@ export default {
     commonjs(),
     terser(),
   ],
-  external: ["react", "react-dom", "styled-components"],
+  external: ["react", "react-dom", "styled-components", "react/jsx-runtime"],
 };

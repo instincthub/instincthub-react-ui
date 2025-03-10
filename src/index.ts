@@ -5,7 +5,7 @@ import "./assets/css/material-ui.css";
 import "./assets/css/tooltip.css";
 import "./assets/css/primereact.css";
 
-// import ActionDropdown from "./components/forms/ActionDropdown";
+import ActionDropdown from "./components/forms/ActionDropdown";
 import TextField from "./components/forms/TextField";
 // import FilterObjects from "./components/forms/FilterObjects";
 // import PhoneNumberInput from "./components/forms/PhoneNumberInput";
@@ -25,7 +25,7 @@ import NewSubmitBtn from "./components/forms/NewSubmitBtn";
 // } from "./assets/js/helpFunction";
 
 export {
-  // ActionDropdown,
+  ActionDropdown,
   TextField,
   // FilterObjects,
   // PhoneNumberInput,

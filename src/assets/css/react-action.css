@@ -1,0 +1,46 @@
+.ihub-react-action {
+  position: relative;
+}
+.ihub-react-action .main_list {
+  padding: 10px;
+  display: none;
+  background: var(--White);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.18);
+  border-radius: 5px;
+  min-width: 200px;
+  max-width: 500px;
+  position: absolute;
+  left: 0;
+  bottom: -60px;
+  z-index: 1;
+}
+.ihub-react-action .main_list li {
+  border-radius: 10px;
+  padding: 7px 10px;
+  cursor: pointer;
+  margin: 0;
+  transition: 0.1s ease-in;
+}
+.ihub-react-action .main_list li span {
+  position: relative;
+  top: 5px;
+  margin-right: 10px;
+}
+.ihub-react-action .main_list li:hover {
+  background: var(--DarkCyan);
+  color: var(--White);
+}
+.ihub-react-action:hover .main_list {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .ihub-react-action {
+    height: 100px;
+  }
+  .ihub-react-action .ctrl-dropdown {
+    right: 15px;
+    top: 0px;
+    position: absolute;
+  }
+}
