@@ -173,7 +173,8 @@ small {
   opacity: 0;
 }
 
-.ClientHome .important-btn {
+.ClientHome .important-btn,
+.ClientHome .ihub-important-btn {
   background-color: var(--DarkCyan) !important;
 }
 .ClientHome .outlined-btn {
@@ -936,13 +937,15 @@ h4 {
   padding-bottom: 0px;
 }
 .anime-button,
-.anime-button-chevron {
+.anime-button-chevron,
+.ihub-anime-button-chevron {
   position: relative;
 }
 
 .anime-button span,
 .anime-button svg,
-.anime-button-chevron svg#animate {
+.anime-button-chevron svg#animate,
+.ihub-anime-button-chevron svg#animate {
   position: absolute;
   right: 25px;
   top: 10px;
@@ -952,12 +955,14 @@ h4 {
   opacity: 0;
 }
 .anime-button:hover,
-.anime-button-chevron:hover {
+.anime-button-chevron:hover,
+.ihub-anime-button-chevron:hover {
   padding-right: 55px;
 }
 .anime-button:hover span,
 .anime-button:hover svg,
-.anime-button-chevron:hover svg#animate {
+.anime-button-chevron:hover svg#animate,
+.ihub-anime-button-chevron:hover svg#animate {
   opacity: 1;
   transform: translate(0px);
 }
@@ -1732,7 +1737,8 @@ RADIO ENDS
   background-color: var(--Gray);
 }
 
-.important-btn {
+.important-btn,
+.ihub-important-btn {
   padding: 12px 35px;
   margin: 25px 0 10px 0;
   border-radius: 5px;
@@ -1747,7 +1753,8 @@ RADIO ENDS
   color: var(--White);
 }
 
-.important-btn:hover {
+.important-btn:hover,
+.ihub-important-btn:hover {
   background-color: var(--DarkCyan);
   opacity: 0.8;
 }
@@ -2728,7 +2735,6 @@ footer ul.breadcrumb li a:hover {
     width: 1260px !important;
   }
 }
-
 
 /* ========================================================================== */
 /* CSS Imports */

@@ -5,12 +5,14 @@ import "./assets/css/material-ui.css";
 import "./assets/css/tooltip.css";
 import "./assets/css/primereact.css";
 
+// Export components
+
 import ActionDropdown from "./components/forms/ActionDropdown";
 import TextField from "./components/forms/TextField";
 // import FilterObjects from "./components/forms/FilterObjects";
 // import PhoneNumberInput from "./components/forms/PhoneNumberInput";
 // import DateInput from "./components/forms/DateInput";
-import NewSubmitBtn from "./components/forms/NewSubmitBtn";
+import SubmitBtn from "./components/forms/SubmitBtn";
 // import FormError from "./components/forms/FormError";
 // import PasswordField from "./components/forms/PasswordField";
 
@@ -30,7 +32,7 @@ export {
   // FilterObjects,
   // PhoneNumberInput,
   // DateInput,
-  NewSubmitBtn,
+  SubmitBtn,
   // FormError,
   // PasswordField,
   // Images,

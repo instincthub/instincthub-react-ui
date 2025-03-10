@@ -1,0 +1,77 @@
+.ihub-wrapper {
+    position: relative;
+    margin-top: 25px;
+  }
+  
+  .ihub-wrapper .ihub-text-label {
+    position: absolute;
+    top: 13px;
+    left: 15px;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    font-size: 16px;
+    color: var(--Gunmetal);
+    font-family: var(--Nunito);
+  }
+  
+  .ihub-wrapper .ihub-input {
+    border: var(--borderDefault);
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-family: var(--Nunito);
+  }
+  
+  /* Chrome, Safari, Edge, Opera */
+  .ihub-wrapper .ihub-input::-webkit-outer-spin-button,
+  .ihub-wrapper .ihub-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Firefox */
+  .ihub-wrapper .ihub-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  .ihub-wrapper .ihub-input:disabled,
+  .ihub-wrapper .ihub-input:read-only {
+    background: #f4f4f4;
+  }
+  
+  .ihub-wrapper .ihub-input:focus + .ihub-text-label,
+  .ihub-wrapper.ihub-value .ihub-text-label {
+    background: var(--White);
+    top: -10px;
+    height: 20px;
+    padding: 5px;
+    margin: 0;
+    color: var(--DarkCyan);
+    font-size: 14px;
+    pointer-events: initial;
+    left: 15px;
+    line-height: 10px;
+    width: auto;
+    font-family: var(--Nunito);
+  }
+  
+  .ihub-wrapper .ihub-input.ihub-width-auto {
+    width: auto;
+  }
+  
+  .ihub-wrapper[data-text-transform="lowercase"] .ihub-input {
+    text-transform: lowercase;
+  }
+  
+  .ihub-wrapper[data-text-transform="uppercase"] .ihub-input {
+    text-transform: uppercase;
+  }
+  
+  .ihub-wrapper[data-text-transform="capitalize"] .ihub-input {
+    text-transform: capitalize;
+  }
+  
+  .ihub-notes {
+    font-size: 12px;
+    margin-top: 5px;
+  }
