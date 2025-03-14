@@ -1,8 +1,8 @@
-import { useState, useEffect, FC } from "react";
 import React from "react";
+import { useState, useEffect } from "react";
 
 // Define component as a Functional Component (FC)
-const AnimatedBox: FC = () => {
+function AnimatedBox() {
   const [animationClass, setAnimationClass] = useState<string>("");
 
   // Add animation class when the component mounts
@@ -26,6 +26,6 @@ const AnimatedBox: FC = () => {
       }}
     ></div>
   );
-};
+}
 
 export default AnimatedBox;

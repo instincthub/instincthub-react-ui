@@ -11,14 +11,20 @@ export default {
   input: "src/index.ts",
   output: [
     {
-      file: "dist/index.js",
+      dir: "dist",
       format: "cjs",
       sourcemap: true,
+      preserveModules: true, // Ensures tree-shaking and correct imports
+      exports: "named", // Ensures named exports are properly handled
+      // inlineDynamicImports: true, // Ensures dynamic imports are inlined
     },
     {
-      file: "dist/index.esm.js",
+      dir: "dist",
       format: "esm",
       sourcemap: true,
+      preserveModules: true, // Ensures tree-shaking and correct imports
+      exports: "named", // Ensures named exports are properly handled
+      // inlineDynamicImports: true, // Ensures dynamic imports are inlined
     },
   ],
   plugins: [
@@ -51,5 +57,11 @@ export default {
     commonjs(),
     terser(),
   ],
-  external: ["react", "react-dom", "styled-components", "react/jsx-runtime"],
+  external: [
+    "next",
+    "react",
+    "react-dom",
+    "styled-components",
+    "react/jsx-runtime",
+  ],
 };

@@ -1,0 +1,314 @@
+/* styles/list-styles.css */
+
+/* Standard Unordered List */
+.ihub-content-viewer ul.ihub-list-standard {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.ihub-list-standard li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.ihub-list-standard li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--Gunmetal);
+  display: inline-block;
+}
+
+/* Circle style for nested lists */
+.ihub-content-viewer ul.ihub-list-circle {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.ihub-list-circle li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.ihub-list-circle li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+}
+
+/* Square style for deeply nested lists */
+.ihub-content-viewer ul.ihub-list-square {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.ihub-list-square li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.ihub-list-square li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background-color: var(--TurkishRose);
+}
+
+/* Primary Ordered List */
+.ihub-content-viewer ol.ihub-list-primary {
+  list-style: none;
+  counter-reset: item;
+}
+
+.ihub-content-viewer ol.ihub-list-primary li {
+  counter-increment: item;
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ol.ihub-list-primary li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: var(--DarkCyan);
+  border-radius: 100%;
+  color: var(--White);
+  font-weight: 700;
+  text-align: center;
+  line-height: 25px;
+  font-size: 0.875rem;
+}
+
+/* Secondary Ordered List */
+.ihub-content-viewer ol.ihub-list-secondary li::before {
+  background-color: var(--TurkishRose);
+}
+
+/* Tertiary Ordered List */
+.ihub-content-viewer ol.ihub-list-tertiary li::before {
+  background-color: var(--ViridianGreen);
+}
+
+/* Base List Styling */
+.ihub-content-viewer ul,
+.ihub-content-viewer ol {
+  margin: 1.5rem 0;
+  padding-left: 0;
+}
+
+/* Standard Unordered List */
+.ihub-content-viewer ul:not([data-type="taskList"]) {
+  list-style: none;
+}
+
+.ihub-content-viewer ul:not([data-type="taskList"]) li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul:not([data-type="taskList"]) li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--Gunmetal);
+  display: inline-block;
+}
+
+/* Custom Bullet List - checkmark style */
+.ihub-content-viewer ul.checkmark {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.checkmark li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.checkmark li::before {
+  content: "\2713"; /* Unicode checkmark */
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  color: var(--DarkCyan);
+}
+
+/* Custom Bullet List - circle style */
+.ihub-content-viewer ul.circle {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.circle li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.circle li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+}
+
+/* Custom Bullet List - arrow style */
+.ihub-content-viewer ul.arrow {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.arrow li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.arrow li::before {
+  content: "\2192"; /* Unicode right arrow */
+  position: absolute;
+  left: 0;
+  color: var(--DarkCyan);
+}
+
+/* Custom Bullet List - square style */
+.ihub-content-viewer ul.square {
+  list-style: none;
+}
+
+.ihub-content-viewer ul.square li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ul.square li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background-color: var(--TurkishRose);
+}
+
+/* Styled Ordered List */
+.ihub-content-viewer ol {
+  list-style: none;
+  counter-reset: item;
+}
+
+.ihub-content-viewer ol li {
+  counter-increment: item;
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.ihub-content-viewer ol li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: var(--Gunmetal);
+  border-radius: 100%;
+  color: var(--White);
+  font-weight: 700;
+  text-align: center;
+  line-height: 25px;
+  font-size: 0.875rem;
+}
+
+/* Colored Ordered List Options */
+.ihub-content-viewer ol.primary li::before {
+  background-color: var(--DarkCyan);
+}
+
+.ihub-content-viewer ol.secondary li::before {
+  background-color: var(--TurkishRose);
+}
+
+.ihub-content-viewer ol.tertiary li::before {
+  background-color: var(--ViridianGreen);
+}
+
+/* Nested Lists */
+.ihub-content-viewer ul li ul,
+.ihub-content-viewer ol li ul,
+.ihub-content-viewer ol li ol,
+.ihub-content-viewer ul li ol {
+  margin: 0.5rem 0 0.5rem 0.5rem;
+}
+
+/* Styled List Variant with Background */
+.ihub-content-viewer .custom-ul-list ul,
+.ihub-content-viewer .custom-ul-list ol {
+  padding: 15px;
+  background-color: var(--OpacityBackground);
+  display: inline-block;
+  border-radius: 5px;
+  margin: 15px 0px;
+  width: 100%;
+}
+
+/* Task Lists - Additional Styling */
+.ihub-content-viewer ul[data-type="taskList"] {
+  background-color: transparent;
+  padding: 0;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  padding-left: 0;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li[data-checked="true"] {
+  text-decoration: line-through;
+  color: var(--ChineseSilver);
+}
+
+/* Two-column list for desktop */
+@media (min-width: 768px) {
+  .ihub-content-viewer ul.two-column,
+  .ihub-content-viewer ol.two-column {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .ihub-content-viewer ul.two-column li,
+  .ihub-content-viewer ol.two-column li {
+    width: 50%;
+    box-sizing: border-box;
+    padding-right: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .ihub-content-viewer ul li::before,
+  .ihub-content-viewer ol li::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
