@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import "../../../assets/css/ui/editor.css";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";

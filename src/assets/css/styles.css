@@ -1,0 +1,23 @@
+/* Base Styles */
+@import url("assets/css/imports.css");
+@import url("assets/css/main.css");
+@import url("assets/css/forms.css");
+@import url("assets/css/modals.css");
+@import url("assets/css/tooltip.css");
+
+/* UI Styles */
+@import url("assets/css/ui/parent-list-styles.css");
+@import url("assets/css/ui/list-styles.css");
+@import url("assets/css/ui/code-display.css");
+
+/* React Form Components */
+@import url("assets/css/forms/react-action.css");
+@import url("assets/css/forms/text-fields.css");
+@import url("assets/css/forms/submit-btn.css");
+
+/* Third-party Framework Styles */
+@import url("assets/css/material-ui.css");
+@import url("assets/css/primereact.css");
+
+/* Overrides & Dark Mode: Last to ensure it overrides other styles */
+@import url("assets/css/darkmode.css");

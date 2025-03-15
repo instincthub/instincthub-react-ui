@@ -1,0 +1,131 @@
+/* CodeDisplay.css */
+.ihub-code-display {
+  border-radius: 5px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid var(--borderDefault);
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.ihub-code-display code.language-css {
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 1em;
+}
+
+.ihub-code-display:focus {
+  outline: 2px solid var(--DarkCyan);
+  box-shadow: 0 0 0 4px rgba(0, 131, 143, 0.2);
+}
+
+.ihub-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--Gray);
+  border-bottom: var(--borderDefault);
+  font-family: var(--Montserat);
+}
+
+.ihub-code-filename {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--Gunmetal);
+}
+
+.ihub-code-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.ihub-code-button {
+  background-color: transparent;
+  border: 1px solid var(--borderDefault);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--Gunmetal);
+}
+
+.ihub-code-button:hover {
+  background-color: var(--DarkCyan);
+  color: white;
+}
+
+.ihub-code-button:disabled {
+  background-color: var(--DarkCyan);
+  color: white;
+  opacity: 0.7;
+  cursor: default;
+}
+
+.ihub-code-content {
+  max-height: 500px;
+  overflow: auto;
+  transition: max-height 0.3s ease;
+}
+
+.ihub-code-content.ihub-collapsed {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.ihub-code-collapsed-indicator {
+  text-align: center;
+  padding: 0.5rem;
+  background-color: var(--Gray);
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--DarkCyan);
+  font-weight: 500;
+  border-top: var(--borderDefault);
+}
+
+.ihub-code-collapsed-indicator:hover {
+  background-color: var(--Magnolia);
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 540px) {
+  .ihub-code-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ihub-code-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .ihub-code-content {
+    max-height: 300px;
+  }
+}
+
+/* Dark mode support */
+html.DarkMode .ihub-code-display {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.DarkMode .ihub-code-header {
+  background-color: var(--Gunmetal);
+}
+
+html.DarkMode .ihub-code-filename,
+html.DarkMode .ihub-code-button {
+  color: var(--White);
+}
+
+html.DarkMode .ihub-code-button {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+html.DarkMode .ihub-code-collapsed-indicator {
+  background-color: var(--Gunmetal);
+  color: var(--DarkCyan);
+}

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, ChangeEvent } from "react";
-import "../../assets/css/forms/text-fields.css";
 
 interface TextFieldProps {
   types: string;

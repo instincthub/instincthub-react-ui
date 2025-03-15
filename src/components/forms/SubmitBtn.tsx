@@ -1,6 +1,5 @@
 import React from "react";
 import ChevronRightIcon from "../svgs/ChevronRightIcon";
-import "../../assets/css/forms/submit-btn.css";
 
 interface SubmitBtnProps {
   labels: string;

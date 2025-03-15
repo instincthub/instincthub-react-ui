@@ -19,7 +19,7 @@
   margin: 0;
   border-radius: 0;
   background-color: var(--White);
-  z-index: 1000;
+  z-index: 100000;
   overflow-y: auto;
   padding: 2rem;
 }
@@ -287,7 +287,7 @@
   right: 20px;
   padding: 0.75rem 1.25rem;
   border-radius: 0.375rem;
-  z-index: 1100;
+  z-index: 10000;
   animation: slide-in 0.3s ease-out forwards,
     fade-out 0.5s ease-in forwards 2.5s;
   max-width: 300px;
@@ -382,4 +382,220 @@
     box-shadow: none;
     margin: 0;
   }
+}
+
+/* ========================================================================== */
+/* Markdown styles */
+
+/* Markdown content styles */
+.ihub-markdown-content {
+  font-family: var(--Nunito);
+  line-height: 1.6;
+  color: var(--Gunmetal);
+}
+
+/* Blockquotes */
+.ihub-blockquote {
+  border-left: 4px solid var(--DarkCyan);
+  padding-left: 16px;
+  margin: 20px 0;
+  color: var(--Gunmetal);
+  font-style: italic;
+  background-color: var(--OpacityBackground);
+  padding: 16px 20px;
+  border-radius: 4px;
+}
+
+/* Code blocks */
+.ihub-code-block {
+  background-color: var(--OpacityBackground);
+  border-radius: 4px;
+  margin: 20px 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+.ihub-code {
+  display: block;
+  padding: 16px;
+  color: var(--Gunmetal);
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
+/* Inline code */
+.ihub-inline-code {
+  background-color: var(--OpacityBackground);
+  border-radius: 3px;
+  color: var(--DarkCyan);
+  font-family: monospace;
+  font-size: 0.9em;
+  padding: 2px 4px;
+}
+
+/* Tables */
+.ihub-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  overflow-x: auto;
+  display: block;
+}
+
+.ihub-table th {
+  background-color: var(--LavenderGray);
+  color: var(--Gunmetal);
+  font-weight: 600;
+  padding: 12px;
+  text-align: left;
+  border: var(--borderDefault);
+}
+
+.ihub-table td {
+  padding: 10px 12px;
+  border: var(--borderDefault);
+}
+
+.ihub-table tr:nth-child(even) {
+  background-color: var(--Gray);
+}
+
+/* Task lists */
+.ihub-markdown-content ul[data-type="taskList"] {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.ihub-markdown-content ul[data-type="taskList"] li {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.ihub-markdown-content ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Headings */
+.ihub-markdown-content h1,
+.ihub-markdown-content h2,
+.ihub-markdown-content h3,
+.ihub-markdown-content h4,
+.ihub-markdown-content h5,
+.ihub-markdown-content h6 {
+  font-family: var(--Montserat);
+  color: var(--Gunmetal);
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.ihub-markdown-content h1 {
+  font-size: 2em;
+  border-bottom: 2px solid var(--OpacityBackground);
+  padding-bottom: 10px;
+}
+
+.ihub-markdown-content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--OpacityBackground);
+  padding-bottom: 8px;
+}
+
+.ihub-markdown-content h3 {
+  font-size: 1.3em;
+}
+
+.ihub-markdown-content h4 {
+  font-size: 1.2em;
+}
+
+.ihub-markdown-content h5 {
+  font-size: 1.1em;
+}
+
+.ihub-markdown-content h6 {
+  font-size: 1em;
+}
+
+/* Links */
+.ihub-markdown-content a {
+  color: var(--DarkCyan);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ihub-markdown-content a:hover {
+  text-decoration: underline;
+}
+
+/* Horizontal Rule */
+.ihub-markdown-content hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--Gray);
+  margin: 30px 0;
+}
+
+/* Images */
+.ihub-markdown-content img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+/* Code syntax highlighting (optional - you can add more specific styles for code syntax) */
+.ihub-markdown-content .token.comment,
+.ihub-markdown-content .token.prolog,
+.ihub-markdown-content .token.doctype,
+.ihub-markdown-content .token.cdata {
+  color: #6a737d;
+}
+
+.ihub-markdown-content .token.punctuation {
+  color: #24292e;
+}
+
+.ihub-markdown-content .token.property,
+.ihub-markdown-content .token.tag,
+.ihub-markdown-content .token.boolean,
+.ihub-markdown-content .token.number,
+.ihub-markdown-content .token.constant,
+.ihub-markdown-content .token.symbol {
+  color: #005cc5;
+}
+
+.ihub-markdown-content .token.selector,
+.ihub-markdown-content .token.attr-name,
+.ihub-markdown-content .token.string,
+.ihub-markdown-content .token.char,
+.ihub-markdown-content .token.builtin {
+  color: #032f62;
+}
+
+.ihub-markdown-content .token.operator,
+.ihub-markdown-content .token.entity,
+.ihub-markdown-content .token.url,
+.ihub-markdown-content .language-css .token.string,
+.ihub-markdown-content .style .token.string {
+  color: #d73a49;
+}
+
+.ihub-markdown-content .token.atrule,
+.ihub-markdown-content .token.attr-value,
+.ihub-markdown-content .token.keyword {
+  color: #d73a49;
+}
+
+.ihub-markdown-content .token.function,
+.ihub-markdown-content .token.class-name {
+  color: #6f42c1;
+}
+
+.ihub-markdown-content .token.regex,
+.ihub-markdown-content .token.important,
+.ihub-markdown-content .token.variable {
+  color: #e36209;
 }

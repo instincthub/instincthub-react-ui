@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import "../../../assets/css/ui/content-viewer.css";
 import DOMPurify from "dompurify";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { marked } from "marked"; // Import marked for Markdown parsing
 
 // MUI Icons
 import PrintIcon from "@mui/icons-material/Print";
@@ -24,6 +24,7 @@ interface ContentViewerProps {
   onContentChange?: (newContent: string) => void;
   showToolbar?: boolean;
   showEditBtn?: boolean;
+  isMarkdown?: boolean; // New prop to indicate if content is Markdown
 }
 
 export default function ContentViewer({
@@ -36,6 +37,7 @@ export default function ContentViewer({
   setIsEditing,
   showToolbar = true,
   showEditBtn = false,
+  isMarkdown = false, // Default to false for backward compatibility
 }: ContentViewerProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState("");
@@ -61,10 +63,73 @@ export default function ContentViewer({
     });
   }, []);
 
+  // Configure marked options
+  useEffect(() => {
+    marked.use({
+      gfm: true,
+      breaks: true,
+    });
+  }, []);
+
+  // Detect if content is Markdown
+  const detectMarkdown = (content: string): boolean => {
+    if (isMarkdown) return true;
+
+    // If isMarkdown prop isn't set, try to auto-detect
+    // Common Markdown patterns
+    const markdownPatterns = [
+      /^#\s+.+$/m, // Headers
+      /^\*\s+.+$/m, // Unordered lists
+      /^\d+\.\s+.+$/m, // Ordered lists
+      /\[.+\]\(.+\)/, // Links
+      /!\[.+\]\(.+\)/, // Images
+      /^>\s+.+$/m, // Blockquotes
+      /`{1,3}[\s\S]*?`{1,3}/, // Code blocks or inline code
+      /^\s*\*\*\*+\s*$/m, // Horizontal rules
+      /\*\*.+\*\*/, // Bold
+      /\*.+\*/, // Italic
+      /^(\|[^|]+\|)+$/m, // Tables
+    ];
+
+    // Check if content matches any Markdown patterns
+    return markdownPatterns.some((pattern) => pattern.test(content));
+  };
+
+  // Convert Markdown to HTML
+  const processMarkdown = (markdownContent: string): Promise<string> => {
+    return Promise.resolve(marked(markdownContent));
+  };
+
+  const processCodeContent = (content: string) => {
+    // Look for <code> tags and process their contents
+    return content.replace(
+      /<code>([\s\S]*?)<\/code>/g,
+      (match, codeContent) => {
+        const escapedCode = codeContent
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        return `<code>${escapedCode}</code>`;
+      }
+    );
+  };
+
   // Process HTML to add styling to lists
-  const processHtml = (rawHtml: string) => {
-    // First sanitize the content
-    const sanitizedContent = DOMPurify.sanitize(rawHtml, {
+  const processHtml = async (rawContent: string) => {
+    // First check if it's markdown and convert if needed
+    const isContentMarkdown = detectMarkdown(rawContent);
+    let processedContent = isContentMarkdown
+      ? await processMarkdown(rawContent)
+      : rawContent;
+
+    // Check if the content is code
+    const isCode = processedContent.includes("<code>");
+    if (isCode) {
+      // Process the content
+      processedContent = processCodeContent(processedContent);
+    }
+
+    // Sanitize the content
+    const sanitizedContent = DOMPurify.sanitize(processedContent, {
       USE_PROFILES: { html: true },
       ADD_ATTR: ["target", "rel", "data-type", "data-checked"],
       ADD_TAGS: ["iframe", "video", "audio", "source"],
@@ -107,6 +172,41 @@ export default function ContentViewer({
       ol.classList.add(styleClass);
     });
 
+    // Apply additional Markdown-specific styling
+    if (isContentMarkdown) {
+      // Style blockquotes
+      const blockquotes = tempDiv.querySelectorAll("blockquote");
+      blockquotes.forEach((blockquote) => {
+        blockquote.classList.add("ihub-blockquote");
+      });
+
+      // Style code blocks
+      const preCodeBlocks = tempDiv.querySelectorAll("pre code");
+      preCodeBlocks.forEach((codeBlock) => {
+        const pre = codeBlock.parentElement;
+        if (pre) {
+          pre.classList.add("ihub-code-block");
+        }
+        codeBlock.classList.add("ihub-code");
+      });
+
+      // Style inline code
+      const inlineCodes = tempDiv.querySelectorAll("code:not(pre code)");
+      inlineCodes.forEach((code) => {
+        code.classList.add("ihub-inline-code");
+      });
+
+      // Style tables
+      const tables = tempDiv.querySelectorAll("table");
+      tables.forEach((table) => {
+        table.classList.add("ihub-table");
+        table.setAttribute("cellspacing", "0");
+        table.setAttribute("cellpadding", "0");
+      });
+    }
+
+    setHtml(tempDiv.innerHTML);
+
     return tempDiv.innerHTML;
   };
 
@@ -128,9 +228,8 @@ export default function ContentViewer({
   // Update HTML when content changes
   useEffect(() => {
     if (!content) return;
-    const processedHtml = processHtml(content);
-    setHtml(processedHtml);
-  }, [content]);
+    processHtml(content);
+  }, [content, isMarkdown]);
 
   // Handle task item checkbox clicks
   const handleClick = useCallback(
@@ -365,7 +464,9 @@ export default function ContentViewer({
 
       <div
         ref={contentRef}
-        className="ihub-content-viewer"
+        className={`ihub-content-viewer ${
+          isMarkdown ? "ihub-markdown-content" : ""
+        }`}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>

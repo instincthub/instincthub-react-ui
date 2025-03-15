@@ -5,10 +5,13 @@ import { babel } from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
+import copy from "rollup-plugin-copy";
+import postcssImport from "postcss-import";
+import json from "@rollup/plugin-json";
 import removeDirectives from "./rollup-plugin-remove-directives";
 
 export default {
-  input: "src/index.ts",
+  input: ["src/index.ts", "src/styles.ts"],
   output: [
     {
       dir: "dist",
@@ -28,12 +31,13 @@ export default {
   plugins: [
     removeDirectives(),
     peerDepsExternal(),
+    postcssImport(), // Ensures `@import` stays at the top of CSS files
+    json(), // Allows importing JSON files
     postcss({
       extensions: [".css"],
       minimize: true,
-      inject: {
-        insertAt: "top",
-      },
+      extract: "styles.css", // This forces a separate CSS file'
+      inject: false, // Prevents injecting styles into JavaScript
     }),
     babel({
       babelHelpers: "bundled",
@@ -54,6 +58,15 @@ export default {
     }),
     commonjs(),
     terser(),
+    copy({
+      targets: [
+        { src: "src/assets/images", dest: "dist/assets" }, // Copy Assets
+        { src: "src/assets/js", dest: "dist/assets" }, // Copy Assets
+        { src: "src/assets/json", dest: "dist/assets" }, // Copy Assets
+        { src: "src/assets/pngs", dest: "dist/assets" }, // Copy Assets
+        { src: "src/assets/svgs", dest: "dist/assets" }, // Copy Assets
+      ],
+    }),
   ],
   external: [
     "next",
@@ -61,5 +74,10 @@ export default {
     "react-dom",
     "styled-components",
     "react/jsx-runtime",
+    "@mui/system",
+    "@mui/material",
+    "@mui/icons-material",
+    "@emotion/react",
+    "@emotion/styled",
   ],
 };
