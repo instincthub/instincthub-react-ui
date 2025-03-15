@@ -1,0 +1,223 @@
+/* styles/parent-list-styles.css */
+
+/* Default list style when parent has .ihub-style-list class */
+.ihub-style-list ul {
+  list-style: none;
+  margin: 1.5rem 0;
+  padding-left: 0;
+}
+
+.ihub-style-list ul li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--Nunito);
+  font-weight: 400;
+  color: var(--Gunmetal);
+}
+
+.ihub-style-list ul li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--Gunmetal);
+  display: inline-block;
+}
+
+/* Styled ordered lists */
+.ihub-style-list ol {
+  list-style: none;
+  counter-reset: item;
+  margin: 1.5rem 0;
+  padding-left: 0;
+}
+
+.ihub-style-list ol li {
+  counter-increment: item;
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--Nunito);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 28px;
+  color: var(--Gunmetal);
+}
+
+.ihub-style-list ol li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: var(--Gunmetal);
+  border-radius: 100%;
+  color: var(--White);
+  font-weight: 700;
+  text-align: center;
+  line-height: 25px;
+  font-size: 0.875rem;
+}
+
+/* Nested list styles */
+.ihub-style-list ul ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+}
+
+.ihub-style-list ul ul ul li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 0;
+  background-color: var(--TurkishRose);
+}
+
+.ihub-style-list ol ol li::before {
+  background-color: var(--TurkishRose);
+}
+
+.ihub-style-list ol ol ol li::before {
+  background-color: var(--ViridianGreen);
+}
+
+/* Mixed nesting */
+.ihub-style-list ul ol li::before {
+  content: counter(item);
+  width: 25px;
+  height: 25px;
+  background-color: var(--DarkCyan);
+  border-radius: 100%;
+  color: var(--White);
+  font-weight: 700;
+  text-align: center;
+  line-height: 25px;
+  font-size: 0.875rem;
+}
+
+.ihub-style-list ol ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+}
+
+/* Style variants through additional classes */
+
+/* Checkmark list style */
+.ihub-style-list.checkmark ul li::before {
+  content: "\2713"; /* Unicode checkmark */
+  color: var(--DarkCyan);
+  font-weight: bold;
+}
+
+/* Circle list style */
+.ihub-style-list.circle ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+}
+
+/* Arrow list style */
+.ihub-style-list.arrow ul li::before {
+  content: "\2192"; /* Unicode right arrow */
+  color: var(--DarkCyan);
+}
+
+/* Square list style */
+.ihub-style-list.square ul li::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background-color: var(--TurkishRose);
+}
+
+/* Primary color ordered list */
+.ihub-style-list.primary ol li::before {
+  background-color: var(--DarkCyan);
+}
+
+/* Secondary color ordered list */
+.ihub-style-list.secondary ol li::before {
+  background-color: var(--TurkishRose);
+}
+
+/* Tertiary color ordered list */
+.ihub-style-list.tertiary ol li::before {
+  background-color: var(--ViridianGreen);
+}
+
+/* Boxed list variant */
+.ihub-style-list.boxed {
+  padding: 15px;
+  background-color: var(--OpacityBackground);
+  border-radius: 5px;
+  margin: 15px 0px;
+}
+
+/* Two column layout for desktop */
+@media (min-width: 768px) {
+  .ihub-style-list.two-column ul,
+  .ihub-style-list.two-column ol {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .ihub-style-list.two-column ul li,
+  .ihub-style-list.two-column ol li {
+    width: 50%;
+    box-sizing: border-box;
+    padding-right: 1rem;
+  }
+}
+
+/* Special handling for task lists from TipTap */
+.ihub-style-list ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ihub-style-list ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  padding-left: 0;
+}
+
+.ihub-style-list ul[data-type="taskList"] li::before {
+  content: none;
+}
+
+.ihub-style-list ul[data-type="taskList"] li[data-checked="true"] {
+  text-decoration: line-through;
+  color: var(--ChineseSilver);
+}
+
+/* Print styles */
+@media print {
+  .ihub-style-list ul li::before,
+  .ihub-style-list ol li::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

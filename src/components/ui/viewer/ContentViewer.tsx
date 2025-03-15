@@ -19,8 +19,11 @@ interface ContentViewerProps {
   className?: string;
   editable?: boolean;
   onEdit?: () => void;
+  isEditing: boolean;
+  setIsEditing: (html: boolean) => void;
   onContentChange?: (newContent: string) => void;
   showToolbar?: boolean;
+  showEditBtn?: boolean;
 }
 
 export default function ContentViewer({
@@ -28,9 +31,11 @@ export default function ContentViewer({
   title = "Document",
   className = "",
   editable = false,
-  onEdit,
   onContentChange,
+  isEditing = false,
+  setIsEditing,
   showToolbar = true,
+  showEditBtn = false,
 }: ContentViewerProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState("");
@@ -56,16 +61,75 @@ export default function ContentViewer({
     });
   }, []);
 
-  // Sanitize content
-  useEffect(() => {
-    if (!content) return;
-
-    const sanitizedContent = DOMPurify.sanitize(content, {
+  // Process HTML to add styling to lists
+  const processHtml = (rawHtml: string) => {
+    // First sanitize the content
+    const sanitizedContent = DOMPurify.sanitize(rawHtml, {
       USE_PROFILES: { html: true },
       ADD_ATTR: ["target", "rel", "data-type", "data-checked"],
       ADD_TAGS: ["iframe", "video", "audio", "source"],
     });
-    setHtml(sanitizedContent);
+
+    // Create a temporary element to manipulate the DOM
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = sanitizedContent;
+
+    // Find all unordered lists that don't already have a class
+    const uls = tempDiv.querySelectorAll(
+      'ul:not([class]):not([data-type="taskList"])'
+    );
+    uls.forEach((ul, index) => {
+      // Apply different styles based on nesting level or position
+      const depth = getListDepth(ul);
+
+      if (depth === 0) {
+        // First level lists get standard styling
+        ul.classList.add("ihub-list-standard");
+      } else if (depth === 1) {
+        // Second level lists get circle styling
+        ul.classList.add("ihub-list-circle");
+      } else {
+        // Deeper nested lists get square styling
+        ul.classList.add("ihub-list-square");
+      }
+    });
+
+    // Find all ordered lists that don't already have a class
+    const ols = tempDiv.querySelectorAll("ol:not([class])");
+    ols.forEach((ol, index) => {
+      // Alternate between different styled ordered lists
+      const styleClass =
+        index % 3 === 0
+          ? "ihub-list-primary"
+          : index % 3 === 1
+          ? "ihub-list-secondary"
+          : "ihub-list-tertiary";
+      ol.classList.add(styleClass);
+    });
+
+    return tempDiv.innerHTML;
+  };
+
+  // Helper function to get the nesting depth of a list
+  const getListDepth = (element: Element): number => {
+    let depth = 0;
+    let parent = element.parentElement;
+
+    while (parent) {
+      if (parent.tagName === "LI") {
+        depth++;
+      }
+      parent = parent.parentElement;
+    }
+
+    return depth;
+  };
+
+  // Update HTML when content changes
+  useEffect(() => {
+    if (!content) return;
+    const processedHtml = processHtml(content);
+    setHtml(processedHtml);
   }, [content]);
 
   // Handle task item checkbox clicks
@@ -245,14 +309,16 @@ export default function ContentViewer({
     >
       {showToolbar && (
         <div className="ihub-content-toolbar">
-          {onEdit && (
+          {!isEditing && showEditBtn ? (
             <button
-              onClick={onEdit}
+              onClick={() => setIsEditing(!isEditing)}
               className="ihub-toolbar-btn"
               title="Edit content"
             >
               <EditIcon fontSize="small" />
             </button>
+          ) : (
+            ""
           )}
           <button
             onClick={handlePrint}

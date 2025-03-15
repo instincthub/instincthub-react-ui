@@ -75,10 +75,18 @@
 
 .ihub-editor-char-count {
   padding: 0.5rem;
-  text-align: right;
+  border-top: var(--borderDefault);
+  display: flex;
+  justify-content: space-between;
+}
+.ihub-editor-char-count p {
   font-size: 0.75rem;
   color: #6c757d;
-  border-top: var(--borderDefault);
+  margin: 0px;
+}
+.ihub-editor-char-count p:empty {
+  width: 10px;
+  height: 5px;
 }
 
 /* Table styling */
@@ -140,4 +148,14 @@
 }
 .ihub-editor .ProseMirror ul[data-type="taskList"] li > div p {
   margin: 0px;
+}
+
+@media (max-width: 767px) {
+  .ihub-editor-char-count {
+    display: block;
+  }
+  .ihub-editor-char-count p {
+    display: inline-block;
+    margin-right: 1rem;
+  }
 }

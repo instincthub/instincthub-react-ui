@@ -1,81 +1,48 @@
 "use client";
 import React, { useState } from "react";
-import TextEditor from "../editor/CustomTextEditor";
+import CustomTextEditor from "../editor/CustomTextEditor";
 import ContentViewer from "./ContentViewer";
 
-// MUI icons
-import EditIcon from "@mui/icons-material/Edit";
-import PreviewIcon from "@mui/icons-material/Visibility";
+interface ContentViewOrEditProps {
+  setContent: (html: string) => void;
+  content: string;
+  title: string;
+  showToolbar: boolean;
+  placeholder: string;
+  charLimit: number;
+  lastUpdated?: string;
+  showEditBtn?: boolean;
+  showPreviewBtn?: boolean;
+}
 
-export default function ContentViewOrEdit(): JSX.Element {
-  const [content, setContent] = useState<string>(
-    "<h2>Getting Started with InstinctHub</h2><p>Welcome to your course content! This editor allows you to create rich, interactive content for your students.</p><ul><li>Format text using the toolbar above</li><li>Add images, tables, and code samples</li><li>Create interactive task lists</li></ul><p>Click the edit button to make changes, then preview to see how your content will appear to students.</p>"
-  );
+export default function ContentViewOrEdit(
+  props: ContentViewOrEditProps
+): JSX.Element {
   const [isEditing, setIsEditing] = useState(false);
 
-  const toggleEditMode = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const handleContentChange = (newContent: string) => {
-    setContent(newContent);
-  };
-
-  const handleSave = () => {
-    // Here you would typically save the content to your backend
-    console.log("Saving content:", content);
-    // For demonstration, we'll just switch back to view mode
-    setIsEditing(false);
-  };
-
   return (
-    <div className="ihub-content-page">
-      <div className="ihub-content-header">
-        <h1>Course Module: Introduction</h1>
-
-        <div className="ihub-content-actions">
-          <button
-            className="ihub-btn ihub-btn-secondary"
-            onClick={toggleEditMode}
-          >
-            {isEditing ? (
-              <>
-                <PreviewIcon fontSize="small" /> Preview
-              </>
-            ) : (
-              <>
-                <EditIcon fontSize="small" /> Edit
-              </>
-            )}
-          </button>
-
-          {isEditing && (
-            <button className="ihub-btn ihub-btn-primary" onClick={handleSave}>
-              Save Changes
-            </button>
-          )}
-        </div>
-      </div>
-
+    <div className="ihub-content-page ihub-style-list">
       {isEditing ? (
-        <TextEditor
-          content={content}
-          onChange={handleContentChange}
-          placeholder="Start creating your course content..."
-          charLimit={50000}
+        <CustomTextEditor
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          content={props.content}
+          onChange={props.setContent}
+          placeholder={props.placeholder}
+          charLimit={props.charLimit}
+          lastUpdated={props.lastUpdated}
+          showPreviewBtn={props.showPreviewBtn}
         />
       ) : (
         <ContentViewer
-          content={content}
-          title="Course Module: Introduction"
-          onEdit={toggleEditMode}
-          showToolbar={true}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          content={props.content}
+          title={props.title}
+          showToolbar={props.showToolbar}
+          showEditBtn={props.showEditBtn}
         />
       )}
-
-      <div className="ihub-content-footer">
-        <p>Last updated: March 14, 2025</p>
-      </div>
     </div>
   );
 }

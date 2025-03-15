@@ -85,7 +85,7 @@ const Wrapper = styled.div`
     position: relative;
     padding-left: 30px;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1rem;
     margin-top: 10px;
   }
   .radio input:checked + span::after,

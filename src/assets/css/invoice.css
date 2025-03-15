@@ -34,7 +34,7 @@ table td {
   padding: 5px;
 }
 .print .invoice-container {
-    margin-top: 0px;
+  margin-top: 0px;
 }
 header {
   background-color: var(--OpacityBackground);
@@ -60,7 +60,7 @@ header {
   color: #979898;
   text-align: center;
   padding: 6px 12px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 th {
@@ -103,7 +103,7 @@ address p {
   line-height: 0.9rem;
 }
 address h4 {
-  font-size: 16px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
 }
@@ -169,7 +169,7 @@ table thead tr:nth-of-type(1) {
   margin-left: auto;
 }
 .total {
-  font-size: 16px;
+  font-size: 1rem;
   border: 3px solid;
   padding: 8px;
   border-radius: 3px;

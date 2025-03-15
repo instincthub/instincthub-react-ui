@@ -1,387 +1,385 @@
 /* Content Viewer Container */
 .ihub-content-container {
-    position: relative;
-    width: 100%;
-    margin: 1rem 0;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: var(--lightShadow);
-    transition: all 0.3s ease;
-    background-color: var(--White);
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--lightShadow);
+  transition: all 0.3s ease;
+  background-color: var(--White);
+}
+
+.ihub-content-container.ihub-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+  background-color: var(--White);
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+/* Toolbar */
+.ihub-content-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--Gray);
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  color: var(--Gunmetal);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-toolbar-btn:hover {
+  background-color: var(--OpacityBackground);
+  color: var(--DarkCyan);
+}
+
+/* Content Viewer */
+.ihub-content-viewer {
+  padding: 1.5rem;
+  background-color: var(--White);
+  line-height: 1.6;
+  font-size: 1rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Typography */
+.ihub-content-viewer h1 {
+  font-size: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-family: var(--Montserat);
+  color: var(--Gunmetal);
+}
+
+.ihub-content-viewer h2 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  font-family: var(--Montserat);
+  color: var(--Gunmetal);
+}
+
+.ihub-content-viewer h3 {
+  font-size: 1.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: var(--Montserat);
+  color: var(--Gunmetal);
+}
+
+.ihub-content-viewer strong {
+  font-weight: 600;
+}
+
+.ihub-content-viewer em {
+  font-style: italic;
+}
+
+/* Links */
+.ihub-content-viewer a {
+  color: var(--DarkCyan);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-family: var(--Montserat);
+}
+
+.ihub-content-viewer a:hover {
+  color: var(--ViridianGreen);
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* Lists */
+.ihub-content-viewer ul,
+.ihub-content-viewer ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.ihub-content-viewer li {
+  margin-bottom: 0.5rem;
+  font-family: var(--Nunito);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  color: var(--Gunmetal);
+}
+
+/* Task Lists */
+.ihub-content-viewer ul[data-type="taskList"] {
+  list-style-type: none;
+  padding-left: 0.5rem;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-top: 0.25rem;
+  position: relative;
+  border: 2px solid var(--DarkCyan);
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+  outline: 0;
+  padding: 0 !important;
+  vertical-align: text-top;
+  height: 20px;
+  width: 20px;
+  -webkit-appearance: none;
+  opacity: 0.5;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"]:hover {
+  opacity: 1;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li[data-checked="true"] div,
+.ihub-content-viewer ul[data-type="taskList"] li[data-checked="false"] div {
+  position: relative;
+  top: -8px;
+}
+
+.ihub-content-viewer
+  ul[data-type="taskList"]
+  li
+  input[type="checkbox"]:checked {
+  background-color: var(--DarkCyan);
+  opacity: 1;
+}
+
+.ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"]:before {
+  content: "";
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  width: 4px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  margin: -1px -1px 0 -1px;
+  transform: rotate(45deg) translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* Images */
+.ihub-content-viewer img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+/* Code */
+.ihub-content-viewer code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1rem;
+  background-color: var(--Gray);
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+}
+
+.ihub-content-viewer pre {
+  background-color: var(--Gunmetal);
+  color: var(--White);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1rem;
+  margin: 1rem 0;
+}
+
+.ihub-content-viewer pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Blockquote */
+.ihub-content-viewer blockquote {
+  border-left: 4px solid var(--LavenderGray);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: var(--Gunmetal);
+}
+
+/* Tables */
+.ihub-content-viewer table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-family: var(--Nunito);
+  margin: 25px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ihub-content-viewer table th,
+.ihub-content-viewer table td {
+  border: var(--borderDefault);
+  padding: 0.5rem;
+}
+
+.ihub-content-viewer table th {
+  background-color: var(--LavenderGray);
+  font-weight: 600;
+  text-align: left;
+  color: var(--Gunmetal);
+}
+
+.ihub-content-viewer table tr:nth-child(even) {
+  background-color: var(--Gray);
+}
+
+/* Horizontal Rule */
+.ihub-content-viewer hr {
+  border: 0.5px solid rgba(44, 51, 58, 0.5);
+  margin: 40px 0;
+}
+
+/* Highlight */
+.ihub-content-viewer mark {
+  background-color: var(--Corn);
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+}
+
+/* Notification */
+.ihub-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.375rem;
+  z-index: 1100;
+  animation: slide-in 0.3s ease-out forwards,
+    fade-out 0.5s ease-in forwards 2.5s;
+  max-width: 300px;
+  box-shadow: var(--shadow);
+}
+
+.ihub-notification-success {
+  background-color: var(--CaribbeanGreen);
+  color: var(--White);
+  border-left: 4px solid var(--DarkCyan);
+}
+
+.ihub-notification-error {
+  background-color: var(--Danger);
+  color: var(--White);
+  border-left: 4px solid var(--TurkishRose);
+}
+
+/* Button Styles - Matching Main CSS */
+.ihub-btn {
+  padding: 12px 35px;
+  margin: 25px 0 10px 0;
+  border-radius: 5px;
+  border: 0;
+  background-color: unset;
+  font-family: var(--Montserat);
+  outline: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.ihub-btn-primary,
+.ihub-btn-important {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+}
+
+.ihub-btn-primary:hover,
+.ihub-btn-important:hover {
+  background-color: var(--DarkCyan);
+  opacity: 0.8;
+}
+
+.ihub-btn-secondary,
+.ihub-btn-outlined {
+  background-color: var(--White);
+  color: var(--DarkCyan);
+  border: 1px solid var(--DarkCyan);
+}
+
+.ihub-btn-secondary:hover,
+.ihub-btn-outlined:hover {
+  color: var(--White);
+  background-color: var(--DarkCyan);
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  
-  .ihub-content-container.ihub-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    border-radius: 0;
-    background-color: var(--White);
-    z-index: 1000;
-    overflow-y: auto;
-    padding: 2rem;
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  /* Toolbar */
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Print styles */
+@media print {
   .ihub-content-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background-color: var(--Gray);
-    border-bottom: var(--borderDefault);
+    display: none;
   }
-  
-  .ihub-toolbar-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: transparent;
-    border: none;
-    border-radius: 0.25rem;
-    color: var(--Gunmetal);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .ihub-toolbar-btn:hover {
-    background-color: var(--ChineseSilver);
-    color: var(--DarkCyan);
-  }
-  
-  /* Content Viewer */
+
   .ihub-content-viewer {
-    padding: 1.5rem;
-    background-color: var(--White);
-    line-height: 1.6;
-    font-size: 1rem;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-  }
-  
-  /* Typography */
-  .ihub-content-viewer h1 {
-    font-size: 2rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    line-height: 1.2;
-    font-family: var(--Montserat);
-    color: var(--Gunmetal);
-  }
-  
-  .ihub-content-viewer h2 {
-    font-size: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-    line-height: 1.3;
-    font-family: var(--Montserat);
-    color: var(--Gunmetal);
-  }
-  
-  .ihub-content-viewer h3 {
-    font-size: 1.25rem;
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    line-height: 1.4;
-    font-family: var(--Montserat);
-    color: var(--Gunmetal);
-  }
-  
-  .ihub-content-viewer p {
-    margin-bottom: 1rem;
-    font-family: var(--Nunito);
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 28px;
-    color: var(--Gunmetal);
-  }
-  
-  .ihub-content-viewer strong {
-    font-weight: 600;
-  }
-  
-  .ihub-content-viewer em {
-    font-style: italic;
-  }
-  
-  /* Links */
-  .ihub-content-viewer a {
-    color: var(--DarkCyan);
-    text-decoration: none;
-    transition: color 0.2s ease;
-    font-family: var(--Montserat);
-  }
-  
-  .ihub-content-viewer a:hover {
-    color: var(--ViridianGreen);
-    text-decoration: underline;
-    opacity: 0.8;
-  }
-  
-  /* Lists */
-  .ihub-content-viewer ul, 
-  .ihub-content-viewer ol {
-    margin: 1rem 0;
-    padding-left: 2rem;
-  }
-  
-  .ihub-content-viewer li {
-    margin-bottom: 0.5rem;
-    font-family: var(--Nunito);
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 28px;
-    color: var(--Gunmetal);
-  }
-  
-  /* Task Lists */
-  .ihub-content-viewer ul[data-type="taskList"] {
-    list-style-type: none;
-    padding-left: 0.5rem;
-  }
-  
-  .ihub-content-viewer ul[data-type="taskList"] li {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 0.5rem;
-    gap: 0.5rem;
-  }
-  
-  .ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"] {
-    margin-top: 0.25rem;
-    position: relative;
-    border: 2px solid var(--DarkCyan);
-    border-radius: 2px;
-    background: none;
-    cursor: pointer;
-    line-height: 0;
-    outline: 0;
-    padding: 0 !important;
-    vertical-align: text-top;
-    height: 20px;
-    width: 20px;
-    -webkit-appearance: none;
-    opacity: 0.5;
-  }
-  
-  .ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"]:hover {
-    opacity: 1;
-  }
-  
-  .ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"]:checked {
-    background-color: var(--DarkCyan);
-    opacity: 1;
-  }
-  
-  .ihub-content-viewer ul[data-type="taskList"] li input[type="checkbox"]:before {
-    content: "";
-    position: absolute;
-    right: 50%;
-    top: 50%;
-    width: 4px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    margin: -1px -1px 0 -1px;
-    transform: rotate(45deg) translate(-50%, -50%);
-    z-index: 2;
-  }
-  
-  /* Images */
-  .ihub-content-viewer img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 0.25rem;
-    margin: 1rem 0;
-  }
-  
-  /* Code */
-  .ihub-content-viewer code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.9em;
-    background-color: var(--Gray);
-    padding: 0.2em 0.4em;
-    border-radius: 0.25rem;
-  }
-  
-  .ihub-content-viewer pre {
-    background-color: var(--Gunmetal);
-    color: var(--White);
-    padding: 1rem;
-    border-radius: 0.25rem;
-    overflow-x: auto;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.9em;
-    margin: 1rem 0;
-  }
-  
-  .ihub-content-viewer pre code {
-    background-color: transparent;
     padding: 0;
-    color: inherit;
+    border: none;
+    box-shadow: none;
   }
-  
-  /* Blockquote */
-  .ihub-content-viewer blockquote {
-    border-left: 4px solid var(--LavenderGray);
-    padding-left: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    font-style: italic;
-    color: var(--Gunmetal);
+
+  .ihub-content-container {
+    border: none;
+    box-shadow: none;
+    margin: 0;
   }
-  
-  /* Tables */
-  .ihub-content-viewer table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 1rem 0;
-    font-size: 0.95em;
-    font-family: var(--Nunito);
-    margin: 25px 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  .ihub-content-viewer table th,
-  .ihub-content-viewer table td {
-    border: var(--borderDefault);
-    padding: 0.5rem;
-  }
-  
-  .ihub-content-viewer table th {
-    background-color: var(--LavenderGray);
-    font-weight: 600;
-    text-align: left;
-    color: var(--Gunmetal);
-  }
-  
-  .ihub-content-viewer table tr:nth-child(even) {
-    background-color: var(--Gray);
-  }
-  
-  /* Horizontal Rule */
-  .ihub-content-viewer hr {
-    border: 0.5px solid rgba(44, 51, 58, 0.5);
-    margin: 40px 0;
-  }
-  
-  /* Highlight */
-  .ihub-content-viewer mark {
-    background-color: var(--Corn);
-    padding: 0.1em 0.4em;
-    border-radius: 0.2em;
-  }
-  
-  /* Notification */
-  .ihub-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 0.75rem 1.25rem;
-    border-radius: 0.375rem;
-    z-index: 1100;
-    animation: slide-in 0.3s ease-out forwards, fade-out 0.5s ease-in forwards 2.5s;
-    max-width: 300px;
-    box-shadow: var(--shadow);
-  }
-  
-  .ihub-notification-success {
-    background-color: var(--CaribbeanGreen);
-    color: var(--White);
-    border-left: 4px solid var(--DarkCyan);
-  }
-  
-  .ihub-notification-error {
-    background-color: var(--Danger);
-    color: var(--White);
-    border-left: 4px solid var(--TurkishRose);
-  }
-  
-  /* Button Styles - Matching Main CSS */
-  .ihub-btn {
-    padding: 12px 35px;
-    margin: 25px 0 10px 0;
-    border-radius: 5px;
-    border: 0;
-    background-color: unset;
-    font-family: var(--Montserat);
-    outline: 0;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-  }
-  
-  .ihub-btn-primary, 
-  .ihub-btn-important {
-    background-color: var(--DarkCyan);
-    color: var(--White);
-  }
-  
-  .ihub-btn-primary:hover,
-  .ihub-btn-important:hover {
-    background-color: var(--DarkCyan);
-    opacity: 0.8;
-  }
-  
-  .ihub-btn-secondary,
-  .ihub-btn-outlined {
-    background-color: var(--White);
-    color: var(--DarkCyan);
-    border: 1px solid var(--DarkCyan);
-  }
-  
-  .ihub-btn-secondary:hover,
-  .ihub-btn-outlined:hover {
-    color: var(--White);
-    background-color: var(--DarkCyan);
-  }
-  
-  @keyframes slide-in {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes fade-out {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-  
-  /* Print styles */
-  @media print {
-    .ihub-content-toolbar {
-      display: none;
-    }
-    
-    .ihub-content-viewer {
-      padding: 0;
-      border: none;
-      box-shadow: none;
-    }
-    
-    .ihub-content-container {
-      border: none;
-      box-shadow: none;
-      margin: 0;
-    }
-  }
+}

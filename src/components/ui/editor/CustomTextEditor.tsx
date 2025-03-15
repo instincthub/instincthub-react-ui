@@ -16,19 +16,28 @@ import TaskItem from "@tiptap/extension-task-item";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import MenuBar from "./MenuBar";
+import { formatDateToWord } from "../../../assets/js/helpFunction";
 
 interface TextEditorProps {
   onChange: (html: string) => void;
+  setIsEditing: (html: boolean) => void;
+  isEditing: boolean;
   content: string;
   charLimit?: number;
   placeholder?: string;
+  lastUpdated?: string;
+  showPreviewBtn?: boolean;
 }
 
 export default function CustomTextEditor({
   onChange,
+  setIsEditing,
   content,
+  isEditing = false,
   charLimit = 5000,
   placeholder = "Begin writing here...",
+  lastUpdated = "",
+  showPreviewBtn = false,
 }: TextEditorProps) {
   const editor = useEditor({
     extensions: [
@@ -69,13 +78,25 @@ export default function CustomTextEditor({
 
   return (
     <div className="ihub-editor">
-      <MenuBar editor={editor} />
+      <MenuBar
+        editor={editor}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        showPreviewBtn={showPreviewBtn}
+      />
       <EditorContent editor={editor} className="ihub-editor-content-wrapper" />
       {editor && (
         <div className="ihub-editor-char-count">
-          {editor.storage.characterCount.words()} words:{"  "}
-          {editor.storage.characterCount.characters() / charLimit}/{charLimit}{" "}
-          characters
+          <p>
+            {lastUpdated
+              ? `Last updated: ${formatDateToWord(lastUpdated)}`
+              : ""}
+          </p>
+          <p>
+            {editor.storage.characterCount.words()} words:{"  "}
+            {editor.storage.characterCount.characters() / charLimit}/{charLimit}{" "}
+            characters
+          </p>
         </div>
       )}
     </div>

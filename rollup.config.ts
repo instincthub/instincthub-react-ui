@@ -16,7 +16,6 @@ export default {
       sourcemap: true,
       preserveModules: true, // Ensures tree-shaking and correct imports
       exports: "named", // Ensures named exports are properly handled
-      // inlineDynamicImports: true, // Ensures dynamic imports are inlined
     },
     {
       dir: "dist",
@@ -24,7 +23,6 @@ export default {
       sourcemap: true,
       preserveModules: true, // Ensures tree-shaking and correct imports
       exports: "named", // Ensures named exports are properly handled
-      // inlineDynamicImports: true, // Ensures dynamic imports are inlined
     },
   ],
   plugins: [

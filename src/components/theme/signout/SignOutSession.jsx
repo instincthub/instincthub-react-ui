@@ -41,7 +41,7 @@ const styles = {
     margin: "10px 0",
   },
   message: {
-    fontSize: "16px",
+    fontSize: "1rem",
     margin: "15px 0",
     textAlign: "center",
   },

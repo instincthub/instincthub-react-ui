@@ -3,6 +3,9 @@ import "./assets/css/main.css";
 import "./assets/css/forms.css";
 import "./assets/css/modals.css";
 import "./assets/css/tooltip.css";
+
+/* UI Styles */
+import "./assets/css/ui/parent-list-styles.css";
 import "./assets/css/ui/list-styles.css";
 
 /* Third-party Framework Styles */

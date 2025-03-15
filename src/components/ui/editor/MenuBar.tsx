@@ -17,12 +17,22 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import FormatClearIcon from "@mui/icons-material/FormatClear";
+import PreviewIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface MenuBarProps {
   editor: Editor | null;
+  setIsEditing: (html: boolean) => void;
+  isEditing: boolean;
+  showPreviewBtn?: boolean;
 }
 
-const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
+const MenuBar: React.FC<MenuBarProps> = ({
+  editor,
+  setIsEditing,
+  isEditing,
+  showPreviewBtn = false,
+}) => {
   if (!editor) {
     return null;
   }
@@ -52,6 +62,22 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
 
   return (
     <div className="ihub-editor-menu">
+      {showPreviewBtn ? (
+        <button
+          type="button"
+          onClick={() => setIsEditing(!isEditing)}
+          className={`ihub-editor-btn`}
+        >
+          {isEditing ? (
+            <PreviewIcon fontSize="small" />
+          ) : (
+            <EditIcon fontSize="small" />
+          )}
+        </button>
+      ) : (
+        ""
+      )}
+
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}

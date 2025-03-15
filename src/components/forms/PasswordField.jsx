@@ -71,7 +71,7 @@ const Wrapper = styled.div`
     left: 15px;
     transition: all 0.3s ease;
     pointer-events: none;
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--Gunmetal);
   }
   input {

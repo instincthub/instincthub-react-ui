@@ -36,11 +36,14 @@
   content: "";
   position: absolute;
   left: 0.25rem;
-  top: 0.5rem;
+  top: 1px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background-color: var(--DarkCyan);
+  display: flex !important;
+  justify-content: space-around;
+  align-items: center;
 }
 
 /* Square style for deeply nested lists */
@@ -58,7 +61,7 @@
   content: "";
   position: absolute;
   left: 0.25rem;
-  top: 0.5rem;
+  /* top: 4px; */
   width: 8px;
   height: 8px;
   background-color: var(--TurkishRose);

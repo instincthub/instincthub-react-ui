@@ -1,16 +1,16 @@
-.gp-table{
-    /* border: 1px solid black; */
-    /* border-bottom: 1px solid black; */
-    /* border-left: 1px solid black; */
+.gp-table {
+  /* border: 1px solid black; */
+  /* border-bottom: 1px solid black; */
+  /* border-left: 1px solid black; */
 }
-tr{
-    /* border-bottom: 1px solid black;
+tr {
+  /* border-bottom: 1px solid black;
     border-collapse: collapse; */
 }
 td {
-    /* border: 1px solid black; */
-    /* border-collapse: collapse; */
-    /* padding: 8px 16px; */
-    text-align: center;
-    /* background-color: white; */
+  /* border: 1px solid black; */
+  /* border-collapse: collapse; */
+  /* padding: 8px 1rem; */
+  text-align: center;
+  /* background-color: white; */
 }
