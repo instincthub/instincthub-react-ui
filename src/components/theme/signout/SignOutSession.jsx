@@ -2,19 +2,17 @@ import { logout } from "@/lib/auth/actions";
 
 export default function SignOutSession() {
   return (
-    <html>
-      <body>
-        <div style={styles.overlay}>
-          <div style={styles.card}>
-            <h2 style={styles.title}>Signout</h2>
-            <p style={styles.message}>Your logged in session has expired!</p>
-            <button className="important-btn" onClick={logout}>
-              Sign out
-            </button>
-          </div>
+    <section>
+      <div style={styles.overlay}>
+        <div style={styles.card}>
+          <h2 style={styles.title}>Signout</h2>
+          <p style={styles.message}>Your logged in session has expired!</p>
+          <button className="important-btn" onClick={logout}>
+            Sign out
+          </button>
         </div>
-      </body>
-    </html>
+      </div>
+    </section>
   );
 }
 
