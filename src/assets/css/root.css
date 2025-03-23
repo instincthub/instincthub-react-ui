@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style-type: none;
+  overflow: -moz-scrollbars-vertical;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --DarkCyan: #00838f;
+  --TurkishRose: #bc658d;
+  --Gunmetal: #2c333a;
+  --ViridianGreen: #009ba2;
+  --White: #ffffff;
+  --Danger: #ea5f5e;
+  --FadeGlass: #ffffffe6;
+
+  --Rhythm: #69779b;
+  --CaribbeanGreen: #00c5a2;
+  --OldLavender: #756c83;
+  --AmericanPurple: #432160;
+  --ChineseBlue: #415b90;
+  --DarkSlateGray: #314a52;
+  --MaximumRedPurple: #a03c78;
+  --DarkLavender: #6f539b;
+  --MetallicBlue: #3c5186;
+  --TiffanyBlue: #0fabbc;
+  --PoliceBlue: #394a6d;
+  --Corn: #fbeb5b;
+  --LimeGreen: #4be133;
+  --OldRose: #394a6d;
+  --Magnolia: #f4f3fe;
+  --ChineseSilver: #cccccc;
+  --LavenderGray: #c5c0db;
+  --Main-Gradient: linear-gradient(79.85deg, #009ba2 -20.87%, #bc658d 87.74%);
+  --Dark-Gradient: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(33, 33, 33, 1) 35%,
+    rgba(79, 79, 79, 1) 100%
+  );
+  --blue: rgb(26, 57, 87);
+  --white: rgb(236, 236, 236);
+  --DeepGreen-CyanTurquoise: #206d62;
+  --Gray: #f4f4f4;
+  --filter: none;
+  --shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --overlay: rgba(44, 51, 58, 0.2);
+  --lightShadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
+  --borderDefault: 1px solid rgba(44, 51, 58, 0.2);
+  --nesgBlue: #083e9e;
+  --nesgBlueOpacity: #083f9e9c;
+  --main-color: #f857a6;
+  --second-color: #ff5858;
+  --OpacityBackground: #7d7c7c20;
+
+  /* Fonts */
+  --Nunito: "Nunito", sans-serif;
+  --Montserat: "Montserrat", sans-serif;
+
+  /* Z-index more details on ./README.md */
+  --z-base: 0;
+  --z-navigation: 100;
+  --z-overlay: 500;
+  --z-popup: 1000;
+  --z-critical: 9999;
+}

@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import React, { useState, useRef, useEffect } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {
+  tomorrow,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // Define the props interface
 interface CodeDisplayProps {
@@ -34,7 +37,7 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy code: ', err);
+      console.error("Failed to copy code: ", err);
     }
   };
 
@@ -51,44 +54,50 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
   // Add keyboard shortcut for copy (Ctrl+C or Cmd+C when focused)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'c' && document.activeElement === codeRef.current) {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key === "c" &&
+        document.activeElement === codeRef.current
+      ) {
         e.preventDefault();
         handleCopy();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [code]);
 
   return (
-    <div 
+    <div
       className="ihub-code-display"
       ref={codeRef}
       tabIndex={0}
-      aria-label={`Code block in ${language}${fileName ? ` for file ${fileName}` : ''}`}
+      aria-label={`Code block in ${language}${
+        fileName ? ` for file ${fileName}` : ""
+      }`}
     >
       {/* Header with controls */}
       <div className="ihub-code-header">
         {fileName && <span className="ihub-code-filename">{fileName}</span>}
         <div className="ihub-code-controls">
-          <button 
+          {/* <button 
             onClick={toggleTheme}
             className="ihub-code-button"
             aria-label={userDarkMode ? "Switch to light theme" : "Switch to dark theme"}
           >
             {userDarkMode ? "☀️" : "🌙"}
-          </button>
-          <button 
+          </button> */}
+          <button
             onClick={toggleCollapse}
             className="ihub-code-button"
             aria-label={isCollapsed ? "Expand code" : "Collapse code"}
           >
             {isCollapsed ? "+" : "-"}
           </button>
-          <button 
+          <button
             onClick={handleCopy}
             className="ihub-code-button"
             aria-label="Copy code to clipboard"
@@ -100,7 +109,9 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
       </div>
 
       {/* Code content */}
-      <div className={`ihub-code-content ${isCollapsed ? 'ihub-collapsed' : ''}`}>
+      <div
+        className={`ihub-code-content ${isCollapsed ? "ihub-collapsed" : ""}`}
+      >
         <SyntaxHighlighter
           language={language}
           style={userDarkMode ? tomorrow : oneLight}
@@ -109,14 +120,14 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
           wrapLongLines={wrapLines}
           customStyle={{
             margin: 0,
-            borderRadius: '0 0 4px 4px',
-            fontSize: '14px',
+            borderRadius: "0 0 4px 4px",
+            fontSize: "14px",
           }}
         >
           {code}
         </SyntaxHighlighter>
       </div>
-      
+
       {/* Display an indicator when code is collapsed */}
       {isCollapsed && (
         <div className="ihub-code-collapsed-indicator" onClick={toggleCollapse}>

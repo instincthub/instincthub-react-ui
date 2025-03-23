@@ -15,7 +15,7 @@
 
 	/* Position the tooltip */
 	position: absolute;
-	z-index: 1;
+	z-index: var(--z-navigation);
 	top: 120%;
 	right: -50%;
 	margin-left: -60px;

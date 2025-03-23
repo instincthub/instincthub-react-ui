@@ -92,7 +92,7 @@
   border: none;
 }
 .p-toast-message-content {
-  z-index: 10000 !important;
+  z-index: var(--z-overlay) !important;
 }
 
 .p-button.p-button-text:enabled:hover,
@@ -335,7 +335,7 @@
   color: #444;
   padding: 5px 12px;
   white-space: nowrap;
-  z-index: 999;
+  z-index: var(--z-overlay);
 }
 
 .ql-snow .ql-tooltip input[type="text"] {

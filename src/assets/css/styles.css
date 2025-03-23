@@ -1,23 +1,23 @@
 /* Base Styles */
-@import url("assets/css/imports.css");
-@import url("assets/css/main.css");
-@import url("assets/css/forms.css");
-@import url("assets/css/modals.css");
-@import url("assets/css/tooltip.css");
+@import url("./fonts.css");
+@import url("./root.css");
+@import url("./bootstrap.css");
+@import url("./tag-only-selectors.css");
+@import url("./main.css");
+@import url("./forms/input-fields.css");
+@import url("./modals.css");
+@import url("./tooltip.css");
 
 /* UI Styles */
-@import url("assets/css/ui/parent-list-styles.css");
-@import url("assets/css/ui/list-styles.css");
-@import url("assets/css/ui/code-display.css");
-
-/* React Form Components */
-@import url("assets/css/forms/react-action.css");
-@import url("assets/css/forms/text-fields.css");
-@import url("assets/css/forms/submit-btn.css");
+@import url("./ui/parent-list-styles.css");
+@import url("./ui/list-styles.css");
+@import url("./ui/editor.css");
+@import url("./ui/content-viewer.css");
+@import url("./ui/code-display.css");
 
 /* Third-party Framework Styles */
-@import url("assets/css/material-ui.css");
-@import url("assets/css/primereact.css");
+@import url("./material-ui.css");
+@import url("./primereact.css");
 
 /* Overrides & Dark Mode: Last to ensure it overrides other styles */
-@import url("assets/css/darkmode.css");
+@import url("./darkmode.css");

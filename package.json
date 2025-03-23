@@ -10,10 +10,11 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/src/index.esm.js",
+      "import": "./dist/src/index.js",
       "require": "./dist/src/index.js",
       "types": "./dist/src/types/index.d.ts"
-    }
+    },
+    "./styles.css": "./dist/assets/css/styles.css"
   },
   "scripts": {
     "rollup": "rollup -c",
@@ -100,5 +101,6 @@
     "dompurify": "^3.2.4",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -4,9 +4,11 @@
   margin: 1.5rem 0;
   overflow: hidden;
   border: 1px solid var(--borderDefault);
-  box-shadow: var(--shadow);
+  box-shadow: var(--lightShadow);
   transition: all 0.3s ease;
   position: relative;
+  width: 95%;
+  margin: auto;
 }
 
 .ihub-code-display code.language-css {
@@ -15,16 +17,15 @@
 }
 
 .ihub-code-display:focus {
-  outline: 2px solid var(--DarkCyan);
-  box-shadow: 0 0 0 4px rgba(0, 131, 143, 0.2);
+  outline: 0.2px solid var(--DarkCyan);
+  box-shadow: 0 0 0 4px rgba(0, 131, 143, 0.1);
 }
 
 .ihub-code-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: var(--Gray);
+  background-color: var(--OpacityBackground);
   border-bottom: var(--borderDefault);
   font-family: var(--Montserat);
 }
@@ -38,6 +39,7 @@
 .ihub-code-controls {
   display: flex;
   gap: 8px;
+  margin-left: auto;
 }
 
 .ihub-code-button {
@@ -52,8 +54,8 @@
 }
 
 .ihub-code-button:hover {
-  background-color: var(--DarkCyan);
-  color: white;
+  background-color: var(--borderDefault);
+  color: var(--DarkCyan);
 }
 
 .ihub-code-button:disabled {
@@ -67,6 +69,9 @@
   max-height: 500px;
   overflow: auto;
   transition: max-height 0.3s ease;
+}
+.ihub-code-content pre {
+  background-color: var(--White) !important;
 }
 
 .ihub-code-content.ihub-collapsed {
@@ -93,7 +98,7 @@
 @media (max-width: 540px) {
   .ihub-code-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 8px;
   }
 
@@ -112,13 +117,9 @@ html.DarkMode .ihub-code-display {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-html.DarkMode .ihub-code-header {
-  background-color: var(--Gunmetal);
-}
-
 html.DarkMode .ihub-code-filename,
 html.DarkMode .ihub-code-button {
-  color: var(--White);
+  color: var(--white);
 }
 
 html.DarkMode .ihub-code-button {

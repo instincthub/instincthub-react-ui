@@ -1,7 +1,7 @@
 // components/CountryStateInput.tsx
 import React, { useEffect, useState } from "react";
 import CloseIcon from "../svgs/CloseIcon";
-import "./CountryStateInput.css"; // You'll need to create this CSS file separately
+// import "./CountryStateInput.css"; // You'll need to create this CSS file separately
 
 // Define the State object interface
 interface StateObject {

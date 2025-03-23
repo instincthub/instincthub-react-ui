@@ -1,0 +1,66 @@
+/* Overflow utilities */
+.ihub-overflow-auto {
+  overflow: auto;
+}
+
+.ihub-overflow-hidden {
+  overflow: hidden;
+}
+
+.ihub-overflow-visible {
+  overflow: visible;
+}
+
+.ihub-overflow-scroll {
+  overflow: scroll;
+}
+
+.ihub-overflow-x-auto {
+  overflow-x: auto;
+}
+
+.ihub-overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.ihub-overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.ihub-overflow-y-auto {
+  overflow-y: auto;
+}
+
+.ihub-overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.ihub-overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+/* Scrollbar styling for WebKit browsers */
+.ihub-scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.ihub-scrollbar-thin::-webkit-scrollbar-track {
+  background: var(--Gray);
+  border-radius: 5px;
+}
+
+.ihub-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--DarkCyan);
+  border-radius: 5px;
+}
+
+/* Hide scrollbar but maintain functionality */
+.ihub-scrollbar-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.ihub-scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

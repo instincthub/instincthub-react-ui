@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import countryObjects from "../../assets/json/countryObjects";
 import CloseIcon from "../svgs/CloseIcon";
-import "./CountryInput.css"; // Import external CSS
+// import "./CountryInput.css"; // Import external CSS
 
 // Define country object interface
 interface CountryObject {
