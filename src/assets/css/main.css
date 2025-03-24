@@ -1485,7 +1485,7 @@ RADIO ENDS
   border: 1px solid var(--DarkCyan);
 }
 .outlined-btn:hover {
-  color: var(--White);
+  color: var(--white);
   background-color: var(--DarkCyan);
 }
 
