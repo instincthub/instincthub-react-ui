@@ -570,3 +570,1048 @@
     margin: 5px 0;
   }
 }
+
+
+/* FilterArray Component Styles */
+.ihub-select {
+  margin: 30px 0;
+  position: relative;
+}
+
+.ihub-select__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  height: 47px;
+  padding: 0 10px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+}
+
+.ihub-select.ihub-form-err .ihub-select__btn {
+  border-color: var(--Danger);
+}
+
+.ihub-select__btn:focus-within {
+  outline: none;
+  border-color: var(--DarkCyan);
+}
+
+.ihub-select__input {
+  display: none;
+}
+
+.ihub-select__btn p {
+  margin: 0;
+}
+
+.ihub-select__label {
+  position: absolute;
+  top: -15px;
+  left: 15px;
+  padding: 5px;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  background: var(--White);
+  pointer-events: none;
+}
+
+.ihub-select__content {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 1;
+  font-family: var(--Nunito);
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--White);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ihub-select__item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-select__item:hover {
+  background-color: #f2f2f2;
+}
+
+
+/* FilterObjects Component Styles */
+.ihub-select {
+  margin: 30px 0;
+  position: relative;
+}
+
+.ihub-select__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  height: 47px;
+  padding: 0 10px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+}
+
+.ihub-select.ihub-form-err .ihub-select__btn {
+  border-color: var(--Danger);
+}
+
+.ihub-select__btn:focus-within {
+  outline: none;
+  border-color: var(--DarkCyan);
+}
+
+.ihub-select__input {
+  display: none;
+}
+
+.ihub-select__btn p {
+  margin: 0;
+}
+
+.ihub-select__label {
+  position: absolute;
+  top: -15px;
+  left: 15px;
+  padding: 5px;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  background: var(--White);
+  pointer-events: none;
+}
+
+.ihub-select__content {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 1;
+  font-family: var(--Nunito);
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--White);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ihub-select__item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-select__item:hover {
+  background-color: #f2f2f2;
+}
+
+.ihub-select .disabled {
+  opacity: 0.7;
+}
+
+.ihub-select__loader {
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid var(--DarkCyan); /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: ihub-select-spin 2s linear infinite;
+}
+
+@keyframes ihub-select-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form Error Component Styles */
+.ihub-form-error {
+  padding: 20px;
+  margin: 20px 0px;
+  background-color: var(--Danger);
+  border-radius: 5px;
+}
+
+.ihub-form-error p {
+  font-size: 14px;
+  margin-bottom: 10px !important;
+  text-align: left !important;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.ihub-form-error h4 {
+  font-size: 1em;
+  text-align: left !important;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+
+/* InputSearchDropdown Component Styles */
+.ihub-react-search-dropdown {
+  margin-bottom: 20px;
+}
+
+.ihub-react-search-dropdown-title {
+  font-size: 1em;
+  margin-top: 40px;
+  font-weight: 600;
+  font-family: var(--Nunito);
+}
+
+.ihub-react-search-dropdown .ihub-input {
+  border: var(--borderDefault);
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-family: var(--Nunito);
+}
+
+.ihub-react-search-dropdown .ihub-input:disabled,
+.ihub-react-search-dropdown .ihub-input[readonly] {
+  background: #f4f4f4;
+}
+
+.ihub-react-search-dropdown .ihub-drop-down-list {
+  box-shadow: var(--shadow);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--White);
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: var(--z-navigation);
+}
+
+.ihub-react-search-dropdown .ihub-drop-down-list li {
+  padding: 10px 15px;
+  border-bottom: var(--borderDefault);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-react-search-dropdown .ihub-drop-down-list li:hover {
+  background-color: var(--Gray);
+}
+
+.ihub-react-search-dropdown .ihub-field {
+  position: relative;
+}
+
+
+/* MessageDisplay Component Styles */
+.ihub-react-message {
+  padding: 15px;
+  margin: 20px 0px;
+  background-color: #2c333a;
+  border-radius: 5px;
+}
+
+.ihub-react-message p {
+  color: var(--White);
+  margin: 0;
+}
+
+.ihub-react-message.ihub-success {
+  background-color: #2c333a;
+}
+
+.ihub-react-message.ihub-success p {
+  color: #fff !important;
+}
+
+.ihub-react-message.ihub-failed {
+  background-color: #ea5f5e;
+}
+
+.ihub-react-message.ihub-note {
+  background-color: #69779b;
+}
+
+
+/* MultipleEmail Component Styles */
+.ihub-multiple-email {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: var(--White);
+}
+
+.ihub-multiple-email .ihub-button {
+  margin: 0 20px;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 300;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--Gunmetal);
+}
+
+.ihub-multiple-email .ihub-input {
+  border: var(--borderDefault);
+  padding: 8px 10px;
+  flex-grow: 1;
+  min-width: 200px;
+  margin: 5px 0;
+  font-family: var(--Nunito);
+}
+
+.ihub-multiple-email .ihub-input:focus {
+  border-color: var(--DarkCyan);
+  outline: none;
+}
+
+.ihub-multiple-email .ihub-input.ihub-has-error {
+  border-color: tomato;
+}
+
+.ihub-multiple-email .ihub-error {
+  margin: 5px 0 0 0;
+  font-size: 90%;
+  color: tomato;
+  width: 100%;
+  font-family: var(--Nunito);
+}
+
+.ihub-multiple-email .ihub-tag-item {
+  background-color: #d4d5d6;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 30px;
+  height: 30px;
+  padding: 0 4px 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0.3rem 0.3rem 0;
+}
+
+.ihub-multiple-email .ihub-tag-item p {
+  margin: 0;
+  padding: 0;
+  font-family: var(--Nunito);
+  font-size: 14px;
+}
+
+
+/* PageLoading Component Styles */
+.ihub-loading {
+  height: 80vh;
+}
+
+.ihub-loading p {
+  text-align: center;
+  margin-top: 30vh;
+  font-family: var(--Nunito);
+  font-weight: 500;
+  color: var(--Gunmetal);
+}
+
+
+
+/* PhoneNumberInput Component Styles */
+.ihub-react-phone-input {
+  margin-top: 30px;
+}
+
+.ihub-react-phone-input .ihub-make-bold {
+  font-weight: 800;
+  font-style: italic;
+  font-family: var(--Nunito);
+  margin-top: 5px;
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-target-phone {
+  display: flex;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ihub-react-phone-input .ihub-country-select {
+  border: 0;
+  display: inline-block;
+  height: 50px;
+  width: 20%;
+  padding-left: 5px;
+  border-radius: 5px;
+  font-family: var(--Nunito);
+  background-color: var(--White);
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-phone-input {
+  border: 0;
+  border-radius: 5px;
+  padding-left: 10px;
+  height: 50px;
+  width: 80%;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-c-flag {
+  margin-right: 3px;
+}
+
+.ihub-react-phone-input .ihub-c-code {
+  font-weight: 500;
+}
+
+/* Focus states */
+.ihub-react-phone-input .ihub-country-select:focus,
+.ihub-react-phone-input .ihub-phone-input:focus {
+  outline: none;
+}
+
+.ihub-react-phone-input .ihub-target-phone:focus-within {
+  border-color: var(--DarkCyan);
+}
+
+
+/* RadioField Component Styles */
+.ihub-radio-wrapper {
+  max-height: 200px;
+  overflow: auto;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.ihub-radio-parent {
+  margin-bottom: 15px;
+}
+
+.ihub-radio {
+  display: block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: left;
+}
+
+.ihub-radio input {
+  display: none;
+}
+
+.ihub-field input:valid {
+  background-color: var(--White);
+}
+
+.ihub-field input {
+  width: 100%;
+  font-family: var(--Montserat);
+  padding: 15px;
+  border: 1px solid #d0d0d0;
+  border-radius: 5px;
+  height: 50px;
+  font-size: 15px;
+  outline: 0;
+}
+
+.ihub-radio input + .ihub-label-title {
+  display: inline-block;
+  position: relative;
+  padding-left: 40px;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 10px;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal);
+}
+
+.ihub-radio input:checked + .ihub-label-title::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+.ihub-radio input + .ihub-label-title::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  border-radius: 50%;
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--DarkCyan);
+}
+
+.ihub-radio input + .ihub-label-title::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--DarkCyan);
+  position: absolute;
+  border-radius: 50%;
+  top: 6px;
+  left: 6px;
+  transform: scale(0, 0);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+}
+
+/* Scrollbar styling */
+.ihub-radio-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ihub-radio-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.ihub-radio-wrapper::-webkit-scrollbar-thumb {
+  background: var(--DarkCyan);
+  border-radius: 10px;
+}
+
+
+
+/* RadioSimple Component Styles */
+.ihub-radio-btn .ihub-select-theme {
+  margin-top: 20px;
+}
+
+.ihub-radio-btn .ihub-select-theme p {
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+
+.ihub-radio-btn .ihub-radio-label {
+  color: #303030;
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 7px;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  bottom: 10px;
+  right: 0;
+  font-family: var(--Nunito);
+}
+
+.ihub-radio-btn .ihub-p-label {
+  font-size: 14px;
+  font-weight: 400;
+  display: inline;
+  bottom: 10px;
+  right: 0;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal);
+}
+
+.ihub-radio-btn .ihub-radio-input {
+  margin: 0;
+  transition: all 0.4s ease-in-out;
+  visibility: hidden;
+}
+
+.ihub-radio-btn .ihub-radio-input:checked + .ihub-custom-radio {
+  border: 1px solid var(--DarkCyan);
+  transition: all 0.4s ease-in-out;
+}
+
+.ihub-radio-btn .ihub-radio-input:checked + .ihub-custom-radio:after {
+  opacity: 1;
+}
+
+.ihub-radio-btn .ihub-custom-radio {
+  left: -8px;
+  top: 6px;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--DarkCyan);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+/* for inner filled circle */
+.ihub-radio-btn .ihub-custom-radio::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: var(--DarkCyan);
+  position: absolute;
+  border-radius: 50%;
+  transition: all 0.4s ease-in-out;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+
+/* RangeRadio Component Styles */
+.ihub-range-wrapper {
+  max-height: 200px;
+  overflow: auto;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ihub-range-wrapper .ihub-radio-parent {
+  margin-right: 20px;
+}
+
+.ihub-range-wrapper .ihub-radio {
+  display: block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: left;
+}
+
+.ihub-range-wrapper .ihub-radio input {
+  display: none;
+}
+
+.ihub-range-wrapper input:valid {
+  background-color: var(--White);
+}
+
+.ihub-range-wrapper input {
+  width: 100%;
+  font-family: var(--Montserat);
+  padding: 15px;
+  border: 1px solid #d0d0d0;
+  border-radius: 5px;
+  height: 50px;
+  font-size: 15px;
+  outline: 0;
+}
+
+.ihub-range-wrapper .ihub-radio input + span {
+  display: inline-block;
+  position: relative;
+  padding-left: 30px;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 10px;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal);
+}
+
+.ihub-range-wrapper .ihub-radio input:checked + span::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+.ihub-range-wrapper .ihub-radio input + span::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 0;
+  border-radius: 50%;
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--DarkCyan);
+}
+
+.ihub-range-wrapper .ihub-radio input + span::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--DarkCyan);
+  position: absolute;
+  border-radius: 50%;
+  top: 10px;
+  left: 6px;
+  transform: scale(0, 0);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-range-wrapper {
+    flex-direction: column;
+  }
+  
+  .ihub-range-wrapper .ihub-radio-parent {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+
+/* ReactTimeAgo Component Styles */
+.ihub-time-ago {
+  font-family: var(--Nunito);
+  font-size: 0.9rem;
+  color: var(--Gunmetal);
+  font-style: italic;
+}
+
+
+/* ReadTermsAndCondition Component Styles */
+.ihub-react-terms {
+  margin-bottom: 20px;
+  font-family: var(--Nunito);
+}
+
+.ihub-react-terms p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  color: var(--Gunmetal);
+}
+
+.ihub-react-terms .ihub-link {
+  text-decoration: underline;
+  color: var(--DarkCyan);
+  transition: color 0.2s ease;
+}
+
+.ihub-react-terms .ihub-link:hover {
+  color: var(--ViridianGreen);
+}
+
+.ihub-react-terms .ihub-label-cbx {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 16px 0;
+  user-select: none;
+}
+
+.ihub-react-terms .ihub-checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--DarkCyan);
+  border-radius: 3px;
+  transition: all 0.2s;
+  margin-right: 8px;
+}
+
+.ihub-react-terms .ihub-checkbox svg {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+}
+
+.ihub-react-terms .ihub-checkbox svg path {
+  fill: none;
+  stroke: var(--DarkCyan);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 71px;
+  stroke-dashoffset: 71px;
+  transition: all 0.6s ease;
+}
+
+.ihub-react-terms .ihub-checkbox svg polyline {
+  fill: none;
+  stroke: #FFF;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 18px;
+  stroke-dashoffset: 18px;
+  transition: all 0.3s ease;
+}
+
+.ihub-react-terms input:checked + .ihub-checkbox {
+  border-color: var(--DarkCyan);
+  background: var(--DarkCyan);
+}
+
+.ihub-react-terms input:checked + .ihub-checkbox svg path {
+  stroke-dashoffset: 0;
+}
+
+.ihub-react-terms input:checked + .ihub-checkbox svg polyline {
+  stroke-dashoffset: 0;
+}
+
+.ihub-react-terms span {
+  color: var(--Gunmetal);
+  font-weight: 500;
+}
+
+
+
+/* SearchField Component Styles */
+.ihub-search-field {
+  width: 100%;
+}
+
+.ihub-search-set {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ihub-input-div {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.ihub-search-icon {
+  color: var(--Gunmetal);
+  opacity: 0.7;
+}
+
+.ihub-event-input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  border: var(--borderDefault);
+  border-radius: 5px;
+  font-family: var(--Nunito);
+  font-size: 0.9rem;
+  color: var(--Gunmetal);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ihub-event-input:focus {
+  border-color: var(--DarkCyan);
+}
+
+.ihub-event-input::placeholder {
+  color: var(--Gunmetal);
+  opacity: 0.5;
+}
+
+@media (min-width: 760px) {
+  .ihub-search-field {
+    width: 20%;
+  }
+}
+
+
+/* Add these styles to input-fields.css */
+
+.ihub-progress-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  margin: 100px auto;
+}
+
+.ihub-progress-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: var(--borderDefault);
+  border-radius: 100%;
+  background-color: white;
+  color: var(--Gunmetal);
+  font-weight: bold;
+  font-family: var(--Montserat);
+}
+
+.ihub-progress-step.ihub-step-active {
+  background-color: var(--ViridianGreen);
+  color: white;
+}
+
+.ihub-progress-line {
+  height: 2px;
+  background-color: rgba(44, 51, 58, 0.2);
+}
+
+
+/* Add to input-fields.css */
+
+.ihub-table-container {
+  width: 100%;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.ihub-table-filter {
+  margin-bottom: 15px;
+}
+
+.ihub-table-filter-input {
+  padding: 8px 12px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  width: 250px;
+}
+
+.ihub-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: var(--Nunito);
+}
+
+.ihub-table th {
+  background-color: var(--Gray);
+  color: var(--Gunmetal);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-table td {
+  padding: 10px 15px;
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-table tbody tr:hover {
+  background-color: rgba(0, 131, 143, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ihub-table-filter-input {
+    width: 100%;
+  }
+  
+  .ihub-table th,
+  .ihub-table td {
+    padding: 8px 10px;
+  }
+}
+
+
+/* Add to input-fields.css */
+
+.ihub-textarea-wrapper {
+  position: relative;
+  margin-top: 25px;
+  font-family: var(--Nunito);
+}
+
+.ihub-textarea-wrapper textarea {
+  border: var(--borderDefault);
+  border-radius: 5px;
+  font-size: inherit;
+  outline: none;
+  width: 100%;
+  padding: 15px 10px;
+  font-family: var(--Montserat) !important;
+  font-size: 15px;
+}
+
+.ihub-textarea-wrapper .ihub-textarea-label {
+  position: absolute;
+  top: 8px;
+  left: 15px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-size: 1rem;
+  color: var(--Gunmetal);
+}
+
+.ihub-textarea-wrapper textarea:focus + .ihub-textarea-label,
+.ihub-textarea-wrapper.ihub-value .ihub-textarea-label {
+  background: var(--White);
+  top: -10px;
+  font-family: var(--Nunito);
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  pointer-events: initial;
+  left: 15px;
+  line-height: 10px;
+}
+
+.ihub-textarea-wrapper textarea:disabled {
+  background-color: var(--Gray);
+  cursor: not-allowed;
+}
+
+
+/* Add to input-fields.css */
+
+.ihub-tooltip-container {
+  position: relative;
+}
+
+.ihub-tooltip {
+  background: #3e474f;
+  border-radius: 0.25em;
+  bottom: 65px;
+  color: #edeff0;
+  margin-left: -8.75em;
+  padding: 1em;
+  transition: all 0.65s cubic-bezier(0.84, -0.18, 0.31, 1.26) 0.2s;
+  transform: scale(0.6) translateY(50%);
+  width: 400px;
+  height: 200px;
+  z-index: 100;
+  position: absolute;
+  font-size: 25px;
+  overflow: auto;
+}
+
+.ihub-tooltip p {
+  color: var(--White);
+  font-size: 25px;
+  line-height: 120%;
+}
+
+.ihub-tip-item {
+  margin-bottom: 20px;
+  border: var(--borderDefault);
+}
+
+.ihub-timestamp {
+  font-size: 12px;
+}
+
+.ihub-tip-wrapper {
+  position: relative;
+}
+
+.ihub-tip-wrapper::after {
+  border-style: solid;
+  border-width: 1em 0.75em 0 0.75em;
+  border-color: #3e474f transparent transparent transparent;
+  content: "";
+  position: absolute;
+  bottom: 30px;
+  left: 0px;
+  transition: all 0.65s cubic-bezier(0.84, -0.18, 0.31, 1.26) 0.2s;
+}
