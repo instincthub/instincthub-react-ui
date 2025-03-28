@@ -1,0 +1,247 @@
+/* File Uploader Component Styles */
+.ihub-uploader {
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+  font-family: var(--Nunito);
+}
+
+.ihub-uploader-header {
+  font-family: var(--Nunito);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--Gunmetal);
+  margin-bottom: 15px;
+}
+
+.ihub-uploader-container {
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--White);
+  box-shadow: var(--lightShadow);
+}
+
+/* Dropzone */
+.ihub-uploader-dropzone {
+  border: 2px dashed rgba(44, 51, 58, 0.3);
+  border-radius: 8px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--White);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.ihub-uploader-dropzone:hover {
+  border-color: var(--DarkCyan);
+  background-color: rgba(0, 131, 143, 0.03);
+}
+
+.ihub-uploader-dropzone-active {
+  border-color: var(--DarkCyan);
+  background-color: rgba(0, 131, 143, 0.05);
+}
+
+.ihub-uploader-icon {
+  color: var(--DarkCyan);
+  margin-bottom: 15px;
+}
+
+.ihub-uploader-text {
+  font-size: 1.1rem;
+  color: var(--Gunmetal);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.ihub-uploader-hint {
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+
+.ihub-uploader-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+/* File Preview */
+.ihub-uploader-preview {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--White);
+}
+
+.ihub-uploader-file-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ihub-uploader-file-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: var(--Gunmetal);
+  background-color: rgba(44, 51, 58, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ihub-uploader-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ihub-uploader-file-details {
+  flex: 1;
+}
+
+.ihub-uploader-file-name {
+  font-weight: 600;
+  color: var(--Gunmetal);
+  margin: 0 0 5px 0;
+  word-break: break-word;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ihub-uploader-file-size {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Progress Bar */
+.ihub-uploader-progress {
+  height: 8px;
+  background-color: rgba(44, 51, 58, 0.1);
+  border-radius: 4px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+.ihub-uploader-progress-bar {
+  height: 100%;
+  background-color: var(--DarkCyan);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.3s ease;
+}
+
+.ihub-uploader-progress-text {
+  color: var(--White);
+  font-size: 10px;
+  font-weight: 700;
+  display: none;
+}
+
+/* Show progress text only when width is significant */
+.ihub-uploader-progress-bar[style*="width: 2"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 3"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 4"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 5"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 6"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 7"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 8"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 9"] .ihub-uploader-progress-text,
+.ihub-uploader-progress-bar[style*="width: 10"] .ihub-uploader-progress-text {
+  display: inline-block;
+}
+
+/* Action Buttons */
+.ihub-uploader-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Success message */
+.ihub-uploader-success {
+  display: flex;
+  align-items: center;
+  color: var(--DarkCyan);
+  font-weight: 600;
+}
+
+.ihub-uploader-success svg {
+  margin-right: 8px;
+}
+
+/* Error message */
+.ihub-uploader-error {
+  display: flex;
+  align-items: center;
+  background-color: rgba(234, 95, 94, 0.1);
+  border-left: 3px solid var(--Danger);
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-top: 15px;
+  color: var(--Danger);
+}
+
+.ihub-uploader-error svg {
+  margin-right: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .ihub-uploader-dropzone {
+    padding: 20px 15px;
+    min-height: 150px;
+  }
+
+  .ihub-uploader-actions {
+    flex-direction: column;
+  }
+
+  .ihub-uploader-upload-btn,
+  .ihub-uploader-cancel-btn,
+  .ihub-uploader-retry-btn {
+    width: 100%;
+  }
+}
+
+/* Additional states */
+.ihub-uploader-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Enhancements for better integration with InstinctHub design system */
+.ihub-uploader-upload-btn.ihub-important-btn {
+  padding: 10px 25px;
+  transition: all 0.3s ease;
+}
+
+.ihub-uploader-retry-btn.ihub-important-btn {
+  background-color: var(--DarkCyan);
+}
+
+.ihub-uploader-cancel-btn.outlined-btn {
+  border: 1px solid var(--DarkCyan);
+  color: var(--DarkCyan);
+  background-color: transparent;
+  padding: 10px 25px;
+  transition: all 0.3s ease;
+}
+
+.ihub-uploader-cancel-btn.outlined-btn:hover {
+  background-color: rgba(0, 131, 143, 0.05);
+}

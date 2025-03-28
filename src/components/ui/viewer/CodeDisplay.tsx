@@ -17,14 +17,14 @@ interface CodeDisplayProps {
   darkMode?: boolean;
 }
 
-const CodeDisplay: React.FC<CodeDisplayProps> = ({
+export default function CodeDisplay({
   code,
   language,
   showLineNumbers = true,
   wrapLines = false,
   fileName,
   darkMode = true,
-}) => {
+}: CodeDisplayProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [userDarkMode, setUserDarkMode] = useState(darkMode);
@@ -136,6 +136,4 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
       )}
     </div>
   );
-};
-
-export default CodeDisplay;
+}

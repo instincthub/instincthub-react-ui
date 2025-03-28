@@ -15,7 +15,7 @@ import TaskItem from "@tiptap/extension-task-item";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import MenuBar from "./MenuBar";
-import { formatDateToWord } from "../../../assets/js/helpFunction";
+import { formatDateToWord } from "../../lib/helpFunction";
 
 interface TextEditorProps {
   onChange: (html: string) => void;

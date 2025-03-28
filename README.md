@@ -21,6 +21,11 @@ or
 yarn add @instincthub/react-ui
 ```
 
+## peerDependencies Installation
+```bash
+npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
+```
+
 ## Core Features
 
 - **Form Components**: A comprehensive set of form elements including text fields, date pickers, phone inputs, and more

@@ -18,7 +18,6 @@ interface ContentViewerProps {
   title?: string;
   className?: string;
   editable?: boolean;
-  onEdit?: () => void;
   isEditing: boolean;
   setIsEditing: (html: boolean) => void;
   onContentChange?: (newContent: string) => void;
@@ -34,7 +33,7 @@ export default function ContentViewer({
   editable = false,
   onContentChange,
   isEditing = false,
-  setIsEditing,
+  setIsEditing = () => {},
   showToolbar = true,
   showEditBtn = false,
   isMarkdown = false, // Default to false for backward compatibility

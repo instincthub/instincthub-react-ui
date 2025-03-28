@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "@/styles/scss/unsplash.login.module.scss";
 import { unsplashDefaultObject } from "../../assets/json/unsplashDefaultObject";
-import { IN_DEV_MODE } from "../../assets/js/helpFunction";
+import { IN_DEV_MODE } from "../lib/helpFunction";
 import Image from "next/image";
 import { useDispatch, useSelector } from "@/lib/redux";
 import {

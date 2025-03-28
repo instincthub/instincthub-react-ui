@@ -3,8 +3,12 @@ import {
   calculateAmountAfterDeduction,
   reqOptions,
   setCookie,
-} from "./helpFunction";
-import { getUserEmailInputModal, openConfirmModal, openToast } from "./modals";
+} from "../../components/lib/helpFunction";
+import {
+  getUserEmailInputModal,
+  openConfirmModal,
+  openToast,
+} from "../../components/lib/modals";
 
 /*
     const obj = {

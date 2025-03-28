@@ -1,6 +1,6 @@
 {
   "name": "@instincthub/react-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "InstinctHub React UI components and assets in TypeScript",
   "main": "dist/src/index.js",
   "module": "dist/src/index.mjs",
@@ -13,6 +13,26 @@
       "import": "./dist/src/index.js",
       "require": "./dist/src/index.js",
       "types": "./dist/src/types/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/src/index-types.js",
+      "require": "./dist/src/index-types.js",
+      "types": "./dist/src/types/index-types.d.ts"
+    },
+    "./lib": {
+      "import": "./dist/src/lib-index.js",
+      "require": "./dist/src/lib-index.js",
+      "types": "./dist/src/types/lib-index.d.ts"
+    },
+    "./modals": {
+      "import": "./dist/src/components/lib/modals.js",
+      "require": "./dist/src/components/lib/modals.js",
+      "types": "./dist/src/types/components/lib/modals.d.ts"
+    },
+    "./helpFunction": {
+      "import": "./dist/src/components/lib/helpFunction.js",
+      "require": "./dist/src/components/lib/helpFunction.js",
+      "types": "./dist/src/types/components/lib/helpFunction.d.ts"
     },
     "./styles.css": "./dist/assets/css/styles.css"
   },
@@ -34,6 +54,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^8.3.3",
+    "@types/dompurify": "^3.2.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -47,14 +68,16 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2",
-    "styled-components": "^5.3.5",
+    "styled-components": "^6.1.16",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.777.0",
+    "@aws-sdk/lib-storage": "^3.777.0",
     "next": "^15.2.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "keywords": [
     "css",
@@ -81,7 +104,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.4.7",
+    "@mui/icons-material": "^7.0.0",
+    "@mui/material": "^7.0.0",
     "@tiptap/extension-character-count": "^2.11.5",
     "@tiptap/extension-code-block": "^2.11.5",
     "@tiptap/extension-highlight": "^2.11.5",
@@ -96,11 +120,14 @@
     "@tiptap/extension-task-list": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
-    "@types/dompurify": "^3.2.0",
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.4",
     "html2canvas": "^1.4.1",
-    "jspdf": "^3.0.0"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "jspdf": "^3.0.1",
+    "next": "^15.2.1",
+    "primereact": "^10.9.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8"
+  }
 }

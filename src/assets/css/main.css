@@ -1460,7 +1460,7 @@ RADIO ENDS
   font-weight: 600;
   font-size: 1rem;
   background-color: var(--DarkCyan);
-  color: var(--White);
+  color: var(--white);
 }
 
 .important-btn:hover,
@@ -1523,7 +1523,8 @@ RADIO ENDS
   padding-top: 170px !important;
 }
 @media (min-width: 767px) {
-  .container {
+  .container,
+  .ihub-container {
     padding: 0 40px;
   }
   .pt-500 {
@@ -1549,13 +1550,15 @@ RADIO ENDS
     display: none;
   }
 }
-.container {
+.container,
+.ihub-container {
   max-width: 1650px;
   margin: 0 auto;
   padding: 0 20px;
 }
 @media (min-width: 1024px) {
-  .container {
+  .container,
+  .ihub-container {
     padding: 0 40px;
   }
   .ih_hide_wb {
@@ -1563,12 +1566,14 @@ RADIO ENDS
   }
 }
 @media (max-width: 1024px) {
-  .container {
+  .container,
+  .ihub-container {
     padding: 0 40px;
   }
 }
 @media (max-width: 540px) {
-  .container {
+  .container,
+  .ihub-container {
     padding: 0 20px;
   }
   .ih_hide_mb {
@@ -1576,7 +1581,8 @@ RADIO ENDS
   }
 }
 @media (min-width: 1024px) {
-  .container {
+  .container,
+  .ihub-container {
     padding: 0 40px;
   }
 }
@@ -1808,7 +1814,8 @@ RADIO ENDS
   }
 }
 
-footer .container {
+footer .container,
+footer .ihub-container {
   margin-bottom: 0;
 }
 

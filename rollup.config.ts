@@ -12,7 +12,12 @@ import removeDirectives from "./rollup-plugin-remove-directives";
 
 export default {
   // input: ["src/index.ts", "src/styles.ts"], // js and css files
-  input: ["src/index.ts"], // js files only
+  input: [
+    "src/index.ts",
+    "src/index-types.ts",
+    "src/components/lib/modals.ts",
+    "src/components/lib/helpFunction.ts",
+  ], // js and css files
   output: [
     {
       dir: "dist",
@@ -76,10 +81,5 @@ export default {
     "react-dom",
     "styled-components",
     "react/jsx-runtime",
-    // "@mui/system",
-    // "@mui/material",
-    // "@mui/icons-material",
-    // "@emotion/react",
-    // "@emotion/styled",
   ],
 };

@@ -3,6 +3,11 @@
   margin-top: 25px;
 }
 
+.field h5,
+.ihub-field h5 {
+  font-size: 0.9rem;
+}
+
 .ihub-wrapper .ihub-text-label {
   position: absolute;
   top: 13px;
@@ -74,4 +79,494 @@
 .ihub-notes {
   font-size: 12px;
   margin-top: 5px;
+}
+
+.ihub-is_invalid {
+  color: var(--Danger);
+  background-color: "#EA5F5E";
+}
+
+/* Passowrd */
+.ihub-password-wrapper {
+  position: relative;
+  margin-top: 25px;
+}
+
+.ihub-password-wrapper span {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-size: 1rem;
+  color: var(--Gunmetal);
+}
+
+.ihub-password-wrapper input {
+  border: var(--borderDefault);
+}
+
+/* Chrome, Safari, Edge, Opera */
+.ihub-password-wrapper input::-webkit-outer-spin-button,
+.ihub-password-wrapper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.ihub-password-wrapper input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.ihub-password-wrapper input:disabled {
+  background: #f4f4f4;
+}
+
+.ihub-password-wrapper .focused,
+.ihub-password-wrapper.value span {
+  background: var(--White);
+  top: -10px;
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  pointer-events: initial;
+  left: 15px;
+  line-height: 10px;
+  width: auto;
+}
+
+.ihub-password-wrapper input.width_auto {
+  width: auto;
+}
+
+.ihub-password-wrapper .input_icon {
+  position: relative;
+}
+
+.ihub-password-wrapper .input_icon .material-symbols-outlined,
+.ihub-password-wrapper .input_icon .symbols {
+  position: absolute;
+  right: 5%;
+  top: 10%;
+  cursor: pointer;
+  z-index: 10;
+  width: auto;
+}
+
+/* Date Input Component Styles */
+.ihub-date-input-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  position: relative;
+  margin-top: 25px;
+}
+
+.ihub-date-input {
+  width: 60px;
+  height: 50px;
+  text-align: center;
+  border: var(--borderDefault);
+  border-radius: 5px;
+  margin: 0 5px;
+  outline: none;
+}
+
+.ihub-date-input:focus {
+  border-color: var(--ViridianGreen);
+}
+
+.ihub-date-year {
+  width: 70px;
+}
+
+.ihub-date-input-container.date-err input {
+  border-color: var(--Danger);
+}
+
+.ihub-auto-date span {
+  display: inline-block !important;
+  color: var(--ViridianGreen);
+}
+
+.ihub-auto-date .ihub-separator {
+  color: grey;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.ihub-auto-date .ihub-set-today,
+.ihub-auto-date .ihub-set-tomorrow,
+.ihub-auto-date .ihub-clear-date {
+  cursor: pointer;
+}
+
+/* DateTime Input Component Styles */
+.ihub-datetime-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 280px;
+  position: relative;
+  margin-top: 25px;
+}
+
+.ihub-date-wrapper,
+.ihub-time-wrapper {
+  display: flex;
+}
+
+.ihub-datetime-separator {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 500px) {
+  .ihub-datetime-container {
+    display: block;
+    width: 100%;
+  }
+
+  .ihub-datetime-separator {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .ihub-date-wrapper,
+  .ihub-time-wrapper {
+    justify-content: center;
+  }
+}
+
+/* DropFile Component Styles */
+.ihub-dropzone {
+  padding: 30px;
+  position: relative;
+}
+
+.ihub-dropzone-wrap {
+  border: 2px dashed #ccc;
+  padding: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.ihub-dropzone-wrap:hover {
+  border-color: var(--ViridianGreen, #4caf50);
+}
+
+.ihub-dropzone p {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.ihub-download-template {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.ihub-download-template a {
+  color: var(--ViridianGreen, #4caf50);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.ihub-download-template a:hover {
+  text-decoration: underline;
+}
+
+/* Email List Component Styles */
+.ihub-email-list {
+  margin-top: 20px;
+}
+
+.ihub-email-list ul {
+  max-height: 400px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.ihub-email-item {
+  background-color: #d4d5d6;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 30px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0.3rem 0.3rem 0;
+}
+
+.ihub-email-text {
+  display: inline-block;
+  padding: 5px 5px 5px 0;
+}
+
+.ihub-email-icon {
+  font-size: 18px;
+  position: relative;
+  top: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ihub-email-icon:hover {
+  color: var(--Danger, #ff0000);
+}
+
+.ihub-email-list input[type="text"] {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 12px;
+}
+
+/* FileField Component Styles */
+.ihub-file-input-wrapper {
+  margin-bottom: 15px;
+}
+
+.ihub-file-input-wrapper .ihub-tag-upload {
+  margin-bottom: 5px;
+}
+
+.ihub-file-input-wrapper .ihub-preview-img {
+  position: static;
+  width: 100% !important;
+  object-fit: cover;
+  height: 200px !important;
+  border-radius: 5px;
+  padding: 0 !important;
+  margin-top: 10px;
+}
+
+.ihub-file-input-wrapper .ihub-custom-uploader {
+  margin-bottom: 10px;
+}
+
+.ihub-file-input {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.ihub-file-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--ViridianGreen, #0077cc);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.ihub-file-link:hover {
+  text-decoration: underline;
+}
+
+/* File Upload Input Wrapper */
+.ihub-wrapper.ihub-file-wrapper {
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-label {
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background: var(--White);
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  pointer-events: initial;
+  line-height: 10px;
+  width: auto;
+  font-family: var(--Nunito);
+  z-index: 1;
+}
+
+/* File Input Area */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-area {
+  width: 100%;
+  min-height: 120px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-area:hover {
+  border-color: var(--DarkCyan);
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-area.ihub-file-active {
+  border-color: var(--DarkCyan);
+  background-color: rgba(0, 131, 143, 0.03);
+}
+
+/* File Input Content */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-content {
+  padding: 30px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-icon {
+  margin-bottom: 15px;
+  color: var(--DarkCyan);
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-text {
+  font-family: var(--Nunito);
+  font-size: 1rem;
+  color: var(--Gunmetal);
+  margin: 0 0 5px 0;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-hint {
+  font-family: var(--Nunito);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Hidden File Input */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+/* File Preview */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-preview {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-info {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-preview-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  background: rgba(44, 51, 58, 0.05);
+  border-radius: 5px;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-preview-details {
+  flex: 1;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-preview-name {
+  font-family: var(--Nunito);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--Gunmetal);
+  margin: 0 0 3px 0;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-preview-size {
+  font-family: var(--Nunito);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Progress Indicator */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-progress {
+  margin: 15px 0;
+  height: 6px;
+  background: rgba(44, 51, 58, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-progress-bar {
+  height: 100%;
+  background: var(--DarkCyan);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Status Messages */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-status {
+  padding: 10px 15px;
+  margin-top: 15px;
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-status.ihub-file-error {
+  background: rgba(234, 95, 94, 0.1);
+  color: var(--Danger);
+  border-left: 3px solid var(--Danger);
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-status.ihub-file-success {
+  background: rgba(0, 131, 143, 0.1);
+  color: var(--DarkCyan);
+  border-left: 3px solid var(--DarkCyan);
+}
+
+.ihub-wrapper.ihub-file-wrapper .ihub-file-status-icon {
+  margin-right: 10px;
+}
+
+/* Action Buttons */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Thumbnail Preview */
+.ihub-wrapper.ihub-file-wrapper .ihub-file-thumbnail {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .ihub-wrapper.ihub-file-wrapper .ihub-file-content {
+    padding: 20px 15px;
+  }
+
+  .ihub-wrapper.ihub-file-wrapper .ihub-file-actions {
+    flex-direction: column;
+  }
+
+  .ihub-wrapper.ihub-file-wrapper .ihub-file-actions button {
+    width: 100%;
+    margin: 5px 0;
+  }
 }
