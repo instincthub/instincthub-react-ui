@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ChevronRightIcon from "../svgs/ChevronRightIcon";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 interface SubmitBtnProps {
   labels: string;
@@ -27,7 +27,12 @@ function SubmitBtn(props: SubmitBtnProps) {
           </svg>
         )}
         <span>{props.labels}</span>
-        <ChevronRightIcon fills="#fff" ids="animate" widths="16" heights="16" />
+        <ChevronRightIcon
+          style={{ color: "#ffffff" }}
+          id="animate"
+          width="16"
+          height="16"
+        />
       </button>
     </div>
   );

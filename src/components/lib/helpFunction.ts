@@ -301,7 +301,10 @@ export const slugifyFileName = (fileName: string): string => {
     .toLowerCase();
 
   // Remove parentheses from the slugified name
-  const nameWithoutParentheses: string = slugifiedName.replace(/\(([^)]+)\)/g, "");
+  const nameWithoutParentheses: string = slugifiedName.replace(
+    /\(([^)]+)\)/g,
+    ""
+  );
 
   // Only take first 50 characters
   const reduced_txt: string = nameWithoutParentheses.slice(0, 50);
@@ -576,7 +579,7 @@ export const reqOptions = (
   method: string,
   data: BodyInit | FormData | null = null,
   token: string | null = null,
-  content_type: "json" | "form-data" | false = false,
+  content_type: "json" | "form-data" | null | false = false,
   channel: string | null = null,
   auth_sk: boolean = false
 ): RequestOptions => {
