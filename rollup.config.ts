@@ -23,15 +23,17 @@ export default {
       dir: "dist",
       format: "cjs",
       sourcemap: true,
-      preserveModules: true, // Ensures tree-shaking and correct imports
-      exports: "named", // Ensures named exports are properly handled
+      preserveModules: true,
+      preserveModulesRoot: "src", // Added this line - removes the src prefix in output
+      exports: "named",
     },
     {
       dir: "dist",
       format: "esm",
       sourcemap: true,
-      preserveModules: true, // Ensures tree-shaking and correct imports
-      exports: "named", // Ensures named exports are properly handled
+      preserveModules: true,
+      preserveModulesRoot: "src", // Added this line - removes the src prefix in output
+      exports: "named",
     },
   ],
   plugins: [
