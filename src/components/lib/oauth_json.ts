@@ -1,5 +1,5 @@
 // Checking the data samples returned from auth
-const profile_goggle_provider = {
+export const profile_goggle_provider = {
 	iss: "https://accounts.google.com",
 	azp: "574381222933-fsh7rfl1ldb0p96kqjdis391ec2nkps2.apps.googleusercontent.com",
 	aud: "574381222933-fsh7rfl1ldb0p96kqjdis391ec2nkps2.apps.googleusercontent.com",
@@ -17,7 +17,7 @@ const profile_goggle_provider = {
 	exp: 1686212295,
 };
 
-const paystackHook = {
+export const paystackHook = {
 	data: {
 		id: 3144535842,
 		log: null,

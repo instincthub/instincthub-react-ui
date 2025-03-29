@@ -9,7 +9,7 @@ interface CountryObject {
 }
 
 // Import country objects with proper type
-import countryObjects from "../../assets/json/countryObjects";
+import countryObjects from "../lib/json/countryObjects";
 
 interface PhoneNumberInputProps {
   phoneCode?: string;
@@ -18,13 +18,16 @@ interface PhoneNumberInputProps {
     [key: string]: any;
   };
   names?: string;
-  inputEvent?: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  inputEvent?: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
 }
 
 const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   // Get default country
   const [selectedCountry, setSelectedCountry] = useState<CountryObject>(
-    countryObjects.find((c) => c.phonecode === (props.phoneCode || "234")) || countryObjects[0]
+    countryObjects.find((c) => c.phonecode === (props.phoneCode || "234")) ||
+      countryObjects[0]
   );
 
   // Get default number
@@ -37,17 +40,19 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
     const country = countryObjects.find(
       (country) => country.phonecode === selectedCountryCode
     );
-    
+
     if (country) {
       setSelectedCountry(country);
     }
-    
+
     if (props.inputEvent) {
       props.inputEvent(event);
     }
   };
 
-  const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhoneNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setPhoneNumber(event.target.value);
     if (props.inputEvent) {
       props.inputEvent(event);

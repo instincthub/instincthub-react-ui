@@ -17,7 +17,36 @@
     "declaration": true,
     "declarationDir": "dist/src/types",
     "outDir": "dist",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@instincthub/react-ui/dist/types"
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@instincthub/react-ui": [
+        "/node_modules/@instincthub/react-ui/dist/src/index.js"
+      ],
+      "@instincthub/react-ui/types": [
+        "/node_modules/@instincthub/react-ui/dist/src/types/index-types.d.ts"
+      ],
+      "@instincthub/react-ui/dist/styles.css": [
+        "/node_modules/@instincthub/react-ui/dist/assets/css/styles.css"
+      ]
+      // "@instincthub/react-ui": [
+      //   "/node_modules/@instincthub/react-ui/dist/src/index.js"
+      // ],
+      // "@instincthub/react-ui/asssets": [
+      //   "/node_modules/@instincthub/react-ui/dist/assets/*"
+      // ],
+      // "@instincthub/react-ui/types": [
+      //   "/node_modules/@instincthub/react-ui/dist/src/index-types.js"
+      // ],
+      // "@instincthub/react-ui/lib": [
+      //   "/node_modules/@instincthub/react-ui/dist/src/types/components/lib/*"
+      // ]
+    }
   },
   "include": [
     "src/**/*.ts",

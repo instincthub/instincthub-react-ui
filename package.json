@@ -19,22 +19,16 @@
       "require": "./dist/src/index-types.js",
       "types": "./dist/src/types/index-types.d.ts"
     },
-    "./lib": {
-      "import": "./dist/src/lib-index.js",
-      "require": "./dist/src/lib-index.js",
-      "types": "./dist/src/types/lib-index.d.ts"
+    "./lib/*": {
+      "import": "./dist/src/components/lib/*",
+      "require": "./dist/src/components/lib/*",
+      "types": "./dist/src/types/components/lib/*"
     },
-    "./modals": {
-      "import": "./dist/src/components/lib/modals.js",
-      "require": "./dist/src/components/lib/modals.js",
-      "types": "./dist/src/types/components/lib/modals.d.ts"
-    },
-    "./helpFunction": {
-      "import": "./dist/src/components/lib/helpFunction.js",
-      "require": "./dist/src/components/lib/helpFunction.js",
-      "types": "./dist/src/types/components/lib/helpFunction.d.ts"
-    },
-    "./styles.css": "./dist/assets/css/styles.css"
+    "./assets/*": {
+      "import": "./dist/assets/*",
+      "require": "./dist/assets/*",
+      "types": "./dist/assets/*"
+    }
   },
   "scripts": {
     "rollup": "rollup -c",
@@ -75,16 +69,16 @@
   "peerDependencies": {
     "@aws-sdk/client-s3": "^3.777.0",
     "@aws-sdk/lib-storage": "^3.777.0",
-    "next": "^15.2.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next-auth": "^4.24.11",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "jspdf": "^3.0.1",
-    "primereact": "^10.9.3"
+    "next": "^15.2.1",
+    "next-auth": "^4.24.11",
+    "primereact": "^10.9.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "keywords": [
     "css",

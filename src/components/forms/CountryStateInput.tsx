@@ -1,6 +1,6 @@
 // components/CountryStateInput.tsx
 import React, { useEffect, useState } from "react";
-import CloseIcon from "../svgs/CloseIcon";
+import CloseIcon from "@mui/icons-material/Close";
 // import "./CountryStateInput.css"; // You'll need to create this CSS file separately
 
 // Define the State object interface
@@ -93,7 +93,7 @@ const CountryStateInput: React.FC<CountryStateInputProps> = (props) => {
     const getStateObj = async () => {
       try {
         const countryStatesObjects = await import(
-          "../../assets/json/countryStatesObjects"
+          "../lib/json/countryStatesObjects"
         );
         const filteredStates = countryStatesObjects.default.filter(
           (state: StateObject) => state.countryCode === props.country?.isoCode
@@ -153,7 +153,7 @@ const CountryStateInput: React.FC<CountryStateInputProps> = (props) => {
             </li>
           ))}
           <div className="close_icon" onClick={() => setFilteredStates([])}>
-            <CloseIcon widths="24" heights="24" />
+            <CloseIcon width="24" height="24" />
           </div>
         </ul>
       )}
