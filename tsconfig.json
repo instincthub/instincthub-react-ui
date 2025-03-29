@@ -1,37 +1,52 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "declaration": true,
-    "declarationDir": "dist/types", // Changed from dist/src/types
-    "outDir": "dist",
-    "emitDeclarationOnly": true,
-    "baseUrl": ".",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.jsx",
-    "src/**/*.js",
-    "types/**/*"
-  ],
-  "exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"target": "ESNext",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "react-jsx",
+		"declaration": true,
+		"declarationDir": "dist/src/types",
+		"outDir": "dist",
+		"emitDeclarationOnly": true,
+		"baseUrl": ".",
+		"typeRoots": [
+			"./node_modules/@types",
+			"./node_modules/@instincthub/react-ui/dist/types"
+		],
+		"paths": {
+			"@instincthub/react-ui": ["dist/src/index.js"],
+			"@instincthub/react-ui/src/types": ["dist/src/types/index-types.d.ts"],
+			"@instincthub/react-ui/styles.css": ["dist/assets/css/styles.css"]
+			// "@instincthub/react-ui": [
+			//   "/node_modules/@instincthub/react-ui/dist/src/index.js"
+			// ],
+			// "@instincthub/react-ui/asssets": [
+			//   "/node_modules/@instincthub/react-ui/dist/assets/*"
+			// ],
+			// "@instincthub/react-ui/types": [
+			//   "/node_modules/@instincthub/react-ui/dist/src/index-types.js"
+			// ],
+			// "@instincthub/react-ui/lib": [
+			//   "/node_modules/@instincthub/react-ui/dist/src/types/components/lib/*"
+			// ]
+		}
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.jsx",
+		"src/**/*.js",
+		"types/**/*"
+	],
+	"exclude": ["node_modules", "dist"]
 }
