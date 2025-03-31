@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "../../lib/auth/dbRequestst";
 import SignOutSession from "./SignOutSession";
@@ -5,12 +7,26 @@ import SignOutSession from "./SignOutSession";
 /**
  * Session data user information
  */
-interface SessionUser {
+export interface SessionUser {
   name?: {
+    id?: number;
     uuid?: string;
+    email?: string;
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+    full_name?: string;
+    picture?: string;
     token?: string;
+    category?: string;
+    channels?: any; // Adjust based on structure
     [key: string]: any;
   };
+  track?: boolean;
+  profile_id?: string;
+  verified?: boolean;
+  is_staff?: boolean;
+  status?: number;
   [key: string]: any;
 }
 
@@ -43,13 +59,13 @@ interface SessionExpiresLogoutProps {
  * Component that validates session and token expiration
  * and displays a logout screen when invalid
  */
-const SessionExpiresLogout: React.FC<SessionExpiresLogoutProps> = ({
+export default function SessionExpiresLogout({
   children,
   session,
   expiredMessage = "Your logged in session has expired!",
   disableValidation = false,
-  onSessionInvalid
-}) => {
+  onSessionInvalid,
+}: SessionExpiresLogoutProps) {
   const [valid, setValid] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const checkedRef = useRef<boolean>(false);
@@ -126,10 +142,14 @@ const SessionExpiresLogout: React.FC<SessionExpiresLogoutProps> = ({
   }
 
   if (!valid) {
-    return <SignOutSession message={expiredMessage} />;
+    return (
+      <html>
+        <body>
+          <SignOutSession message={expiredMessage} />
+        </body>
+      </html>
+    );
   }
 
   return <>{children}</>;
-};
-
-export default SessionExpiresLogout;
+}

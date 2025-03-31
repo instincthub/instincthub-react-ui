@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { useEffect, useState, FC } from "react";
 import LoadingAnimate from "./LoadingAnimate";
 
@@ -10,11 +12,11 @@ interface ThemeChangerProps {
 /**
  * Changes CSS variables in the document root based on provided colors
  */
-const ThemeChanger: FC<ThemeChangerProps> = ({
+export default function ChangeStyleVariable({
   primaryColor,
   variables = {},
   onComplete,
-}) => {
+}: ThemeChangerProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -45,6 +47,4 @@ const ThemeChanger: FC<ThemeChangerProps> = ({
 
   // Only render loading animation when loading
   return isLoading ? <LoadingAnimate /> : null;
-};
-
-export default ThemeChanger;
+}

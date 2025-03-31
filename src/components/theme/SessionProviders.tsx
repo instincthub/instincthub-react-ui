@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { useEffect, useState, FC, ReactNode } from "react";
 
@@ -10,11 +12,11 @@ interface SessionProvidersProps {
 /**
  * Wraps the Next-Auth SessionProvider with hydration handling
  */
-const SessionProviders: FC<SessionProvidersProps> = ({
+export default function SessionProviders({
   children,
   refetchInterval = 720 * 60, // 12 hour
   refetchOnWindowFocus = true,
-}) => {
+}: SessionProvidersProps) {
   // Prevent hydration errors by only mounting after client-side hydration
   const [isMounted, setIsMounted] = useState(false);
 
@@ -36,6 +38,4 @@ const SessionProviders: FC<SessionProvidersProps> = ({
       {children}
     </SessionProvider>
   );
-};
-
-export default SessionProviders;
+}

@@ -93,7 +93,7 @@ const CountryStateInput: React.FC<CountryStateInputProps> = (props) => {
     const getStateObj = async () => {
       try {
         const countryStatesObjects = await import(
-          "../lib/json/countryStatesObjects"
+          "../../assets/json/countries.json"
         );
         const filteredStates = countryStatesObjects.default.filter(
           (state: StateObject) => state.countryCode === props.country?.isoCode

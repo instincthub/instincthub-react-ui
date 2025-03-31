@@ -1,4 +1,5 @@
-import { useEffect, ReactNode, FC } from "react";
+"use client";
+import React, { useEffect, ReactNode } from "react";
 
 export type Theme = "DarkMode" | "LightMode" | "Device";
 
@@ -11,11 +12,11 @@ interface DarkModeProviderProps {
 /**
  * Provider component that manages theme state based on user preference or system settings
  */
-const DarkModeProvider: FC<DarkModeProviderProps> = ({ 
-  children, 
+export default function DarkModeProvider({
+  children,
   defaultTheme = "Device",
-  onChange 
-}) => {
+  onChange = () => {},
+}: DarkModeProviderProps) {
   useEffect(() => {
     // Apply the theme based on stored preference or system settings
     const applyTheme = () => {
@@ -32,9 +33,11 @@ const DarkModeProvider: FC<DarkModeProviderProps> = ({
         activeTheme = storedTheme;
       } else {
         // Apply system preference
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
         const systemTheme: Theme = prefersDark ? "DarkMode" : "LightMode";
-        
+
         rootHTML.classList.add(systemTheme);
         localStorage.setItem("theme", defaultTheme);
         activeTheme = systemTheme;
@@ -75,6 +78,4 @@ const DarkModeProvider: FC<DarkModeProviderProps> = ({
   }, [defaultTheme, onChange]);
 
   return <>{children}</>;
-};
-
-export default DarkModeProvider;
+}

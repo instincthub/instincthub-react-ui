@@ -1,30 +1,58 @@
-# InstinctHub UI
+# Installation Guide for @instincthub/react-ui
 
-A comprehensive React component library with built-in assets and utilities for building modern web applications.
+## Prerequisites
+Before installing `@instincthub/react-ui`, ensure you have the following installed on your system:
 
-[![npm version](https://img.shields.io/npm/v/instincthub-react-ui.svg)](https://www.npmjs.com/package/instincthub-react-ui)
-[![license](https://img.shields.io/npm/l/instincthub-react-ui.svg)](https://github.com/yourusername/instincthub-react-ui/blob/main/LICENSE)
-
-## Overview
-
-InstinctHub React UI provides a collection of reusable React components, styling assets, and utility functions that make it easy to build consistent user interfaces. Originally developed for InstinctHub's internal projects, this package is now available for anyone to use in their React and Next.js projects.
+- **Node.js** (Recommended version: >= 16.x)
+- **npm** (Comes with Node.js) or **yarn**
 
 ## Installation
 
-```bash
-npm install @instincthub/react-ui
+### Step 1: Install Peer Dependencies
+`@instincthub/react-ui` has several peer dependencies that need to be installed separately:
+```sh
+npm install @aws-sdk/client-s3 @aws-sdk/lib-storage @emotion/react @emotion/styled @mui/icons-material @mui/material jspdf next next-auth primereact react react-dom
+```
+Or using yarn:
+```sh
+yarn add @aws-sdk/client-s3 @aws-sdk/lib-storage @emotion/react @emotion/styled @mui/icons-material @mui/material jspdf next next-auth primereact react react-dom
 ```
 
-or
-
-```bash
+### Step 2: Install the Package
+Now, install `@instincthub/react-ui`:
+```sh
+npm install @instincthub/react-ui
+```
+Or using yarn:
+```sh
 yarn add @instincthub/react-ui
 ```
 
-## peerDependencies Installation
-```bash
-npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
+## Development Setup
+If you are contributing or testing locally, install the required dependencies:
+```sh
+npm install
 ```
+Then, build the package using:
+```sh
+npm run rollup
+```
+
+## Linking the Package (For Local Development)
+To test `@instincthub/react-ui` locally within another project:
+```sh
+npm link
+```
+In your consuming project, run:
+```sh
+npm link @instincthub/react-ui
+```
+
+To unlink:
+```sh
+npm unlink @instincthub/react-ui
+```
+
 
 ## Core Features
 

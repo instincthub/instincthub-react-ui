@@ -8,7 +8,6 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import CodeIcon from "@mui/icons-material/Code";
 import TableChartIcon from "@mui/icons-material/TableChart";
-import ImageIcon from "@mui/icons-material/Image";
 import LinkIcon from "@mui/icons-material/Link";
 import HighlightIcon from "@mui/icons-material/Highlight";
 import UndoIcon from "@mui/icons-material/Undo";
