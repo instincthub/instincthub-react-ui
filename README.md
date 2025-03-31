@@ -291,7 +291,7 @@ This package works seamlessly with Next.js applications. For optimal performance
 
 ```jsx
 // In your _app.js or layout.js
-import "@instincthub/react-ui/dist/styles.css"; // Import styles once at the application root
+import "@instincthub/react-ui/asssets/css/styles.css"; // Import styles once at the application root
 ```
 
 ## TypeScript Support

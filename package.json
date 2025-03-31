@@ -1,6 +1,6 @@
 {
   "name": "@instincthub/react-ui",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "InstinctHub React UI components and assets in TypeScript",
   "main": "dist/src/index.js",
   "module": "dist/src/index.mjs",
@@ -74,7 +74,7 @@
     "@mui/material": "^7.0.0",
     "jspdf": "^3.0.1",
     "next": "^15.2.1",
-    "next-auth": "^4.24.11",
+    "next-auth": "^5.0.0-beta.25",
     "primereact": "^10.9.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

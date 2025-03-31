@@ -27,14 +27,14 @@
       "@instincthub/react-ui": [
         "/node_modules/@instincthub/react-ui/dist/src/index.js"
       ],
-      "@instincthub/react-ui/asssets": [
-        "/node_modules/@instincthub/react-ui/dist/assets/*"
-      ],
       "@instincthub/react-ui/types": [
         "/node_modules/@instincthub/react-ui/dist/src/index-types.js"
       ],
       "@instincthub/react-ui/lib": [
         "/node_modules/@instincthub/react-ui/dist/src/components/lib/index.js"
+      ],
+      "@instincthub/react-ui/asssets/*": [
+        "/node_modules/@instincthub/react-ui/dist/src/assets/*"
       ]
     }
   },
