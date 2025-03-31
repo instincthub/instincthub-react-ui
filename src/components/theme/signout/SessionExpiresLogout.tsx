@@ -142,13 +142,7 @@ export default function SessionExpiresLogout({
   }
 
   if (!valid) {
-    return (
-      <html>
-        <body>
-          <SignOutSession message={expiredMessage} />
-        </body>
-      </html>
-    );
+    return <SignOutSession message={expiredMessage} />;
   }
 
   return <>{children}</>;
