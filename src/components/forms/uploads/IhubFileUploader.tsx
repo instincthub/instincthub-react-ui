@@ -4,55 +4,8 @@ import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { openToast } from "../../lib/modals";
+import { FileUploaderType, S3UploadResponseType } from "src/types";
 
-/**
- * Response interface for S3 uploads
- */
-export interface S3UploadResponseType {
-  bucket: string;
-  title: string;
-  key: string;
-  content_type: string;
-  size: number;
-  location: string;
-}
-
-/**
- * Props interface for the FileUploader component
- */
-export interface FileUploaderProps {
-  /** Header text to display above the uploader */
-  header?: string;
-  /** Label text for the dropzone area */
-  label?: string;
-  /** Accepted file types (e.g., 'image/*', 'video/*', '.pdf,.docx') */
-  accept?: string;
-  /** Maximum allowed file size in bytes */
-  maxFileSize?: number;
-  /** Input field name */
-  name?: string;
-  /** Module identifier for setting values */
-  module?: string;
-  /** Step identifier for setting values */
-  step?: string;
-  /** Username for file naming */
-  username?: string | null;
-  /** Callback for handling the upload response */
-  onUploadComplete?: (response: S3UploadResponseType) => void;
-  /** Callback for setting values */
-  setValues?: (name: string, value: string) => void;
-  /** Callback for setting module values */
-  setModules?: (module: string, name: string, value: string) => void;
-  /** Callback for setting step values */
-  setSteps?: (
-    module: string,
-    step: string,
-    name: string,
-    value: string
-  ) => void;
-  /** Additional CSS class names */
-  className?: string;
-}
 
 /**
  * A modern file uploader component with drag and drop support
@@ -71,7 +24,7 @@ export default function IhubFileUploader({
   setModules,
   setSteps,
   className = "",
-}: FileUploaderProps) {
+}: FileUploaderType) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [uploadPercentage, setUploadPercentage] = useState<number>(0);

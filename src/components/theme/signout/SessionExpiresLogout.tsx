@@ -3,41 +3,7 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "../../lib/auth/dbRequestst";
 import SignOutSession from "./SignOutSession";
-
-/**
- * Session data user information
- */
-export interface SessionUser {
-  name?: {
-    id?: number;
-    uuid?: string;
-    email?: string;
-    username?: string;
-    first_name?: string;
-    last_name?: string;
-    full_name?: string;
-    picture?: string;
-    token?: string;
-    category?: string;
-    channels?: any; // Adjust based on structure
-    [key: string]: any;
-  };
-  track?: boolean;
-  profile_id?: string;
-  verified?: boolean;
-  is_staff?: boolean;
-  status?: number;
-  [key: string]: any;
-}
-
-/**
- * Session data structure
- */
-interface SessionData {
-  expires: string;
-  user?: SessionUser;
-  [key: string]: any;
-}
+import { SessionType } from "src/types";
 
 /**
  * Properties for the SessionExpiresLogout component
@@ -46,7 +12,7 @@ interface SessionExpiresLogoutProps {
   /** Child components to render when session is valid */
   children: React.ReactNode;
   /** Next.js session object */
-  session: SessionData | null;
+  session: SessionType | null;
   /** Custom message to display when session expires */
   expiredMessage?: string;
   /** Whether to disable automatic session validation */

@@ -28,7 +28,7 @@
         "/node_modules/@instincthub/react-ui/dist/src/index.js"
       ],
       "@instincthub/react-ui/types": [
-        "/node_modules/@instincthub/react-ui/dist/src/index-types.js"
+        "/node_modules/@instincthub/react-ui/dist/src/types/types/index.d.ts"
       ],
       "@instincthub/react-ui/lib": [
         "/node_modules/@instincthub/react-ui/dist/src/components/lib/index.js"

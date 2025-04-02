@@ -797,13 +797,13 @@ small {
 .anime-button svg,
 .anime-button-chevron svg#animate,
 .ihub-anime-button-chevron svg#animate {
-  position: absolute;
-  right: 25px;
-  top: 10px;
-  transform: translate(-40px);
-
   transition: 0.4s;
-  opacity: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  position: relative;
+  top: 5px;
+  fill: #fff;
 }
 .anime-button:hover,
 .anime-button-chevron:hover,

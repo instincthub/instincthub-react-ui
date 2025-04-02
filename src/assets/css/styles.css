@@ -4,11 +4,14 @@
 @import url("./bootstrap.css");
 @import url("./tag-only-selectors.css");
 @import url("./main.css");
+@import url("./modals.css");
+@import url("./tooltip.css");
+
+/* Forms Styles */
 @import url("./forms/input-fields.css");
 @import url("./forms/ihub-file-uploader.css");
 @import url("./forms/unsplash-random-image.css");
-@import url("./modals.css");
-@import url("./tooltip.css");
+@import url("./forms/submit-button.css");
 
 /* UI Styles */
 @import url("./ui/parent-list-styles.css");

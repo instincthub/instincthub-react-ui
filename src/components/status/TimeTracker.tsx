@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { API_HOST_URL, IN_DEV_MODE, reqOptions } from "../lib/helpFunction";
-
-import { SessionUser } from "../theme/signout/SessionExpiresLogout";
+import { SessionUserType } from "src/types";
 
 interface IPAddressData {
   ip_address?: string;
@@ -11,7 +10,7 @@ interface IPAddressData {
 interface TimeTrackerProps {
   channel_username?: string;
   IPAdress: IPAddressData;
-  session: SessionUser;
+  session: SessionUserType;
   selectIPAdress: any;
   useDispatch: any;
   useSelector: any;

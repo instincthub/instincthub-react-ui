@@ -6,21 +6,27 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 // Define props interface
 interface PasswordFieldProps {
+  ids: string | null; // Optional ID for the input element
   names: string; // Class name and input name
   labels: string; // Label text
+  notes: string | null; // Optional validation message
   requireds?: boolean; // Optional required flag
   defaultValues?: string; // Optional default value
   setValues?: (value: string) => void; // Optional callback for value changes
-  inputEvent?: (name: string, value: string) => void; // Optional input event handler
+  inputEvent?: (e: React.ChangeEvent<HTMLInputElement>) => void | null; // Optional input event handler
+  setNameValue?: (name: string, value: string) => void | null; // Optional input event handler
 }
 
 export default function PasswordField({
+  ids,
   names,
   labels,
+  notes,
   requireds = false,
   defaultValues = "",
   setValues,
   inputEvent,
+  setNameValue,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -39,7 +45,8 @@ export default function PasswordField({
     if (value) {
       parentDiv?.classList.add("value");
       if (setValues) setValues(value);
-      if (inputEvent) inputEvent(names, value);
+      if (inputEvent) inputEvent(e);
+      if (setNameValue) setNameValue(names, value);
     } else {
       parentDiv?.classList.remove("value");
     }
@@ -56,7 +63,7 @@ export default function PasswordField({
           <div className="input_icon">
             <input
               type={showPassword ? "text" : "password"}
-              id="password"
+              id={ids || "password"}
               name={names}
               required={requireds}
               value={password}
@@ -75,6 +82,7 @@ export default function PasswordField({
             {labels}
           </span>
         </div>
+        {notes && <p className="ihub-notes">{notes}</p>}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface FormErrorProps {
-  errors?: Record<string, string[]>;
+  errors?: Record<string, string[]> | undefined;
   status?: number;
 }
 

@@ -15,6 +15,11 @@ export { default as MessageDisplay } from "./components/forms/MessageDisplay";
 export { default as MultipleEmail } from "./components/forms/MultipleEmail";
 export { default as PageLoading } from "./components/forms/PageLoading";
 
+// Auth
+export { default as IsUsernameEmailTaken } from "./components/auth/IsUsernameEmailTaken";
+export { default as ClientDetector } from "./components/auth/ClientDetector";
+export { default as PasswordsMatch } from "./components/auth/PasswordsMatch";
+
 // Correcting incorrect assignments
 export { default as PhoneNumberInput } from "./components/forms/PhoneNumberInput";
 export { default as RadioField } from "./components/forms/RadioField";
@@ -24,7 +29,7 @@ export { default as ReactTimeAgo } from "./components/forms/ReactTimeAgo"; // En
 export { default as ReadTermsAndCondition } from "./components/forms/ReadTermsAndCondition";
 export { default as SearchField } from "./components/forms/SearchField";
 export { default as StepProgressBar } from "./components/forms/StepProgressBar";
-export { default as SubmitBtn } from "./components/forms/SubmitBtn";
+export { default as SubmitButton } from "./components/forms/SubmitButton";
 export { default as Tables } from "./components/forms/Tables";
 export { default as TextArea } from "./components/forms/TextArea";
 export { default as TextField } from "./components/forms/TextField";

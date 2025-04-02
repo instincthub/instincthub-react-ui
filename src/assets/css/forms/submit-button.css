@@ -1,0 +1,170 @@
+/* Submit Button Styles */
+.ihub-submit-btn-wrapper {
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.ihub-submit-btn {
+  margin-top: 40px;
+  position: relative;
+  padding: 12px 35px;
+  margin: 25px 0 10px 0;
+  border-radius: 5px;
+  border: 0;
+  background-color: unset;
+  font-family: var(--Montserat);
+  outline: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease-in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+}
+
+.ihub-submit-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--White), 0 0 0 4px var(--DarkCyan);
+  outline: none;
+}
+
+.ihub-submit-btn span {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  font-family: var(--Montserat);
+  z-index: 1;
+}
+
+/* Button variants */
+.ihub-submit-btn.important-btn {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+}
+
+.ihub-submit-btn.important-btn:hover:not(:disabled) {
+  background-color: var(--DarkCyan);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.ihub-submit-btn.important-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ihub-submit-btn.outlined-btn {
+  background-color: transparent;
+  color: var(--DarkCyan);
+  border: 1px solid var(--DarkCyan);
+}
+
+.ihub-submit-btn.outlined-btn:hover:not(:disabled) {
+  color: var(--White);
+  background-color: var(--DarkCyan);
+}
+
+.ihub-submit-btn.primary-btn {
+  background-color: var(--Gunmetal);
+  color: var(--White);
+}
+
+.ihub-submit-btn.primary-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.ihub-submit-btn.danger-btn {
+  background-color: var(--Danger);
+  color: var(--White);
+}
+
+.ihub-submit-btn.danger-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.ihub-submit-btn.default-btn {
+  background-color: var(--Gray);
+  color: var(--Gunmetal);
+}
+
+.ihub-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--Gray);
+  color: var(--Gunmetal);
+  border: 1px solid rgba(204, 204, 204, 0.4);
+  box-shadow: none;
+}
+
+/* Spinner animation */
+.ihub-submit-btn.ihub-rolling .ihub-bt-spinner {
+  display: block;
+  opacity: 1;
+}
+
+.ihub-bt-spinner {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: ihub-spinner-rotation 1s linear infinite;
+  opacity: 0;
+  display: none;
+}
+
+/* Hover animation */
+.ihub-anime-button-chevron {
+  position: relative;
+  overflow: hidden;
+}
+
+.ihub-anime-button-chevron svg#animate {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translate(-40px, -50%);
+  transition: all 0.4s ease;
+  opacity: 0;
+}
+
+.ihub-anime-button-chevron:hover:not(:disabled) {
+  padding-right: 55px;
+}
+
+.ihub-anime-button-chevron:hover:not(:disabled) svg#animate {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+@keyframes ihub-spinner-rotation {
+  0% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ihub-submit-btn.outlined-btn {
+    border-color: var(--White);
+    color: var(--White);
+  }
+
+  .ihub-submit-btn:focus-visible {
+    box-shadow: 0 0 0 2px var(--Gunmetal), 0 0 0 4px var(--White);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-submit-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}

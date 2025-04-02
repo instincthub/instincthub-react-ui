@@ -15,9 +15,9 @@
       "types": "./dist/src/types/index.d.ts"
     },
     "./types": {
-      "import": "./dist/src/index-types.js",
-      "require": "./dist/src/index-types.js",
-      "types": "./dist/src/types/index-types.d.ts"
+      "import": "./dist/src/types/types/index.d.ts",
+      "require": "./dist/src/types/types/index.d.ts",
+      "types": "./dist/src/types/types/index.d.ts"
     },
     "./lib": {
       "import": "./dist/src/components/lib/index.js",

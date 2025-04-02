@@ -571,7 +571,6 @@
   }
 }
 
-
 /* FilterArray Component Styles */
 .ihub-select {
   margin: 30px 0;
@@ -611,7 +610,7 @@
   position: absolute;
   top: -15px;
   left: 15px;
-  padding: 5px;
+  padding: 0px 5px;
   color: var(--DarkCyan);
   font-size: 14px;
   background: var(--White);
@@ -641,7 +640,6 @@
 .ihub-select__item:hover {
   background-color: #f2f2f2;
 }
-
 
 /* FilterObjects Component Styles */
 .ihub-select {
@@ -676,17 +674,6 @@
 
 .ihub-select__btn p {
   margin: 0;
-}
-
-.ihub-select__label {
-  position: absolute;
-  top: -15px;
-  left: 15px;
-  padding: 5px;
-  color: var(--DarkCyan);
-  font-size: 14px;
-  background: var(--White);
-  pointer-events: none;
 }
 
 .ihub-select__content {
@@ -758,7 +745,6 @@
   margin-bottom: 10px;
 }
 
-
 /* InputSearchDropdown Component Styles */
 .ihub-react-search-dropdown {
   margin-bottom: 20px;
@@ -813,7 +799,6 @@
   position: relative;
 }
 
-
 /* MessageDisplay Component Styles */
 .ihub-react-message {
   padding: 15px;
@@ -842,7 +827,6 @@
 .ihub-react-message.ihub-note {
   background-color: #69779b;
 }
-
 
 /* MultipleEmail Component Styles */
 .ihub-multiple-email {
@@ -913,7 +897,6 @@
   font-size: 14px;
 }
 
-
 /* PageLoading Component Styles */
 .ihub-loading {
   height: 80vh;
@@ -926,8 +909,6 @@
   font-weight: 500;
   color: var(--Gunmetal);
 }
-
-
 
 /* PhoneNumberInput Component Styles */
 .ihub-react-phone-input {
@@ -988,7 +969,6 @@
 .ihub-react-phone-input .ihub-target-phone:focus-within {
   border-color: var(--DarkCyan);
 }
-
 
 /* RadioField Component Styles */
 .ihub-radio-wrapper {
@@ -1088,8 +1068,6 @@
   border-radius: 10px;
 }
 
-
-
 /* RadioSimple Component Styles */
 .ihub-radio-btn .ihub-select-theme {
   margin-top: 20px;
@@ -1167,7 +1145,6 @@
   opacity: 0;
   transition: opacity 0.2s;
 }
-
 
 /* RangeRadio Component Styles */
 .ihub-range-wrapper {
@@ -1260,13 +1237,12 @@
   .ihub-range-wrapper {
     flex-direction: column;
   }
-  
+
   .ihub-range-wrapper .ihub-radio-parent {
     margin-right: 0;
     margin-bottom: 10px;
   }
 }
-
 
 /* ReactTimeAgo Component Styles */
 .ihub-time-ago {
@@ -1275,7 +1251,6 @@
   color: var(--Gunmetal);
   font-style: italic;
 }
-
 
 /* ReadTermsAndCondition Component Styles */
 .ihub-react-terms {
@@ -1336,7 +1311,7 @@
 
 .ihub-react-terms .ihub-checkbox svg polyline {
   fill: none;
-  stroke: #FFF;
+  stroke: #fff;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1362,8 +1337,6 @@
   color: var(--Gunmetal);
   font-weight: 500;
 }
-
-
 
 /* SearchField Component Styles */
 .ihub-search-field {
@@ -1419,7 +1392,6 @@
   }
 }
 
-
 /* Add these styles to input-fields.css */
 
 .ihub-progress-bar-container {
@@ -1453,7 +1425,6 @@
   height: 2px;
   background-color: rgba(44, 51, 58, 0.2);
 }
-
 
 /* Add to input-fields.css */
 
@@ -1505,13 +1476,12 @@
   .ihub-table-filter-input {
     width: 100%;
   }
-  
+
   .ihub-table th,
   .ihub-table td {
     padding: 8px 10px;
   }
 }
-
 
 /* Add to input-fields.css */
 
@@ -1561,7 +1531,6 @@
   background-color: var(--Gray);
   cursor: not-allowed;
 }
-
 
 /* Add to input-fields.css */
 
