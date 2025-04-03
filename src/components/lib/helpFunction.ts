@@ -232,6 +232,18 @@ export const convertArrayToFormData = (array: FormItem[]): FormData => {
 };
 
 /**
+ * Checks if an object is empty
+ * @param obj Object to check
+ * @returns True if empty, false otherwise
+ */
+export const objectIsEmpty = (obj: any): boolean => {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) return false;
+  }
+  return true;
+};
+
+/**
  * Handles form validation errors.
  * @param e Event object from form input
  * @param formError Current error list
