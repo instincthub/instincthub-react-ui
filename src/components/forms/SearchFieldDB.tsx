@@ -2,7 +2,6 @@ import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import "../../assets/css/forms/search-field-db.css";
 
 /**
  * SearchFieldDB component for searching items and updating data via API
