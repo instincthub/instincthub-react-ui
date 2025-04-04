@@ -1,0 +1,66 @@
+/* Search Field Component Styles */
+.ihub-search-field {
+  position: relative;
+}
+
+.ihub-search-courses {
+  margin-right: 15px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.ihub-search-courses input {
+  padding: 10px;
+  height: 40px !important;
+  max-width: 400px;
+  min-width: 300px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  font-family: var(--Nunito);
+}
+
+.ihub-search-btn {
+  position: absolute;
+  height: 90%;
+  width: 50px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  right: 2px;
+  top: 2px;
+  background: var(--Gunmetal);
+  padding: 10px 15px;
+}
+
+.ihub-search-btn .ihub-material-symbols-outlined {
+  font-weight: 600 !important;
+  color: var(--White);
+  position: relative;
+  top: -3px;
+}
+
+.ihub-search-cancel {
+  position: absolute;
+  right: 55px;
+  top: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.ihub-loader {
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid var(--DarkCyan); /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: ihub-spin 2s linear infinite;
+}
+
+@keyframes ihub-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

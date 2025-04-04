@@ -26,8 +26,10 @@ export { default as RadioField } from "./components/forms/RadioField";
 export { default as RadioSimple } from "./components/forms/RadioSimple";
 export { default as ReactTimeAgo } from "./components/forms/ReactTimeAgo"; // Ensure this exists
 
+// Forms
 export { default as ReadTermsAndCondition } from "./components/forms/ReadTermsAndCondition";
 export { default as SearchField } from "./components/forms/SearchField";
+export { default as SearchFieldDB } from "./components/forms/SearchFieldDB";
 export { default as StepProgressBar } from "./components/forms/StepProgressBar";
 export { default as SubmitButton } from "./components/forms/SubmitButton";
 export { default as Tables } from "./components/forms/Tables";
