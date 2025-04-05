@@ -96,8 +96,9 @@ export interface SessionType {
   [key: string]: any;
 }
 
-
-
+export type SearchParamsType = {
+  [key: string]: string;
+};
 
 /**
  * Response interface for S3 uploads
@@ -110,6 +111,14 @@ export interface S3UploadResponseType {
   size: number;
   location: string;
 }
+
+// Define interfaces for the component
+export interface FilterObjectsType {
+  id: string | number;
+  title: string;
+  [key: string]: any; // For any additional properties
+}
+
 
 /**
  * Props interface for the FileUploader component

@@ -1,0 +1,13 @@
+/* Download As Excel Component Styles */
+.ihub-plain-download {
+  cursor: pointer;
+  margin-right: 20px !important;
+  transition: 0.3s ease-in;
+  font-family: var(--Nunito);
+  display: inline-flex;
+  align-items: center;
+}
+
+.ihub-plain-download:hover {
+  opacity: 0.7;
+}

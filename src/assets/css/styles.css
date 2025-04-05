@@ -13,6 +13,8 @@
 @import url("./forms/unsplash-random-image.css");
 @import url("./forms/submit-button.css");
 @import url("./forms/search-field-db.css");
+@import url("./forms/download-as-excel.css");
+@import url("./forms/thead-sort-btn.css");
 
 /* UI Styles */
 @import url("./ui/parent-list-styles.css");

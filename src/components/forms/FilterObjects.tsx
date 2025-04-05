@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from "react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { setCookie } from "../lib/helpFunction";
-
-// Define interfaces for the component
-interface FilterObjectsOption {
-  id: string | number;
-  title: string;
-  [key: string]: any; // For any additional properties
-}
+import { FilterObjectsType } from "src/types";
 
 interface FilterObjectsProps {
-  options: FilterObjectsOption[];
-  defaultValues?: FilterObjectsOption | string | number;
+  options: FilterObjectsType[];
+  defaultValues?: FilterObjectsType | string | number;
   names: string;
   labels?: string;
-  setSelectedValues?: (name: string, value: FilterObjectsOption) => void;
+  setSelectedValues?: (name: string, value: FilterObjectsType) => void;
   defaultWidth?: string;
   requireds?: boolean;
   errs?: boolean;
-  setArrayProps?: (arrayProps: any[], option: FilterObjectsOption) => void;
+  setArrayProps?: (arrayProps: any[], option: FilterObjectsType) => void;
   arrayProps?: any[];
   dataNames?: string;
   setCookies?: string;
-  setObjects?: (option: FilterObjectsOption) => void;
+  setObjects?: (option: FilterObjectsType) => void;
   status?: number;
   upperCases?: boolean;
 }
@@ -30,7 +24,7 @@ interface FilterObjectsProps {
 const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>("Choose...");
-  const [objects, setObjects] = useState<FilterObjectsOption[]>([]);
+  const [objects, setObjects] = useState<FilterObjectsType[]>([]);
   const [id, setID] = useState<string | number>("");
 
   useEffect(() => {
@@ -38,7 +32,7 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
         Objects throws error when you loop with map or forEach.
         Solution: convert objects list to array.
     */
-    let obj: FilterObjectsOption[] = [];
+    let obj: FilterObjectsType[] = [];
     for (const i in props.options) {
       if (props.options[i].id === props.defaultValues) {
         setSelected(props.options[i].title);
@@ -69,7 +63,10 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
     }
   }, [props.defaultValues, props.options]);
 
-  const handleOptionClick = (option: FilterObjectsOption, title: string): void => {
+  const handleOptionClick = (
+    option: FilterObjectsType,
+    title: string
+  ): void => {
     setSelected(title);
     setID(option.id);
     setIsActive(false);

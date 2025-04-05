@@ -37,6 +37,9 @@ export { default as TextArea } from "./components/forms/TextArea";
 export { default as TextField } from "./components/forms/TextField";
 export { default as Tooltip } from "./components/forms/Tooltip";
 export { default as UnsplashRandomImage } from "./components/forms/UnsplashRandomImage";
+export { default as DownloadAsExcel } from "./components/forms/DownloadAsExcel";
+export { default as THeadSortBtn } from "./components/forms/THeadSortBtn";
+export { default as THeadSortList } from "./components/forms/THeadSortList";
 
 // Upload components
 export { default as FileUploader } from "./components/forms/uploads/FileUploader";
