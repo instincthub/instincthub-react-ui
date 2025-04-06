@@ -174,7 +174,7 @@ table thead tr {
   border-radius: 5px 5px 0px 0px;
 }
 table thead tr:nth-of-type(1) {
-  background-color: #f3f3f3;
+  background-color: var(--OpacityBackground);
 }
 table tbody tr {
   border: var(--borderDefault);
@@ -182,7 +182,7 @@ table tbody tr {
   font-weight: 500;
 }
 table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+  background-color: var(--OpacityBackground);
   font-size: 15px;
   font-weight: 500;
   line-height: 24px;

@@ -7,13 +7,15 @@
   margin-right: 15px;
   margin-bottom: 30px;
   position: relative;
+  max-width: 400px;
+  min-width: 300px;
 }
 
 .ihub-search-courses input {
-  padding: 10px;
-  height: 40px !important;
   max-width: 400px;
   min-width: 300px;
+  padding: 10px;
+  height: 40px !important;
   border: var(--borderDefault);
   border-radius: 4px;
   font-family: var(--Nunito);

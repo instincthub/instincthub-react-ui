@@ -15,20 +15,9 @@ interface HeaderItem {
   width?: string;
 }
 
-/**
- * Props interface for the THeadSortList component
- * @interface THeadSortListProps
- * @property {React.Dispatch<React.SetStateAction<any[]>>} setData - State setter for the table data
- * @property {React.Dispatch<React.SetStateAction<string>>} setNext - State setter for the pagination next URL
- * @property {Function} fetchData - Function to fetch data from the API
- * @property {string} [token] - Optional authentication token
- * @property {string} [handle] - Optional user/account handle
- * @property {string} urlPath - API endpoint path for data
- * @property {HeaderItem[]} headerItems - Configuration for table headers
- */
 interface THeadSortListProps {
-  setData: React.Dispatch<React.SetStateAction<any[]>>;
-  setNext: React.Dispatch<React.SetStateAction<string>>;
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  setNext: React.Dispatch<React.SetStateAction<string | null>>;
   fetchData: (urlPath: string, reset?: boolean) => void;
   token?: string;
   handle?: string;
@@ -50,7 +39,7 @@ interface ApiResponse {
 /**
  * Component for sortable table headers
  * Renders a table header row with sortable columns based on the provided configuration
- * 
+ *
  * @component
  * @example
  * ```tsx
@@ -59,7 +48,7 @@ interface ApiResponse {
  *   { label: "Email", key: "email" },
  *   { label: "Status", key: "status", width: "120px" }
  * ];
- * 
+ *
  * <THeadSortList
  *   setData={setData}
  *   setNext={setNext}
@@ -69,20 +58,31 @@ interface ApiResponse {
  *   headerItems={headerItems}
  * />
  * ```
+ * Props interface for the THeadSortList component
+ * @interface THeadSortListProps
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setData - State setter for the table data
+ * @property {React.Dispatch<React.SetStateAction<string>>} setNext - State setter for the pagination next URL
+ * @property {Function} fetchData - Function to fetch data from the API
+ * @property {string} [token] - Optional authentication token
+ * @property {string} [handle] - Optional user/account handle
+ * @property {string} urlPath - API endpoint path for data
+ * @property {HeaderItem[]} headerItems - Configuration for table headers
  */
 const THeadSortList: React.FC<THeadSortListProps> = (props) => {
   /**
    * State to store the complete set of unpaginated data for sorting
    * False when data hasn't been fetched yet
    */
-  const [unpaginatedData, setUnpaginatedData] = useState<ApiResponse | false>(false);
-  
+  const [unpaginatedData, setUnpaginatedData] = useState<ApiResponse | false>(
+    false
+  );
+
   /**
    * Currently sorted column name
    * Empty string means no sorting is applied
    */
   const [sorted, setSorted] = useState<string>("");
-  
+
   /**
    * Request options for API calls
    * Generated using the reqOptions utility from react-ui lib
@@ -94,7 +94,7 @@ const THeadSortList: React.FC<THeadSortListProps> = (props) => {
    * Fetches complete dataset if not already available
    * Applies sorting and updates the parent component's data state
    * Clicking the same column twice resets to unsorted state
-   * 
+   *
    * @param column - The column key to sort by
    * @returns Promise<void>
    */
@@ -139,13 +139,13 @@ const THeadSortList: React.FC<THeadSortListProps> = (props) => {
     // fetch data if doesn't exist
     let items: any[] = [];
     if (!unpaginatedData) {
-      const res = await fetchAPI(
+      const res = (await fetchAPI(
         setUnpaginatedData,
         `${props.urlPath}?limit=36500`,
         options,
         true
-      ) as ApiResponse;
-      
+      )) as ApiResponse;
+
       items = [...res.results];
     } else {
       items = [...unpaginatedData.results];
@@ -184,7 +184,7 @@ const THeadSortList: React.FC<THeadSortListProps> = (props) => {
    * Maps through headerItems to create either:
    * - Regular <th> elements for non-sortable columns
    * - THeadSortBtn components for sortable columns (those with key property)
-   * 
+   *
    * @returns JSX.Element - The rendered table header
    */
   return (

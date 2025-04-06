@@ -15,6 +15,7 @@
 @import url("./forms/search-field-db.css");
 @import url("./forms/download-as-excel.css");
 @import url("./forms/thead-sort-btn.css");
+@import url("./forms/table-data-list.css");
 
 /* UI Styles */
 @import url("./ui/parent-list-styles.css");

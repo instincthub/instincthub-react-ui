@@ -3,10 +3,33 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+interface SearchFieldDBProps {
+  /** The API endpoint path to search */
+  urlPath: string;
+  /** Function to set data state with API results */
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  /** Function to set next page URL */
+  setNext: React.Dispatch<React.SetStateAction<string | null>>;
+  /** Function to set previous page URL */
+  setPrevious: React.Dispatch<React.SetStateAction<string | null>>;
+  /** Auth token for API requests */
+  token?: string | null;
+  /** Search parameters from URL */
+  searchParams: {
+    channel?: string;
+    search?: string;
+  };
+  /** Custom label for search placeholder */
+  labels?: string;
+}
+
 /**
  * SearchFieldDB component for searching items and updating data via API
  *
+ * @component
  * @example
+ * ```tsx
+ *
  * <SearchFieldDB
  *   urlPath={`channels/courses/${channel}/?`}
  *   setData={setData}
@@ -16,27 +39,18 @@ import React, { useEffect, useState } from "react";
  *   searchParams={{ channel, search }}
  *   labels="Courses"
  * />
+ * ```
+ * Props interface for the THeadSortList component
+ * @property {string} [urlPath] - Optional authentication token
+ * @interface THeadSortListProps
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setData - State setter for the table data
+ * @property {React.Dispatch<React.SetStateAction<string>>} setNext - State setter for the pagination next URL
+ * @property {React.Dispatch<React.SetStateAction<string>>} setPrevious - State setter for the pagination next URL
+ * @property {Function} fetchData - Function to fetch data from the API
+ * @property {string} [token] - Optional user/account handle
+ * @property {{channel?: string; search?: string; }} searchParams - Search params for the API
+ * @property {string} labels - Field name for visual search placeholder
  */
-
-interface SearchFieldDBProps {
-  /** The API endpoint path to search */
-  urlPath: string;
-  /** Function to set data state with API results */
-  setData: (data: any[]) => void;
-  /** Function to set next page URL */
-  setNext: (nextUrl: string | null) => void;
-  /** Function to set previous page URL */
-  setPrevious: (prevUrl: string | null) => void;
-  /** Auth token for API requests */
-  token?: string;
-  /** Search parameters from URL */
-  searchParams: {
-    channel?: string;
-    search?: string;
-  };
-  /** Custom label for search placeholder */
-  labels?: string;
-}
 
 const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
   const router = useRouter();

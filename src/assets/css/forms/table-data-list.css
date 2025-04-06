@@ -1,0 +1,139 @@
+/* Add these styles to your data-list.css file */
+/* import "@/styles/app/data-list.css"; */
+
+.ihub-data-list-container {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.ihub-data-list-container h2 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  margin-bottom: 30px;
+  color: var(--DarkCyan);
+}
+
+.ihub-data-list-container h3 {
+  line-height: 1.2;
+  margin-bottom: 0;
+}
+
+.ihub-data-list-container table {
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ihub-data-list-container table th,
+.ihub-data-list-container table td {
+  padding: 10px;
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-data-list-header {
+  padding: 20px;
+}
+
+.ihub-data-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.ihub-data-controls button {
+  margin-top: 0;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ihub-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-item-actions p {
+  padding: 0 10px;
+  line-height: 1.2;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.ihub-item-actions p:first-child {
+  padding-left: 0;
+}
+
+.ihub-item-actions p:hover {
+  font-weight: 700;
+  color: var(--DarkCyan);
+}
+
+.ihub-action-divider {
+  width: 1px;
+  height: 15px;
+  background: grey;
+}
+
+.ihub-empty-state {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  height: 200px;
+  color: #888;
+  padding: 20px;
+  margin: auto;
+  width: 100%;
+}
+
+.ihub-empty-state p {
+  text-align: center;
+}
+.ihub-empty-state h4 {
+  font-size: 1.2em;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.ihub-empty-state span {
+  font-size: 50px;
+}
+
+.ihub-loading-state {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-loading-state p {
+  margin: 30px;
+  text-align: center;
+  width: 100%;
+}
+
+.ihub-scroll-container {
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .ihub-scroll-container {
+    overflow: auto !important;
+  }
+
+  .ihub-scroll-container table {
+    width: 789px;
+  }
+}
+
+@media (max-width: 530px) {
+  .ihub-data-list-header {
+    display: block !important;
+  }
+
+  .ihub-data-controls {
+    flex-direction: column;
+  }
+}
