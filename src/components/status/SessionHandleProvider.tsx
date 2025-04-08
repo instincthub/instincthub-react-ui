@@ -1,34 +1,12 @@
 "use client";
 
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { openToast } from "../lib/modals";
 import Error500 from "../status/Error500";
 import { SessionUserType } from "src/types";
-
-interface Channel {
-  username?: string;
-  id?: number;
-}
-
-interface ActiveChannel {
-  channel?: Channel;
-  id?: number;
-}
-
-interface Channels {
-  active?: ActiveChannel;
-}
-
-interface User {
-  name?: {
-    channels?: Channels;
-    token?: string;
-  };
-  token?: string;
-}
 
 interface SessionHandleProviderProps {
   children: ReactNode;
@@ -48,7 +26,6 @@ interface SessionHandleProviderProps {
  * @param {ReactNode} children - Children components
  * @param {string} endpointPath - API endpoint path for the session handle
  */
-
 export default function SessionHandleProvider({
   children,
   endpointPath = null,
@@ -58,24 +35,39 @@ export default function SessionHandleProvider({
 
   const { data: session, update: sessionUpdate } = useSession();
   const user = session?.user as SessionUserType | undefined;
-  const session_handle = user?.name?.channels?.active?.channel?.username;
-
-  const token = user?.name?.token;
+  
+  // Use useMemo for derived values
+  const session_handle = useMemo(() => 
+    user?.name?.channels?.active?.channel?.username,
+    [user?.name?.channels?.active?.channel?.username]
+  );
+  
+  const token = useMemo(() => user?.name?.token, [user?.name?.token]);
 
   const [status, setStatus] = useState<boolean>(true);
 
-  const getChannelData = async (): Promise<void> => {
+  // Use useCallback for function definitions
+  const getChannelData = useCallback(async (): Promise<void> => {
     if (!token || !params_handle) return;
 
     const options = reqOptions("PUT", null, token);
-    const api = `${API_HOST_URL}${
-      endpointPath || `channels/instructor-channel/selected/${params_handle}/`
-    }`;
+    
+    // More robust URL construction
+    const baseEndpoint = endpointPath || 'channels/instructor-channel/selected/';
+    const endpoint = baseEndpoint.endsWith('/') 
+      ? `${baseEndpoint}${params_handle}/` 
+      : `${baseEndpoint}/${params_handle}/`;
+    
+    const api = `${API_HOST_URL}${endpoint}`;
 
     try {
       const req = await fetch(api, options);
+      
+      if (!req.ok) {
+        throw new Error(`Request failed with status: ${req.status}`);
+      }
+      
       const res = await req.json();
-      console.log(res);
 
       if (res?.active?.id) {
         sessionUpdate({
@@ -85,46 +77,52 @@ export default function SessionHandleProvider({
           },
         });
       } else {
-        openToast(res?.detail, 400);
+        openToast(res?.detail || "Channel switching failed", 400);
         setStatus(false);
       }
     } catch (error) {
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Failed to fetch channel data";
+      
       console.error("Error fetching channel data:", error);
-      openToast("Failed to fetch channel data", 500);
+      openToast(errorMessage, 500);
       setStatus(false);
     }
-  };
+  }, [token, params_handle, endpointPath, user, sessionUpdate]);
+
+  // Simplified validation logic
+  const isInvalidHandle = useMemo(() => {
+    if (!params_handle || typeof params_handle !== "string") return true;
+    
+    const nullValues = ["null", "undefined", "false", "true", "", " "];
+    return nullValues.includes(params_handle);
+  }, [params_handle]);
 
   useEffect(() => {
-    if (session_handle) {
-      const params_handle_is_string = typeof params_handle === "string";
-
-      if (params_handle_is_string) {
-        // if session handle != to params id, try switch handle or throw error.
-        const nullValue = ["null", "undefined", "false", "true", "", " "];
-        const invalidHandle = nullValue.find((i) => i === params_handle); // Invalid handle in kwargs params
-
-        if (
-          session_handle &&
-          session_handle !== params_handle &&
-          !invalidHandle
-        ) {
-          getChannelData();
-        } else if (session_handle && invalidHandle && params_handle_is_string) {
-          openToast("Invalid handle!", 400);
-          setStatus(false);
-        }
-      }
+    // Only proceed if we have both session handle and param handle
+    if (!session_handle || !params_handle) return;
+    
+    // Skip if handles match - nothing to do
+    if (session_handle === params_handle) return;
+    
+    // If current handle is valid but doesn't match session, switch channels
+    if (!isInvalidHandle) {
+      getChannelData();
+    } else {
+      openToast("Invalid handle!", 400);
+      setStatus(false);
     }
-  }, [session_handle, params_handle]);
+  }, [session_handle, params_handle, isInvalidHandle, getChannelData]);
 
-  if (status) {
-    return <>{children}</>;
-  } else {
+  // Avoid the SessionProvider nesting - just render the error component
+  if (!status) {
     return (
       <Error500
         msg={`"${params_handle}" is not a valid channel handle. Check the URL; it must be a valid channel username.`}
       />
     );
   }
+  
+  return <>{children}</>;
 }

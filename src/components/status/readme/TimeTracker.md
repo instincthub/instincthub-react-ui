@@ -1,7 +1,7 @@
-# TimeTracker Component
+# ReactTimeTracker Component
 
 ## Overview
-The TimeTracker component tracks and reports the time a user spends on a web page. It monitors visibility changes, idle states, and page unloads to accurately measure engagement time and sends this data to a server for analysis.
+The ReactTimeTracker component tracks and reports the time a user spends on a web page. It monitors visibility changes, idle states, and page unloads to accurately measure engagement time and sends this data to a server for analysis.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -48,7 +48,7 @@ The component captures:
 ## Usage Examples
 
 ```tsx
-import TimeTracker from './components/TimeTracker';
+import ReactTimeTracker from './components/ReactTimeTracker';
 
 function ChannelPage({ channelData }) {
   return (
@@ -57,7 +57,7 @@ function ChannelPage({ channelData }) {
       <p>{channelData.description}</p>
       
       {/* Silently track user time on this page */}
-      <TimeTracker channel={channelData} />
+      <ReactTimeTracker channel={channelData} />
     </div>
   );
 }
@@ -96,4 +96,4 @@ function ChannelPage({ channelData }) {
    - Created comprehensive documentation explaining the component's purpose, usage, and requirements
    - Included code examples and installation instructions
 
-These improvements make the TimeTracker component more robust, type-safe, and easier to maintain while preserving all of its original functionality.
+These improvements make the ReactTimeTracker component more robust, type-safe, and easier to maintain while preserving all of its original functionality.

@@ -1,29 +1,27 @@
 "use client";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getData } from "../../lib/auth/dbRequestst";
 import SignOutSession from "./SignOutSession";
 import { SessionType } from "src/types";
 
-/**
- * Properties for the SessionExpiresLogout component
- */
 interface SessionExpiresLogoutProps {
-  /** Child components to render when session is valid */
   children: React.ReactNode;
-  /** Next.js session object */
   session: SessionType | null;
-  /** Custom message to display when session expires */
   expiredMessage?: string;
-  /** Whether to disable automatic session validation */
   disableValidation?: boolean;
-  /** Callback function when session validation fails */
   onSessionInvalid?: () => void;
 }
 
+type ValidationState = "loading" | "valid" | "invalid";
+
 /**
- * Component that validates session and token expiration
- * and displays a logout screen when invalid
+ * 
+ * @constructor
+ * @example
+ * <SessionExpiresLogout session={session}>
+ *   <div>Your session has expired</div>
+ * </SessionExpiresLogout>
+ * 
  */
 export default function SessionExpiresLogout({
   children,
@@ -32,74 +30,77 @@ export default function SessionExpiresLogout({
   disableValidation = false,
   onSessionInvalid,
 }: SessionExpiresLogoutProps) {
-  const [valid, setValid] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const checkedRef = useRef<boolean>(false);
-
-  const checkExpiringDate = async (): Promise<void> => {
-    if (!session) {
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const user = session?.user?.name;
-      const sessionExpiry = new Date(session?.expires);
-
-      // Check if the session has expired
-      if (sessionExpiry < new Date() || !user?.uuid) {
-        console.warn("Session expired or invalid user UUID. Signing out...");
-        setValid(false);
-        if (onSessionInvalid) onSessionInvalid();
-        setIsLoading(false);
-        return;
-      }
-
-      // Skip validation if disabled
-      if (disableValidation) {
-        setIsLoading(false);
-        return;
-      }
-
-      // Validate user token and UUID from the database
-      const funcParams = {
-        path: `auth/skills/validate-user-token/?access_token=${user?.token}&user_uuid=${user?.uuid}`,
-        token: user?.token,
-        auth_sk: true,
-      };
-
-      const res = await getData(funcParams);
-
-      if (
-        res?.detail === "Unauthorized" ||
-        res?.detail === "Not found." ||
-        !res?.detail
-      ) {
-        console.warn("Token validation failed. Signing out...");
-        setValid(false);
-        if (onSessionInvalid) onSessionInvalid();
-      }
-    } catch (error) {
-      console.error("Error during session validation:", error);
-      // Don't invalidate session on error - just log it
-    } finally {
-      // Mark as checked and remove loading state
-      checkedRef.current = true;
-      setIsLoading(false);
-    }
-  };
+  const [validationState, setValidationState] =
+    useState<ValidationState>("loading");
 
   useEffect(() => {
-    // Run checkExpiringDate only if not already checked
-    if (session && !checkedRef.current) {
-      checkExpiringDate();
-    } else if (!session) {
-      setIsLoading(false);
-    }
-  }, [session]); // Run when session changes
+    let isMounted = true;
 
-  if (isLoading) {
-    // Return a loading state - can be customized
+    async function validateSession() {
+      // No session case
+      if (!session) {
+        if (isMounted) setValidationState("invalid");
+        return;
+      }
+
+      try {
+        const user = session?.user?.name;
+        const sessionExpiry = new Date(session?.expires);
+
+        // Check session expiration
+        if (sessionExpiry < new Date() || !user?.uuid) {
+          console.warn("Session expired or invalid user UUID");
+          if (isMounted) {
+            setValidationState("invalid");
+            if (onSessionInvalid) onSessionInvalid();
+          }
+          return;
+        }
+
+        // Skip further validation if disabled
+        if (disableValidation) {
+          if (isMounted) setValidationState("valid");
+          return;
+        }
+
+        // Validate token with API
+        const funcParams = {
+          path: `auth/skills/validate-user-token/?access_token=${user?.token}&user_uuid=${user?.uuid}`,
+          token: user?.token,
+          auth_sk: true,
+        };
+
+        const res = await getData(funcParams);
+
+        if (
+          !isMounted ||
+          res?.detail === "Unauthorized" ||
+          res?.detail === "Not found." ||
+          !res?.detail
+        ) {
+          if (isMounted) {
+            setValidationState("invalid");
+            if (onSessionInvalid) onSessionInvalid();
+          }
+        } else {
+          if (isMounted) setValidationState("valid");
+        }
+      } catch (error) {
+        console.error("Error during session validation:", error);
+        // Set to valid on error as a fallback - can be changed based on requirements
+        if (isMounted) setValidationState("valid");
+      }
+    }
+
+    validateSession();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [session, disableValidation, onSessionInvalid]);
+
+  if (validationState === "loading") {
     return (
       <div className="ihub-session-loading">
         <div className="ihub-session-loading-spinner"></div>
@@ -107,7 +108,7 @@ export default function SessionExpiresLogout({
     );
   }
 
-  if (!valid) {
+  if (validationState === "invalid") {
     return <SignOutSession message={expiredMessage} />;
   }
 
