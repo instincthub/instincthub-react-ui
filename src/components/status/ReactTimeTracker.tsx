@@ -29,7 +29,7 @@ type SelectorFunction = (state: any) => IPAddressData;
 interface TimeTrackerProps {
   channel_username?: string | null;
   session: SessionUserType;
-  endpoint: string;
+  endpoint: string | null;
 }
 
 /**
@@ -41,11 +41,11 @@ interface TimeTrackerProps {
  * @param {SessionUserType} session - The session user type
  * @param {string} endpoint - The endpoint to fetch the IP Address
  */
-const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
+export default function ReactTimeTracker({
   channel_username = null,
   session,
   endpoint = "/api/user-ip-address",
-}) => {
+}: TimeTrackerProps) {
   const dispatch = useDispatch();
   const ipAds = useSelector<any>(selectIPAdress);
   const startTime = useRef<Date>(new Date());
@@ -101,7 +101,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
     if (!ipAds?.ip_address) {
       const fetchIpAddress = async (): Promise<void> => {
         try {
-          const response = await fetch(endpoint);
+          const response = await fetch(endpoint || "");
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -189,6 +189,4 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
   }, [visibility, session, ipAds, handle]); // Removed refs from dependencies
 
   return null; // Using null instead of empty fragment for slightly better performance
-};
-
-export default ReactTimeTracker;
+}

@@ -1,3 +1,5 @@
 /* Instruments */
-import type { ReduxState } from "@/lib/redux";
+
+import { ReduxState } from "../../store";
+
 export const selectCallbackUrl = (state: ReduxState) => state.callbackUrl.value;

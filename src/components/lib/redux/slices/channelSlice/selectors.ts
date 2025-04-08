@@ -1,10 +1,11 @@
+import { ReduxState } from "../../store";
+
 /* Instruments */
-import type { ReduxState } from "@/lib/redux";
 export const selectActiveChannel = (state: ReduxState) =>
-	state.activeChannel.value;
+  state.activeChannel.value;
 export const selectChannelDetails = (state: ReduxState) =>
-	state.channelDetails.value;
+  state.channelDetails.value;
 export const selectInstructorChannelList = (state: ReduxState) =>
-	state.instructorChannelList.value;
+  state.instructorChannelList.value;
 export const selectChannelHandle = (state: ReduxState) =>
-	state.channelHandle.value;
+  state.channelHandle.value;
