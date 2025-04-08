@@ -23,6 +23,29 @@ interface PhoneNumberInputProps {
   ) => void;
 }
 
+/**
+ * 
+ * @component
+ * @example
+ * ```jsx
+ * import { PhoneNumberInput } from "@instincthub/react-ui";
+ * 
+ * <PhoneNumberInput
+ *   phoneCode="234"
+ *   defaultValues={{ mobile: "1234567890" }}
+ *   names="phoneNumber"
+ *   inputEvent={(event) => {
+ *     console.log(event);
+ *   }}
+ * />
+ * ```
+ * Props interface for the PhoneNumberInput component
+ * @property {string} phoneCode - Default country code
+ * @property {object} defaultValues - Default values for the input field
+ * @property {string} names - Name of the input field
+ * @property {(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void} inputEvent - Callback for input events
+ */
+
 const PhoneNumberInput: React.FC<PhoneNumberInputProps> = (props) => {
   // Get default country
   const [selectedCountry, setSelectedCountry] = useState<CountryObject>(

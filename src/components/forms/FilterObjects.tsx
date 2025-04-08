@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { setCookie } from "../lib/helpFunction";
 import { FilterObjectsType } from "src/types";
+import ContentViewer from "../ui/viewer/ContentViewer";
 
 interface FilterObjectsProps {
   options: FilterObjectsType[];
   defaultValues?: FilterObjectsType | string | number;
   names: string;
   labels?: string;
+  notes?: string;
   setSelectedValues?: (name: string, value: FilterObjectsType) => void;
   defaultWidth?: string;
   requireds?: boolean;
@@ -20,6 +22,41 @@ interface FilterObjectsProps {
   status?: number;
   upperCases?: boolean;
 }
+
+/**
+ * FilterOnject dropdown
+ * @component
+ * @example
+ * ```tsx
+ *
+ * <FilterObjects
+ *   options={[
+ *     { id: 1, title: "Option 1" },
+ *     { id: 2, title: "Option 2" },
+ *     { id: 3, title: "Option 3" },
+ *   ]}
+ *   defaultValues={1}
+ *   names="filterObjects"
+ *   labels="Filter Objects"
+ *   setSelectedValues={setSelectedValues}
+ *   setObjects={setObjects}
+ *   setArrayProps={setArrayProps}
+ *   arrayProps={arrayProps}
+ *   dataNames="filterObjects"
+ *   setCookies="filterObjects" // Optional
+ * />
+ * ```
+ * Props interface for the FilterObjects component
+ * @property {FilterObjectsType[]} options - Array of objects to filter
+ * @property {string} defaultValues - Default value for the dropdown
+ * @property {string} names - Name of the input field
+ * @property {string} labels - Label for the dropdown
+ * @property {(option: FilterObjectsType) => void} setSelectedValues - Callback for setting selected values
+ * @property {(option: FilterObjectsType) => void} setObjects - Callback for setting objects
+ * @property {any[]} arrayProps - Array of objects to set
+ * @property {string} dataNames - Name of the data
+ * @property {string} setCookies - Cookie name to set
+ */
 
 const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -79,53 +116,56 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
   };
 
   return (
-    <div
-      className={`ihub-select ${props.errs ? "ihub-form-err" : ""}`}
-      style={{ width: props.defaultWidth || "300px" }}
-    >
+    <>
       <div
-        className="ihub-select__btn"
-        onClick={() => props.status !== 0 && setIsActive(!isActive)}
+        className={`ihub-select ${props.errs ? "ihub-form-err" : ""}`}
+        style={{ width: props.defaultWidth || "300px" }}
       >
-        <div className={props.status === 0 ? "disabled" : ""}>
-          <input
-            type="text"
-            className="ihub-select__input"
-            value={props.upperCases ? String(id).toUpperCase() : id || ""}
-            id={"id_" + props.names}
-            name={props.names}
-            required={props.requireds}
-            data-name={props.dataNames || props.names}
-            readOnly
-          />
-          <p>{selected || "..."}</p>
-        </div>
-        {props.labels && (
-          <label className="ihub-select__label">{props.labels}</label>
-        )}
-
-        <div className="search_btn">
-          {props.status === 0 ? (
-            <div className="ihub-select__loader"></div>
-          ) : (
-            <ExpandMoreIcon />
+        <div
+          className="ihub-select__btn"
+          onClick={() => props.status !== 0 && setIsActive(!isActive)}
+        >
+          <div className={props.status === 0 ? "disabled" : ""}>
+            <input
+              type="text"
+              className="ihub-select__input"
+              value={props.upperCases ? String(id).toUpperCase() : id || ""}
+              id={"id_" + props.names}
+              name={props.names}
+              required={props.requireds}
+              data-name={props.dataNames || props.names}
+              readOnly
+            />
+            <ContentViewer content={selected || "..."} showToolbar={false} />
+          </div>
+          {props.labels && (
+            <label className="ihub-select__label">{props.labels}</label>
           )}
+
+          <div className="search_btn">
+            {props.status === 0 ? (
+              <div className="ihub-select__loader"></div>
+            ) : (
+              <ExpandMoreIcon />
+            )}
+          </div>
         </div>
+        {isActive && (
+          <div className="ihub-select__content">
+            {objects.map((option, index) => (
+              <div
+                className="ihub-select__item"
+                onClick={() => handleOptionClick(option, option.title)}
+                key={index}
+              >
+                {option.title}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      {isActive && (
-        <div className="ihub-select__content">
-          {objects.map((option, index) => (
-            <div
-              className="ihub-select__item"
-              onClick={() => handleOptionClick(option, option.title)}
-              key={index}
-            >
-              {option.title}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+      {props.notes && <p className="ihub-input-notes">{props.notes}</p>}
+    </>
   );
 };
 

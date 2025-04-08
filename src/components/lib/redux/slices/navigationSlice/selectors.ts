@@ -12,4 +12,4 @@ export const selectStatusMessageState = (state: ReduxState) =>
   state.statusMessageState.value;
 export const selectConfirmDelete = (state: ReduxState) =>
   state.confirmDelete.value;
-export const selectIPAdress = (state: ReduxState) => state.IPAdress.value;
+export const selectIPAdress = (state: ReduxState) => state.IPAdress?.value;

@@ -206,7 +206,20 @@ footer {
 }
 
 p,
-div {
+div,
+td,
+div,
+main,
+section,
+article,
+aside,
+nav,
+header,
+footer,
+form,
+fieldset,
+legend,
+label {
   font-size: 1rem;
   font-family: var(--Nunito);
   color: var(--Gunmetal);

@@ -1,0 +1,162 @@
+/* 
+  InstinctHub Font Size Utility Classes
+  Prefix: ihub-fs-
+  A comprehensive typography system with responsive options
+*/
+
+/* Base font sizes */
+.ihub-fs-xs { font-size: 0.75rem !important; }  /* 12px */
+.ihub-fs-sm { font-size: 0.875rem !important; } /* 14px */
+.ihub-fs-md { font-size: 1rem !important; }     /* 16px - base */
+.ihub-fs-lg { font-size: 1.125rem !important; } /* 18px */
+.ihub-fs-xl { font-size: 1.25rem !important; }  /* 20px */
+.ihub-fs-2xl { font-size: 1.5rem !important; }  /* 24px */
+.ihub-fs-3xl { font-size: 1.875rem !important; } /* 30px */
+.ihub-fs-4xl { font-size: 2.25rem !important; } /* 36px */
+.ihub-fs-5xl { font-size: 3rem !important; }    /* 48px */
+.ihub-fs-6xl { font-size: 3.75rem !important; } /* 60px */
+
+/* Specific pixel-based font sizes */
+.ihub-fs-10 { font-size: 10px !important; }
+.ihub-fs-12 { font-size: 12px !important; }
+.ihub-fs-14 { font-size: 14px !important; }
+.ihub-fs-16 { font-size: 16px !important; }
+.ihub-fs-18 { font-size: 18px !important; }
+.ihub-fs-20 { font-size: 20px !important; }
+.ihub-fs-24 { font-size: 24px !important; }
+.ihub-fs-28 { font-size: 28px !important; }
+.ihub-fs-32 { font-size: 32px !important; }
+.ihub-fs-36 { font-size: 36px !important; }
+.ihub-fs-42 { font-size: 42px !important; }
+.ihub-fs-48 { font-size: 48px !important; }
+.ihub-fs-56 { font-size: 56px !important; }
+.ihub-fs-64 { font-size: 64px !important; }
+
+/* Line heights - useful with font sizes */
+.ihub-lh-1 { line-height: 1 !important; }           /* No extra height */
+.ihub-lh-sm { line-height: 1.25 !important; }       /* Tight */
+.ihub-lh-md { line-height: 1.5 !important; }        /* Normal */
+.ihub-lh-lg { line-height: 1.75 !important; }       /* Relaxed */
+.ihub-lh-xl { line-height: 2 !important; }          /* Loose */
+.ihub-lh-normal { line-height: normal !important; } /* Browser default */
+
+/* Typography alignment */
+.ihub-text-left { text-align: left !important; }
+.ihub-text-center { text-align: center !important; }
+.ihub-text-right { text-align: right !important; }
+.ihub-text-justify { text-align: justify !important; }
+
+/* Font weights */
+.ihub-fw-light { font-weight: 300 !important; }
+.ihub-fw-normal { font-weight: 400 !important; }
+.ihub-fw-medium { font-weight: 500 !important; }
+.ihub-fw-semibold { font-weight: 600 !important; }
+.ihub-fw-bold { font-weight: 700 !important; }
+.ihub-fw-extrabold { font-weight: 800 !important; }
+
+/* Text decoration */
+.ihub-text-underline { text-decoration: underline !important; }
+.ihub-text-line-through { text-decoration: line-through !important; }
+.ihub-text-no-decoration { text-decoration: none !important; }
+
+/* Text transforms */
+.ihub-text-lowercase { text-transform: lowercase !important; }
+.ihub-text-uppercase { text-transform: uppercase !important; }
+.ihub-text-capitalize { text-transform: capitalize !important; }
+.ihub-text-normal-case { text-transform: none !important; }
+
+/* Letter spacing */
+.ihub-tracking-tight { letter-spacing: -0.025em !important; }
+.ihub-tracking-normal { letter-spacing: 0 !important; }
+.ihub-tracking-wide { letter-spacing: 0.025em !important; }
+.ihub-tracking-wider { letter-spacing: 0.05em !important; }
+.ihub-tracking-widest { letter-spacing: 0.1em !important; }
+
+/* Text overflow */
+.ihub-text-truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.ihub-text-break {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.ihub-text-nowrap { white-space: nowrap !important; }
+
+/* Responsive font sizes */
+/* Small devices (sm) */
+@media (min-width: 576px) {
+  .ihub-fs-sm-xs { font-size: 0.75rem !important; }
+  .ihub-fs-sm-sm { font-size: 0.875rem !important; }
+  .ihub-fs-sm-md { font-size: 1rem !important; }
+  .ihub-fs-sm-lg { font-size: 1.125rem !important; }
+  .ihub-fs-sm-xl { font-size: 1.25rem !important; }
+  .ihub-fs-sm-2xl { font-size: 1.5rem !important; }
+  .ihub-fs-sm-3xl { font-size: 1.875rem !important; }
+  .ihub-fs-sm-4xl { font-size: 2.25rem !important; }
+  .ihub-fs-sm-5xl { font-size: 3rem !important; }
+}
+
+/* Medium devices (md) */
+@media (min-width: 768px) {
+  .ihub-fs-md-xs { font-size: 0.75rem !important; }
+  .ihub-fs-md-sm { font-size: 0.875rem !important; }
+  .ihub-fs-md-md { font-size: 1rem !important; }
+  .ihub-fs-md-lg { font-size: 1.125rem !important; }
+  .ihub-fs-md-xl { font-size: 1.25rem !important; }
+  .ihub-fs-md-2xl { font-size: 1.5rem !important; }
+  .ihub-fs-md-3xl { font-size: 1.875rem !important; }
+  .ihub-fs-md-4xl { font-size: 2.25rem !important; }
+  .ihub-fs-md-5xl { font-size: 3rem !important; }
+}
+
+/* Large devices (lg) */
+@media (min-width: 992px) {
+  .ihub-fs-lg-xs { font-size: 0.75rem !important; }
+  .ihub-fs-lg-sm { font-size: 0.875rem !important; }
+  .ihub-fs-lg-md { font-size: 1rem !important; }
+  .ihub-fs-lg-lg { font-size: 1.125rem !important; }
+  .ihub-fs-lg-xl { font-size: 1.25rem !important; }
+  .ihub-fs-lg-2xl { font-size: 1.5rem !important; }
+  .ihub-fs-lg-3xl { font-size: 1.875rem !important; }
+  .ihub-fs-lg-4xl { font-size: 2.25rem !important; }
+  .ihub-fs-lg-5xl { font-size: 3rem !important; }
+}
+
+/* Extra large devices (xl) */
+@media (min-width: 1200px) {
+  .ihub-fs-xl-xs { font-size: 0.75rem !important; }
+  .ihub-fs-xl-sm { font-size: 0.875rem !important; }
+  .ihub-fs-xl-md { font-size: 1rem !important; }
+  .ihub-fs-xl-lg { font-size: 1.125rem !important; }
+  .ihub-fs-xl-xl { font-size: 1.25rem !important; }
+  .ihub-fs-xl-2xl { font-size: 1.5rem !important; }
+  .ihub-fs-xl-3xl { font-size: 1.875rem !important; }
+  .ihub-fs-xl-4xl { font-size: 2.25rem !important; }
+  .ihub-fs-xl-5xl { font-size: 3rem !important; }
+}
+
+/* Font families (using your existing CSS variable system) */
+.ihub-font-nunito { font-family: var(--Nunito) !important; }
+.ihub-font-montserrat { font-family: var(--Montserat) !important; }
+
+/* Color contrast helpers */
+.ihub-text-contrast-dark {
+  color: var(--Gunmetal) !important;
+}
+
+.ihub-text-contrast-light {
+  color: var(--White) !important;
+}
+
+/* Primary brand colors */
+.ihub-text-primary {
+  color: var(--DarkCyan) !important;
+}
+
+.ihub-text-secondary {
+  color: var(--TurkishRose) !important;
+}

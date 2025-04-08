@@ -9,6 +9,33 @@ interface RadioSimpleProps {
   inputEvent?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * import { RadioSimple } from "@instincthub/react-ui";
+ * 
+ * <RadioSimple
+ *   ids="radio-simple" 
+ *   names="radio-simple" 
+ *   values="1" 
+ *   labels="Radio Simple" 
+ *   checked={true} 
+ *   inputEvent={(e) => {
+ *     console.log(e);
+ *   }}
+ * />
+ * ```
+ * Props interface for the RadioSimple component
+ * @property {string} ids - ID for the radio input
+ * @property {string} names - Name for the radio input    
+ * @property {string | number} values - Value for the radio input
+ * @property {string} labels - Label for the radio input
+ * @property {boolean} checked - Whether the radio input is checked
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events
+ */
+
 const RadioSimple: React.FC<RadioSimpleProps> = ({
   ids,
   names,

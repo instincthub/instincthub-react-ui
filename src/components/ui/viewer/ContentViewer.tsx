@@ -18,14 +18,33 @@ interface ContentViewerProps {
   title?: string;
   className?: string;
   editable?: boolean;
-  isEditing: boolean;
-  setIsEditing: (html: boolean) => void;
+  isEditing?: boolean;
+  setIsEditing?: (html: boolean) => void;
   onContentChange?: (newContent: string) => void;
   showToolbar?: boolean;
   showEditBtn?: boolean;
   isMarkdown?: boolean; // New prop to indicate if content is Markdown
 }
 
+/**
+ * 
+ * @component
+ * @example
+ * ```jsx
+ * import {ContentViewer} from "@instincthub/react-ui";
+ * <ContentViewer content="Hello world" />
+ * ```
+ * @param {string} content - The content to be displayed
+ * @param {string} title - The title of the content
+ * @param {string} className - Additional class names for the content viewer
+ * @param {boolean} editable - Whether the content is editable
+ * @param {function} onContentChange - A function to be called when the content changes
+ * @param {boolean} isEditing - Whether the content is being edited
+ * @param {function} setIsEditing - A function to set the isEditing state
+ * @param {boolean} showToolbar - Whether to show the toolbar
+ * @param {boolean} showEditBtn - Whether to show the edit button
+ * @param {boolean} isMarkdown - Whether the content is Markdown
+ */
 export default function ContentViewer({
   content,
   title = "Document",

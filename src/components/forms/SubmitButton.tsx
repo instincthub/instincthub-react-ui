@@ -30,6 +30,24 @@ interface SubmitButtonProps {
 
 /**
  * Submit button component with loading state and animation
+ * @component
+ * @example
+ * ```tsx
+ * <SubmitButton label="Submit" status={0} />
+ * ```
+ * Props interface for the SubmitButtonProps interface
+ * @property {string} label - Button label text
+ * @property {number} [status=1] - Loading state: 0 = loading, 1 = ready, 2 = success, 3 = error
+ * @property {string} [type="submit"] - Button type attribute
+ * @property {string} [name] - Button name attribute
+ * @property {string} [variant="important"] - Button style variant
+ * @property {boolean} [disabled=false] - Disable the button
+ * @property {(event: React.MouseEvent<HTMLButtonElement>) => void} [onClick] - Button onClick handler
+ * @property {number} [autoResetTimeout=30000] - Auto-reset timer (in ms) for loading state (0 to disable)
+ * @property {string} [className=""] - Custom class name to add to the button
+ * @property {string} [ariaLabel] - ARIA label for better accessibility
+ * @property {string} [id="submitBtn"] - ID for the button element
+ * @property {string} [testId="submit-button"] - Data testid for testing
  */
 const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
   (

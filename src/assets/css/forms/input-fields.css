@@ -76,11 +76,6 @@
   text-transform: capitalize;
 }
 
-.ihub-notes {
-  font-size: 12px;
-  margin-top: 5px;
-}
-
 .ihub-is_invalid {
   color: var(--Danger);
   background-color: "#EA5F5E";
@@ -704,6 +699,18 @@
   opacity: 0.7;
 }
 
+.ihub-input-notes {
+  display: inline-block;
+  max-width: 600px;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--Gunmetal);
+}
+.ihub-input-notes a {
+  font-weight: bold !important;
+}
+
 .ihub-select__loader {
   border: 3px solid #f3f3f3; /* Light grey */
   border-top: 3px solid var(--DarkCyan); /* Blue */
@@ -1249,7 +1256,6 @@
   font-family: var(--Nunito);
   font-size: 0.9rem;
   color: var(--Gunmetal);
-  font-style: italic;
 }
 
 /* ReadTermsAndCondition Component Styles */

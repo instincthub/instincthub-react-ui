@@ -94,7 +94,7 @@ const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
         placeholder="Separate emails with commas or 'Enter'"
         className="ihub-input"
       />
-      {message && <p className="ihub-notes ihub-is_invalid">{message}</p>}
+      {message && <p className="ihub-input-notes ihub-is_invalid">{message}</p>}
     </div>
   );
 };

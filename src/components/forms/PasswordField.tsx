@@ -17,6 +17,38 @@ interface PasswordFieldProps {
   setNameValue?: (name: string, value: string) => void | null; // Optional input event handler
 }
 
+/**
+ * 
+ * @component
+ * @example
+ * ```jsx
+ * import { PasswordField } from "@instincthub/react-ui";
+ * 
+ * <PasswordField
+ *   ids={["password"]}
+ *   names={["password"]}
+ *   labels={["Password"]}
+ *   notes={["Enter your password"]}
+ *   requireds={true}
+ *   defaultValues={""}
+ *   setValues={(name, value) => {
+ *     console.log(name, value);
+ *   }}
+ *   inputEvent={(e) => {
+ *     console.log(e);
+ *   }}
+ * />
+ * ```
+ * Props interface for the PasswordField component
+ * @property {string[]} ids - Array of IDs for the input field
+ * @property {string[]} names - Array of names for the input field
+ * @property {string[]} labels - Array of labels for the input field
+ * @property {string[]} notes - Array of notes for the input field
+ * @property {boolean} requireds - Whether the field is required
+ * @property {string} defaultValues - Default value for the input field
+ * @property {(name: string, value: string) => void} setValues - Callback for setting values
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events    
+ */
 export default function PasswordField({
   ids,
   names,
@@ -82,7 +114,7 @@ export default function PasswordField({
             {labels}
           </span>
         </div>
-        {notes && <p className="ihub-notes">{notes}</p>}
+        {notes && <p className="ihub-input-notes">{notes}</p>}
       </div>
     </div>
   );

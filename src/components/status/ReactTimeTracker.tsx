@@ -113,7 +113,7 @@ export default function ReactTimeTracker({
       };
       fetchIpAddress();
     }
-  }, [dispatch, ipAds?.ip_address, IPAdress.actions]);
+  }, [dispatch, ipAds?.ip_address, IPAdress?.actions]);
 
   // Send time data to server when visibility changes or component unmounts
   useEffect(() => {

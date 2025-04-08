@@ -19,6 +19,20 @@ interface DataResponse {
   detail?: string;
 }
 
+/**
+ * @component
+ * @example
+ *```tsx
+ * <DownloadAsExcel urlPath="/api/v1/courses/1/questions" token="token" />
+ *```
+ * @param {string} urlPath - The API endpoint to fetch data from
+ * @param {string} token - The token to authenticate the request 
+ * @param {string} fileName - The name of the file to download
+ * @param {string} labels - The labels to display in the file
+ * @param {boolean} plainBtn - Whether to display the download button as plain text
+ * 
+ */
+
 const DownloadAsExcel = (props: DownloadAsExcelProps) => {
   const [status, setStatus] = useState<number>(1);
 

@@ -15,6 +15,37 @@ interface RadioFieldProps {
   setSelectedValue?: (value: string) => void;
 }
 
+/**
+ *
+ * @component
+ * @example
+ * ```tsx
+ * import { RadioField } from "@instincthub/react-ui";
+ *
+ * <RadioField
+ *   options={[
+ *     { id: 1, title: "Option 1" },
+ *     { id: 2, title: "Option 2" },
+ *     { id: 3, title: "Option 3" },
+ *   ]}
+ *   names="radioField"
+ *   labels="Radio Field"
+ *   requireds={true}
+ *   defaultValues={1}
+ *   setSelectedValue={(value) => {
+ *     console.log(value);
+ *   }}
+ * />
+ * ```
+ * Props interface for the RadioField component
+ * @property {RadioOption[]} options - Array of options for the radio field
+ * @property {string} names - Name of the input field
+ * @property {string} labels - Label for the radio field
+ * @property {boolean} requireds - Whether the field is required
+ * @property {string | number} defaultValues - Default value for the radio field
+ * @property {(value: string) => void} setSelectedValue - Callback for setting selected value
+ */
+
 const RadioField: React.FC<RadioFieldProps> = (props) => {
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (props.setSelectedValue) {
@@ -43,9 +74,7 @@ const RadioField: React.FC<RadioFieldProps> = (props) => {
                     value={option.id}
                     required={index === 0 ? props.requireds : false}
                     onChange={handleOptionChange}
-                    defaultChecked={
-                      props.defaultValues === option.id
-                    }
+                    defaultChecked={props.defaultValues === option.id}
                   />
                   <span className="ihub-label-title">
                     {option.title ? option.title : option.name}

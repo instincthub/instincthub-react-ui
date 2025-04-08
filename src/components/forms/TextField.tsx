@@ -23,6 +23,32 @@ interface TextFieldProps {
   setArrayProps?: (props: [number, string], value: string) => void;
 }
 
+/**
+ *
+ * @component
+ * @example
+ * ```tsx
+ *
+ * <TextField
+ *   label="Name"
+ *   name="name"
+ *   value="John Doe"
+ *   onChange={(e) => console.log(e.target.value)}
+ *   required={true}
+ *   placeholder="Enter your name"
+ *   disabled={false}
+ * />
+ * ```
+ * Props interface for the TextField component
+ * @property {string} label - Label text
+ * @property {string} name - Name of the input field
+ * @property {string} value - Value of the input field
+ * @property {(e: ChangeEvent<HTMLInputElement>) => void} onChange - Callback for input changes
+ * @property {boolean} required - Whether the field is required
+ * @property {string} placeholder - Placeholder text
+ * @property {boolean} disabled - Whether the field is disabled
+ * */
+
 function TextField(props: TextFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -109,7 +135,7 @@ function TextField(props: TextFieldProps) {
           />
           <span className="ihub-text-label">{props.labels}</span>
         </div>
-        {props.notes && <p className="ihub-notes">{props.notes}</p>}
+        {props.notes && <p className="ihub-input-notes">{props.notes}</p>}
       </div>
     </div>
   );

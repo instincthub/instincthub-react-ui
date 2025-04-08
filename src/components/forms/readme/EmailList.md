@@ -59,7 +59,7 @@ The component uses the following CSS classes that should be included in your `in
 - `.ihub-email-text` - Text content of the email tag
 - `.ihub-email-icon` - Delete icon for email tags
 - `.ihub-input` - Input field styling (from existing CSS)
-- `.ihub-notes` - Notes styling (from existing CSS)
+- `.ihub-input-notes` - Notes styling (from existing CSS)
 - `.ihub-is_invalid` - Error message styling (from existing CSS)
 
 ### Styling Details
