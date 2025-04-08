@@ -1,0 +1,57 @@
+/* Error State Component Styles */
+.ihub-error-state {
+  max-width: 500px;
+  margin: 20vh auto 20px auto;
+}
+
+.ihub-error-status {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.ihub-error-status h3 {
+  font-size: 46px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  line-height: 56px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.ihub-error-status a {
+  margin-top: 30px;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--DarkCyan);
+  display: inline-block;
+}
+
+.ihub-error-status a:hover {
+  text-decoration: underline;
+}
+
+.ihub-error-status p {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.ihub-error-svg-container {
+  width: 150px;
+  height: 150px;
+  display: inline-block;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.ihub-error-svg-container svg {
+  transform: scale(5);
+  position: absolute;
+  top: 45%;
+  right: 45%;
+  text-align: center;
+}
+
+.ihub-error-svg-container svg path {
+  fill: var(--TiffanyBlue);
+}

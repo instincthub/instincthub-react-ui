@@ -24,6 +24,9 @@
 /* Cursor Styles */
 @import url("./cursors/style.css");
 
+/* Status Styles */
+@import url("./status/error-state.css");
+
 /* UI Styles */
 @import url("./ui/parent-list-styles.css");
 @import url("./ui/list-styles.css");
