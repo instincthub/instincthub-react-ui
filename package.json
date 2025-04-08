@@ -24,6 +24,11 @@
       "require": "./dist/src/components/lib/index.js",
       "types": "./dist/src/types/components/lib/index.d.ts"
     },
+    "./redux": {
+      "import": "./dist/src/components/lib/redux/index.js",
+      "require": "./dist/src/components/lib/redux/index.js",
+      "types": "./dist/src/types/components/lib/redux/index.d.ts"
+    },
     "./cursors": {
       "import": "./dist/src/components/cursors/index.js",
       "require": "./dist/src/components/cursors/index.js",
@@ -77,12 +82,16 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@types/redux-logger": "^3.0.13",
     "jspdf": "^3.0.1",
     "next": "^15.2.1",
     "next-auth": "^5.0.0-beta.25",
     "primereact": "^10.9.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "redux-logger": "^3.0.6"
   },
   "keywords": [
     "css",

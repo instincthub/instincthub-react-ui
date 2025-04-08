@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { API_HOST_URL, IN_DEV_MODE, reqOptions } from "../lib/helpFunction";
 import { SessionUserType } from "src/types";
 import { useParams } from "next/navigation";
+import { useDispatch, useSelector, selectIPAdress } from "../lib/redux";
 
 // Improved type definitions
 interface IPAddressData {
@@ -24,9 +25,7 @@ interface TimeTrackerProps {
   channel_username?: string | null;
   IPAdress: IPAddressActions;
   session: SessionUserType;
-  selectIPAdress: SelectorFunction;
-  useDispatch: () => AppDispatch;
-  useSelector: <T>(selector: (state: any) => T) => T;
+  endpoint: string;
 }
 
 /**
@@ -38,22 +37,21 @@ interface TimeTrackerProps {
  * @param {IPAddressActions} IPAdress - The IP Address Actions
  * @param {SessionUserType} session - The session user type
  * @param {SelectorFunction} selectIPAdress - The select IP Address function
- * @param {AppDispatch} useDispatch - The use dispatch function
- * @param {(state: any) => T} useSelector - The use selector function
-*/
+ * @param {string} endpoint - The endpoint to fetch the IP Address
+ */
 const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
   channel_username = null,
   IPAdress,
   session,
-  selectIPAdress,
-  useDispatch,
-  useSelector,
+  endpoint = "/api/user-ip-address",
 }) => {
   const dispatch = useDispatch();
   const ipAds = useSelector(selectIPAdress);
   const startTime = useRef<Date>(new Date());
   const endTime = useRef<Date | null>(null);
-  const [visibility, setVisibility] = useState<string>(document?.visibilityState || "visible");
+  const [visibility, setVisibility] = useState<string>(
+    document?.visibilityState || "visible"
+  );
   const params = useParams<{ channel: string }>();
   const handle = params.channel || channel_username;
   const timeUpdatePending = useRef<boolean>(false);
@@ -61,7 +59,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
   const handleVisibilityChange = (): void => {
     const newVisibility = document.visibilityState;
     setVisibility(newVisibility);
-    
+
     if (newVisibility === "hidden") {
       endTime.current = new Date();
       timeUpdatePending.current = true;
@@ -75,13 +73,13 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
     endTime.current = new Date();
     timeUpdatePending.current = true;
     // Force a re-render to trigger the time sending effect
-    setVisibility(prev => prev === "idle" ? "idle_update" : "idle");
+    setVisibility((prev) => (prev === "idle" ? "idle_update" : "idle"));
   };
 
   // Setup event listeners
   useEffect(() => {
     startTime.current = new Date();
-    
+
     document.addEventListener("visibilitychange", handleVisibilityChange);
     document.addEventListener("idle", handleIdle);
 
@@ -91,7 +89,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
         endTime.current = new Date();
         timeUpdatePending.current = true;
       }
-      
+
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("idle", handleIdle);
     };
@@ -102,7 +100,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
     if (!ipAds?.ip_address) {
       const fetchIpAddress = async (): Promise<void> => {
         try {
-          const response = await fetch("/api/user-ip-address");
+          const response = await fetch(endpoint);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -120,7 +118,11 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
   useEffect(() => {
     const sendTime = async (): Promise<void> => {
       // Only send time if there's a pending update and we have valid start/end times
-      if (!timeUpdatePending.current || !startTime.current || !endTime.current) {
+      if (
+        !timeUpdatePending.current ||
+        !startTime.current ||
+        !endTime.current
+      ) {
         return;
       }
 
@@ -160,7 +162,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
         if (req.status === 201) {
           // Reset the pending flag as we've successfully sent the data
           timeUpdatePending.current = false;
-          
+
           if (IN_DEV_MODE) {
             console.log("Time spent sent to server successfully!");
             const responseData = await req.json();
@@ -176,7 +178,7 @@ const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
     };
 
     sendTime();
-    
+
     // Cleanup function to ensure we attempt to send any pending time data
     return () => {
       if (timeUpdatePending.current) {

@@ -119,7 +119,6 @@ export interface FilterObjectsType {
   [key: string]: any; // For any additional properties
 }
 
-
 /**
  * Props interface for the FileUploader component
  */
