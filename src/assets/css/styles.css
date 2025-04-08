@@ -17,6 +17,13 @@
 @import url("./forms/thead-sort-btn.css");
 @import url("./forms/table-data-list.css");
 
+/* Navbar Styles */
+@import url("./navbar/channel-list-avatar.css");
+@import url("./navbar/menu-dropdown.css");
+
+/* Cursor Styles */
+@import url("./cursors/style.css");
+
 /* UI Styles */
 @import url("./ui/parent-list-styles.css");
 @import url("./ui/list-styles.css");

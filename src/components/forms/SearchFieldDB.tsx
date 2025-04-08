@@ -120,7 +120,6 @@ const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
 
   return (
     <div className="ihub-search-field">
-      <div className="ihub-search-set"></div>
       <div className="ihub-search-courses">
         <input
           type="search"

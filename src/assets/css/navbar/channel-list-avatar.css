@@ -1,0 +1,78 @@
+.ihub-channel-list-avatar .item {
+  display: flex;
+  padding: 10px;
+}
+
+.ihub-channel-list-avatar h3 {
+  max-width: 270px;
+}
+
+.ihub-channel-list-avatar img {
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+}
+
+.ihub-channel-list-avatar div h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+}
+
+.ihub-channel-list-avatar div p {
+  margin: 0 !important;
+  color: gray;
+}
+
+.ihub-channel-list-avatar.allowed_acct h3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  letter-spacing: 0em;
+}
+
+.ihub-channel-list-avatar .char_avatar {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 100%;
+  margin-right: 20px;
+}
+
+.ihub-channel-list-avatar .name {
+  margin-left: 20px;
+}
+
+.ihub-channel-list-avatar .ff_layer {
+  cursor: pointer;
+  padding: 15px;
+}
+
+.ihub-channel-list-avatar .ff_layer img {
+  width: 30px;
+  height: 30px;
+}
+
+.ihub-channel-list-avatar .ff_layer .char_avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.ihub-channel-list-avatar .ff_layer .name {
+  margin-left: 0px;
+}
+
+.ihub-channel-list-avatar .ff_layer .name h3 {
+  font-size: 14px;
+}
+
+.ihub-channel-list-avatar .ff_layer .name p {
+  font-size: 12px;
+}

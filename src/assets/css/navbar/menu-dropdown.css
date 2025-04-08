@@ -1,0 +1,230 @@
+.ihub-menu-dropdown {
+    position: absolute;
+    background: var(--White);
+    top: 65px;
+    right: 0px;
+    z-index: 500;
+    border: var(--borderDefault);
+  }
+  
+  .ihub-name-truce {
+    display: flex;
+    padding: 15px;
+    border-bottom: var(--borderDefault);
+  }
+  
+  .ihub-dp {
+    width: 55px;
+    height: 55px;
+    margin-right: 15px;
+    object-fit: cover;
+    border-radius: 50%;
+    transform: scale(1);
+    transition: 0.3s ease;
+  }
+  
+  .ihub-dp:hover {
+    transform: scale(1.08);
+  }
+  
+  .ihub-name-truce h4 {
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 500;
+  }
+  
+  .ihub-name-truce p {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+  
+  .ihub-mini-dp {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    object-fit: cover;
+    border-radius: 50%;
+    transform: scale(1);
+    transition: 0.3s ease;
+  }
+  
+  .ihub-mini-dp:hover {
+    transform: scale(1.08);
+  }
+  
+  .ihub-step-back {
+    padding: 15px;
+    border-bottom: var(--borderDefault);
+  }
+  
+  .ihub-fitted-globe {
+    position: relative;
+  }
+  
+  .ihub-ff-layer {
+    border-bottom: var(--borderDefault);
+  }
+  
+  .ihub-ff-layer li {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    letter-spacing: 0em;
+    padding: 9px 10px;
+    padding-left: 50px !important;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .ihub-ff-layer li span {
+    font-size: 14px;
+    color: #737070;
+  }
+  
+  .ihub-option2 {
+    border-bottom: var(--borderDefault);
+  }
+  
+  .ihub-option2 li {
+    position: relative;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    letter-spacing: 0em;
+    padding: 11px 10px;
+    padding-left: 50px !important;
+    cursor: pointer;
+  }
+  
+  .ihub-allowed-acct {
+    display: flex;
+    padding: 15px 20px;
+  }
+  
+  .ihub-allowed-acct li {
+    padding: 0 !important;
+    padding-left: 0 !important;
+    margin: 0;
+  }
+  
+  .ihub-allowed-acct img {
+    margin-right: 15px;
+  }
+  
+  .ihub-menu-dropdown li {
+    transition: 0.2s ease-in;
+  }
+  
+  .ihub-menu-dropdown li:hover {
+    opacity: 0.7;
+  }
+  
+  .ihub-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: 0.4s ease;
+  }
+  
+  .ihub-menu-item {
+    cursor: pointer;
+  }
+  
+  .ihub-sub-menu {
+    background: var(--White);
+    width: 100%;
+    transform: translateX(768px);
+    transition: transform 0.3s ease-in-out;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ihub-submenu-open {
+    transform: translateX(0);
+  }
+  
+  .ihub-appearance {
+    padding: 10px 20px;
+  }
+  
+  .ihub-appearance p {
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    color: var(--OldLavender);
+  }
+  
+  .ihub-appearance ul li {
+    color: var(--Gunmetal);
+    cursor: pointer;
+    position: relative;
+    padding-left: 35px;
+  }
+  
+  .ihub-char-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: var(--DarkCyan);
+    color: var(--White);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+  }
+  
+  /* Icon-based classes */
+  .ihub-switch-acct {
+    position: relative;
+  }
+  
+  .ihub-switch-acct:before {
+    content: "\e9ed";
+    font-family: "Material Icons";
+    -webkit-font-feature-settings: "liga";
+    margin-right: 10px;
+    position: absolute;
+    left: 19px;
+    top: 8px;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  
+  .ihub-switch-acct:after {
+    content: "\e5e1";
+    font-family: "Material Icons";
+    -webkit-font-feature-settings: "liga";
+    margin-right: 10px;
+    position: absolute;
+    right: 10px;
+    top: 11px;
+  }
+  
+  .ihub-sign-out:before {
+    content: "\e9ba";
+    font-family: "Material Icons";
+    -webkit-font-feature-settings: "liga";
+    margin-right: 10px;
+    position: absolute;
+    left: 14px;
+    top: 8px;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  
+  .ihub-theme-selector li.add_check:before {
+    content: "\e876";
+    font-family: "Material Icons";
+    -webkit-font-feature-settings: "liga";
+    margin-right: 10px;
+    position: absolute;
+    left: 3px;
+    top: 0px;
+    color: var(--Gunmetal);
+    font-size: 20px;
+    font-weight: 400;
+  }

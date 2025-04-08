@@ -33,6 +33,9 @@
       "@instincthub/react-ui/lib": [
         "/node_modules/@instincthub/react-ui/dist/src/components/lib/index.js"
       ],
+      "@instincthub/react-ui/cursors": [
+        "/node_modules/@instincthub/react-ui/dist/src/components/cursors/index.js"
+      ],
       "@instincthub/react-ui/asssets/*": [
         "/node_modules/@instincthub/react-ui/dist/src/assets/*"
       ]

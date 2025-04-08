@@ -1,11 +1,11 @@
 /* Search Field Component Styles */
 .ihub-search-field {
   position: relative;
+  display: contents;
 }
 
 .ihub-search-courses {
   margin-right: 15px;
-  margin-bottom: 30px;
   position: relative;
   max-width: 400px;
   min-width: 300px;
@@ -23,12 +23,12 @@
 
 .ihub-search-btn {
   position: absolute;
-  height: 90%;
+  height: 95%;
   width: 50px;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
-  right: 2px;
-  top: 2px;
+  right: 0px;
+  top: 1px;
   background: var(--Gunmetal);
   padding: 10px 15px;
 }

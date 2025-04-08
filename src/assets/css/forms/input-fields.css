@@ -1339,7 +1339,7 @@
 }
 
 /* SearchField Component Styles */
-.ihub-search-field {
+.ihub-search-field.event-input {
   width: 100%;
 }
 
@@ -1387,7 +1387,7 @@
 }
 
 @media (min-width: 760px) {
-  .ihub-search-field {
+  .ihub-search-field.event-input {
     width: 20%;
   }
 }

@@ -24,6 +24,11 @@
       "require": "./dist/src/components/lib/index.js",
       "types": "./dist/src/types/components/lib/index.d.ts"
     },
+    "./cursors": {
+      "import": "./dist/src/components/cursors/index.js",
+      "require": "./dist/src/components/cursors/index.js",
+      "types": "./dist/src/types/components/cursors/index.d.ts"
+    },
     "./assets/*": {
       "import": "./dist/src/assets/*",
       "require": "./dist/src/assets/*",

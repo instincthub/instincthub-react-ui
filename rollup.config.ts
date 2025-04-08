@@ -12,7 +12,11 @@ import removeDirectives from "./rollup-plugin-remove-directives";
 
 export default {
   // input: ["src/index.ts", "src/styles.ts"], // js and css files
-  input: ["src/index.ts", "src/components/lib/index.ts"], // js and css files
+  input: [
+    "src/index.ts",
+    "src/components/lib/index.ts",
+    "src/components/cursors/index.ts",
+  ], // js and css files
   output: [
     {
       dir: "dist",

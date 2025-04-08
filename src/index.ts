@@ -42,6 +42,10 @@ export { default as THeadSortBtn } from "./components/forms/THeadSortBtn";
 export { default as THeadSortList } from "./components/forms/THeadSortList";
 export { default as TBodyNoData } from "./components/forms/TBodyNoData";
 
+// Navbar components
+export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
+export { default as MenuDropdown } from "./components/navbar/MenuDropdown";
+
 // Upload components
 export { default as FileUploader } from "./components/forms/uploads/FileUploader";
 export { default as IhubFileUploader } from "./components/forms/uploads/IhubFileUploader";

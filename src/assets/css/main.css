@@ -2182,9 +2182,30 @@ footer ul.breadcrumb li a:hover {
 .play_boy .controls-bar {
   background-color: blue !important;
 }
+@media (min-width: 724px) {
+  .small_display {
+    width: 70%;
+    margin-left: auto;
+  }
+}
+@media (min-width: 1024px) {
+  .small_display {
+    width: 75%;
+  }
+}
+@media (min-width: 1124px) {
+  .small_display {
+    width: 80%;
+  }
+}
+@media (min-width: 1440px) {
+  .small_display {
+    width: 82% !important;
+  }
+}
 @media (min-width: 1700px) {
   .small_display {
-    width: 100% !important;
+    width: 85% !important;
   }
 }
 .media-controls.inline > .controls-bar {
