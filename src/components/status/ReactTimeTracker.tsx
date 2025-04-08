@@ -3,7 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { API_HOST_URL, IN_DEV_MODE, reqOptions } from "../lib/helpFunction";
 import { SessionUserType } from "src/types";
 import { useParams } from "next/navigation";
-import { useDispatch, useSelector, selectIPAdress } from "../lib/redux";
+import {
+  useDispatch,
+  useSelector,
+  selectIPAdress,
+  IPAdress,
+} from "../lib/redux";
 
 // Improved type definitions
 interface IPAddressData {
@@ -23,7 +28,6 @@ type SelectorFunction = (state: any) => IPAddressData;
 
 interface TimeTrackerProps {
   channel_username?: string | null;
-  IPAdress: IPAddressActions;
   session: SessionUserType;
   endpoint: string;
 }
@@ -34,19 +38,16 @@ interface TimeTrackerProps {
  * @example
  * <ReactTimeTracker />
  * @param {string} channel_username - The channel username
- * @param {IPAddressActions} IPAdress - The IP Address Actions
  * @param {SessionUserType} session - The session user type
- * @param {SelectorFunction} selectIPAdress - The select IP Address function
  * @param {string} endpoint - The endpoint to fetch the IP Address
  */
 const ReactTimeTracker: React.FC<TimeTrackerProps> = ({
   channel_username = null,
-  IPAdress,
   session,
   endpoint = "/api/user-ip-address",
 }) => {
   const dispatch = useDispatch();
-  const ipAds = useSelector(selectIPAdress);
+  const ipAds = useSelector<any>(selectIPAdress);
   const startTime = useRef<Date>(new Date());
   const endTime = useRef<Date | null>(null);
   const [visibility, setVisibility] = useState<string>(

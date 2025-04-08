@@ -1,5 +1,6 @@
 /* Core */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { IPAdressSliceState } from "src/types/redux";
 
 const initialState: IPAdressSliceState = {
 	value: {
@@ -18,8 +19,3 @@ export const IPAdress = createSlice({
 		},
 	},
 });
-
-export interface IPAdressSliceState {
-	value: object;
-	status: "idle" | "loading" | "failed";
-}

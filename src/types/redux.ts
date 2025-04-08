@@ -90,3 +90,8 @@ export interface instructorChannelListSliceState {
   status: "idle" | "loading" | "failed";
   id: string;
 }
+
+export interface IPAdressSliceState {
+	value: object;
+	status: "idle" | "loading" | "failed";
+}
