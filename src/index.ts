@@ -70,3 +70,8 @@ export { default as SessionHandleProvider } from "./components/status/SessionHan
 export { default as Error500 } from "./components/status/Error500";
 export { default as ErrorState } from "./components/status/ErrorState";
 export { default as ReactTimeTracker } from "./components/status/ReactTimeTracker";
+
+// Tabs
+export { default as Tabs } from "./components/tabs/Tabs";
+export { default as VeriticalTabs } from "./components/tabs/VerticalTabs";
+export { default as TabContent } from "./components/tabs/TabContent";

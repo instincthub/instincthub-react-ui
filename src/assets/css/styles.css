@@ -9,6 +9,9 @@
 /* Bootstrap */
 @import url("./bootstrap/style.css");
 
+/* Tab Rtles */
+@import url("./tabs/style.css");
+
 /* Forms Styles */
 @import url("./forms/input-fields.css");
 @import url("./forms/ihub-file-uploader.css");
