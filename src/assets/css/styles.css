@@ -6,6 +6,9 @@
 @import url("./modals.css");
 @import url("./tooltip.css");
 
+/* Modals */
+@import url("./modals/style.css");
+
 /* Bootstrap */
 @import url("./bootstrap/style.css");
 

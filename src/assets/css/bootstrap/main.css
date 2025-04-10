@@ -873,7 +873,7 @@
 .ihub-my-auto { margin-top: auto !important; margin-bottom: auto !important; }
 
 /* Responsive margin classes for different breakpoints */
-@media (min-width: 576px) {
+@media (max-width: 576px) {
   /* Small devices (sm) */
   .ihub-m-sm-0 { margin: 0 !important; }
   .ihub-m-sm-1 { margin: 10px !important; }
@@ -894,7 +894,7 @@
   /* Similar patterns for other directions */
 }
 
-@media (min-width: 768px) {
+@media (min-width: 577px) {
   /* Medium devices (md) */
   .ihub-m-md-0 { margin: 0 !important; }
   .ihub-m-md-1 { margin: 10px !important; }
