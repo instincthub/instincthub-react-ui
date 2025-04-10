@@ -41,7 +41,7 @@ interface TabsProps {
  * @param contentClassName Additional classes for the content container
  * @type {TabsProps} from src/types
  */
-const Tabs: React.FC<TabsProps> = ({
+const Tabs = ({
   items,
   defaultActiveTab,
   onChange,
@@ -49,7 +49,7 @@ const Tabs: React.FC<TabsProps> = ({
   className = "",
   tabsContainerClassName = "",
   contentClassName = "",
-}) => {
+}: TabsProps) => {
   const [activeItem, setactiveItem] = useState<TabItemType>(
     (items.length > 0 ? items[0] : null) as TabItemType
   );

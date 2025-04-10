@@ -40,14 +40,14 @@ interface VerticalTabsProps {
  *
  * @type {VerticalTabsProps} from src/types
  */
-const VerticalTabs: React.FC<VerticalTabsProps> = ({
+const VerticalTabs = ({
   items,
   defaultActiveTab,
   onChange,
   className = "",
   tabsContainerClassName = "",
   contentClassName = "",
-}) => {
+}: VerticalTabsProps) => {
   const [activeTab, setActiveTab] = useState<VerticalTabItemType>(
     (items.length > 0 ? items[0] : null) as VerticalTabItemType
   );

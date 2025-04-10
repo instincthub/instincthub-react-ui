@@ -5,7 +5,7 @@ import MultiPurposeModal from "./MultiPurposeModal";
 /**
  * Example component demonstrating various ways to use the MultiPurposeModal
  */
-const ModalExamples: React.FC = () => {
+const ModalExamples = () => {
   const [isBasicModalOpen, setIsBasicModalOpen] = useState<boolean>(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
