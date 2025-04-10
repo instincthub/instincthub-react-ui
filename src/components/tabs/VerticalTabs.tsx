@@ -25,8 +25,8 @@ interface VerticalTabsProps {
  *     { id: 3, label: "Tab 3", content: <div>Content 3</div> },
  *   ]}
  *   defaultActiveTab={1}
- *   onChange={(tabId) => {
- *     console.log(tabId);
+ *   onChange={(tabItem) => {
+ *     console.log(tabItem);
  *   }}
  * />
  * ```
