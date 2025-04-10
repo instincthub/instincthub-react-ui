@@ -175,3 +175,11 @@ export interface TabItemType {
   content?: React.ReactNode | JSX.Element | null;
   disabled?: boolean;
 }
+
+export interface VerticalTabItemType {
+  id: string;
+  label: string;
+  content?: React.ReactNode | JSX.Element | null;
+  icon?: React.ReactNode | JSX.Element | null;
+  disabled?: boolean;
+}

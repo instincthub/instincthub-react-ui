@@ -1,19 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
-
-interface VerticalTabItem {
-  id: string;
-  label: string;
-  content?: ReactNode | JSX.Element | null;
-  icon?: ReactNode | JSX.Element | null;
-  disabled?: boolean;
-}
+import { VerticalTabItemType } from "src/types";
 
 interface VerticalTabsProps {
-  items: VerticalTabItem[];
+  items: VerticalTabItemType[];
   defaultActiveTab?: string;
-  onChange?: (tabId: string) => void;
+  onChange?: (tabItem: VerticalTabItemType) => void;
   className?: string;
   tabsContainerClassName?: string;
   contentClassName?: string;
@@ -44,6 +37,8 @@ interface VerticalTabsProps {
  * @param className Additional classes for the main container
  * @param tabsContainerClassName Additional classes for the tabs sidebar container
  * @param contentClassName Additional classes for the content container
+ *
+ * @type {VerticalTabsProps} from src/types
  */
 const VerticalTabs: React.FC<VerticalTabsProps> = ({
   items,
@@ -53,30 +48,34 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
   tabsContainerClassName = "",
   contentClassName = "",
 }) => {
-  const [activeTab, setActiveTab] = useState<string>(
-    defaultActiveTab || (items.length > 0 ? items[0].id : "")
+  const [activeTab, setActiveTab] = useState<VerticalTabItemType>(
+    (items.length > 0 ? items[0] : null) as VerticalTabItemType
   );
 
   useEffect(() => {
     if (defaultActiveTab) {
-      setActiveTab(defaultActiveTab);
+      const defaultItem = items.find(
+        (item) => defaultActiveTab === item.id
+      ) as VerticalTabItemType;
+
+      setActiveTab(defaultItem);
     }
   }, [defaultActiveTab]);
 
-  const handleTabClick = (tabId: string) => {
-    if (items.find((item) => item.id === tabId)?.disabled) {
+  const handleTabClick = (tabItem: VerticalTabItemType) => {
+    if (items.find((item) => item.id === tabItem.id)?.disabled) {
       return;
     }
 
-    setActiveTab(tabId);
+    setActiveTab(tabItem);
     if (onChange) {
-      onChange(tabId);
+      onChange(tabItem);
     }
   };
 
   const getTabItemClass = (tabId: string, disabled?: boolean) => {
     const baseClass = "ihub-vtab-item";
-    const activeClass = tabId === activeTab ? "ihub-vtab-active" : "";
+    const activeClass = tabId === activeTab.id ? "ihub-vtab-active" : "";
     const disabledClass = disabled ? "ihub-vtab-disabled" : "";
 
     return `${baseClass} ${activeClass} ${disabledClass}`;
@@ -89,9 +88,9 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
           <div
             key={tab.id}
             className={getTabItemClass(tab.id, tab.disabled)}
-            onClick={() => handleTabClick(tab.id)}
+            onClick={() => handleTabClick(tab)}
             role="tab"
-            aria-selected={activeTab === tab.id}
+            aria-selected={activeTab.id === tab.id}
             tabIndex={tab.disabled ? -1 : 0}
           >
             {tab.icon && <span className="ihub-vtab-icon">{tab.icon}</span>}
@@ -99,10 +98,11 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
           </div>
         ))}
       </div>
-
-      <div className={`ihub-vtab-content ${contentClassName}`}>
-        {items.find((tab) => tab.id === activeTab)?.content}
-      </div>
+      {activeTab?.content && (
+        <div className={`ihub-vtab-content ${contentClassName}`}>
+          {activeTab?.content}
+        </div>
+      )}
     </div>
   );
 };
