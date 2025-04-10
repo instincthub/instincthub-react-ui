@@ -3,8 +3,6 @@
 import React, { useState, useEffect, ReactNode } from "react";
 import { TabItemType } from "src/types";
 
-
-
 interface TabsProps {
   items: TabItemType[];
   defaultActiveTab?: string;
@@ -52,9 +50,6 @@ const Tabs: React.FC<TabsProps> = ({
   tabsContainerClassName = "",
   contentClassName = "",
 }) => {
-  const [activeTab, setActiveTab] = useState<string>(
-    defaultActiveTab || (items.length > 0 ? items[0].id : "")
-  );
   const [activeItem, setactiveItem] = useState<TabItemType>(
     (items.length > 0 ? items[0] : null) as TabItemType
   );
@@ -96,7 +91,7 @@ const Tabs: React.FC<TabsProps> = ({
 
   const getTabItemClass = (tabId: string, disabled?: boolean) => {
     const baseClass = "ihub-tab-item";
-    const activeClass = tabId === activeTab ? "ihub-tab-active" : "";
+    const activeClass = tabId === activeItem.id ? "ihub-tab-active" : "";
     const disabledClass = disabled ? "ihub-tab-disabled" : "";
 
     return `${baseClass} ${activeClass} ${disabledClass}`;
@@ -111,7 +106,7 @@ const Tabs: React.FC<TabsProps> = ({
             className={getTabItemClass(tab.id, tab.disabled)}
             onClick={() => handleTabClick(tab)}
             role="tab"
-            aria-selected={activeTab === tab.id}
+            aria-selected={activeItem.id === tab.id}
             tabIndex={tab.disabled ? -1 : 0}
           >
             {tab.label}
