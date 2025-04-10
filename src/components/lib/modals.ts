@@ -1,3 +1,5 @@
+import { reqOptions } from "./helpFunction";
+
 // Type for status codes
 type StatusCode = 200 | 201 | 400 | 500 | number;
 
@@ -80,6 +82,191 @@ export const openConfirmModal = (
       const target = e.target as HTMLElement;
       if (target.id === "myModal" || target.id === "confirmModal") {
         cleanup();
+      }
+    });
+  });
+};
+
+/**
+ * Opens a confirmation dialog for deleting an item
+ * @example
+ * ```ts
+ * const confirm = await openConfirmDelete(option.title, token, endpoint);
+ * if (confirm) {
+ *   // Update objects
+ *   const newObjects = data.filter((i) => i.id !== option.id);
+ *   setData(newObjects);
+ * }
+ * ```
+ * @param message The name of the item to be deleted
+ * @param token Authentication token
+ * @param url API endpoint for deletion
+ * @param pop Whether to show the confirmation dialog (default: true)
+ * @returns Promise that resolves to true if deletion was successful, false otherwise
+ */
+export const openConfirmDelete = (
+  message: string,
+  token: string | undefined,
+  url: string,
+  pop: boolean = true
+): Promise<boolean> => {
+  /* Import the css in root: import "@/styles/app/modal.css";
+  INITIATE:
+  const handleDelete = async (option) => {
+    const endpoint = `${API_HOST_URL}assessments/${handle}/assessment-link-tree-destroy/${option.id}/`;
+    const confirm = await openConfirmDelete(option.title, token, endpoint);
+    if (confirm) {
+      // Update objects
+      const newObjects = data.filter((i) => i.id !== option.id);
+      setData(newObjects);
+    }
+  };
+  */
+
+  return new Promise<boolean>((resolve) => {
+    const handleSubmit = async (): Promise<void> => {
+      // Delete the object from the DB if user confirms.
+      const requestOptions = reqOptions("DELETE", null, token);
+      const request = await fetch(url, requestOptions);
+
+      if (request.status === 204) {
+        openToast(`${message} was successfully deleted.`);
+        cleanup();
+        resolve(true);
+        return;
+      } else if (request.status === 401) {
+        openToast("You don't have permission to delete this item.", 401);
+      } else {
+        const res = await request.json();
+        openToast(
+          res.detail ||
+            "Couldn't delete the item. You can report the issue with the feedback button.",
+          request.status
+        );
+      }
+      resolve(false);
+    };
+
+    if (!pop) {
+      // No need for pop if not required.
+      handleSubmit();
+      return;
+    }
+
+    let modal_container = document.getElementById("confirmModal");
+    if (!modal_container) {
+      modal_container = document.createElement("div");
+      modal_container.id = "confirmModal";
+    }
+
+    const copiedState = `
+		<div>
+		<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CheckIcon" style="position: relative; top: 5px; margin-right: 10px;"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>
+		<span> Copied! </span>
+	<div/>
+		`;
+
+    const unCopiedState = `
+		<div>
+			<svg
+				class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+				focusable="false"
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				data-testid="ContentCopyIcon"
+				style="position: relative; top: 5px; margin-right: 10px"
+			>
+			<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" ></path></svg>
+			<span> Copy Link </span>
+		</div>
+		`;
+
+    const modalContent = `
+		<section id="myModal" class="ihub-modal">
+			<div class="ihub-modal-content">
+				<h4>Delete ${message}?</h4>
+				<p class="ihub-something-bad-flagged">
+					Unexpected bad things will happen if you don't read this!
+				</p>
+				<p>
+					This action cannot be undone. This will permanently delete the
+					<strong>${message}</strong> repository, feedbacks, schedules, and remove all team
+					associations.<br/><br/>
+				</p>
+
+				<div class="ihub-flex">
+					<p>Please type <strong>${message}</strong> to confirm.</p>
+					<div style="cursor: pointer" id="copyValue"> ${unCopiedState}</div>
+				</div>
+
+				<input type="text" id="deleteInput" oninput="handleInput(this)"/>
+				
+				<div class="ihub-action-btn">
+					<button type="button" disabled id="deleteBtn" class="ihub-delete-btn" onClick={handleConfirm()}>Delete</button>
+					<button type="button" class="ihub-cancel-btn" id="cancelBtn" onClick={handleCancel()}>Cancel</button>
+				</div>
+			</div>
+		</section>
+		`;
+
+    modal_container.innerHTML = modalContent;
+    document.body.appendChild(modal_container);
+
+    const copyValue = document.getElementById("copyValue");
+    const deleteBtn = document.getElementById(
+      "deleteBtn"
+    ) as HTMLButtonElement | null;
+
+    if (copyValue) {
+      copyValue.addEventListener("click", () => {
+        navigator.clipboard
+          .writeText(message)
+          .then(() => {
+            if (copyValue) {
+              copyValue.innerHTML = copiedState;
+              setTimeout(() => {
+                if (copyValue) {
+                  copyValue.innerHTML = unCopiedState;
+                }
+              }, 2000); // Set the timeout duration (2 seconds in this case)
+            }
+          })
+          .catch((err) => console.error("Unable to copy to clipboard", err));
+      });
+    }
+
+    // Define the input handler on the window object
+    (window as any).handleInput = (e: HTMLInputElement): void => {
+      if (deleteBtn) {
+        deleteBtn.disabled = `${message}` !== e.value;
+      }
+    };
+
+    function cleanup(): void {
+      if (modal_container) {
+        modal_container.remove();
+      }
+    }
+
+    // Define the cancel handler on the window object
+    (window as any).handleCancel = (): void => {
+      // User canceled!
+      cleanup();
+      resolve(false);
+    };
+
+    // Define the confirm handler on the window object
+    (window as any).handleConfirm = (): void => {
+      // User confirmed
+      handleSubmit();
+    };
+
+    modal_container.addEventListener("click", (e: MouseEvent) => {
+      // Close if user clicks outside the content box.
+      const target = e.target as HTMLElement;
+      if (target.id === "myModal" || target.id === "confirmModal") {
+        cleanup();
+        resolve(false);
       }
     });
   });

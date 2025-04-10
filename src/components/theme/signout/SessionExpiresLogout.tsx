@@ -15,13 +15,13 @@ interface SessionExpiresLogoutProps {
 type ValidationState = "loading" | "valid" | "invalid";
 
 /**
- * 
+ *
  * @constructor
  * @example
  * <SessionExpiresLogout session={session}>
  *   <div>Your session has expired</div>
  * </SessionExpiresLogout>
- * 
+ *
  */
 export default function SessionExpiresLogout({
   children,
@@ -108,7 +108,7 @@ export default function SessionExpiresLogout({
     );
   }
 
-  if (validationState === "invalid") {
+  if (validationState === "invalid" && session?.user) {
     return <SignOutSession message={expiredMessage} />;
   }
 

@@ -1,19 +1,14 @@
-
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
+import { TabItemType } from "src/types";
 
-interface TabItem {
-  id: string;
-  label: string;
-  content: ReactNode;
-  disabled?: boolean;
-}
+
 
 interface TabsProps {
-  items: TabItem[];
+  items: TabItemType[];
   defaultActiveTab?: string;
-  onChange?: (tabId: string) => void;
+  onChange?: (tabId: TabItemType) => void;
   variant?: "default" | "bordered" | "pills";
   className?: string;
   tabsContainerClassName?: string;
@@ -37,8 +32,8 @@ interface TabsProps {
  *   },
  * ];
  *
- * <Tabs items={tabs} defaultActiveTab="tab1" onChange={(tabId) => console.log(tabId)} />
- * 
+ * <Tabs items={tabs} defaultActiveTab="tab1" onChange={(tabItem) => console.log(tabItem)} />
+ *
  * @param items Array of tab items containing id, label, and content. See example above.
  * @param defaultActiveTab ID of the tab that should be active by default
  * @param onChange Callback function that fires when a tab is changed
@@ -46,6 +41,7 @@ interface TabsProps {
  * @param className Additional classes for the main container
  * @param tabsContainerClassName Additional classes for the tabs header container
  * @param contentClassName Additional classes for the content container
+ * @type {TabsProps} from src/types
  */
 const Tabs: React.FC<TabsProps> = ({
   items,
@@ -59,28 +55,35 @@ const Tabs: React.FC<TabsProps> = ({
   const [activeTab, setActiveTab] = useState<string>(
     defaultActiveTab || (items.length > 0 ? items[0].id : "")
   );
+  const [activeItem, setactiveItem] = useState<TabItemType>(
+    (items.length > 0 ? items[0] : null) as TabItemType
+  );
 
   useEffect(() => {
     if (defaultActiveTab) {
-      setActiveTab(defaultActiveTab);
+      const defaultItem = items.find(
+        (item) => defaultActiveTab === item.id
+      ) as TabItemType;
+      setactiveItem(defaultItem);
     }
   }, [defaultActiveTab]);
 
-  const handleTabClick = (tabId: string) => {
-    if (items.find(item => item.id === tabId)?.disabled) {
+  const handleTabClick = (item: TabItemType) => {
+    if (items.find((item) => item.id === item.id)?.disabled) {
       return;
     }
-    
-    setActiveTab(tabId);
+
+    setactiveItem(item);
+
     if (onChange) {
-      onChange(tabId);
+      onChange(item);
     }
   };
 
   // Generate class names based on variant
   const getTabsContainerClass = () => {
     const baseClass = "ihub-tabs-header";
-    
+
     switch (variant) {
       case "bordered":
         return `${baseClass} ihub-tabs-bordered ${tabsContainerClassName}`;
@@ -95,7 +98,7 @@ const Tabs: React.FC<TabsProps> = ({
     const baseClass = "ihub-tab-item";
     const activeClass = tabId === activeTab ? "ihub-tab-active" : "";
     const disabledClass = disabled ? "ihub-tab-disabled" : "";
-    
+
     return `${baseClass} ${activeClass} ${disabledClass}`;
   };
 
@@ -106,7 +109,7 @@ const Tabs: React.FC<TabsProps> = ({
           <div
             key={tab.id}
             className={getTabItemClass(tab.id, tab.disabled)}
-            onClick={() => handleTabClick(tab.id)}
+            onClick={() => handleTabClick(tab)}
             role="tab"
             aria-selected={activeTab === tab.id}
             tabIndex={tab.disabled ? -1 : 0}
@@ -115,10 +118,11 @@ const Tabs: React.FC<TabsProps> = ({
           </div>
         ))}
       </div>
-      
-      <div className={`ihub-tab-content ${contentClassName}`}>
-        {items.find((tab) => tab.id === activeTab)?.content}
-      </div>
+      {activeItem?.content && (
+        <div className={`ihub-tab-content ${contentClassName}`}>
+          {activeItem?.content}
+        </div>
+      )}
     </div>
   );
 };

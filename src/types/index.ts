@@ -155,3 +155,23 @@ export interface FileUploaderType {
   /** Additional CSS class names */
   className?: string;
 }
+
+export interface FetchDataType {
+  page: string;
+  token: string | null;
+  options: object;
+  data: any[];
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
+  setNext: React.Dispatch<React.SetStateAction<string | null>>;
+  setPrevious: React.Dispatch<React.SetStateAction<string | null>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  reset: boolean;
+}
+
+export interface TabItemType {
+  id: string;
+  label: string;
+  content?: React.ReactNode | JSX.Element | null;
+  disabled?: boolean;
+}

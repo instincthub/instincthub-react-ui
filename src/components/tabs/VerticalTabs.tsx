@@ -5,8 +5,8 @@ import React, { useState, useEffect, ReactNode } from "react";
 interface VerticalTabItem {
   id: string;
   label: string;
-  content: ReactNode;
-  icon?: ReactNode;
+  content?: ReactNode | JSX.Element | null;
+  icon?: ReactNode | JSX.Element | null;
   disabled?: boolean;
 }
 
@@ -36,7 +36,7 @@ interface VerticalTabsProps {
  *     console.log(tabId);
  *   }}
  * />
- * ``` 
+ * ```
  * Props interface for the VerticalTabsProps interface
  * @param items Array of tab items containing id, label, content, and optional icon
  * @param defaultActiveTab ID of the tab that should be active by default
@@ -64,10 +64,10 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
   }, [defaultActiveTab]);
 
   const handleTabClick = (tabId: string) => {
-    if (items.find(item => item.id === tabId)?.disabled) {
+    if (items.find((item) => item.id === tabId)?.disabled) {
       return;
     }
-    
+
     setActiveTab(tabId);
     if (onChange) {
       onChange(tabId);
@@ -78,7 +78,7 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
     const baseClass = "ihub-vtab-item";
     const activeClass = tabId === activeTab ? "ihub-vtab-active" : "";
     const disabledClass = disabled ? "ihub-vtab-disabled" : "";
-    
+
     return `${baseClass} ${activeClass} ${disabledClass}`;
   };
 
@@ -99,7 +99,7 @@ const VerticalTabs: React.FC<VerticalTabsProps> = ({
           </div>
         ))}
       </div>
-      
+
       <div className={`ihub-vtab-content ${contentClassName}`}>
         {items.find((tab) => tab.id === activeTab)?.content}
       </div>

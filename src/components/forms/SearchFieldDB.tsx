@@ -15,9 +15,13 @@ interface SearchFieldDBProps {
   /** Auth token for API requests */
   token?: string | null;
   /** Search parameters from URL */
-  searchParams: {
+  params: {
     channel?: string;
+    [key: string]: any;
+  };
+  searchParams: {
     search?: string;
+    [key: string]: any;
   };
   /** Custom label for search placeholder */
   labels?: string;
@@ -54,7 +58,8 @@ interface SearchFieldDBProps {
 
 const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
   const router = useRouter();
-  const { channel, search } = props.searchParams;
+  const { channel } = props.params;
+  const { search } = props.searchParams;
   const [status, setStatus] = useState<number | undefined>();
   const [searchValue, setSearchValue] = useState<string | undefined>(search);
 

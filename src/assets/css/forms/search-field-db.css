@@ -23,7 +23,7 @@
 
 .ihub-search-btn {
   position: absolute;
-  height: 95%;
+  height: 40px;
   width: 50px;
   border-radius: 0 5px 5px 0;
   cursor: pointer;

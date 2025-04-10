@@ -1,6 +1,8 @@
 // TypeScript version of the original JavaScript document
 import { format } from "date-fns";
 import { forbidden, notFound } from "next/navigation";
+import { openToast } from "./modals";
+import React from "react";
 
 // Constants with Type Safety
 export const IN_DEV_MODE: boolean = process.env.NODE_ENV === "development";
@@ -615,6 +617,68 @@ export const reqOptions = (
 
   if (IN_DEV_MODE) console.log(request);
   return request;
+};
+
+/**
+ * Fetches paginated data from an API.
+ * @function
+ * @example
+ * ```ts
+ * fetchData(page, token, options, data, setData, setCount, setNext, setPrevious, setIsLoading, reset);
+ * ```
+ * @param page API endpoint
+ * @param token Auth token
+ * @param options Request options
+ * @param data Existing data
+ * @param setData Data setter
+ * @param setCount Count setter
+ * @param setNext Next page setter
+ * @param setPrevious Previous page setter
+ * @param setIsLoading Loading state setter
+ * @param reset Reset state
+ * @returns
+ * @see {@link FetchDataType}
+ */
+
+export const fetchData = async (
+  page: string,
+  token: string | null,
+  options: object,
+  data: any[],
+  setData: React.Dispatch<React.SetStateAction<any>>,
+  setCount: React.Dispatch<React.SetStateAction<number>>,
+  setNext: React.Dispatch<React.SetStateAction<string | null>>,
+  setPrevious: React.Dispatch<React.SetStateAction<string | null>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  reset = false
+) => {
+  // Fetch paginated data when user scrolls
+  if (!token) return;
+
+  try {
+    // Fetch data from the server with pagination
+    const response = await fetch(page, options);
+    const newData: any = await response.json();
+    if (response.status === 401) {
+      openToast("Unauthorized fetchData", 401);
+      return;
+    }
+
+    // Append the new data to the existing data
+    if (reset) {
+      setData(newData.results);
+      setCount(newData.count);
+    } else {
+      setData([...data, ...newData.results]);
+    }
+    setNext(newData.next);
+    setPrevious(newData.previous);
+  } catch (error) {
+    openToast("Error fetching data", 500);
+    console.error("Error fetching data:", error);
+  } finally {
+    setIsLoading(false);
+  }
 };
 
 /**
