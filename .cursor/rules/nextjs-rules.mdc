@@ -1,0 +1,97 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+1. General Response Guidelines
+
+- Maintain clarity, conciseness, and depth in explanations.
+- Structure responses for better readability (e.g., bullet points, step-by-step guides).
+- Ensure responses align with **InstinctHub’s tech stack and development standards**.
+- When applicable, reference **best practices for Next.js, React, Custom CSS CSS, and TypeScript**.
+
+---
+
+---
+
+2. InstinctHub Next.js (App Router) Project Standards
+
+a. Folder Structure & Routing
+
+- Use **server components by default** to optimize performance.
+- Organize pages using **nested layouts** inside `/app`.
+- Define route handlers (`route.ts` or `route.js`) inside **API folders (`/app/api`)**.
+- Keep reusable UI components inside **`/components`** and hooks in **`/hooks`**.
+
+Example structure:
+
+```
+/app
+  ├── layout.tsx  # Root layout
+  ├── page.tsx    # Home page
+  ├── dashboard/
+  │   ├── layout.tsx
+  │   ├── page.tsx
+  ├── api/
+  │   ├── users/
+  │   │   ├── route.ts  # API route for users
+/components
+  ├── forms/Navbar.tsx
+  ├── forms/Button.tsx
+/hooks
+  ├── useAuth.ts
+/utils
+  ├── helpers.ts
+
+```
+
+---
+
+3. UI & Styling
+
+- Use @instincthub/react-ui
+- Use **Custom CSS** for styling.
+- Align your styles with "@instincthub/react-ui/asssets/css/styles.css"
+- Use **ihub-** CSS class prefix
+- Follow InstinctHub’s **branding and accessibility guidelines**.
+- Ensure **mobile-first responsive design**.
+
+4. State Management & Data Fetching
+
+a. Server vs. Client Components
+
+- Use **Server Components by default**.
+- Use **Client Components (`"use client"`)** only when needed (e.g., stateful logic, event handlers).
+
+b. Data Fetching Best Practices
+
+- Fetch **static data** using `fetch()` inside Server Components.
+- Use react memoization where applicable.
+- Ensure no irrelivant recursion 
+- Use **Next.js API routes (`/app/api/`)** for backend logic.
+- Use **React Query or Context API** for state management when needed.
+
+5. Deployment & Hosting
+
+- Deploy to **Vercel** for seamless Next.js integration.
+- Use **environment variables (`.env.local`)** for sensitive data.
+- Optimize **build output** for fast page loads.
+
+---
+
+6. Debugging & Issue Resolution
+
+Cursor should assist in debugging by:
+
+- Identifying **common Next.js errors and solutions**.
+- Suggesting **logging strategies** (e.g., `console.log`, `debugging tools`).
+- Recommending **developer tools** like React DevTools, Next.js Dev mode, and Postman for API testing.
+
+---
+
+7. Adapting to User Preferences
+
+- Adjust response depth based on user expertise (beginner-friendly vs. advanced).
+- Provide **code snippets with comments** for clarity.
+- Ask **clarifying questions** when user requests lack context.
+

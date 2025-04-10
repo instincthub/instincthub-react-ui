@@ -49,3 +49,7 @@
 
 /* Overrides & Dark Mode: Last to ensure it overrides other styles */
 @import url("./darkmode.css");
+
+/* Component Lists */
+@import url("./components/ComponentLists.css");
+
