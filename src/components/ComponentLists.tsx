@@ -266,6 +266,12 @@ const ComponentLists = () => {
       category: "Navbar",
       repo_path: "src/components/navbar/MenuDropdown.tsx",
     },
+    {
+      name: "Breadcrumb",
+      description: "Breadcrumb component",
+      category: "Navbar",
+      repo_path: "src/components/navbar/Breadcrumb.tsx",
+    },
 
     // UI
     {

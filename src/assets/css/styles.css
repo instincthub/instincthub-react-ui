@@ -29,6 +29,7 @@
 /* Navbar Styles */
 @import url("./navbar/channel-list-avatar.css");
 @import url("./navbar/menu-dropdown.css");
+@import url("./navbar/breadcrumb.css");
 
 /* Cursor Styles */
 @import url("./cursors/style.css");
@@ -53,4 +54,3 @@
 
 /* Component Lists */
 @import url("./components/ComponentLists.css");
-

@@ -46,6 +46,7 @@ export { default as ActionCallbackDropdown } from "./components/forms/ActionCall
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
 export { default as MenuDropdown } from "./components/navbar/MenuDropdown";
+export { default as Breadcrumb } from "./components/navbar/Breadcrumb";
 
 // Upload components
 export { default as FileUploader } from "./components/forms/uploads/FileUploader";
