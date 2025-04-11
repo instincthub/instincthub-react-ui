@@ -104,12 +104,12 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
   return (
     <div key={keys}>
       <TextField
-        names={names}
+        name={names}
         types={types}
-        labels={labels}
-        requireds={requireds}
+        label={labels}
+        required={requireds}
         onChange={isUsernameValid}
-        notes={field.note}
+        note={field.note}
         TextTransform="lowercase"
       />
     </div>

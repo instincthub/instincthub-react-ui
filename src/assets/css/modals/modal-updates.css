@@ -2,204 +2,204 @@
 
 /* Modal base */
 .ihub-modal {
-    position: fixed;
-    z-index: var(--z-popup, 1000);
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(44, 51, 58, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  
-  .ihub-modal-open {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .ihub-modal-closing {
-    opacity: 0;
-    visibility: hidden;
-  }
-  
-  /* Modal content - base styles */
-  .ihub-modal-content {
-    background-color: var(--White);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    max-height: 90vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  position: fixed;
+  z-index: var(--z-popup, 1000);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(44, 51, 58, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.ihub-modal-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ihub-modal-closing {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Modal content - base styles */
+.ihub-modal-content {
+  background-color: var(--White);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  max-height: 90vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ihub-modal-open .ihub-modal-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Size variations */
+.ihub-modal-small {
+  max-width: 400px;
+}
+
+.ihub-modal-medium {
+  max-width: 600px;
+}
+
+.ihub-modal-large {
+  max-width: 900px;
+}
+
+.ihub-modal-full {
+  max-width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Modal header */
+.ihub-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--Gunmetal);
+}
+
+/* Close button */
+.ihub-close-it {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+  color: var(--Gunmetal);
+}
+
+.ihub-close-it:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Modal body */
+.ihub-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Modal footer */
+.ihub-modal-footer {
+  padding: 15px 20px;
+  border-top: var(--borderDefault);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Animation for modal entry and exit */
+@keyframes ihub-modal-in {
+  from {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
   }
-  
-  .ihub-modal-open .ihub-modal-content {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
-  
-  /* Size variations */
-  .ihub-modal-small {
-    max-width: 400px;
+}
+
+@keyframes ihub-modal-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .ihub-modal-medium {
-    max-width: 600px;
+  to {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ihub-modal-small,
+  .ihub-modal-medium,
   .ihub-modal-large {
-    max-width: 900px;
-  }
-  
-  .ihub-modal-full {
+    width: 100%;
     max-width: 100%;
-    height: 100%;
-    max-height: 100vh;
+    margin: 0;
     border-radius: 0;
-    margin: 0;
   }
-  
-  /* Modal header */
-  .ihub-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: var(--borderDefault);
-  }
-  
-  .ihub-modal-title {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--Gunmetal);
-  }
-  
-  /* Close button */
-  .ihub-close-it {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+
+  .ihub-modal {
     padding: 0;
-    color: var(--Gunmetal);
   }
-  
-  .ihub-close-it:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Modal body */
-  .ihub-modal-body {
-    padding: 20px;
-    overflow-y: auto;
-    flex: 1;
-  }
-  
-  /* Modal footer */
+
   .ihub-modal-footer {
-    padding: 15px 20px;
-    border-top: var(--borderDefault);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    flex-direction: column;
   }
-  
-  /* Animation for modal entry and exit */
-  @keyframes ihub-modal-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes ihub-modal-out {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    to {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .ihub-modal-small,
-    .ihub-modal-medium,
-    .ihub-modal-large {
-      width: 100%;
-      max-width: 100%;
-      margin: 0;
-      border-radius: 0;
-    }
-    
-    .ihub-modal {
-      padding: 0;
-    }
-    
-    .ihub-modal-footer {
-      flex-direction: column;
-    }
-    
-    .ihub-modal-footer button {
-      width: 100%;
-    }
-  }
-  
-  /* Improvements for buttons in modal */
-  .ihub-modal .ihub-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+
+  .ihub-modal-footer button {
     width: 100%;
   }
-  
-  .ihub-modal .ihub-buttons button {
-    margin: 0;
-  }
-  
-  /* Accessibility improvements */
-  .ihub-modal:focus-visible {
-    outline: 2px solid var(--DarkCyan);
-  }
-  
-  .ihub-modal-body:focus {
-    outline: none;
-  }
-  
-  /* Scrollbar styling */
-  .ihub-modal-body::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  .ihub-modal-body::-webkit-scrollbar-track {
-    background: var(--Gray);
-    border-radius: 3px;
-  }
-  
-  .ihub-modal-body::-webkit-scrollbar-thumb {
-    background-color: var(--DarkCyan);
-    border-radius: 3px;
-  }
+}
+
+/* Improvements for buttons in modal */
+.ihub-modal .ihub-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.ihub-modal .ihub-buttons button {
+  margin: 0;
+}
+
+/* Accessibility improvements */
+.ihub-modal:focus-visible {
+  outline: 2px solid var(--DarkCyan);
+}
+
+.ihub-modal-body:focus {
+  outline: none;
+}
+
+/* Scrollbar styling */
+.ihub-modal-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ihub-modal-body::-webkit-scrollbar-track {
+  background: var(--Gray);
+  border-radius: 3px;
+}
+
+.ihub-modal-body::-webkit-scrollbar-thumb {
+  background-color: var(--DarkCyan);
+  border-radius: 3px;
+}

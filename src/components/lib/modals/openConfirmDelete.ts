@@ -168,7 +168,7 @@ export const openConfirmDelete = (
           <svg class="ihub-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyIcon">
             <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
           </svg>
-          <span>Copy Text</span>
+          <span class="ihub-fs-sm">Copy Text</span>
         </div>
       `.trim();
 
@@ -181,7 +181,7 @@ export const openConfirmDelete = (
 
     // Create modal content with proper ihub- prefixed classes
     const modalContent = `
-        <section class="ihub-modal" aria-labelledby="delete-modal-title" role="dialog" aria-modal="true">
+        <section class="ihub-modal ihub-modal-open" aria-labelledby="delete-modal-title" role="dialog" aria-modal="true">
           <div class="ihub-modal-content">
             <h4 id="delete-modal-title" class="ihub-modal-title">Delete confirmation</h4>
             <p class="ihub-warning-text">
