@@ -9,15 +9,21 @@ This guide will walk you through the process of exporting a new component from t
 3. Exporting the component
 4. Importing the component in `/src/index.ts`
 5. If it is utils in lib that you want to export like `@instincthub/react-ui/modals`
+
 - In the rollup.config.ts file, add the file path to the input array
+
 ```json
   input: ["src/components/lib/modals.ts"], // js and css files
 ```
+
 - In the tsconfig.json file, add the file path to the include array (you could add a repository or a specific file like so `src/components/lib/modals.ts`)
+
 ```json
 "include": ["src/components/lib/**/*.ts"],
 ```
+
 - In the package.json file, add the file to the exports
+
 ```json
 "exports": {
     "./modals": {

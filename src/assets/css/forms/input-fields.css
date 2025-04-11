@@ -1590,3 +1590,99 @@
   left: 0px;
   transition: all 0.65s cubic-bezier(0.84, -0.18, 0.31, 1.26) 0.2s;
 }
+
+
+/* InputNumber Component Styles */
+.ihub-number-input-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.ihub-number-input {
+  width: 100%;
+  padding-right: 40px !important; /* Make room for controls */
+  font-family: var(--Nunito);
+  font-size: 1rem;
+}
+
+.ihub-number-controls {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  display: flex;
+  flex-direction: column;
+  border-left: var(--borderDefault);
+}
+
+.ihub-number-increment,
+.ihub-number-decrement {
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--Gunmetal);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.ihub-number-increment {
+  border-bottom: var(--borderDefault);
+  border-top-right-radius: 4px;
+}
+
+.ihub-number-decrement {
+  border-bottom-right-radius: 4px;
+}
+
+.ihub-number-increment:hover,
+.ihub-number-decrement:hover {
+  background-color: rgba(0, 131, 143, 0.1);
+  color: var(--DarkCyan);
+}
+
+.ihub-number-increment:disabled,
+.ihub-number-decrement:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: transparent;
+}
+
+.ihub-control-icon {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.ihub-required {
+  color: var(--Danger);
+  margin-left: 2px;
+}
+
+.ihub-error .ihub-input {
+  border-color: var(--Danger);
+}
+
+.ihub-error-message {
+  color: var(--Danger);
+  font-size: 12px;
+  margin-top: 5px;
+  font-family: var(--Nunito);
+}
+
+/* Disable number input arrows in browsers */
+.ihub-number-input::-webkit-outer-spin-button,
+.ihub-number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+.ihub-number-input[type="number"] {
+  -moz-appearance: textfield;
+}

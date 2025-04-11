@@ -1,0 +1,583 @@
+/* app/global.css */
+
+/* Additional custom styles for the landing page */
+.ihub-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero section styles */
+.ihub-hero {
+  text-align: center;
+  padding: 80px 0 60px;
+  position: relative;
+  margin-top: 20px;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(197, 192, 219, 0.15) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 16px;
+}
+
+.ihub-hero::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--Main-Gradient);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.ihub-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -70px;
+  left: -70px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: var(--Main-Gradient);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.ihub-hero h1 {
+  font-size: 56px;
+  color: var(--Gunmetal);
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+  background: var(--Main-Gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.ihub-hero p {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 700px;
+  color: var(--Gunmetal);
+  opacity: 0.9;
+}
+
+/* Features section styles */
+.ihub-features {
+  margin: 90px 0 70px;
+}
+
+.ihub-features h2 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 36px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.ihub-features h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 3px;
+  background: var(--Main-Gradient);
+  border-radius: 2px;
+}
+
+.ihub-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+.ihub-feature-card {
+  padding: 30px;
+  border-radius: 12px;
+  transition: all 0.35s ease;
+  position: relative;
+  border: 1px solid transparent;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ihub-feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 155, 162, 0.05) 0%,
+    rgba(188, 101, 141, 0.05) 100%
+  );
+  z-index: -1;
+  transition: all 0.35s ease;
+}
+
+.ihub-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
+  border-color: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-feature-card:hover::before {
+  opacity: 0.8;
+}
+
+.ihub-feature-card h4 {
+  color: var(--DarkCyan);
+  margin-bottom: 14px;
+  font-size: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.ihub-feature-card h4::before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--DarkCyan);
+  transition: width 0.3s ease;
+}
+
+.ihub-feature-card:hover h4::before {
+  width: 100%;
+}
+
+/* Component demo styles */
+.ihub-components-preview {
+  position: relative;
+}
+
+.ihub-components-preview h2 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 36px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.ihub-components-preview h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 3px;
+  background: var(--Main-Gradient);
+  border-radius: 2px;
+}
+
+.ihub-component-demo {
+  margin-bottom: 50px;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.ihub-component-demo h3 {
+  margin-bottom: 25px;
+  color: var(--DarkCyan);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.ihub-component-demo h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--DarkCyan);
+}
+
+.ihub-demo-content {
+  background-color: var(--Magnolia);
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ihub-code-example {
+  background-color: var(--Gunmetal);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ihub-code-example::before {
+  content: "Code";
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-family: var(--Montserat);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ihub-code-example pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.ihub-code-example code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  white-space: pre;
+  color: #f8f8f2;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Components grid */
+.ihub-components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.ihub-component-card {
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
+  padding: 25px 15px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ihub-component-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 155, 162, 0.08) 0%,
+    rgba(188, 101, 141, 0.08) 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.ihub-component-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--Main-Gradient);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s ease;
+}
+
+.ihub-component-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  border-color: transparent;
+}
+
+.ihub-component-card:hover::before {
+  opacity: 1;
+}
+
+.ihub-component-card:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.ihub-component-card h4 {
+  color: var(--DarkCyan);
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+/* Community section */
+.ihub-community {
+  text-align: center;
+  margin: 80px 0;
+}
+
+.ihub-community-content {
+  border-radius: 16px;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 155, 162, 0.07) 0%,
+    rgba(188, 101, 141, 0.07) 100%
+  );
+  border: 1px solid rgba(0, 131, 143, 0.1);
+}
+
+.ihub-community-content::before,
+.ihub-community-content::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--Main-Gradient);
+  opacity: 0.05;
+  z-index: 0;
+}
+
+.ihub-community-content::before {
+  top: -150px;
+  right: -150px;
+}
+
+.ihub-community-content::after {
+  bottom: -150px;
+  left: -150px;
+}
+
+.ihub-community h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.ihub-community p {
+  margin: 20px auto 30px;
+  font-size: 18px;
+  max-width: 650px;
+  position: relative;
+  z-index: 1;
+}
+
+.ihub-community-links {
+  position: relative;
+  z-index: 1;
+}
+
+.ihub-community-links button {
+  margin: 0 10px;
+  min-width: 160px;
+  padding: 15px 25px;
+  transition: all 0.3s ease;
+}
+
+/* Button styling enhancements */
+.important-btn,
+.ihub-important-btn {
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.important-btn::before,
+.ihub-important-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.important-btn:hover::before,
+.ihub-important-btn:hover::before {
+  transform: translateX(0);
+}
+
+.outlined-btn {
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.outlined-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--DarkCyan);
+  opacity: 0.05;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.outlined-btn:hover::before {
+  transform: translateY(0);
+}
+
+/* Custom animation for button with chevron */
+.ihub-anime-button-chevron svg {
+  transition: transform 0.3s ease;
+}
+
+.ihub-anime-button-chevron:hover svg {
+  transform: translateX(4px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ihub-hero {
+    padding: 60px 0 40px;
+  }
+
+  .ihub-hero h1 {
+    font-size: 36px;
+  }
+
+  .ihub-hero p {
+    font-size: 18px;
+  }
+
+  .ihub-features-grid,
+  .ihub-components-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ihub-community-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ihub-community-links button {
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  .ihub-hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .ihub-hero-buttons button {
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  .ml-2 {
+    margin-left: 0;
+  }
+
+  .ihub-component-demo {
+    padding: 20px;
+  }
+
+  .ihub-demo-content {
+    padding: 20px;
+  }
+}
+
+/* Code highlighting */
+.ihub-code-example code .keyword {
+  color: #ff79c6;
+}
+
+.ihub-code-example code .tag {
+  color: #bd93f9;
+}
+
+.ihub-code-example code .string {
+  color: #f1fa8c;
+}
+
+.ihub-code-example code .comment {
+  color: #6272a4;
+}
+
+.ihub-code-example code .attribute {
+  color: #8be9fd;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ihub-hero h1 {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.ihub-hero p {
+  animation: fadeIn 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.ihub-hero-buttons {
+  animation: fadeIn 0.8s ease-out 0.4s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}

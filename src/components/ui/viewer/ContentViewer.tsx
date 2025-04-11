@@ -27,7 +27,7 @@ interface ContentViewerProps {
 }
 
 /**
- * 
+ *
  * @component
  * @example
  * ```jsx

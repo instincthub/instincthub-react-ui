@@ -232,6 +232,12 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/ActionCallbackDropdown.tsx",
     },
+    {
+      name: "InputNumber",
+      description:"InputNumber component for numerical input",
+      category: "Form",
+      repo_path: "src/components/forms/InputNumber.tsx"
+    },
 
     // Auth
     {

@@ -1,0 +1,102 @@
+/* CodeExamplePage.css */
+.ihub-code-example-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: var(--Nunito);
+}
+
+.ihub-code-example-page h1 {
+  margin-bottom: 2rem;
+  color: var(--Gunmetal);
+  font-weight: 600;
+}
+
+.ihub-language-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ihub-language-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--Gunmetal);
+}
+
+.ihub-language-button:hover {
+  background-color: var(--Gray);
+}
+
+.ihub-language-button.active {
+  background-color: var(--DarkCyan);
+  color: white;
+  border-color: var(--DarkCyan);
+}
+
+.ihub-code-container {
+  margin: 2rem 0;
+}
+
+.ihub-options-panel {
+  background-color: var(--Gray);
+  padding: 1.5rem;
+  border-radius: 5px;
+  margin-top: 2rem;
+}
+
+.ihub-options-panel h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.ihub-options-panel ul {
+  margin-left: 1.5rem;
+}
+
+.ihub-options-panel li {
+  margin-bottom: 0.5rem;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .ihub-language-selector {
+    flex-wrap: wrap;
+  }
+
+  .ihub-language-button {
+    flex: 1;
+    min-width: 80px;
+    padding: 0.5rem;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+/* Dark mode support */
+html.DarkMode .ihub-code-example-page h1,
+html.DarkMode .ihub-code-example-page h2 {
+  color: var(--White);
+}
+
+html.DarkMode .ihub-language-button {
+  background-color: var(--Gunmetal);
+  color: var(--White);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.DarkMode .ihub-language-button:hover {
+  background-color: #3a444d;
+}
+
+html.DarkMode .ihub-options-panel {
+  background-color: var(--Gunmetal);
+}
+
+

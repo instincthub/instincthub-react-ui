@@ -18,12 +18,12 @@ interface PasswordFieldProps {
 }
 
 /**
- * 
+ *
  * @component
  * @example
  * ```jsx
  * import { PasswordField } from "@instincthub/react-ui";
- * 
+ *
  * <PasswordField
  *   ids={["password"]}
  *   names={["password"]}
@@ -47,7 +47,7 @@ interface PasswordFieldProps {
  * @property {boolean} requireds - Whether the field is required
  * @property {string} defaultValues - Default value for the input field
  * @property {(name: string, value: string) => void} setValues - Callback for setting values
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events    
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events
  */
 export default function PasswordField({
   ids,

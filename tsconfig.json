@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -13,7 +17,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "declaration": true,
     "declarationDir": "dist/src/types",
     "outDir": "dist",
@@ -24,6 +28,9 @@
       "./node_modules/@instincthub/react-ui/dist/types"
     ],
     "paths": {
+      "@/*": [
+        "./src/*"
+      ],
       "@instincthub/react-ui": [
         "/node_modules/@instincthub/react-ui/dist/src/index.js"
       ],
@@ -42,14 +49,25 @@
       "@instincthub/react-ui/asssets/*": [
         "/node_modules/@instincthub/react-ui/dist/src/assets/*"
       ]
-    }
+    },
+    "noEmit": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.jsx",
-    "src/**/*.js",
-    "types/**/*"
+    "types/**/*",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

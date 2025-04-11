@@ -1,6 +1,7 @@
 # Installation Guide for @instincthub/react-ui
 
 ## Prerequisites
+
 Before installing `@instincthub/react-ui`, ensure you have the following installed on your system:
 
 - **Node.js** (Recommended version: >= 16.x)
@@ -9,50 +10,66 @@ Before installing `@instincthub/react-ui`, ensure you have the following install
 ## Installation
 
 ### Step 1: Install Peer Dependencies
+
 `@instincthub/react-ui` has several peer dependencies that need to be installed separately:
+
 ```sh
 npm install @aws-sdk/client-s3 @aws-sdk/lib-storage @emotion/react @emotion/styled @mui/icons-material @mui/material jspdf next next-auth primereact react react-dom
 ```
+
 Or using yarn:
+
 ```sh
 yarn add @aws-sdk/client-s3 @aws-sdk/lib-storage @emotion/react @emotion/styled @mui/icons-material @mui/material jspdf next next-auth primereact react react-dom
 ```
 
 ### Step 2: Install the Package
+
 Now, install `@instincthub/react-ui`:
+
 ```sh
 npm install @instincthub/react-ui
 ```
+
 Or using yarn:
+
 ```sh
 yarn add @instincthub/react-ui
 ```
 
 ## Development Setup
+
 If you are contributing or testing locally, install the required dependencies:
+
 ```sh
 npm install
 ```
+
 Then, build the package using:
+
 ```sh
 npm run rollup
 ```
 
 ## Linking the Package (For Local Development)
+
 To test `@instincthub/react-ui` locally within another project:
+
 ```sh
 npm link
 ```
+
 In your consuming project, run:
+
 ```sh
 npm link @instincthub/react-ui
 ```
 
 To unlink:
+
 ```sh
 npm unlink @instincthub/react-ui
 ```
-
 
 ## Core Features
 

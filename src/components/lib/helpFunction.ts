@@ -328,6 +328,40 @@ export const slugifyFileName = (fileName: string): string => {
 };
 
 /**
+ * Converts a string to a URL-friendly slug format.
+ * @param value The string to convert to a slug
+ * @example
+ * ```ts
+ * const slug = convertToSlug("Hello World");
+ * console.log(slug); // "hello-world"
+ * ```
+ * @returns A lowercase string with spaces and special characters replaced by hyphens
+ * @throws Error if the resulting slug contains invalid characters
+ */
+export const convertToSlug = (value: string): string => {
+  // Normalize the string to remove accents and other diacritics
+  value = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  // Convert to lowercase
+  value = value.toLowerCase();
+
+  // Replace any non-alphanumeric characters with a hyphen
+  value = value.replace(/[^a-z0-9]+/g, "-");
+
+  // Remove leading or trailing hyphens
+  value = value.replace(/^-+|-+$/g, "");
+
+  // Ensure the slug only contains valid characters
+  if (!/^[a-z0-9_-]+$/.test(value)) {
+    throw new Error(
+      'Enter a valid "slug" consisting of letters, numbers, underscores, or hyphens.'
+    );
+  }
+
+  return value;
+};
+
+/**
  * Checks if an element is in the viewport.
  * @param element DOM element
  * @returns Boolean indicating visibility

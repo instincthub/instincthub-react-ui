@@ -41,6 +41,7 @@
     }
   },
   "scripts": {
+    "dev": "next dev",
     "rollup": "rollup -c",
     "link-ui": "npm unlink @instincthub/react-ui && rm -rf dist && rollup -c && npm link",
     "unlink-ui-linux": "npm unlink @instincthub/react-ui",

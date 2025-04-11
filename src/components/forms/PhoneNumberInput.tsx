@@ -24,12 +24,12 @@ interface PhoneNumberInputProps {
 }
 
 /**
- * 
+ *
  * @component
  * @example
  * ```jsx
  * import { PhoneNumberInput } from "@instincthub/react-ui";
- * 
+ *
  * <PhoneNumberInput
  *   phoneCode="234"
  *   defaultValues={{ mobile: "1234567890" }}
