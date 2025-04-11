@@ -1434,7 +1434,6 @@ RADIO ENDS
 ===== */
 .default-btn {
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;
@@ -1449,7 +1448,6 @@ RADIO ENDS
 .important-btn,
 .ihub-important-btn {
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;
@@ -1470,7 +1468,6 @@ RADIO ENDS
 
 .outlined-btn {
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;
@@ -1490,7 +1487,6 @@ RADIO ENDS
 
 .primary-btn {
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;
@@ -1505,7 +1501,6 @@ RADIO ENDS
 
 .danger-btn {
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;

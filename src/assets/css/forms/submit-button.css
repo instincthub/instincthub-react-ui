@@ -6,10 +6,8 @@
 }
 
 .ihub-submit-btn {
-  margin-top: 40px;
   position: relative;
   padding: 12px 35px;
-  margin: 25px 0 10px 0;
   border-radius: 5px;
   border: 0;
   background-color: unset;
@@ -28,15 +26,6 @@
 .ihub-submit-btn:focus-visible {
   box-shadow: 0 0 0 2px var(--White), 0 0 0 4px var(--DarkCyan);
   outline: none;
-}
-
-.ihub-submit-btn span {
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
-  color: #fff;
-  font-family: var(--Montserat);
-  z-index: 1;
 }
 
 /* Button variants */
