@@ -23,7 +23,26 @@ interface InputNumberProps {
 
 /**
  * InputNumber component for numerical input with formatting and validation
+ * 
+ * @example
+ * ```tsx
+ * <InputNumber name="age" label="Age" />
+ * ```  
+ * 
  * @param props Component properties
+ * @param props.id - The id of the input
+ * @param props.name - The name of the input
+ * @param props.label - The label of the input
+ * @param props.placeholder - The placeholder of the input
+ * @param props.min - The minimum value of the input
+ * @param props.max - The maximum value of the input
+ * @param props.step - The step value of the input
+ * @param props.defaultValue - The default value of the input
+ * @param props.value - The value of the input
+ * @param props.required - Whether the input is required
+ * @param props.disabled - Whether the input is disabled
+ * @param props.readOnly - Whether the input is read only
+ * @param props.onChange - The onChange event of the input
  * @returns InputNumber component
  */
 const InputNumber = ({
