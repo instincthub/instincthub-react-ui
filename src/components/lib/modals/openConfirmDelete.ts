@@ -1,3 +1,6 @@
+import { reqOptions } from "../helpFunction";
+import { openToast } from "./modals";
+
 /**
  * API response interface for error handling
  */
@@ -7,60 +10,38 @@ interface ApiErrorResponse {
 }
 
 /**
- * Request options utility type (assuming it's imported from elsewhere)
- */
-type RequestOptionsFunction = (
-  method: string,
-  data: any,
-  token?: string
-) => RequestInit;
-
-/**
- * Toast notification utility type (assuming it's imported from elsewhere)
- */
-type OpenToastFunction = (message: string, status?: number) => void;
-
-/**
  * Opens a confirmation modal for deleting an item
- * @param message The name of the item to be deleted
- * @param token Authentication token for the API request
- * @param url API endpoint for deletion
- * @param pop Whether to show a popup confirmation (default: true)
- * @param reqOptions Function to generate request options (imported from elsewhere)
- * @param openToast Function to show toast notifications (imported from elsewhere)
+ * @example
+ *
+ * const handleDelete = async (option) => {
+ *   const endpoint = `${API_HOST_URL}assessments/${handle}/assessment-link-tree-destroy/${option.id}/`;
+ *   const confirm = await openConfirmDelete(
+ *     option.title,
+ *     token,
+ *     endpoint,
+ *     true,
+ *     reqOptions,
+ *   );
+ *
+ *   if (confirm) {
+ *     // Update objects
+ *     const newObjects = data.filter((i) => i.id !== option.id);
+ *     setData(newObjects);
+ *   }
+ * };
+ *
+ * @property {string} message The name of the item to be deleted
+ * @property {string} token Authentication token for the API request
+ * @property {string} url API endpoint for deletion
+ * @property {boolean} pop Whether to show a popup confirmation (default: true)
  * @returns Promise that resolves to boolean indicating success or failure
  */
 export const openConfirmDelete = (
   message: string,
   token: string,
   url: string,
-  pop: boolean = true,
-  reqOptions: RequestOptionsFunction,
-  openToast: OpenToastFunction
+  pop: boolean = true
 ): Promise<boolean> => {
-  /* Usage example:
-    import { reqOptions, openToast } from "@instincthub/react-ui/lib";
-    import { API_HOST_URL } from "@/config";
-    
-    const handleDelete = async (option) => {
-      const endpoint = `${API_HOST_URL}assessments/${handle}/assessment-link-tree-destroy/${option.id}/`;
-      const confirm = await openConfirmDelete(
-        option.title, 
-        token, 
-        endpoint, 
-        true,
-        reqOptions,
-        openToast
-      );
-      
-      if (confirm) {
-        // Update objects
-        const newObjects = data.filter((i) => i.id !== option.id);
-        setData(newObjects);
-      }
-    };
-    */
-
   return new Promise<boolean>((resolve) => {
     // Create modal element reference ID for cleanup
     const modalId = "ihub-confirm-modal";

@@ -1,0 +1,127 @@
+/* ActionCallbackDropdown component styles */
+.ihub-action-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown toggle button */
+  .ihub-action-dropdown .ihub-dropdown-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--Gunmetal);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .ihub-action-dropdown .ihub-dropdown-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .ihub-action-dropdown .ihub-dropdown-toggle:focus {
+    outline: 2px solid var(--DarkCyan);
+    outline-offset: 2px;
+  }
+  
+  /* Dropdown list */
+  .ihub-action-dropdown .ihub-main-list {
+    padding: 8px;
+    position: absolute;
+    background: var(--White);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    min-width: 200px;
+    max-width: 500px;
+    z-index: 100;
+    margin-top: 4px;
+    list-style-type: none;
+    animation: ihub-dropdown-fadein 0.2s ease;
+  }
+  
+  /* Position variations */
+  .ihub-action-dropdown .ihub-position-right {
+    right: 0;
+  }
+  
+  .ihub-action-dropdown .ihub-position-left {
+    left: 0;
+  }
+  
+  /* List items */
+  .ihub-action-dropdown .ihub-main-list li {
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin: 2px 0;
+    transition: all 0.15s ease-in;
+    display: flex;
+    align-items: center;
+    user-select: none;
+  }
+  
+  .ihub-action-dropdown .ihub-main-list li:focus {
+    outline: 2px solid var(--DarkCyan);
+    outline-offset: -2px;
+  }
+  
+  .ihub-action-dropdown .ihub-main-list li:hover:not(.ihub-item-disabled) {
+    background: var(--DarkCyan);
+    color: var(--White);
+  }
+  
+  /* Item icon */
+  .ihub-action-dropdown .ihub-item-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  /* Item label */
+  .ihub-action-dropdown .ihub-item-label {
+    flex: 1;
+  }
+  
+  /* Disabled items */
+  .ihub-action-dropdown .ihub-item-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Active state */
+  .ihub-action-dropdown.ihub-dropdown-active {
+    z-index: 12;
+  }
+  
+  /* Fade in animation */
+  @keyframes ihub-dropdown-fadein {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 600px) {
+    .ihub-action-dropdown .ihub-main-list {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 20px;
+      width: calc(100% - 40px);
+      max-width: none;
+      border-radius: 8px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .ihub-action-dropdown .ihub-main-list li {
+      padding: 12px 16px;
+    }
+  }

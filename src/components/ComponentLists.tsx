@@ -226,6 +226,12 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/uploads/IhubFileUploader.tsx",
     },
+    {
+      name: "ActionCallbackDropdown",
+      description: "Action callback dropdown component",
+      category: "Forms",
+      repo_path: "src/components/forms/ActionCallbackDropdown.tsx",
+    },
 
     // Auth
     {
