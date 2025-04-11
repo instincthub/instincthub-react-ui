@@ -1,55 +1,71 @@
-import React from "react";
+import React, { memo } from "react";
 
+/**
+ * Props for the FormError component
+ */
 interface FormErrorProps {
-  errors?: Record<string, string[]> | undefined;
+  /** Error messages grouped by field */
+  errors?: Record<string, string[]> | null;
+  /** HTTP status code of the error */
   status?: number;
 }
 
-const FormError: React.FC<FormErrorProps> = ({ errors, status }) => {
-  try {
-    if (status === 500) {
-      return (
-        <div className="ihub-form-error">
-          <h4>Error {status}: </h4>
-          <div>
-            <p>- The server couldn't process your request.</p>
-          </div>
-        </div>
-      );
-    } else if (status === 404) {
-      return (
-        <div className="ihub-form-error">
-          <h4>Error {status}: </h4>
-          <div>
-            <p>- Details not found.</p>
-          </div>
-        </div>
-      );
-    } else if (errors) {
-      return (
-        <div className="ihub-form-error err">
-          <h4>Error {status}: </h4>
-          {Object.keys(errors).length > 0 && (
-            <div>
-              {Object.keys(errors)?.map((field, index) => (
-                <div key={index}>
-                  {errors[field]?.map((error, index) => (
-                    <p key={index}>
-                      <strong>{field}:</strong> {error}
-                    </p>
-                  ))}
-                </div>
-              ))}
-            </div>
+/**
+ * Component that displays form validation errors
+ * @component FormError
+ * @example
+ * ```tsx
+ * <FormError errors={errors} status={status} />
+ * ```  
+ * Props interface for the FormError component
+ * @property {Record<string, string[]> | null} errors - Error messages grouped by field
+ * @property {number} status - HTTP status code
+ */
+const FormError = ({ errors, status }: FormErrorProps) => {
+  // Handle common HTTP error codes
+  if (status === 500) {
+    return renderErrorMessage(
+      "The server couldn't process your request.",
+      status
+    );
+  }
+
+  if (status === 404) {
+    return renderErrorMessage("Details not found.", status);
+  }
+
+  // Handle validation errors from the backend
+  if (errors && Object.keys(errors).length > 0) {
+    return (
+      <div className="ihub-form-error err">
+        <h4>Error {status}: </h4>
+        <div>
+          {Object.entries(errors).map(([field, fieldErrors]) =>
+            fieldErrors?.map((error, index) => (
+              <p key={`${field}-${index}`}>
+                <strong>{field}:</strong> {error}
+              </p>
+            ))
           )}
         </div>
-      );
-    }
-    return null;
-  } catch (e) {
-    console.log(e);
-    return null;
+      </div>
+    );
   }
+
+  return null;
 };
 
-export default FormError;
+/**
+ * Helper function to render a simple error message
+ */
+const renderErrorMessage = (message: string, status?: number) => (
+  <div className="ihub-form-error">
+    <h4>Error {status}: </h4>
+    <div>
+      <p>- {message}</p>
+    </div>
+  </div>
+);
+
+// Memoize the component to prevent unnecessary re-renders
+export default memo(FormError);

@@ -6,17 +6,18 @@ import ContentViewer from "../ui/viewer/ContentViewer";
 
 interface FilterObjectsProps {
   options: FilterObjectsType[];
-  defaultValues?: FilterObjectsType | string | number;
-  names: string;
-  labels?: string;
-  notes?: string;
-  setSelectedValues?: (name: string, value: FilterObjectsType) => void;
+  defaultValue?: FilterObjectsType | string | number;
+  name: string;
+  label?: string;
+  note?: string;
+  setValue?: (value: FilterObjectsType) => void;
+  setNameValue?: (name: string | null, value: FilterObjectsType) => void;
   defaultWidth?: string;
-  requireds?: boolean;
-  errs?: boolean;
+  required?: boolean;
+  err?: boolean;
   setArrayProps?: (arrayProps: any[], option: FilterObjectsType) => void;
   arrayProps?: any[];
-  dataNames?: string;
+  dataName?: string;
   setCookies?: string;
   setObjects?: (option: FilterObjectsType) => void;
   status?: number;
@@ -36,29 +37,29 @@ interface FilterObjectsProps {
  *     { id: 3, title: "Option 3" },
  *   ]}
  *   defaultValues={1}
- *   names="filterObjects"
- *   labels="Filter Objects"
- *   setSelectedValues={setSelectedValues}
+ *   name="filterObjects"
+ *   label="Filter Objects"
+ *   setValue={setValue}
  *   setObjects={setObjects}
  *   setArrayProps={setArrayProps}
  *   arrayProps={arrayProps}
- *   dataNames="filterObjects"
+ *   dataName="filterObjects"
  *   setCookies="filterObjects" // Optional
  * />
  * ```
  * Props interface for the FilterObjects component
  * @property {FilterObjectsType[]} options - Array of objects to filter
  * @property {string} defaultValues - Default value for the dropdown
- * @property {string} names - Name of the input field
- * @property {string} labels - Label for the dropdown
- * @property {(option: FilterObjectsType) => void} setSelectedValues - Callback for setting selected values
+ * @property {string} name - Name of the input field
+ * @property {string} label - Label for the dropdown
+ * @property {(option: FilterObjectsType) => void} setValue - Callback for setting selected values
  * @property {(option: FilterObjectsType) => void} setObjects - Callback for setting objects
  * @property {any[]} arrayProps - Array of objects to set
- * @property {string} dataNames - Name of the data
+ * @property {string} dataName - Name of the data
  * @property {string} setCookies - Cookie name to set
  */
 
-const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
+const FilterObjects = (props: FilterObjectsProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>("Choose...");
   const [objects, setObjects] = useState<FilterObjectsType[]>([]);
@@ -71,24 +72,24 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
     */
     let obj: FilterObjectsType[] = [];
     for (const i in props.options) {
-      if (props.options[i].id === props.defaultValues) {
+      if (props.options[i].id === props.defaultValue) {
         setSelected(props.options[i].title);
         setID(props.options[i].id);
       }
       obj.push(props.options[i]);
     }
     setObjects(obj);
-  }, [props.options, props.defaultValues]);
+  }, [props.options, props.defaultValue]);
 
   useEffect(() => {
     // Update default ID and Selected states
-    if (typeof props.defaultValues === "object" && props.defaultValues?.id) {
+    if (typeof props.defaultValue === "object" && props.defaultValue?.id) {
       // If objects was passed as a props
-      setSelected(props.defaultValues.title);
-      setID(props.defaultValues.id);
-    } else if (props.defaultValues) {
+      setSelected(props.defaultValue.title);
+      setID(props.defaultValue.id);
+    } else if (props.defaultValue) {
       // If ID was passed as a props
-      const obj = props.options.find((i) => i.id === props.defaultValues);
+      const obj = props.options.find((i) => i.id === props.defaultValue);
       if (obj?.id) {
         setSelected(obj.title);
         setID(obj.id);
@@ -98,7 +99,7 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
       setSelected("Choose...");
       setID("");
     }
-  }, [props.defaultValues, props.options]);
+  }, [props.defaultValue, props.options]);
 
   const handleOptionClick = (
     option: FilterObjectsType,
@@ -107,7 +108,8 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
     setSelected(title);
     setID(option.id);
     setIsActive(false);
-    props.setSelectedValues && props.setSelectedValues(props.names, option);
+    props.setValue && props.setValue(option);
+    props.setNameValue && props.setNameValue(props.name, option);
     props.setObjects && props.setObjects(option);
     props.setArrayProps && props.setArrayProps(props.arrayProps || [], option);
     if (props.setCookies) {
@@ -118,7 +120,7 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
   return (
     <>
       <div
-        className={`ihub-select ${props.errs ? "ihub-form-err" : ""}`}
+        className={`ihub-select ${props.err ? "ihub-form-err" : ""}`}
         style={{ width: props.defaultWidth || "300px" }}
       >
         <div
@@ -130,16 +132,16 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
               type="text"
               className="ihub-select__input"
               value={props.upperCases ? String(id).toUpperCase() : id || ""}
-              id={"id_" + props.names}
-              name={props.names}
-              required={props.requireds}
-              data-name={props.dataNames || props.names}
+              id={"id_" + props.name}
+              name={props.name}
+              required={props.required}
+              data-name={props.dataName || props.name}
               readOnly
             />
             <ContentViewer content={selected || "..."} showToolbar={false} />
           </div>
-          {props.labels && (
-            <label className="ihub-select__label">{props.labels}</label>
+          {props.label && (
+            <label className="ihub-select__label">{props.label}</label>
           )}
 
           <div className="search_btn">
@@ -164,7 +166,7 @@ const FilterObjects: React.FC<FilterObjectsProps> = (props) => {
           </div>
         )}
       </div>
-      {props.notes && <p className="ihub-input-notes">{props.notes}</p>}
+      {props.note && <p className="ihub-input-notes">{props.note}</p>}
     </>
   );
 };

@@ -1,68 +1,71 @@
 import React from "react";
 
 interface RadioSimpleProps {
-  ids: string;
-  names: string;
-  values: string | number;
-  labels: string;
+  id: string;
+  name: string;
+  value: string | number;
+  label: string;
   checked?: boolean;
-  inputEvent?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  note?: string;
 }
 
 /**
- * 
+ *
  * @component
  * @example
  * ```tsx
  * import { RadioSimple } from "@instincthub/react-ui";
- * 
+ *
  * <RadioSimple
- *   ids="radio-simple" 
- *   names="radio-simple" 
- *   values="1" 
- *   labels="Radio Simple" 
- *   checked={true} 
+ *   id="radio-simple"
+ *   name="radio-simple"
+ *   value="1"
+ *   label="Radio Simple"
+ *   checked={true}
  *   inputEvent={(e) => {
  *     console.log(e);
  *   }}
  * />
  * ```
  * Props interface for the RadioSimple component
- * @property {string} ids - ID for the radio input
- * @property {string} names - Name for the radio input    
- * @property {string | number} values - Value for the radio input
- * @property {string} labels - Label for the radio input
+ * @property {string} id - ID for the radio input
+ * @property {string} name - Name for the radio input
+ * @property {string | number} value - Value for the radio input
+ * @property {string} label - Label for the radio input
  * @property {boolean} checked - Whether the radio input is checked
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events
  */
 
 const RadioSimple: React.FC<RadioSimpleProps> = ({
-  ids,
-  names,
-  values,
-  labels,
+  id,
+  name,
+  value,
+  label,
   checked,
-  inputEvent
+  onChange,
+  note,
 }) => {
   const handleRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (inputEvent) inputEvent(e);
+    if (onChange) onChange(e);
   };
-  
+
   return (
     <section className="ihub-radio-btn">
-      <label htmlFor={ids} className="ihub-radio-label">
+      <label htmlFor={id} className="ihub-radio-label">
         <input
           className="ihub-radio-input"
           type="radio"
-          name={names}
-          id={ids}
-          value={values}
+          name={name}
+          id={id}
+          value={value}
           onChange={handleRadio}
           defaultChecked={checked}
         />
         <span className="ihub-custom-radio" />
-        <p className="ihub-p-label">{labels}</p>
+        <p className="ihub-p-label">{label}</p>
       </label>
+      {note && <p className="ihub-input-notes">{note}</p>}
     </section>
   );
 };

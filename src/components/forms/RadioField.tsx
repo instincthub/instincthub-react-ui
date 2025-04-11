@@ -8,11 +8,18 @@ interface RadioOption {
 
 interface RadioFieldProps {
   options?: RadioOption[];
-  names: string;
-  labels: string;
-  requireds?: boolean;
-  defaultValues?: string | number;
+  name: string;
+  label: string;
+  required?: boolean;
+  defaultValue?: string | number;
   setSelectedValue?: (value: string) => void;
+  setNameIDValueIndex?: (
+    name: string,
+    id: string,
+    value: string,
+    index: number
+  ) => void;
+  note?: string;
 }
 
 /**
@@ -43,13 +50,22 @@ interface RadioFieldProps {
  * @property {string} labels - Label for the radio field
  * @property {boolean} requireds - Whether the field is required
  * @property {string | number} defaultValues - Default value for the radio field
- * @property {(value: string) => void} setSelectedValue - Callback for setting selected value
+ * @property {(name: string, id: string, value: string, index: number) => void} setNameIDValueIndex - Callback for setting name, id, value, and index
+ * @property {(value: string) => void} setSelectedValue - Callback for setting the selected value
  */
 
 const RadioField: React.FC<RadioFieldProps> = (props) => {
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (props.setSelectedValue) {
       props.setSelectedValue(event.target.value);
+    }
+    if (props.setNameIDValueIndex) {
+      props.setNameIDValueIndex(
+        props.name,
+        String(event.target.dataset.id),
+        event.target.value,
+        Number(event.target.dataset.index)
+      );
     }
   };
 
@@ -58,8 +74,8 @@ const RadioField: React.FC<RadioFieldProps> = (props) => {
   }
 
   return (
-    <div className={props.names}>
-      <h5 className="mt-3">{props.labels}</h5>
+    <div className={props.name}>
+      <h5 className="mt-3">{props.label}</h5>
 
       <div className="ihub-field">
         <div className="ihub-radio-wrapper">
@@ -69,12 +85,14 @@ const RadioField: React.FC<RadioFieldProps> = (props) => {
                 <label className="ihub-radio">
                   <input
                     type="radio"
-                    name={props.names}
-                    id={props.names + index}
+                    name={props.name}
+                    id={props.name + index}
+                    data-id={option.id}
+                    data-index={index}
                     value={option.id}
-                    required={index === 0 ? props.requireds : false}
+                    required={index === 0 ? props.required : false}
                     onChange={handleOptionChange}
-                    defaultChecked={props.defaultValues === option.id}
+                    defaultChecked={props.defaultValue === option.id}
                   />
                   <span className="ihub-label-title">
                     {option.title ? option.title : option.name}
@@ -85,6 +103,7 @@ const RadioField: React.FC<RadioFieldProps> = (props) => {
           })}
         </div>
       </div>
+      {props.note && <p className="ihub-input-notes">{props.note}</p>}
     </div>
   );
 };

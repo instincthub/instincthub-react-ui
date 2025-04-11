@@ -4,18 +4,18 @@ import React, { useRef, ChangeEvent } from "react";
 
 interface TextFieldProps {
   types: string;
-  names: string;
-  labels: string;
-  requireds?: boolean;
-  defaultValues?: string | number | boolean;
-  ids?: string;
-  maxLengths?: number;
-  widths?: string;
-  disableds?: boolean;
-  notes?: string;
-  actives?: boolean;
+  name: string;
+  label: string;
+  required?: boolean;
+  defaultValue?: string | number | boolean;
+  id?: string;
+  maxLength?: number;
+  width?: string;
+  disabled?: boolean;
+  note?: string;
+  active?: boolean;
   TextTransform?: "lowercase" | "uppercase" | "capitalize" | "none";
-  setValues?: (value: string) => void;
+  setValue?: (value: string) => void;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   inputTarget?: (target: HTMLInputElement) => void;
   setNameValue?: (name: string, value: string) => void;
@@ -88,23 +88,23 @@ function TextField(props: TextFieldProps) {
       e.target.value = inputValue;
     }
 
-    if (props.setValues) props.setValues(inputValue);
+    if (props.setValue) props.setValue(inputValue);
     if (props.onChange) props.onChange(e);
     if (props.inputTarget) props.inputTarget(e.target);
-    if (props.setNameValue) props.setNameValue(props.names, inputValue);
+    if (props.setNameValue) props.setNameValue(props.name, inputValue);
     if (props.setArrayProps && props.arrayProps)
       props.setArrayProps(props.arrayProps, inputValue);
     showLabel(e);
   };
 
   return (
-    <div className={`ihub-field-container ${props.names}`}>
+    <div className={`ihub-field-container ${props.name}`}>
       <div className="ihub-field">
         <div
           className={`ihub-wrapper ${
-            props.defaultValues !== undefined ||
-            props.defaultValues === false ||
-            props.actives ||
+            props.defaultValue !== undefined ||
+            props.defaultValue === false ||
+            props.active ||
             props.types === "file"
               ? "ihub-value"
               : ""
@@ -114,28 +114,28 @@ function TextField(props: TextFieldProps) {
           <input
             ref={inputRef}
             type={props.types}
-            name={props.names}
-            required={props.requireds}
+            name={props.name}
+            required={props.required}
             defaultValue={
-              typeof props.defaultValues === "boolean"
-                ? props.defaultValues.toString()
-                : (props.defaultValues as
+              typeof props.defaultValue === "boolean"
+                ? props.defaultValue.toString()
+                : (props.defaultValue as
                     | string
                     | number
                     | readonly string[]
                     | undefined)
             }
-            id={props.ids}
-            maxLength={props.maxLengths}
+            id={props.id}
+            maxLength={props.maxLength}
             onChange={handleInput}
             className={`ihub-input ${
-              props.widths === "auto" ? "ihub-width-auto" : ""
+              props.width === "auto" ? "ihub-width-auto" : ""
             }`}
-            readOnly={props.disableds ? props.disableds : false}
+            readOnly={props.disabled ? props.disabled : false}
           />
-          <span className="ihub-text-label">{props.labels}</span>
+          <span className="ihub-text-label">{props.label}</span>
         </div>
-        {props.notes && <p className="ihub-input-notes">{props.notes}</p>}
+        {props.note && <p className="ihub-input-notes">{props.note}</p>}
       </div>
     </div>
   );
