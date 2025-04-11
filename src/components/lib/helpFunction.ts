@@ -1,7 +1,7 @@
 // TypeScript version of the original JavaScript document
 import { format } from "date-fns";
 import { forbidden, notFound } from "next/navigation";
-import { openToast } from "./modals";
+import { openToast } from "./modals/modals";
 import React from "react";
 
 // Constants with Type Safety

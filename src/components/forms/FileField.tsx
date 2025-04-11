@@ -1,5 +1,5 @@
 import React, { useRef, useState, ChangeEvent } from "react";
-import { openToast } from "../lib/modals";
+import { openToast } from "../lib/modals/modals";
 
 interface FileFieldProps {
   onChange?: (file: File) => void;

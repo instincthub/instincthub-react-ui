@@ -3,9 +3,8 @@ import React, { useState, useRef, DragEvent, ChangeEvent } from "react";
 import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import { openToast } from "../../lib/modals";
+import { openToast } from "../../lib/modals/modals";
 import { FileUploaderType, S3UploadResponseType } from "src/types";
-
 
 /**
  * A modern file uploader component with drag and drop support

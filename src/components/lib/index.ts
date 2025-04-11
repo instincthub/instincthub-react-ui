@@ -19,8 +19,11 @@ export * from "./formError";
 export * from "./getPriceObjects";
 export * from "./helpFunction";
 export * from "./loadScript";
-export * from "./modals";
 export * from "./oauth_json";
 export * from "./paystack";
 export * from "./permissions";
 export * from "./utils";
+
+// Modals
+export * from "./modals/modals";
+export * from "./modals/openConfirmDelete";

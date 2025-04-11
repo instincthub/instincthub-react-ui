@@ -4,7 +4,7 @@ import { useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { openToast } from "../lib/modals";
+import { openToast } from "../lib/modals/modals";
 import Error500 from "../status/Error500";
 import { SessionUserType } from "src/types";
 
@@ -35,13 +35,13 @@ export default function SessionHandleProvider({
 
   const { data: session, update: sessionUpdate } = useSession();
   const user = session?.user as SessionUserType | undefined;
-  
+
   // Use useMemo for derived values
-  const session_handle = useMemo(() => 
-    user?.name?.channels?.active?.channel?.username,
+  const session_handle = useMemo(
+    () => user?.name?.channels?.active?.channel?.username,
     [user?.name?.channels?.active?.channel?.username]
   );
-  
+
   const token = useMemo(() => user?.name?.token, [user?.name?.token]);
 
   const [status, setStatus] = useState<boolean>(true);
@@ -51,22 +51,23 @@ export default function SessionHandleProvider({
     if (!token || !params_handle) return;
 
     const options = reqOptions("PUT", null, token);
-    
+
     // More robust URL construction
-    const baseEndpoint = endpointPath || 'channels/instructor-channel/selected/';
-    const endpoint = baseEndpoint.endsWith('/') 
-      ? `${baseEndpoint}${params_handle}/` 
+    const baseEndpoint =
+      endpointPath || "channels/instructor-channel/selected/";
+    const endpoint = baseEndpoint.endsWith("/")
+      ? `${baseEndpoint}${params_handle}/`
       : `${baseEndpoint}/${params_handle}/`;
-    
+
     const api = `${API_HOST_URL}${endpoint}`;
 
     try {
       const req = await fetch(api, options);
-      
+
       if (!req.ok) {
         throw new Error(`Request failed with status: ${req.status}`);
       }
-      
+
       const res = await req.json();
 
       if (res?.active?.id) {
@@ -81,10 +82,9 @@ export default function SessionHandleProvider({
         setStatus(false);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : "Failed to fetch channel data";
-      
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch channel data";
+
       console.error("Error fetching channel data:", error);
       openToast(errorMessage, 500);
       setStatus(false);
@@ -94,7 +94,7 @@ export default function SessionHandleProvider({
   // Simplified validation logic
   const isInvalidHandle = useMemo(() => {
     if (!params_handle || typeof params_handle !== "string") return true;
-    
+
     const nullValues = ["null", "undefined", "false", "true", "", " "];
     return nullValues.includes(params_handle);
   }, [params_handle]);
@@ -102,10 +102,10 @@ export default function SessionHandleProvider({
   useEffect(() => {
     // Only proceed if we have both session handle and param handle
     if (!session_handle || !params_handle) return;
-    
+
     // Skip if handles match - nothing to do
     if (session_handle === params_handle) return;
-    
+
     // If current handle is valid but doesn't match session, switch channels
     if (!isInvalidHandle) {
       getChannelData();
@@ -123,6 +123,6 @@ export default function SessionHandleProvider({
       />
     );
   }
-  
+
   return <>{children}</>;
 }

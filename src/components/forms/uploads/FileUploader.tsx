@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
 import { S3Client } from "@aws-sdk/client-s3";
-import { openToast } from "../../lib/modals";
+import { openToast } from "../../lib/modals/modals";
 
 interface S3UploadResponse {
   bucket: string;

@@ -3,7 +3,7 @@ import {
   getCookie,
   reqOptions,
 } from "../../components/lib/helpFunction";
-import { openToast } from "../../components/lib/modals";
+import { openToast } from "./modals/modals";
 
 interface SubscriptionObject {
   email?: string;
@@ -27,17 +27,17 @@ const createSubscription = async (
     const endpoint = `${API_HOST_URL}payments/${channel}/user-subscription-create/`;
     const email = getCookie("email") || undefined;
     const newObjects: SubscriptionObject = { ...objects, email };
-    
+
     const raw = JSON.stringify(newObjects);
     const options = reqOptions("POST", raw, token, "json");
     const req = await fetch(endpoint, options);
     const res = await req.json();
-    
+
     if (req.status === 400) {
       openToast(JSON.stringify(res), 400);
       return req.status;
     }
-    
+
     return res;
   } catch (e) {
     console.log(e);

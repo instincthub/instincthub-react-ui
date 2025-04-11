@@ -303,3 +303,212 @@
     width: 100%;
   }
 }
+
+/* Enhanced styles for confirm delete modal */
+
+#ihub-confirm-modal {
+  position: fixed;
+  z-index: var(--z-overlay);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ihub-modal {
+  position: fixed;
+  z-index: var(--z-popup);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ihub-modal-content {
+  background-color: var(--White);
+  max-width: 550px;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: var(--shadow);
+  animation: ihub-fade-in 0.3s ease;
+}
+
+@keyframes ihub-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ihub-modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  color: var(--Gunmetal);
+  font-family: var(--Nunito);
+}
+
+.ihub-warning-text {
+  color: var(--Danger);
+  font-weight: 600;
+  padding: 10px 15px;
+  background: rgba(234, 95, 94, 0.1);
+  border-left: 3px solid var(--Danger);
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.ihub-modal-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--Gunmetal);
+  margin-bottom: 25px;
+}
+
+.ihub-confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ihub-confirm-instruction {
+  font-size: 15px;
+  margin: 0;
+}
+
+.ihub-confirm-value {
+  color: var(--DarkCyan);
+}
+
+.ihub-copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--DarkCyan);
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.ihub-copy-btn:hover {
+  background: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-copy-status {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-copy-success {
+  color: var(--DarkCyan);
+}
+
+.ihub-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  fill: currentColor;
+}
+
+.ihub-input-wrapper {
+  margin-bottom: 25px;
+}
+
+.ihub-delete-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.ihub-delete-input:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.2);
+}
+
+.ihub-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.ihub-delete-btn,
+.ihub-cancel-btn {
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.ihub-delete-btn {
+  background-color: var(--Danger);
+  color: var(--White);
+}
+
+.ihub-delete-btn:hover:not(:disabled) {
+  background-color: #d95252;
+}
+
+.ihub-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ihub-cancel-btn {
+  background-color: var(--Gray);
+  color: var(--Gunmetal);
+}
+
+.ihub-cancel-btn:hover {
+  background-color: #e5e5e5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-modal-content {
+    padding: 20px;
+  }
+
+  .ihub-confirm-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ihub-copy-btn {
+    margin-top: 10px;
+  }
+
+  .ihub-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .ihub-delete-btn,
+  .ihub-cancel-btn {
+    width: 100%;
+  }
+}

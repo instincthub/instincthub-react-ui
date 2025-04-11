@@ -1,7 +1,7 @@
 "use client";
 import * as XLSX from "xlsx";
 import { useState } from "react";
-import { openConfirmModal, openToast } from "../lib/modals";
+import { openConfirmModal, openToast } from "../lib/modals/modals";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import SubmitButton from "./SubmitButton";
@@ -26,11 +26,11 @@ interface DataResponse {
  * <DownloadAsExcel urlPath="/api/v1/courses/1/questions" token="token" />
  *```
  * @param {string} urlPath - The API endpoint to fetch data from
- * @param {string} token - The token to authenticate the request 
+ * @param {string} token - The token to authenticate the request
  * @param {string} fileName - The name of the file to download
  * @param {string} labels - The labels to display in the file
  * @param {boolean} plainBtn - Whether to display the download button as plain text
- * 
+ *
  */
 
 const DownloadAsExcel = (props: DownloadAsExcelProps) => {

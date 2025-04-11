@@ -4,7 +4,11 @@ import {
   reqOptions,
   setCookie,
 } from "./helpFunction";
-import { getUserEmailInputModal, openConfirmModal, openToast } from "./modals";
+import {
+  getUserEmailInputModal,
+  openConfirmModal,
+  openToast,
+} from "./modals/modals";
 
 // PayStack configuration interfaces
 export interface PaystackMetadata {
@@ -56,8 +60,6 @@ export interface PaymentMethod {
   card_type: string;
   last4: string;
 }
-
-
 
 /**
  * Context for processing payments
