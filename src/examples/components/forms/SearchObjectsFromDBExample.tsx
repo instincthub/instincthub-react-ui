@@ -7,10 +7,11 @@ export default function SearchObjectsFromDBExample() {
     <section className="ihub-container">
       <h2 className="ihub-text-2xl ihub-font-bold">SearchObjectsFromDB</h2>
       <SearchObjectsFromDB
+        label="Search Skills"
         token={""}
         handle={"skills"}
         setHandleObject={() => {}}
-        names="display_name"
+        key_name="display_name"
         selected={[]}
       />
 

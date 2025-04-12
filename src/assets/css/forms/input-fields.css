@@ -569,7 +569,7 @@
 
 /* FilterArray Component Styles */
 .ihub-select {
-  margin-top: 30px;
+  margin-top: 15px;
   position: relative;
 }
 
@@ -649,6 +649,7 @@
   padding: 0 10px;
   border: var(--borderDefault);
   border-radius: 4px;
+  margin-bottom: 15px;
 }
 
 .ihub-select.ihub-form-err .ihub-select__btn {
@@ -699,7 +700,6 @@
 .ihub-input-notes {
   display: inline-block;
   max-width: 600px;
-  margin-bottom: 30px;
   margin-top: 10px;
   font-size: 12px;
   color: var(--Gunmetal);

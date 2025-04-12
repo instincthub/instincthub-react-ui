@@ -32,7 +32,7 @@ interface SearchObjectsFromDBProps {
   modelName?: string; // Model name for API
   filterChannel?: boolean; // Whether to filter by channel
   limit?: number; // Maximum number of results
-  names?: string; // Property name to display
+  key_name?: string; // Property name to display
   placeholder?: string; // Input placeholder text
   searchUrl?: string; // Custom search URL
   selected: any[]; // Currently selected items
@@ -82,7 +82,7 @@ function MyComponent() {
   modelName="assessment"
   filterChannel={true}
   limit={10}
-  names="title"
+  key_name="title"
   placeholder="Search by Title or ID"
   selected={selectedAssessments}
   defaultValues={<span>Search for assessments...</span>}
@@ -130,5 +130,5 @@ Clears the input field and search results.
 
 - Uses Material-UI icons for the search and close actions
 - Integrates with the `@instincthub/react-ui` library for API request utilities
-- Supports dynamic property access via the `names` prop
+- Supports dynamic property access via the `key_name` prop
 - Allows customization of search URL via the `searchUrl` prop

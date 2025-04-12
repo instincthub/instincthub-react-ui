@@ -174,7 +174,7 @@ const InputNumber = ({
   } ${error ? "ihub-error" : ""} ${className}`;
 
   return (
-    <div className={"ihub-mb-5 " + wrapperClass}>
+    <div className={"ihub-mb-2 " + wrapperClass}>
       <div className="ihub-number-input-container">
         <input
           id={id || name}

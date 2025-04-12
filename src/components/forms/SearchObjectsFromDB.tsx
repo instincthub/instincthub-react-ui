@@ -14,6 +14,7 @@ interface DataItem {
 
 // Define interface for the component props with generic type
 interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
+  label: string | null;
   token: string;
   handle: string;
   setHandleObject: (option: T) => void;
@@ -60,6 +61,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  */
 
 function SearchObjectsFromDB<T extends DataItem = DataItem>({
+  label,
   token,
   handle,
   setHandleObject,
@@ -176,6 +178,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
 
   return (
     <div className="ihub-react-search card">
+      {label && <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">{label}</h4>}
       <div className="ihub-search-input">
         <input
           type="text"
