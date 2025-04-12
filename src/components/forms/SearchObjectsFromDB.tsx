@@ -22,7 +22,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
   modelName?: string;
   filterChannel?: boolean;
   limit?: number;
-  names?: keyof T | "name_plus_username";
+  key_name?: string;
   placeholder?: string;
   searchUrl?: string;
   selected: (T | string | number)[];
@@ -38,7 +38,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  *  token={authToken}
  *  handle={channelHandle}
  *  setHandleObject={setSelectedUser}
- *  names="display_name"
+ *  key_name="display_name"
  *  selected={selectedUsers}
  * />
  * ```
@@ -51,7 +51,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * @param {string} props.modelName - The model name for the API request
  * @param {boolean} props.filterChannel - The filter channel for the API request
  * @param {number} props.limit - The limit for the API request
- * @param {keyof T | "name_plus_username"} props.names - The names for the API request
+ * @param {keyof T | "name_plus_username"} props.key_name - The key_name to display search results (option[key_name])
  * @param {string} props.placeholder - The placeholder for the API request
  * @param {string} props.searchUrl - The search url for the API request
  * @param {T[]} props.selected - The selected for the API request
@@ -68,7 +68,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   modelName,
   filterChannel = false,
   limit = 5,
-  names = "name_plus_username",
+  key_name = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
   selected = [],
@@ -222,7 +222,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
                 }}
               />
             )}
-            {option[names as keyof T] || option.name_plus_username}
+            {option[key_name as keyof T] || option.title}
           </li>
         ))}
 
