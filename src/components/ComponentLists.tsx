@@ -250,6 +250,13 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputTextarea.tsx",
     },
+    {
+      name: "SearchObjectsFromDB",
+      description:
+        "SearchObjectsFromDB component for searching objects from database",
+      category: "Form",
+      repo_path: "src/components/forms/SearchObjectsFromDB.tsx",
+    },
 
     // Auth
     {

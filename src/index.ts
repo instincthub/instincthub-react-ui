@@ -45,6 +45,7 @@ export { default as ActionCallbackDropdown } from "./components/forms/ActionCall
 export { default as InputNumber } from "./components/forms/InputNumber";
 export { default as InputText } from "./components/forms/InputText";
 export { default as InputTextarea } from "./components/forms/InputTextarea";
+export { default as SearchObjectsFromDB } from "./components/forms/SearchObjectsFromDB";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
