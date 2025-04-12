@@ -54,7 +54,8 @@
   color: var(--DarkCyan);
   font-size: 14px;
   pointer-events: initial;
-  left: 15px;
+  left: 5px;
+  top: 15px;
   line-height: 10px;
   width: auto;
   font-family: var(--Nunito);
@@ -604,7 +605,7 @@
 .ihub-select__label {
   position: absolute;
   top: -15px;
-  left: 15px;
+  left: 5px;
   padding: 0px 5px;
   color: var(--DarkCyan);
   font-size: 14px;
@@ -1825,7 +1826,8 @@
   color: var(--DarkCyan);
   font-size: 14px;
   pointer-events: initial;
-  left: 15px;
+  left: 5px;
+  top: 15px;
   line-height: 10px;
   width: auto;
   font-family: var(--Nunito);

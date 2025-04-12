@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 interface MenuBarProps {
   editor: Editor | null;
-  setIsEditing: (html: boolean) => void;
+  setIsEditing?: (html: boolean) => void;
   isEditing: boolean;
   showPreviewBtn?: boolean;
 }
@@ -64,7 +64,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
       {showPreviewBtn ? (
         <button
           type="button"
-          onClick={() => setIsEditing(!isEditing)}
+          onClick={() => setIsEditing && setIsEditing(!isEditing)}
           className={`ihub-editor-btn`}
         >
           {isEditing ? (

@@ -23,12 +23,12 @@ interface InputNumberProps {
 
 /**
  * InputNumber component for numerical input with formatting and validation
- * 
+ *
  * @example
  * ```tsx
  * <InputNumber name="age" label="Age" />
- * ```  
- * 
+ * ```
+ *
  * @param props Component properties
  * @param props.id - The id of the input
  * @param props.name - The name of the input
@@ -172,7 +172,7 @@ const InputNumber = ({
   } ${error ? "ihub-error" : ""} ${className}`;
 
   return (
-    <div className={wrapperClass}>
+    <div className={"ihub-mb-5 " + wrapperClass}>
       <div className="ihub-number-input-container">
         <input
           id={id || name}

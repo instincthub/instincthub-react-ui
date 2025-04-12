@@ -482,7 +482,7 @@ export default function ContentViewer({
 
       <div
         ref={contentRef}
-        className={`ihub-content-viewer ${
+        className={`ihub-content-viewer ihub-p-10 ${
           isMarkdown ? "ihub-markdown-content" : ""
         }`}
         dangerouslySetInnerHTML={{ __html: html }}

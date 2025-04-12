@@ -146,7 +146,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
 
   return (
     <div
-      className={wrapperClass}
+      className={"ihub-mb-5 "+ wrapperClass}
       data-text-transform={textTransform !== "none" ? textTransform : undefined}
     >
       <textarea
@@ -161,7 +161,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
         placeholder={isLabelElevated ? props.placeholder : ""}
       />
 
-      <span className="ihub-text-label">{label}</span>
+      <label className="ihub-text-label">{label}</label>
 
       {(error || helperText) && (
         <div className="ihub-notes">

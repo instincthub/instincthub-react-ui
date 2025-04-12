@@ -18,9 +18,12 @@ import MenuBar from "./MenuBar";
 import { formatDateToWord } from "../../lib/helpFunction";
 
 interface TextEditorProps {
+  label?: string;
+  name?: string;
+  note?: string;
   onChange: (html: string) => void;
-  setIsEditing: (html: boolean) => void;
-  isEditing: boolean;
+  setIsEditing?: (html: boolean) => void;
+  isEditing?: boolean;
   content: string;
   charLimit?: number;
   placeholder?: string;
@@ -28,7 +31,37 @@ interface TextEditorProps {
   showPreviewBtn?: boolean;
 }
 
+/**
+ * CustomTextEditor is a component that allows you to create a text editor with a menu bar and a preview button.
+ * It is a wrapper around the Tiptap editor.
+ * It is used to create a text editor with a menu bar and a preview button.
+ * @example
+ * ```tsx 
+ * <CustomTextEditor
+ *  label="Content"
+ *  name="content"
+ *  onChange={handleChange}
+ *  content={content}
+ * />
+ * ```
+ * @param {TextEditorProps} props - The props for the CustomTextEditor component.
+ * @param {string} props.label - The label for the editor.
+ * @param {string} props.name - The name for the editor.
+ * @param {function} props.onChange - The function to call when the editor content changes.
+ * @param {string} props.content - The content for the editor.
+ * @param {boolean} props.isEditing - Whether the editor is in editing mode.
+ * @param {number} props.charLimit - The character limit for the editor.
+ * @param {string} props.placeholder - The placeholder for the editor.
+ * @param {string} props.lastUpdated - The last updated date for the editor.
+ * @param {boolean} props.showPreviewBtn - Whether to show the preview button.
+ * @returns {React.ReactNode} The CustomTextEditor component.
+ * 
+ */
+
 export default function CustomTextEditor({
+  label,
+  name = "editor-content",
+  note,
   onChange,
   setIsEditing,
   content,
@@ -77,6 +110,7 @@ export default function CustomTextEditor({
 
   return (
     <div className="ihub-editor">
+      {label && <label htmlFor={name}>{label}</label>}
       <MenuBar
         editor={editor}
         isEditing={isEditing}
@@ -84,6 +118,7 @@ export default function CustomTextEditor({
         showPreviewBtn={showPreviewBtn}
       />
       <EditorContent editor={editor} className="ihub-editor-content-wrapper" />
+      <input type="hidden" value={content} name={name} />
       {editor && (
         <div className="ihub-editor-char-count">
           <p>
@@ -98,6 +133,7 @@ export default function CustomTextEditor({
           </p>
         </div>
       )}
+      {note && <p className="ihub-editor-note">{note}</p>}
     </div>
   );
 }
