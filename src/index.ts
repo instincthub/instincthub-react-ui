@@ -43,6 +43,8 @@ export { default as THeadSortList } from "./components/forms/THeadSortList";
 export { default as TBodyNoData } from "./components/forms/TBodyNoData";
 export { default as ActionCallbackDropdown } from "./components/forms/ActionCallbackDropdown";
 export { default as InputNumber } from "./components/forms/InputNumber";
+export { default as InputText } from "./components/forms/InputText";
+export { default as InputTextarea } from "./components/forms/InputTextarea";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";

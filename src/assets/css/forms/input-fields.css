@@ -1591,7 +1591,6 @@
   transition: all 0.65s cubic-bezier(0.84, -0.18, 0.31, 1.26) 0.2s;
 }
 
-
 /* InputNumber Component Styles */
 .ihub-number-input-container {
   position: relative;
@@ -1685,4 +1684,180 @@
 /* For Firefox */
 .ihub-number-input[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* Additional styles for InputText component */
+
+/* Required field indicator */
+.ihub-wrapper .ihub-required {
+  color: var(--Danger);
+  margin-left: 3px;
+}
+
+/* Focus state styling with animation */
+.ihub-wrapper .ihub-input:focus {
+  border-color: var(--DarkCyan);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--DarkCyan);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Error state styling */
+.ihub-wrapper.ihub-is_invalid .ihub-input {
+  border-color: var(--Danger);
+}
+
+.ihub-wrapper.ihub-is_invalid .ihub-text-label {
+  color: var(--Danger);
+}
+
+.ihub-notes.ihub-is_invalid {
+  color: var(--Danger);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Improve animation for floating label */
+.ihub-wrapper .ihub-input:focus + .ihub-text-label,
+.ihub-wrapper.ihub-value .ihub-text-label {
+  transform: translateY(-22px) scale(0.85);
+  transform-origin: left top;
+  transition: all 0.2s ease;
+}
+
+/* Text transformations */
+.ihub-wrapper[data-text-transform="lowercase"] .ihub-input {
+  text-transform: lowercase;
+}
+
+.ihub-wrapper[data-text-transform="uppercase"] .ihub-input {
+  text-transform: uppercase;
+}
+
+.ihub-wrapper[data-text-transform="capitalize"] .ihub-input {
+  text-transform: capitalize;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-wrapper {
+    margin-top: 20px;
+  }
+
+  .ihub-wrapper .ihub-input {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .ihub-wrapper .ihub-text-label {
+    font-size: 14px;
+  }
+}
+
+/* InputTextarea Component Styles */
+.ihub-wrapper.ihub-textarea-wrapper {
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-text-label {
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-size: 1rem;
+  color: var(--Gunmetal);
+  font-family: var(--Nunito);
+  z-index: 1;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea {
+  border: var(--borderDefault);
+  width: 100%;
+  padding: 15px;
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  min-height: 72px; /* Minimum height for 3 rows */
+  resize: vertical;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--Gunmetal);
+  background-color: var(--White);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Make sure placeholder only appears when label is elevated */
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea::placeholder {
+  color: var(--Gunmetal);
+  opacity: 0.6;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+  box-shadow: 0 0 0 1px var(--DarkCyan);
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea.ihub-input-error {
+  border-color: var(--Danger);
+  box-shadow: 0 0 0 1px var(--Danger);
+}
+
+.ihub-wrapper.ihub-textarea-wrapper.ihub-error .ihub-text-label {
+  color: var(--Danger);
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea:disabled,
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea:read-only {
+  background: var(--Gray, #f4f4f4);
+  cursor: not-allowed;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper .ihub-textarea:focus + .ihub-text-label,
+.ihub-wrapper.ihub-textarea-wrapper.ihub-value .ihub-text-label {
+  background: var(--White);
+  top: -10px;
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  color: var(--DarkCyan);
+  font-size: 14px;
+  pointer-events: initial;
+  left: 15px;
+  line-height: 10px;
+  width: auto;
+  font-family: var(--Nunito);
+}
+
+.ihub-wrapper.ihub-textarea-wrapper.ihub-error
+  .ihub-textarea:focus
+  + .ihub-text-label,
+.ihub-wrapper.ihub-textarea-wrapper.ihub-error.ihub-value .ihub-text-label {
+  color: var(--Danger);
+}
+
+/* Text transformation styles */
+.ihub-wrapper.ihub-textarea-wrapper[data-text-transform="lowercase"]
+  .ihub-textarea {
+  text-transform: lowercase;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper[data-text-transform="uppercase"]
+  .ihub-textarea {
+  text-transform: uppercase;
+}
+
+.ihub-wrapper.ihub-textarea-wrapper[data-text-transform="capitalize"]
+  .ihub-textarea {
+  text-transform: capitalize;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-wrapper.ihub-textarea-wrapper .ihub-textarea {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
 }

@@ -137,4 +137,4 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
 // Display name for React DevTools
 SubmitButton.displayName = "SubmitButton";
 
-export default SubmitButton;
+export default SubmitButton as React.FC<SubmitButtonProps>;

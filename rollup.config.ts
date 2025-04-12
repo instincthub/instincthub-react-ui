@@ -57,7 +57,7 @@ export default {
     }),
     typescript({
       tsconfig: "./tsconfig.json",
-      exclude: ["**/__tests__/**", "src/examples/**", "src/app/**"],
+      exclude: ["**/__tests__/**", "src/examples/**", "src/app/**", ".next/**"],
     }),
     resolve({
       extensions: [".js", ".jsx", ".ts", ".tsx"],

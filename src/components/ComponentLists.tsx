@@ -234,9 +234,21 @@ const ComponentLists = () => {
     },
     {
       name: "InputNumber",
-      description:"InputNumber component for numerical input",
+      description: "InputNumber component for numerical input",
       category: "Form",
-      repo_path: "src/components/forms/InputNumber.tsx"
+      repo_path: "src/components/forms/InputNumber.tsx",
+    },
+    {
+      name: "InputText",
+      description: "InputText component for text input",
+      category: "Form",
+      repo_path: "src/components/forms/InputText.tsx",
+    },
+    {
+      name: "InputTextarea",
+      description: "InputTextarea component for text input",
+      category: "Form",
+      repo_path: "src/components/forms/InputTextarea.tsx",
     },
 
     // Auth
