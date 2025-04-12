@@ -19,6 +19,7 @@ interface InputNumberProps {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   className?: string;
   error?: string;
+  note?: string;
 }
 
 /**
@@ -62,6 +63,7 @@ const InputNumber = ({
   onBlur,
   className = "",
   error,
+  note,
 }: InputNumberProps) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -233,6 +235,11 @@ const InputNumber = ({
         <div className="ihub-error-message" id={`${name}-error`}>
           {error}
         </div>
+      )}
+      {note && (
+        <p className="ihub-input-notes" id={`${name}-note`}>
+          {note}
+        </p>
       )}
     </div>
   );

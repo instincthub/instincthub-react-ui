@@ -569,7 +569,7 @@
 
 /* FilterArray Component Styles */
 .ihub-select {
-  margin-top: 30px 0;
+  margin-top: 30px;
   position: relative;
 }
 
@@ -638,10 +638,6 @@
 }
 
 /* FilterObjects Component Styles */
-.ihub-select {
-  margin: 30px 0;
-  position: relative;
-}
 
 .ihub-select__btn {
   display: flex;

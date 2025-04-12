@@ -1,0 +1,182 @@
+/* Improved Search Objects Component Styles */
+
+.ihub-react-search {
+  max-width: 400px;
+  border: var(--borderDefault);
+  padding: 15px;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow: auto;
+  position: relative;
+}
+
+.ihub-search-input {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.ihub-search-input input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 80px; /* Space for icons */
+  border: var(--borderDefault);
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ihub-search-input input:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.1);
+}
+
+.ihub-search-input input:disabled {
+  background-color: var(--Gray);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ihub-search-icons {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.ihub-search-icon {
+  font-size: 20px !important;
+  margin-left: 10px;
+  cursor: pointer;
+  color: var(--Gunmetal);
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.ihub-search-icon:hover {
+  color: var(--DarkCyan);
+}
+
+.ihub-search-icon:active {
+  transform: scale(0.95);
+}
+
+.ihub-close-icon:hover {
+  color: var(--Danger);
+}
+
+.ihub-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.ihub-disabled:hover {
+  color: var(--Gunmetal);
+}
+
+.ihub-loading {
+  padding: 10px;
+  text-align: center;
+  color: var(--DarkCyan);
+  font-style: italic;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.ihub-search-error {
+  padding: 10px;
+  color: var(--Danger);
+  background-color: rgba(234, 95, 94, 0.1);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.ihub-search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ihub-search-result-item {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+}
+
+.ihub-valid {
+  background-color: var(--OpacityBackground);
+  cursor: pointer;
+}
+
+.ihub-valid:hover {
+  background-color: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-valid:active {
+  transform: scale(0.99);
+}
+
+.ihub-no-results,
+.ihub-default-values {
+  padding: 12px;
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+.ihub-check-icon {
+  color: var(--DarkCyan);
+  min-width: 24px;
+}
+
+.ihub-error {
+  color: var(--Danger);
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 0;
+  background-color: rgba(234, 95, 94, 0.1);
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+/* Add scrollbar styling */
+.ihub-search-results::-webkit-scrollbar,
+.ihub-react-search::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ihub-search-results::-webkit-scrollbar-track,
+.ihub-react-search::-webkit-scrollbar-track {
+  background: var(--Gray);
+  border-radius: 5px;
+}
+
+.ihub-search-results::-webkit-scrollbar-thumb,
+.ihub-react-search::-webkit-scrollbar-thumb {
+  background: var(--DarkCyan);
+  border-radius: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-react-search {
+    max-width: 100%;
+  }
+  
+  .ihub-search-result-item {
+    padding: 14px 12px;
+  }
+}

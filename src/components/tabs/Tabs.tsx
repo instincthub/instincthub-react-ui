@@ -5,7 +5,7 @@ import { TabItemType } from "src/types";
 
 interface TabsProps {
   items: TabItemType[];
-  defaultActiveTab?: string;
+  defaultActiveTab?: string | number;
   onChange?: (tabId: TabItemType) => void;
   variant?: "default" | "bordered" | "pills";
   className?: string;

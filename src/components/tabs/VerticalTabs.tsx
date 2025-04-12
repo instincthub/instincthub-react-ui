@@ -5,7 +5,7 @@ import { VerticalTabItemType } from "src/types";
 
 interface VerticalTabsProps {
   items: VerticalTabItemType[];
-  defaultActiveTab?: string;
+  defaultActiveTab?: string | number;
   onChange?: (tabItem: VerticalTabItemType) => void;
   className?: string;
   tabsContainerClassName?: string;
@@ -73,9 +73,9 @@ const VerticalTabs = ({
     }
   };
 
-  const getTabItemClass = (tabId: string, disabled?: boolean) => {
+  const getTabItemClass = (tabId: string | number, disabled?: boolean) => {
     const baseClass = "ihub-vtab-item";
-    const activeClass = tabId === activeTab.id ? "ihub-vtab-active" : "";
+    const activeClass = tabId === activeTab?.id ? "ihub-vtab-active" : "";
     const disabledClass = disabled ? "ihub-vtab-disabled" : "";
 
     return `${baseClass} ${activeClass} ${disabledClass}`;
@@ -90,7 +90,7 @@ const VerticalTabs = ({
             className={getTabItemClass(tab.id, tab.disabled)}
             onClick={() => handleTabClick(tab)}
             role="tab"
-            aria-selected={activeTab.id === tab.id}
+            aria-selected={activeTab?.id === tab.id}
             tabIndex={tab.disabled ? -1 : 0}
           >
             {tab.icon && <span className="ihub-vtab-icon">{tab.icon}</span>}

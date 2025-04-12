@@ -77,6 +77,11 @@ interface InputTextProps {
    * Helper text or notes to display below the input
    */
   helperText?: string;
+
+  /**
+   * Note text to display below the input
+   */
+  note?: string;
 }
 
 /**
@@ -117,6 +122,7 @@ const InputText: React.FC<InputTextProps> = ({
   onChange,
   onBlur,
   helperText,
+  note,
 }) => {
   const [hasValue, setHasValue] = useState<boolean>(!!value);
 
@@ -164,6 +170,12 @@ const InputText: React.FC<InputTextProps> = ({
       {helperText && !error && <p className="ihub-notes">{helperText}</p>}
 
       {error && <p className="ihub-notes ihub-is_invalid">{error}</p>}
+
+      {note && (
+        <p className="ihub-input-notes" id={`${name}-note`}>
+          {note}
+        </p>
+      )}
     </div>
   );
 };

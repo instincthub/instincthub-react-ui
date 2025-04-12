@@ -49,6 +49,11 @@ interface InputTextareaProps
    * Optional text transform style
    */
   textTransform?: "lowercase" | "uppercase" | "capitalize" | "none";
+
+  /**
+   * Note text to display below the textarea
+   */
+  note?: string;
 }
 
 /**
@@ -68,6 +73,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
   onChange,
   onBlur,
   onFocus,
+  note,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -171,6 +177,12 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
             <span className="ihub-fs-sm">{helperText}</span>
           ) : null}
         </div>
+      )}
+
+      {note && (
+        <p className="ihub-input-notes" id={`${name}-note`}>
+          {note}
+        </p>
       )}
     </div>
   );

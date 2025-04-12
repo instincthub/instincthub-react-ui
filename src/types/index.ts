@@ -177,7 +177,7 @@ export interface TabItemType {
 }
 
 export interface VerticalTabItemType {
-  id: string;
+  id: string | number;
   label: string;
   content?: React.ReactNode | JSX.Element | null;
   icon?: React.ReactNode | JSX.Element | null;
