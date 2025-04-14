@@ -8,7 +8,12 @@ import CheckIcon from "@mui/icons-material/Check";
 interface DataItem {
   id?: number | string;
   username?: string;
-  name_plus_username?: string;
+  [key: string]: any; // Allow for dynamic properties
+}
+
+interface defaultValuesProps {
+  id?: number | string;
+  title?: string;
   [key: string]: any; // Allow for dynamic properties
 }
 
@@ -17,8 +22,8 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
   label: string | null;
   token: string;
   handle: string;
-  setHandleObject: (option: T) => void;
-  preventDefaults?: T[];
+  setSelected: React.Dispatch<React.SetStateAction<T[]>>;
+  value?: T[];
   appLabel?: string;
   modelName?: string;
   filterChannel?: boolean;
@@ -26,8 +31,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
   key_name?: string;
   placeholder?: string;
   searchUrl?: string;
-  selected: (T | string | number)[];
-  defaultValues?: React.ReactNode;
+  selected: T[];
   err?: boolean;
 }
 
@@ -38,7 +42,7 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * <SearchObjectsFromDB<UserType>
  *  token={authToken}
  *  handle={channelHandle}
- *  setHandleObject={setSelectedUser}
+ *  set={setSelectedUser}
  *  key_name="display_name"
  *  selected={selectedUsers}
  * />
@@ -46,8 +50,8 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * @param {SearchObjectsFromDBProps<T>} props - The component props
  * @param {string} props.token - The token for the API request
  * @param {string} props.handle - The handle for the API request
- * @param {Function} props.setHandleObject - The function to set the handle object
- * @param {T[]} props.preventDefaults - The prevent defaults for the API request
+ * @param {Function} props.setSelected - The function to set the handle object
+ * @param {T[]} props.value - The prevent defaults for the API request
  * @param {string} props.appLabel - The app label for the API request
  * @param {string} props.modelName - The model name for the API request
  * @param {boolean} props.filterChannel - The filter channel for the API request
@@ -56,7 +60,6 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * @param {string} props.placeholder - The placeholder for the API request
  * @param {string} props.searchUrl - The search url for the API request
  * @param {T[]} props.selected - The selected for the API request
- * @param {React.ReactNode} props.defaultValues - The default values for the API request
  * @param {boolean} props.err - The error for the API request
  */
 
@@ -64,8 +67,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   label,
   token,
   handle,
-  setHandleObject,
-  preventDefaults = [],
+  setSelected,
   appLabel,
   modelName,
   filterChannel = false,
@@ -73,21 +75,20 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   key_name = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
-  selected = [],
-  defaultValues,
+  selected,
   err = false,
 }: SearchObjectsFromDBProps<T>): JSX.Element {
   const [input, setInput] = useState<string>("");
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<DataItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize with preventDefaults
+  // Initialize with value
   useEffect(() => {
-    if (preventDefaults && preventDefaults.length > 0) {
-      setData(preventDefaults);
+    if (selected && selected.length > 0) {
+      setData(selected as DataItem[]);
     }
-  }, [preventDefaults]);
+  }, [selected]);
 
   /**
    * Handles search functionality by fetching data from API
@@ -177,68 +178,76 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   );
 
   return (
-    <div className="ihub-react-search card">
-      {label && <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">{label}</h4>}
-      <div className="ihub-search-input">
-        <input
-          type="text"
-          placeholder={placeholder}
-          onKeyDown={handleSearchKey}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          disabled={isLoading}
-        />
-        <div className="ihub-search-icons">
-          {input && (
-            <CloseOutlinedIcon
-              onClick={handleCancelSearch}
-              className="ihub-search-icon ihub-close-icon"
-            />
-          )}
-          <SearchOutlinedIcon
-            onClick={handleSearch}
-            className={`ihub-search-icon ihub-search-button ${
-              isLoading ? "ihub-disabled" : ""
-            }`}
+    <div className="ihub-react-search-container">
+      <div className="ihub-react-search card">
+        {label && <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">{label}</h4>}
+        <div className="ihub-search-input">
+          <input
+            type="text"
+            placeholder={placeholder}
+            onKeyDown={handleSearchKey}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading}
           />
-        </div>
-      </div>
-
-      {isLoading && <div className="ihub-loading">Searching...</div>}
-
-      {error && <div className="ihub-search-error">{error}</div>}
-
-      <ul className="ihub-search-results">
-        {data.map((option, index) => (
-          <li
-            className="ihub-search-result-item ihub-valid"
-            key={`${option.id || option.username || index}`}
-            onClick={() => setHandleObject(option)}
-          >
-            {isItemSelected(option) && (
-              <CheckIcon
-                className="ihub-check-icon"
-                style={{
-                  position: "relative",
-                  top: "5px",
-                  marginRight: "10px",
-                }}
+          <div className="ihub-search-icons">
+            {input && (
+              <CloseOutlinedIcon
+                onClick={handleCancelSearch}
+                className="ihub-search-icon ihub-close-icon"
               />
             )}
-            {option[key_name as keyof T] || option.title}
-          </li>
-        ))}
+            <SearchOutlinedIcon
+              onClick={handleSearch}
+              className={`ihub-search-icon ihub-search-button ${
+                isLoading ? "ihub-disabled" : ""
+              }`}
+            />
+          </div>
+        </div>
 
-        {!isLoading && !error && !data.length && !defaultValues && (
-          <li className="ihub-no-results">No available options</li>
-        )}
+        {isLoading && <div className="ihub-loading">Searching...</div>}
 
-        {!isLoading && !error && !data.length && defaultValues && (
-          <li className="ihub-default-values">{defaultValues}</li>
-        )}
-      </ul>
+        {error && <div className="ihub-search-error">{error}</div>}
 
-      {err && <p className="ihub-error">This field is required</p>}
+        <ul className="ihub-search-results">
+          {data?.map((option, index) => (
+            <li
+              className="ihub-search-result-item ihub-valid"
+              key={`${option.id || option.username || index}`}
+              onClick={() => setSelected([...(selected as T[]), option as T])}
+            >
+              {isItemSelected(option as T) && (
+                <CheckIcon
+                  className="ihub-check-icon"
+                  style={{
+                    position: "relative",
+                    top: "5px",
+                    marginRight: "10px",
+                  }}
+                />
+              )}
+              {option[key_name] || option.title}
+            </li>
+          ))}
+
+          {!isLoading && !error && !data.length && !selected.length && (
+            <li className="ihub-no-results">No available options</li>
+          )}
+        </ul>
+
+        {err && <p className="ihub-error">This field is required</p>}
+      </div>
+      {/* {selected.length && (
+        <ul className="ihub-selected-options">
+          <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">Selected Options:</h4>
+          {selected.map((item) => (
+            <li className="ihub-default-values" key={item?.id}>
+              {item[key_name] || item.title}
+            </li>
+          ))}
+        </ul>
+      )} */}
     </div>
   );
 }

@@ -21,3 +21,13 @@ dist
 .yarnrc.yml
 .yarnrc.yaml
 
+# Next.js examples
+src/__examples__/node_modules
+src/__examples__/.next
+src/__examples__/.env
+src/__examples__/.env.local
+src/__examples__/.env.development
+src/__examples__/.env.production
+src/__examples__/.env.test
+src/__examples__/.env.development.local
+src/__examples__/.env.test.local

@@ -26,7 +26,7 @@ npm install @mui/icons-material @instincthub/react-ui
 interface SearchObjectsFromDBProps {
   token: string; // Authentication token
   handle: string; // User handle/identifier
-  setHandleObject: (option: any) => void; // Callback to set selected object
+  setSelectedObject: (option: any) => void; // Callback to set selected object
   preventDefaults?: any[]; // Default data items
   appLabel?: string; // Application label for API
   modelName?: string; // Model name for API
@@ -63,7 +63,7 @@ function MyComponent() {
     <SearchObjectsFromDB
       token="your-auth-token"
       handle="user-handle"
-      setHandleObject={setSelectedUser}
+      setSelectedObject={setSelectedUser}
       selected={selectedUser ? [selectedUser] : []}
     />
   );
@@ -76,7 +76,7 @@ function MyComponent() {
 <SearchObjectsFromDB
   token={authToken}
   handle={userHandle}
-  setHandleObject={setAssessment}
+  setSelectedObject={setAssessment}
   preventDefaults={[assessment]}
   appLabel="assessment"
   modelName="assessment"

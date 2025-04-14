@@ -83,7 +83,7 @@ export { default as ModalExamples } from "./components/status/ModalExamples";
 
 // Tabs
 export { default as Tabs } from "./components/tabs/Tabs";
-export { default as VeriticalTabs } from "./components/tabs/VerticalTabs";
+export { default as VerticalTabs } from "./components/tabs/VerticalTabs";
 export { default as TabContent } from "./components/tabs/TabContent";
 
 
