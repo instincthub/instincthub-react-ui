@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback, memo } from "react";
 import { API_HOST_URL, reqOptions } from "../lib";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import CheckIcon from "@mui/icons-material/Check";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 // Define interface for data items
 interface DataItem {
@@ -27,7 +27,8 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
   appLabel?: string;
   modelName?: string;
   filterChannel?: boolean;
-  limit?: number;
+  limit_query?: number;
+  limit_select?: number;
   key_name?: string;
   placeholder?: string;
   searchUrl?: string;
@@ -55,7 +56,8 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * @param {string} props.appLabel - The app label for the API request
  * @param {string} props.modelName - The model name for the API request
  * @param {boolean} props.filterChannel - The filter channel for the API request
- * @param {number} props.limit - The limit for the API request
+ * @param {number} props.limit_query - The limit for the API request
+ * @param {number} props.limit_select - The limit user can select (0 means unlimited)
  * @param {keyof T | "name_plus_username"} props.key_name - The key_name to display search results (option[key_name])
  * @param {string} props.placeholder - The placeholder for the API request
  * @param {string} props.searchUrl - The search url for the API request
@@ -71,7 +73,8 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   appLabel,
   modelName,
   filterChannel = false,
-  limit = 5,
+  limit_query = 5,
+  limit_select = 0,
   key_name = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
@@ -109,7 +112,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
       // Build user channel search urls
       url = appLabel
         ? `${API_HOST_URL}channels/${handle}/dynamic-search/?app_label=${appLabel}&model_name=${modelName}&value=${input}&filter_channel=${filterChannel}`
-        : `${API_HOST_URL}auth/${handle}/search-user/${input}/?limit=${limit}`;
+        : `${API_HOST_URL}auth/${handle}/search-user/${input}/?limit=${limit_query}`;
     }
 
     try {
@@ -138,7 +141,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
     modelName,
     handle,
     filterChannel,
-    limit,
+    limit_query,
   ]);
 
   /**
@@ -175,6 +178,25 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
       });
     },
     [selected]
+  );
+
+  const handleSelect = useCallback(
+    (option: T): void => {
+      const existingOption = selected.find((item) => item.id === option.id);
+      if (
+        !existingOption &&
+        (limit_select === 0 || selected.length < limit_select)
+      ) {
+        setSelected([...(selected as T[]), option as T]);
+      }
+    },
+    [selected, setSelected, limit_select]
+  );
+  const handleDelete = useCallback(
+    (option: T): void => {
+      setSelected(selected.filter((item) => item.id !== option.id));
+    },
+    [selected, setSelected]
   );
 
   return (
@@ -215,7 +237,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
             <li
               className="ihub-search-result-item ihub-valid"
               key={`${option.id || option.username || index}`}
-              onClick={() => setSelected([...(selected as T[]), option as T])}
+              onClick={() => handleSelect(option as T)}
             >
               {isItemSelected(option as T) && (
                 <CheckIcon
@@ -228,6 +250,10 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
                 />
               )}
               {option[key_name] || option.title}
+              <CloseOutlinedIcon
+                className="ihub-delete-icon ihub-ml-auto"
+                onClick={() => handleDelete(option as T)}
+              />
             </li>
           ))}
 
