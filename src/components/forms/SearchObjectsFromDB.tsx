@@ -3,22 +3,12 @@ import { API_HOST_URL, reqOptions } from "../lib";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-
-// Define interface for data items
-interface DataItem {
-  id?: number | string;
-  username?: string;
-  [key: string]: any; // Allow for dynamic properties
-}
-
-interface defaultValuesProps {
-  id?: number | string;
-  title?: string;
-  [key: string]: any; // Allow for dynamic properties
-}
+import { SearchObjectItemType } from "@/types";
 
 // Define interface for the component props with generic type
-interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
+interface SearchObjectsFromDBProps<
+  T extends SearchObjectItemType = SearchObjectItemType
+> {
   label: string | null;
   token: string;
   handle: string;
@@ -65,7 +55,9 @@ interface SearchObjectsFromDBProps<T extends DataItem = DataItem> {
  * @param {boolean} props.err - The error for the API request
  */
 
-function SearchObjectsFromDB<T extends DataItem = DataItem>({
+function SearchObjectsFromDB<
+  T extends SearchObjectItemType = SearchObjectItemType
+>({
   label,
   token,
   handle,
@@ -82,14 +74,14 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   err = false,
 }: SearchObjectsFromDBProps<T>): JSX.Element {
   const [input, setInput] = useState<string>("");
-  const [data, setData] = useState<DataItem[]>([]);
+  const [data, setData] = useState<SearchObjectItemType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   // Initialize with value
   useEffect(() => {
-    if (selected && selected.length > 0) {
-      setData(selected as DataItem[]);
+    if (selected && selected.length > 0 && data.length === 0) {
+      setData(selected as SearchObjectItemType[]);
     }
   }, [selected]);
 
@@ -149,6 +141,7 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
    */
   const handleSearchKey = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>): void => {
+      // If the enter key is pressed, prevent default and call the handleSearch function
       if (e.key === "Enter") {
         e.preventDefault();
         handleSearch();
@@ -172,8 +165,10 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   const isItemSelected = useCallback(
     (option: T): boolean => {
       return selected.some((item) => {
+        // Check if the item is in the selected array
         const itemId = typeof item === "object" ? item?.id : item;
         const optionId = option?.username || option?.id;
+        // Return true if the item is in the selected array
         return itemId === optionId;
       });
     },
@@ -183,17 +178,23 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
   const handleSelect = useCallback(
     (option: T): void => {
       const existingOption = selected.find((item) => item.id === option.id);
+
       if (
         !existingOption &&
         (limit_select === 0 || selected.length < limit_select)
       ) {
-        setSelected([...(selected as T[]), option as T]);
+        // If limit_select is 0 or the selected length is less than limit_select, add the option to the selected array
+        setSelected([...selected, option]);
+      } else if (limit_select === 1) {
+        // If limit_select is 1, set the selected option to the option
+        setSelected([option]);
       }
     },
     [selected, setSelected, limit_select]
   );
   const handleDelete = useCallback(
     (option: T): void => {
+      // Remove the option from the selected array
       setSelected(selected.filter((item) => item.id !== option.id));
     },
     [selected, setSelected]
@@ -250,15 +251,21 @@ function SearchObjectsFromDB<T extends DataItem = DataItem>({
                 />
               )}
               {option[key_name] || option.title}
-              <CloseOutlinedIcon
-                className="ihub-delete-icon ihub-ml-auto"
-                onClick={() => handleDelete(option as T)}
-              />
+              {isItemSelected(option as T) ? (
+                <CloseOutlinedIcon
+                  className="ihub-delete-icon ihub-ml-auto"
+                  onClick={() => handleDelete(option as T)}
+                />
+              ) : (
+                ""
+              )}
             </li>
           ))}
 
-          {!isLoading && !error && !data.length && !selected.length && (
+          {!isLoading && !error && !data.length && !selected.length ? (
             <li className="ihub-no-results">No available options</li>
+          ) : (
+            ""
           )}
         </ul>
 

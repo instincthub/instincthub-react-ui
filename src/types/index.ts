@@ -183,3 +183,11 @@ export interface VerticalTabItemType {
   icon?: React.ReactNode | JSX.Element | null;
   disabled?: boolean;
 }
+
+
+// Define interface for data items
+export interface SearchObjectItemType {
+  id?: number | string;
+  username?: string;
+  [key: string]: any; // Allow for dynamic properties
+}
