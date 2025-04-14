@@ -176,10 +176,13 @@ function SearchObjectsFromDB<
   );
 
   const handleSelect = useCallback(
-    (option: T): void => {
+    (option: T, deleteOption: boolean = false): void => {
       const existingOption = selected.find((item) => item.id === option.id);
 
-      if (
+      if (deleteOption) {
+        // If deleteOption is true, remove the option from the selected array
+        setSelected(selected.filter((item) => item.id !== option.id));
+      } else if (
         !existingOption &&
         (limit_select === 0 || selected.length < limit_select)
       ) {
@@ -191,13 +194,6 @@ function SearchObjectsFromDB<
       }
     },
     [selected, setSelected, limit_select]
-  );
-  const handleDelete = useCallback(
-    (option: T): void => {
-      // Remove the option from the selected array
-      setSelected(selected.filter((item) => item.id !== option.id));
-    },
-    [selected, setSelected]
   );
 
   return (
@@ -254,7 +250,7 @@ function SearchObjectsFromDB<
               {isItemSelected(option as T) ? (
                 <CloseOutlinedIcon
                   className="ihub-delete-icon ihub-ml-auto"
-                  onClick={() => handleDelete(option as T)}
+                  onClick={() => handleSelect(option as T, true)}
                 />
               ) : (
                 ""
