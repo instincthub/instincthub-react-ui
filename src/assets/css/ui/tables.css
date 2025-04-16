@@ -8,6 +8,7 @@
   box-shadow: var(--lightShadow);
   border-radius: 5px;
   overflow: hidden;
+  display: inline-table;
 }
 
 .ihub-table th,
@@ -151,6 +152,10 @@
   border-radius: 4px;
   background-color: var(--White);
   font-family: var(--Nunito);
+}
+.ihub-rows-select,
+.ihub-rows-select option {
+  color: var(--Gunmetal);
 }
 
 .ihub-sticky-header {
@@ -628,13 +633,14 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  /* bottom: 0; */
   background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 50;
   border-radius: 5px;
+  height: 100vh;
 }
 
 .ihub-search-loading-indicator {
@@ -737,18 +743,17 @@
 }
 
 /* Dark mode support for server table */
-@media (prefers-color-scheme: dark) {
-  .ihub-table-loading-overlay {
-    background-color: rgba(44, 51, 58, 0.7);
-  }
 
-  .ihub-loading-spinner {
-    border-color: rgba(197, 192, 219, 0.2);
-    border-top-color: var(--DarkCyan);
-  }
+.DarkMode .ihub-table-loading-overlay {
+  background-color: rgba(44, 51, 58, 0.7);
+}
 
-  .ihub-error-state {
-    background-color: rgba(234, 95, 94, 0.1);
-    color: var(--Danger);
-  }
+.DarkMode .ihub-loading-spinner {
+  border-color: rgba(197, 192, 219, 0.2);
+  border-top-color: var(--DarkCyan);
+}
+
+.DarkMode .ihub-error-state {
+  background-color: rgba(234, 95, 94, 0.1);
+  color: var(--Danger);
 }

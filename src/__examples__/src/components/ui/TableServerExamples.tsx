@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { IHubTableServer } from "../../../../index";
 import { DataResponseType } from "../../../../types";
 
@@ -107,7 +108,7 @@ export default function ProgramCoursesPage() {
   );
 
   return (
-    <div className="program-courses-page ihub-container">
+    <div className="program-courses-page">
       <IHubTableServer
         token={process.env.NEXT_PUBLIC_TOKEN}
         columns={columns}
@@ -133,6 +134,14 @@ export default function ProgramCoursesPage() {
         stickyHeader={true}
         maxHeight="600px"
       />
+
+      <Link
+        rel="noreferrer noopener"
+        target="_blank"
+        href="https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx"
+      >
+        <button className="ihub-outlined-btn">View codebase</button>
+      </Link>
     </div>
   );
 }

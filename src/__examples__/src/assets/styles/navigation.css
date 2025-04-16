@@ -1,0 +1,24 @@
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--Gunmetal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--DarkCyan);
+}
+
+/* Dark mode support */
+html.DarkMode .theme-toggle {
+  color: var(--White);
+}
+
+html.DarkMode .theme-toggle:hover {
+  color: var(--DarkCyan);
+}

@@ -78,8 +78,42 @@ interface IHubTableServerPropsType<T> {
  *   showSearch={true}
  *   enableSorting={true}
  *   onRowClick={handleRowClick}
+ *   expandable={true}
+ *   renderExpandedRow={renderExpandedRow}
+ *   keyExtractor={keyExtractor}
+ *   stickyHeader={true}
+ *   maxHeight="600px"
+ *   hideHeaderOnMobile={true}
+ *   token={process.env.NEXT_PUBLIC_TOKEN}
+ *   dataAdapter={dataAdapter}
+ *   rowsPerPageOptions={[10, 25, 50, 100]}
+ *   defaultRowsPerPage={10}
+ *   onFetchError={handleFetchError}
+ *   refreshable={true}
+ *   onRefresh={handleRefresh}
  * />
  * ```
+ * @prop {string} token - The token for authentication
+ * @prop {TableColumnType<T>[]} columns - The columns of the table
+ * @prop {string} endpointPath - The path to the API endpoint
+ * @prop {Partial<FetchParamsType>} initialParams - The initial parameters for the API request
+ * @prop {string} title - The title of the table
+ * @prop {boolean} showSearch - Whether to show the search input
+ * @prop {boolean} enableSorting - Whether to enable sorting
+ * @prop {boolean} enableExport - Whether to enable export
+ * @prop {Object} exportOptions - The options for the export
+ * @prop {number[]} rowsPerPageOptions - The options for the rows per page
+ * @prop {number} defaultRowsPerPage - The default rows per page
+ * @prop {Function} onRowClick - The callback for the row click
+ * @prop {Function} onFetchError - The callback for the fetch error
+ * @prop {boolean} expandable - Whether to enable row expansion
+ * @prop {Function} renderExpandedRow - The callback for the expanded row
+ * @prop {Function} keyExtractor - The callback for the key extraction
+ * @prop {boolean} stickyHeader - Whether to enable sticky header
+ * @prop {string} maxHeight - The maximum height of the table
+ * @prop {boolean} hideHeaderOnMobile - Whether to hide the header on mobile
+ *
+ * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx
  */
 export function IHubTableServer<T extends object>({
   token,
@@ -93,7 +127,7 @@ export function IHubTableServer<T extends object>({
   actions,
   showSearch = true,
   searchPlaceholder = "Search...",
-  searchDebounceMs = 300,
+  searchDebounceMs = 1000,
   enableSorting = true,
   enableExport = false,
   exportOptions = { csv: true },
@@ -425,24 +459,6 @@ export function IHubTableServer<T extends object>({
     );
   }
 
-  // Empty state
-  if (!loading && data.length === 0) {
-    return (
-      <div className="ihub-data-list-container">
-        {title && <h2>{title}</h2>}
-        {actions && (
-          <div className="ihub-data-controls ihub-mb-0">{actions}</div>
-        )}
-        <div className="ihub-empty-state">
-          <div>
-            {emptyStateIcon}
-            <p>{emptyStateMessage}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="ihub-data-list-container" ref={tableRef}>
       {/* Header with title, search, and actions */}
@@ -534,7 +550,7 @@ export function IHubTableServer<T extends object>({
         }`}
         style={maxHeight ? { maxHeight } : undefined}
       >
-        <table className="ihub-table">
+        <table className="ihub-table ihub-scroll-container">
           <thead className={hideHeaderOnMobile ? "ihub-hide-on-mobile" : ""}>
             <tr>
               {/* Expandable row icon column */}
@@ -582,74 +598,99 @@ export function IHubTableServer<T extends object>({
               ))}
             </tr>
           </thead>
-          <tbody>
-            {data.map((row, rowIndex) => {
-              const rowKey = keyExtractor(row);
-              const isExpanded = expandedRows.includes(rowKey);
 
-              return (
-                <React.Fragment key={rowKey}>
-                  <tr
-                    onClick={() => onRowClick && onRowClick(row)}
-                    className={onRowClick ? "ihub-clickable-row" : ""}
-                  >
-                    {/* Expandable row toggle cell */}
-                    {expandable && renderExpandedRow && (
-                      <td onClick={(e) => toggleRowExpansion(rowKey, e)}>
-                        {isExpanded ? (
-                          <ExpandLessOutlinedIcon />
-                        ) : (
-                          <ExpandMoreOutlinedIcon />
-                        )}
-                      </td>
-                    )}
+          {/* Empty state */}
+          {!loading && data.length === 0 ? (
+            ""
+          ) : (
+            <tbody>
+              {data.map((row, rowIndex) => {
+                const rowKey = keyExtractor(row);
+                const isExpanded = expandedRows.includes(rowKey);
 
-                    {/* Regular data cells */}
-                    {columns.map((column, colIndex) => (
-                      <td
-                        key={colIndex}
-                        data-label={
-                          hideHeaderOnMobile ? column.header : undefined
-                        }
-                      >
-                        {column.tooltip &&
-                        typeof column.accessor === "string" ? (
-                          <div
-                            className="ihub-cell-tooltip"
-                            data-tooltip={String(
-                              getNestedValue(row, column.accessor as string)
-                            )}
-                          >
-                            {column.cell
-                              ? column.cell(row)
-                              : getNestedValue(row, column.accessor as string)}
-                          </div>
-                        ) : column.cell ? (
-                          column.cell(row)
-                        ) : typeof column.accessor === "function" ? (
-                          column.accessor(row)
-                        ) : (
-                          getNestedValue(row, column.accessor as string)
-                        )}
-                      </td>
-                    ))}
-                  </tr>
+                return (
+                  <React.Fragment key={rowKey}>
+                    <tr
+                      onClick={() => onRowClick && onRowClick(row)}
+                      className={onRowClick ? "ihub-clickable-row" : ""}
+                    >
+                      {/* Expandable row toggle cell */}
+                      {expandable && renderExpandedRow && (
+                        <td onClick={(e) => toggleRowExpansion(rowKey, e)}>
+                          {isExpanded ? (
+                            <ExpandLessOutlinedIcon />
+                          ) : (
+                            <ExpandMoreOutlinedIcon />
+                          )}
+                        </td>
+                      )}
 
-                  {/* Expanded row content */}
-                  {expandable && renderExpandedRow && isExpanded && (
-                    <tr className="ihub-expanded-row">
-                      <td colSpan={columns.length + 1}>
-                        <div className="ihub-row-details">
-                          {renderExpandedRow(row)}
-                        </div>
-                      </td>
+                      {/* Regular data cells */}
+                      {columns.map((column, colIndex) => (
+                        <td
+                          key={colIndex}
+                          data-label={
+                            hideHeaderOnMobile ? column.header : undefined
+                          }
+                        >
+                          {column.tooltip &&
+                          typeof column.accessor === "string" ? (
+                            <div
+                              className="ihub-cell-tooltip"
+                              data-tooltip={String(
+                                getNestedValue(row, column.accessor as string)
+                              )}
+                            >
+                              {column.cell
+                                ? column.cell(row)
+                                : getNestedValue(
+                                    row,
+                                    column.accessor as string
+                                  )}
+                            </div>
+                          ) : column.cell ? (
+                            column.cell(row)
+                          ) : typeof column.accessor === "function" ? (
+                            column.accessor(row)
+                          ) : (
+                            getNestedValue(row, column.accessor as string)
+                          )}
+                        </td>
+                      ))}
                     </tr>
-                  )}
-                </React.Fragment>
-              );
-            })}
-          </tbody>
+
+                    {/* Expanded row content */}
+                    {expandable && renderExpandedRow && isExpanded && (
+                      <tr className="ihub-expanded-row">
+                        <td colSpan={columns.length + 1}>
+                          <div className="ihub-row-details">
+                            {renderExpandedRow(row)}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          )}
         </table>
+        {/* Empty state */}
+        {!loading && data.length === 0 ? (
+          <div className="ihub-data-list-container">
+            {actions && (
+              <div className="ihub-data-controls ihub-mb-0">{actions}</div>
+            )}
+            <div className="ihub-empty-state">
+              <div>
+                {emptyStateIcon}
+                <p>{emptyStateMessage}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       {/* Pagination */}

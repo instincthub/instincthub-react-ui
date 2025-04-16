@@ -128,6 +128,8 @@ export interface TableProps<T> {
  * @prop {object} exportOptions - The options for exporting the table
  * @prop {boolean} refreshable - Whether to allow refreshing the table
  * @prop {function} onRefresh - The function to call when the table is refreshed
+ *
+ * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableExamples.tsx
  */
 export const IHubTable = <T extends object>({
   columns,
@@ -620,7 +622,7 @@ export const IHubTable = <T extends object>({
         }`}
         style={maxHeight ? { maxHeight } : undefined}
       >
-        <table className="ihub-table">
+        <table className="ihub-table ihub-scroll-container">
           <thead className={hideHeaderOnMobile ? "ihub-hide-on-mobile" : ""}>
             <tr>
               {/* Selection checkbox column */}
