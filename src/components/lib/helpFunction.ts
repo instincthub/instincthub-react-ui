@@ -614,6 +614,22 @@ export const handleError = (
 };
 
 /**
+ * Gets a value from an object using a path string (e.g., "course.title" or "course.lecturer.full_name")
+ * @param row The data object to extract value from
+ * @param accessor The path to the value (e.g., "course.title")
+ * @returns The value at the specified path or empty string if not found
+ */
+export function getNestedValue(row: any, accessor: string): any {
+  try {
+    return accessor.split('.').reduce((obj, key) => 
+      obj && obj[key] !== undefined ? obj[key] : '', row);
+  } catch (error) {
+    console.warn(`Error accessing ${accessor}:`, error);
+    return '';
+  }
+}
+
+/**
  * Creates request options for fetch API.
  * @param method HTTP method
  * @param data Request body
@@ -647,7 +663,8 @@ export const reqOptions = (
   }
 
   const request: RequestOptions = { method, headers, redirect: "follow" };
-  if (data) request.body = data;
+  if (data) request["body"] = data;
+  else request["body"] = null;
 
   if (IN_DEV_MODE) console.log(request);
   return request;

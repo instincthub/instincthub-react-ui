@@ -202,20 +202,20 @@ export interface TableColumnType<T> {
   tooltip?: boolean;
 }
 
-
 // IHubTableServer Props
 
 export interface ServerPaginationInfoType {
-  totalCount: number;  // Total number of records on server
+  totalCount: number; // Total number of records on server
   currentPage: number; // Current page number (1-based)
-  perPage: number;     // Number of items per page
-  totalPages: number;  // Total number of pages
+  perPage: number; // Number of items per page
+  totalPages: number; // Total number of pages
 }
 
 export interface ApiResponseType<T> {
-  data: T[];                        // Array of records for current page
+  data: T[]; // Array of records for current page
   pagination?: ServerPaginationInfoType; // Pagination metadata
-  links?: {                         // Optional pagination links
+  links?: {
+    // Optional pagination links
     next?: string | null;
     previous?: string | null;
   };
@@ -231,53 +231,7 @@ export interface FetchParamsType {
   [key: string]: any;
 }
 
-export interface IHubTableServerPropsType<T> {
-  // Core data
-  columns: TableColumnType<T>[];
-  
-  // API and fetching
-  fetchData: (params: FetchParamsType) => Promise<ApiResponseType<T>>;
-  initialParams?: Partial<FetchParamsType>;
-  
-  // Custom data mapping (for non-standard APIs)
-  dataAdapter?: (apiResponse: any) => ApiResponseType<T>;
-  
-  // Rendering customization
-  title?: string;
-  emptyStateMessage?: string;
-  emptyStateIcon?: React.ReactNode;
-  actions?: React.ReactNode;
-  
-  // Features
-  showSearch?: boolean;
-  searchPlaceholder?: string;
-  searchDebounceMs?: number;
-  enableSorting?: boolean;
-  enableExport?: boolean;
-  exportOptions?: {
-    csv?: boolean;
-    excel?: boolean;
-    pdf?: boolean;
-    fileName?: string;
-  };
-  
-  // Options
-  rowsPerPageOptions?: number[];
-  defaultRowsPerPage?: number;
-  
-  // Callbacks
-  onRowClick?: (row: T) => void;
-  onFetchError?: (error: any) => void;
-  
-  // Row expansion
-  expandable?: boolean;
-  renderExpandedRow?: (row: T) => React.ReactNode;
-  
-  // Key extraction
-  keyExtractor?: (row: T) => string | number;
-  
-  // UI customization
-  stickyHeader?: boolean;
-  maxHeight?: string;
-  hideHeaderOnMobile?: boolean;
+export interface DataResponseType {
+  id: string;
+  [key: string]: any;
 }

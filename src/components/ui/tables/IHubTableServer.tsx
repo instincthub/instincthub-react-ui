@@ -1,19 +1,68 @@
 "use client";
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  ReactNode,
-} from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import { TableColumnType } from "@/types";
+import { ApiResponseType, DataResponseType, TableColumnType } from "@/types";
 import { debounce } from "lodash";
-import { IHubTableServerPropsType, ServerPaginationInfoType, FetchParamsType } from "@/types";
+import { ServerPaginationInfoType, FetchParamsType } from "@/types";
+import { API_HOST_URL, getNestedValue, reqOptions } from "../../lib";
+
+interface IHubTableServerPropsType<T> {
+  /** Token for authentication */
+  token?: string | null;
+
+  // Core data
+  columns: TableColumnType<T>[];
+
+  // API and fetching
+  endpointPath: string;
+  initialParams?: Partial<FetchParamsType>;
+
+  // Custom data mapping (for non-standard APIs)
+  dataAdapter?: (apiResponse: any) => ApiResponseType<T>;
+
+  // Rendering customization
+  title?: string;
+  emptyStateMessage?: string;
+  emptyStateIcon?: React.ReactNode;
+  actions?: React.ReactNode;
+
+  // Features
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+  searchDebounceMs?: number;
+  enableSorting?: boolean;
+  enableExport?: boolean;
+  exportOptions?: {
+    csv?: boolean;
+    excel?: boolean;
+    pdf?: boolean;
+    fileName?: string;
+  };
+
+  // Options
+  rowsPerPageOptions?: number[];
+  defaultRowsPerPage?: number;
+
+  // Callbacks
+  onRowClick?: (row: T) => void;
+  onFetchError?: (error: any) => void;
+
+  // Row expansion
+  expandable?: boolean;
+  renderExpandedRow?: (row: T) => React.ReactNode;
+
+  // Key extraction
+  keyExtractor?: (row: T) => string | number;
+
+  // UI customization
+  stickyHeader?: boolean;
+  maxHeight?: string;
+  hideHeaderOnMobile?: boolean;
+}
 
 /**
  * Server-side table component for InstinctHub applications
@@ -23,7 +72,7 @@ import { IHubTableServerPropsType, ServerPaginationInfoType, FetchParamsType } f
  * ```tsx
  * <IHubTableServer
  *   columns={columns}
- *   fetchData={fetchProgramCourses}
+ *   endpointPath={"/api/program-courses"}
  *   initialParams={{ sort: "title", direction: "asc" }}
  *   title="Program Courses"
  *   showSearch={true}
@@ -33,8 +82,9 @@ import { IHubTableServerPropsType, ServerPaginationInfoType, FetchParamsType } f
  * ```
  */
 export function IHubTableServer<T extends object>({
+  token,
   columns,
-  fetchData,
+  endpointPath,
   initialParams = {},
   dataAdapter,
   title,
@@ -66,7 +116,7 @@ export function IHubTableServer<T extends object>({
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  
+
   // Pagination state
   const [pagination, setPagination] = useState<ServerPaginationInfoType>({
     totalCount: 0,
@@ -81,7 +131,7 @@ export function IHubTableServer<T extends object>({
     limit: defaultRowsPerPage,
     ...initialParams,
   });
-  
+
   // UI state
   const [expandedRows, setExpandedRows] = useState<(string | number)[]>([]);
   const [searchTerm, setSearchTerm] = useState(initialParams.search || "");
@@ -95,6 +145,66 @@ export function IHubTableServer<T extends object>({
         page: 1, // Reset to first page on new search
       }));
     }, searchDebounceMs),
+    []
+  );
+
+  // Function to fetch data from your API
+  const handleFetchData = useCallback(
+    async (
+      params: FetchParamsType
+    ): Promise<ApiResponseType<DataResponseType>> => {
+      setLoading(true);
+      try {
+        // Prepare API parameters
+        const apiParams = new URLSearchParams({
+          limit: params.limit.toString(),
+          offset: ((params.page - 1) * params.limit).toString(),
+        });
+
+        // Add search parameter if provided
+        if (params.search) {
+          apiParams.append("search", params.search);
+        }
+
+        // Add sorting parameter if provided
+        if (params.sort) {
+          // Convert from sort & direction to API's ordering format
+          const prefix = params.direction === "desc" ? "-" : "";
+          apiParams.append("ordering", `${prefix}${params.sort}`);
+        }
+
+        const options = reqOptions("GET", null, token);
+        const url = `${API_HOST_URL}${endpointPath}?${apiParams.toString()}`;
+
+        console.log("url: ", url, token);
+        // Make API request
+        const response = await fetch(url, options);
+        const result = await response.json();
+
+        // Transform API response to match component's expected format
+        return {
+          data: result.results,
+          pagination: {
+            totalCount: result.count,
+            currentPage: Math.floor(
+              parseInt(new URLSearchParams(result.next).get("offset") || "0") /
+                params.limit
+            ),
+            perPage: params.limit,
+            totalPages: Math.ceil(result.count / params.limit),
+          },
+          links: {
+            next: result.next,
+            previous: result.previous,
+          },
+        };
+      } catch (error) {
+        console.error("Error fetching program courses:", error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
     []
   );
 
@@ -126,28 +236,36 @@ export function IHubTableServer<T extends object>({
   }, []);
 
   // Handle sorting
-  const handleSort = useCallback((column: TableColumnType<T>) => {
-    if (!enableSorting || !column.sortable || typeof column.accessor !== "string") return;
-    
-    const accessor = column.accessor as string;
-    
-    setParams((prev) => {
-      // If already sorting by this column, toggle direction
-      if (prev.sort === accessor) {
+  const handleSort = useCallback(
+    (column: TableColumnType<T>) => {
+      if (
+        !enableSorting ||
+        !column.sortable ||
+        typeof column.accessor !== "string"
+      )
+        return;
+
+      const accessor = column.accessor as string;
+
+      setParams((prev) => {
+        // If already sorting by this column, toggle direction
+        if (prev.sort === accessor) {
+          return {
+            ...prev,
+            direction: prev.direction === "asc" ? "desc" : "asc",
+          };
+        }
+
+        // Otherwise, sort by this column ascending
         return {
           ...prev,
-          direction: prev.direction === "asc" ? "desc" : "asc",
+          sort: accessor,
+          direction: "asc",
         };
-      }
-      
-      // Otherwise, sort by this column ascending
-      return {
-        ...prev,
-        sort: accessor,
-        direction: "asc",
-      };
-    });
-  }, [enableSorting]);
+      });
+    },
+    [enableSorting]
+  );
 
   // Handle refresh
   const handleRefresh = useCallback(() => {
@@ -159,7 +277,7 @@ export function IHubTableServer<T extends object>({
   const handleExport = useCallback(
     async (type: "csv" | "excel" | "pdf") => {
       if (!enableExport) return;
-      
+
       try {
         // Fetch all data for export (without pagination)
         setLoading(true);
@@ -169,19 +287,21 @@ export function IHubTableServer<T extends object>({
           limit: 1000, // Request more data for export
           export: type,
         };
-        
-        const response = await fetchData(exportParams);
-        const exportData = dataAdapter ? dataAdapter(response).data : response.data;
-        
+
+        const response = await handleFetchData(exportParams);
+        const exportData = dataAdapter
+          ? dataAdapter(response).data
+          : response.data;
+
         const fileName = exportOptions.fileName || "table-export";
-        
+
         // Simple CSV export example
         if (type === "csv") {
           const headers = columns
             .filter((col) => typeof col.accessor === "string")
             .map((col) => col.header);
-          
-          const csvData = exportData.map((row) =>
+
+          const csvData = exportData.map((row: any) =>
             columns
               .filter((col) => typeof col.accessor === "string")
               .map((col) => {
@@ -190,17 +310,17 @@ export function IHubTableServer<T extends object>({
               })
               .join(",")
           );
-          
+
           const csv = [headers.join(","), ...csvData].join("\n");
-          
+
           const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
           const link = document.createElement("a");
           const url = URL.createObjectURL(blob);
-          
+
           link.setAttribute("href", url);
           link.setAttribute("download", `${fileName}.csv`);
           link.style.visibility = "hidden";
-          
+
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -212,31 +332,34 @@ export function IHubTableServer<T extends object>({
         setLoading(false);
       }
     },
-    [columns, params, enableExport, exportOptions, fetchData, dataAdapter, onFetchError]
+    [columns, params, enableExport, exportOptions, dataAdapter, onFetchError]
   );
 
   // Toggle row expansion
-  const toggleRowExpansion = useCallback((rowKey: string | number, event: React.MouseEvent) => {
-    event.stopPropagation();
-    
-    setExpandedRows((prev) => {
-      if (prev.includes(rowKey)) {
-        return prev.filter((key) => key !== rowKey);
-      } else {
-        return [...prev, rowKey];
-      }
-    });
-  }, []);
+  const toggleRowExpansion = useCallback(
+    (rowKey: string | number, event: React.MouseEvent) => {
+      event.stopPropagation();
+
+      setExpandedRows((prev) => {
+        if (prev.includes(rowKey)) {
+          return prev.filter((key) => key !== rowKey);
+        } else {
+          return [...prev, rowKey];
+        }
+      });
+    },
+    []
+  );
 
   // Fetch data effect
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadData = async () => {
       try {
         setLoading(true);
-        const response = await fetchData(params);
-        
+        const response = await handleFetchData(params);
+
         // Process response based on whether an adapter is provided
         if (isMounted) {
           if (dataAdapter) {
@@ -246,12 +369,12 @@ export function IHubTableServer<T extends object>({
               setPagination(adaptedResponse.pagination);
             }
           } else {
-            setData(response.data);
+            setData(response.data as T[]);
             if (response.pagination) {
               setPagination(response.pagination);
             }
           }
-          
+
           setError(null);
         }
       } catch (error) {
@@ -267,14 +390,14 @@ export function IHubTableServer<T extends object>({
         }
       }
     };
-    
+
     loadData();
-    
+
     return () => {
       isMounted = false;
     };
-  }, [fetchData, params, dataAdapter, onFetchError]);
-  
+  }, [params, dataAdapter, onFetchError]);
+
   // Loading state
   if (loading && initialRenderRef.current) {
     return (
@@ -286,7 +409,7 @@ export function IHubTableServer<T extends object>({
       </div>
     );
   }
-  
+
   // Error state
   if (error && !loading && data.length === 0) {
     return (
@@ -301,7 +424,7 @@ export function IHubTableServer<T extends object>({
       </div>
     );
   }
-  
+
   // Empty state
   if (!loading && data.length === 0) {
     return (
@@ -319,7 +442,7 @@ export function IHubTableServer<T extends object>({
       </div>
     );
   }
-  
+
   return (
     <div className="ihub-data-list-container" ref={tableRef}>
       {/* Header with title, search, and actions */}
@@ -424,7 +547,9 @@ export function IHubTableServer<T extends object>({
                 <th
                   key={index}
                   className={`${
-                    column.sortable && enableSorting ? "ihub-sortable-column" : ""
+                    column.sortable && enableSorting
+                      ? "ihub-sortable-column"
+                      : ""
                   } ${
                     params.sort === column.accessor
                       ? `ihub-sorted-${params.direction}`
@@ -432,7 +557,9 @@ export function IHubTableServer<T extends object>({
                   }`}
                   style={column.width ? { width: column.width } : undefined}
                   onClick={() =>
-                    column.sortable && enableSorting ? handleSort(column) : undefined
+                    column.sortable && enableSorting
+                      ? handleSort(column)
+                      : undefined
                   }
                 >
                   <div className="ihub-column-header">
@@ -490,19 +617,19 @@ export function IHubTableServer<T extends object>({
                           <div
                             className="ihub-cell-tooltip"
                             data-tooltip={String(
-                              row[column.accessor as keyof T] ?? ""
+                              getNestedValue(row, column.accessor as string)
                             )}
                           >
                             {column.cell
                               ? column.cell(row)
-                              : String(row[column.accessor as keyof T] ?? "")}
+                              : getNestedValue(row, column.accessor as string)}
                           </div>
                         ) : column.cell ? (
                           column.cell(row)
                         ) : typeof column.accessor === "function" ? (
                           column.accessor(row)
                         ) : (
-                          String(row[column.accessor as keyof T] ?? "")
+                          getNestedValue(row, column.accessor as string)
                         )}
                       </td>
                     ))}
@@ -529,8 +656,7 @@ export function IHubTableServer<T extends object>({
       {pagination && pagination.totalPages > 1 && (
         <div className="ihub-table-pagination">
           <div className="ihub-pagination-info">
-            Showing{" "}
-            {(pagination.currentPage - 1) * pagination.perPage + 1} to{" "}
+            Showing {(pagination.currentPage - 1) * pagination.perPage + 1} to{" "}
             {Math.min(
               pagination.currentPage * pagination.perPage,
               pagination.totalCount
@@ -562,7 +688,10 @@ export function IHubTableServer<T extends object>({
                   pageNum = i + 1;
                 } else if (pagination.currentPage <= 3) {
                   pageNum = i + 1;
-                } else if (pagination.currentPage >= pagination.totalPages - 2) {
+                } else if (
+                  pagination.currentPage >=
+                  pagination.totalPages - 2
+                ) {
                   pageNum = pagination.totalPages - 4 + i;
                 } else {
                   pageNum = pagination.currentPage - 2 + i;
@@ -585,14 +714,18 @@ export function IHubTableServer<T extends object>({
 
             <button
               className="ihub-pagination-button"
-              disabled={pagination.currentPage === pagination.totalPages || loading}
+              disabled={
+                pagination.currentPage === pagination.totalPages || loading
+              }
               onClick={() => handlePageChange(pagination.currentPage + 1)}
             >
               ›
             </button>
             <button
               className="ihub-pagination-button"
-              disabled={pagination.currentPage === pagination.totalPages || loading}
+              disabled={
+                pagination.currentPage === pagination.totalPages || loading
+              }
               onClick={() => handlePageChange(pagination.totalPages)}
             >
               »

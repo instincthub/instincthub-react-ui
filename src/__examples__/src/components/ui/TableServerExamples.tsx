@@ -1,135 +1,68 @@
 "use client";
-import { useState, useCallback } from "react";
-import { IHubTableServerPropsType, ServerPaginationInfoType, FetchParamsType, ApiResponseType } from "../../../../types";
 import { IHubTableServer } from "../../../../index";
-import { reqOptions } from "../../../../components/lib/index";
-
-// Define your data type
-interface Course {
-  id: string;
-  title: string;
-  code: string;
-  credits: string;
-  level: string;
-  semester: string;
-  choice: string;
-}
-
-interface ProgramCourse {
-  id: string;
-  course: Course;
-  enroll_count: number;
-  order: number;
-  last_action: string;
-  timestamp: string;
-  owner: number;
-  program: string;
-  lecturer: string | null;
-}
+import { DataResponseType } from "../../../../types";
 
 // Example page component
 export default function ProgramCoursesPage() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Function to fetch data from your API
-  const fetchProgramCourses = useCallback(async (params: FetchParamsType): Promise<ApiResponseType<ProgramCourse>> => {
-    setIsLoading(true);
-    try {
-      // Prepare API parameters
-      const apiParams = new URLSearchParams({
-        limit: params.limit.toString(),
-        offset: ((params.page - 1) * params.limit).toString(),
-      });
-      
-      // Add search parameter if provided
-      if (params.search) {
-        apiParams.append("search", params.search);
-      }
-      
-      // Add sorting parameter if provided
-      if (params.sort) {
-        // Convert from sort & direction to API's ordering format
-        const prefix = params.direction === "desc" ? "-" : "";
-        apiParams.append("ordering", `${prefix}${params.sort}`);
-      }
-      
-      // Make API request
-      const response = await fetch(`/api/v1/sis/hust/admins/program-course-list/?${apiParams.toString()}`);
-      const result = await response.json();
-      
-      // Transform API response to match component's expected format
-      return {
-        data: result.results,
-        pagination: {
-          totalCount: result.count,
-          currentPage: Math.floor(parseInt(new URLSearchParams(result.next).get("offset") || "0") / params.limit) + 1,
-          perPage: params.limit,
-          totalPages: Math.ceil(result.count / params.limit),
-        },
-        links: {
-          next: result.next,
-          previous: result.previous,
-        }
-      };
-    } catch (error) {
-      console.error("Error fetching program courses:", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
   // Define table columns
   const columns = [
     {
       header: "Code",
-      accessor: "course.code" as keyof ProgramCourse, // Type assertion needed for nested properties
+      accessor: "course.code", // Type assertion needed for nested properties
       sortable: true,
-      width: "120px",
+      width: "200px",
     },
     {
       header: "Title",
-      accessor: "course.title" as keyof ProgramCourse,
+      accessor: "course.title",
       sortable: true,
       tooltip: true,
     },
     {
       header: "Level",
-      accessor: "course.level" as keyof ProgramCourse,
+      accessor: "course.level",
       sortable: true,
       width: "80px",
     },
     {
       header: "Semester",
-      accessor: "course.semester" as keyof ProgramCourse,
+      accessor: "course.semester",
       sortable: true,
       width: "100px",
     },
     {
       header: "Credits",
-      accessor: "course.credits" as keyof ProgramCourse,
+      accessor: "course.credits",
       sortable: true,
       width: "80px",
     },
     {
       header: "Enrollment",
-      accessor: "enroll_count" as keyof ProgramCourse,
+      accessor: "enroll_count",
       sortable: true,
       width: "100px",
     },
     {
       header: "Actions",
-      cell: (row: ProgramCourse) => (
+      cell: (row: DataResponseType) => (
         <div className="ihub-item-actions">
-          <p onClick={(e) => {
-            e.stopPropagation();
-            handleViewCourse(row);
-          }}>View</p>
+          <p
+            onClick={(e) => {
+              e.stopPropagation();
+              handleViewCourse(row);
+            }}
+          >
+            View
+          </p>
           <div className="ihub-action-divider"></div>
-          <p onClick={(e) => {
-            e.stopPropagation();
-            handleEditCourse(row);
-          }}>Edit</p>
+          <p
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditCourse(row);
+            }}
+          >
+            Edit
+          </p>
         </div>
       ),
       width: "120px",
@@ -137,20 +70,20 @@ export default function ProgramCoursesPage() {
   ];
 
   // Action handlers
-  const handleRowClick = (row: ProgramCourse) => {
+  const handleRowClick = (row: DataResponseType) => {
     console.log("Row clicked:", row);
   };
 
-  const handleViewCourse = (course: ProgramCourse) => {
+  const handleViewCourse = (course: DataResponseType) => {
     console.log("View course:", course);
   };
 
-  const handleEditCourse = (course: ProgramCourse) => {
+  const handleEditCourse = (course: DataResponseType) => {
     console.log("Edit course:", course);
   };
 
   // Render expanded row content
-  const renderExpandedRow = (row: ProgramCourse) => (
+  const renderExpandedRow = (row: DataResponseType) => (
     <div className="ihub-row-detail-content">
       <div className="ihub-detail-item">
         <div className="ihub-detail-label">Course ID</div>
@@ -176,8 +109,9 @@ export default function ProgramCoursesPage() {
   return (
     <div className="program-courses-page ihub-container">
       <IHubTableServer
+        token={process.env.NEXT_PUBLIC_TOKEN}
         columns={columns}
-        fetchData={fetchProgramCourses}
+        endpointPath={"sis/hust/admins/program-course-list/"}
         initialParams={{
           sort: "course.title",
           direction: "asc",
