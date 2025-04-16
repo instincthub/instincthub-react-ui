@@ -329,6 +329,12 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/tables/IHubTable.tsx",
     },
+    {
+      name: "IHubTableServer",
+      description: "InstinctHub server table component",
+      category: "UI",
+      repo_path: "src/components/ui/tables/IHubTableServer.tsx",
+    },
 
     // Theme
     {

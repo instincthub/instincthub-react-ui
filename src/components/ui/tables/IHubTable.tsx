@@ -940,7 +940,7 @@ export const IHubTable = <T extends object>({
                   className={`ihub-pagination-button ${
                     currentPage === pageNum ? "ihub-active" : ""
                   }`}
-                  onClick={() => setCurrentPage(pageNum)}
+                  onClick={() => setCurrentPage(pageNum as number)}
                 >
                   {pageNum}
                 </button>

@@ -315,292 +315,440 @@
   }
 }
 
-
 /* Status Badge Styles */
 .ihub-status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-    min-width: 80px;
-  }
-  
-  .ihub-status-active {
-    background-color: rgba(0, 197, 162, 0.15);
-    color: var(--CaribbeanGreen);
-  }
-  
-  .ihub-status-inactive {
-    background-color: rgba(197, 192, 219, 0.15);
-    color: var(--OldLavender);
-  }
-  
-  .ihub-status-pending {
-    background-color: rgba(251, 235, 91, 0.15);
-    color: #d4b400; /* Darker shade of Corn */
-  }
-  
-  .ihub-status-rejected {
-    background-color: rgba(234, 95, 94, 0.15);
-    color: var(--Danger);
-  }
-  
-  .ihub-status-approved {
-    background-color: rgba(75, 225, 51, 0.15);
-    color: var(--LimeGreen);
-  }
-  
-  /* User link styling */
-  .ihub-user-link {
-    color: var(--DarkCyan);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
-  }
-  
-  .ihub-user-link:hover {
-    color: var(--ViridianGreen);
-    text-decoration: underline;
-  }
-  
-  /* Mobile responsive adjustments for status badges */
-  @media (max-width: 768px) {
-    .ihub-status-badge {
-      width: 100%;
-      min-width: unset;
-      text-align: center;
-    }
-  }
-  
-  /* Tooltip for table cells with truncated content */
-  .ihub-cell-tooltip {
-    position: relative;
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .ihub-cell-tooltip:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 0;
-    top: 100%;
-    z-index: 999;
-    background-color: var(--Gunmetal);
-    color: var(--White);
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    white-space: normal;
-    max-width: 250px;
-    box-shadow: var(--shadow);
-    margin-top: 5px;
-  }
-  
-  /* Table row selection styles */
-  .ihub-table tr.ihub-selected-row {
-    background-color: rgba(0, 131, 143, 0.1);
-  }
-  
-  .ihub-table tr.ihub-selected-row:hover {
-    background-color: rgba(0, 131, 143, 0.15);
-  }
-  
-  /* Checkbox cell styling */
-  .ihub-checkbox-cell {
-    width: 40px;
-    text-align: center;
-  }
-  
-  .ihub-checkbox-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Filter dropdown styles */
-  .ihub-column-filter {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .ihub-filter-button {
-    background: none;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--ChineseSilver);
-    padding: 0;
-    margin-left: 8px;
-  }
-  
-  .ihub-filter-button:hover {
-    color: var(--DarkCyan);
-  }
-  
-  .ihub-filter-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: var(--White);
-    border: var(--borderDefault);
-    border-radius: 4px;
-    padding: 12px;
-    min-width: 200px;
-    box-shadow: var(--shadow);
-    z-index: 100;
-    margin-top: 5px;
-  }
-  
-  .ihub-filter-dropdown label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
-  
-  .ihub-filter-input {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 80px;
+}
+
+.ihub-status-active {
+  background-color: rgba(0, 197, 162, 0.15);
+  color: var(--CaribbeanGreen);
+}
+
+.ihub-status-inactive {
+  background-color: rgba(197, 192, 219, 0.15);
+  color: var(--OldLavender);
+}
+
+.ihub-status-pending {
+  background-color: rgba(251, 235, 91, 0.15);
+  color: #d4b400; /* Darker shade of Corn */
+}
+
+.ihub-status-rejected {
+  background-color: rgba(234, 95, 94, 0.15);
+  color: var(--Danger);
+}
+
+.ihub-status-approved {
+  background-color: rgba(75, 225, 51, 0.15);
+  color: var(--LimeGreen);
+}
+
+/* User link styling */
+.ihub-user-link {
+  color: var(--DarkCyan);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.ihub-user-link:hover {
+  color: var(--ViridianGreen);
+  text-decoration: underline;
+}
+
+/* Mobile responsive adjustments for status badges */
+@media (max-width: 768px) {
+  .ihub-status-badge {
     width: 100%;
-    padding: 8px 12px;
-    border: var(--borderDefault);
-    border-radius: 4px;
-    margin-bottom: 12px;
+    min-width: unset;
+    text-align: center;
   }
-  
-  .ihub-filter-actions {
-    display: flex;
-    justify-content: space-between;
+}
+
+/* Tooltip for table cells with truncated content */
+.ihub-cell-tooltip {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ihub-cell-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 999;
+  background-color: var(--Gunmetal);
+  color: var(--White);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: normal;
+  max-width: 250px;
+  box-shadow: var(--shadow);
+  margin-top: 5px;
+}
+
+/* Table row selection styles */
+.ihub-table tr.ihub-selected-row {
+  background-color: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-table tr.ihub-selected-row:hover {
+  background-color: rgba(0, 131, 143, 0.15);
+}
+
+/* Checkbox cell styling */
+.ihub-checkbox-cell {
+  width: 40px;
+  text-align: center;
+}
+
+.ihub-checkbox-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Filter dropdown styles */
+.ihub-column-filter {
+  position: relative;
+  display: inline-block;
+}
+
+.ihub-filter-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--ChineseSilver);
+  padding: 0;
+  margin-left: 8px;
+}
+
+.ihub-filter-button:hover {
+  color: var(--DarkCyan);
+}
+
+.ihub-filter-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 4px;
+  padding: 12px;
+  min-width: 200px;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  margin-top: 5px;
+}
+
+.ihub-filter-dropdown label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.ihub-filter-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.ihub-filter-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ihub-filter-actions button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+/* Table row hover actions */
+.ihub-row-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ihub-table tr:hover .ihub-row-actions {
+  opacity: 1;
+}
+
+/* Table cell with icon */
+.ihub-cell-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ihub-cell-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Export buttons styling */
+.ihub-export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.ihub-export-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ihub-export-button:hover {
+  background-color: var(--Magnolia);
+}
+
+.ihub-export-csv {
+  color: var(--DarkCyan);
+}
+
+.ihub-export-excel {
+  color: #217346; /* Excel green */
+}
+
+.ihub-export-pdf {
+  color: #f40f02; /* PDF red */
+}
+
+/* Table context menu */
+.ihub-context-menu {
+  position: fixed;
+  z-index: 1000;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  min-width: 160px;
+}
+
+.ihub-context-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ihub-context-menu-item:hover {
+  background-color: var(--Magnolia);
+}
+
+.ihub-context-menu-separator {
+  height: 1px;
+  background-color: var(--ChineseSilver);
+  margin: 4px 0;
+}
+
+/* Expanded row details */
+.ihub-expanded-row {
+  background-color: var(--Magnolia);
+  border-top: 1px solid var(--ChineseSilver);
+}
+
+.ihub-row-details {
+  padding: 16px;
+}
+
+.ihub-row-detail-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ihub-row-detail-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.ihub-detail-item {
+  margin-bottom: 8px;
+}
+
+.ihub-detail-label {
+  font-size: 0.8rem;
+  color: var(--ChineseSilver);
+  margin-bottom: 4px;
+}
+
+.ihub-detail-value {
+  font-weight: 500;
+}
+
+/* Additional styles for IHubTableServer component */
+
+/* Loading indicator styles */
+.ihub-loading-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 131, 143, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--DarkCyan);
+  animation: ihub-spin 1s ease-in-out infinite;
+}
+
+@keyframes ihub-spin {
+  to {
+    transform: rotate(360deg);
   }
-  
-  .ihub-filter-actions button {
-    padding: 6px 12px;
-    font-size: 0.85rem;
+}
+
+.ihub-table-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  border-radius: 5px;
+}
+
+.ihub-search-loading-indicator {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ihub-loading-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan);
+  animation: ihub-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ihub-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
   }
-  
-  /* Table row hover actions */
-  .ihub-row-actions {
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  
-  .ihub-table tr:hover .ihub-row-actions {
+  50% {
+    transform: scale(1);
     opacity: 1;
   }
-  
-  /* Table cell with icon */
-  .ihub-cell-with-icon {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
   }
-  
-  .ihub-cell-icon {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
+}
+
+/* Error state styles */
+.ihub-error-state {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--Danger);
+  background-color: rgba(234, 95, 94, 0.05);
+  border-radius: 5px;
+  box-shadow: var(--lightShadow);
+}
+
+.ihub-error-state p {
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* Refresh button styles */
+.ihub-refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--DarkCyan);
+}
+
+.ihub-refresh-button:hover:not(:disabled) {
+  background-color: var(--Magnolia);
+}
+
+.ihub-refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ihub-refresh-button svg {
+  animation: none;
+}
+
+.ihub-refresh-button:disabled svg {
+  animation: ihub-spin 1.5s linear infinite;
+}
+
+/* Search input wrapper */
+.ihub-search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Responsive adjustments for server table */
+@media (max-width: 768px) {
+  .ihub-table-server-controls {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .ihub-refresh-button,
+  .ihub-export-button {
+    width: 100%;
     justify-content: center;
   }
-  
-  /* Export buttons styling */
-  .ihub-export-buttons {
-    display: flex;
-    gap: 8px;
+}
+
+/* Dark mode support for server table */
+@media (prefers-color-scheme: dark) {
+  .ihub-table-loading-overlay {
+    background-color: rgba(44, 51, 58, 0.7);
   }
-  
-  .ihub-export-button {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background-color: var(--White);
-    border: var(--borderDefault);
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+
+  .ihub-loading-spinner {
+    border-color: rgba(197, 192, 219, 0.2);
+    border-top-color: var(--DarkCyan);
   }
-  
-  .ihub-export-button:hover {
-    background-color: var(--Magnolia);
+
+  .ihub-error-state {
+    background-color: rgba(234, 95, 94, 0.1);
+    color: var(--Danger);
   }
-  
-  .ihub-export-csv {
-    color: var(--DarkCyan);
-  }
-  
-  .ihub-export-excel {
-    color: #217346; /* Excel green */
-  }
-  
-  .ihub-export-pdf {
-    color: #f40f02; /* PDF red */
-  }
-  
-  /* Table context menu */
-  .ihub-context-menu {
-    position: fixed;
-    z-index: 1000;
-    background-color: var(--White);
-    border: var(--borderDefault);
-    border-radius: 4px;
-    box-shadow: var(--shadow);
-    min-width: 160px;
-  }
-  
-  .ihub-context-menu-item {
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .ihub-context-menu-item:hover {
-    background-color: var(--Magnolia);
-  }
-  
-  .ihub-context-menu-separator {
-    height: 1px;
-    background-color: var(--ChineseSilver);
-    margin: 4px 0;
-  }
-  
-  /* Expanded row details */
-  .ihub-expanded-row {
-    background-color: var(--Magnolia);
-    border-top: 1px solid var(--ChineseSilver);
-  }
-  
-  .ihub-row-details {
-    padding: 16px;
-  }
-  
-  .ihub-row-detail-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  
-  .ihub-row-detail-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  
-  .ihub-detail-item {
-    margin-bottom: 8px;
-  }
-  
-  .ihub-detail-label {
-    font-size: 0.8rem;
-    color: var(--ChineseSilver);
-    margin-bottom: 4px;
-  }
-  
-  .ihub-detail-value {
-    font-weight: 500;
-  }
+}
