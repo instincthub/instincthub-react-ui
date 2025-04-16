@@ -1,19 +1,19 @@
 "use client"; // If using Next.js, ensure client-side rendering
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 // Define props interface
 interface PasswordFieldProps {
-  ids: string | null; // Optional ID for the input element
-  names: string; // Class name and input name
-  labels: string; // Label text
-  notes: string | null; // Optional validation message
-  requireds?: boolean; // Optional required flag
-  defaultValues?: string; // Optional default value
-  setValues?: (value: string) => void; // Optional callback for value changes
-  inputEvent?: (e: React.ChangeEvent<HTMLInputElement>) => void | null; // Optional input event handler
+  id?: string | null; // Optional ID for the input element
+  name: string; // Class name and input name
+  label: string; // Label text
+  note?: string | null; // Optional validation message
+  required?: boolean; // Optional required flag
+  defaultValue?: string; // Optional default value
+  setValue?: (value: string) => void; // Optional callback for value changes
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null; // Optional input event handler
   setNameValue?: (name: string, value: string) => void | null; // Optional input event handler
 }
 
@@ -25,39 +25,39 @@ interface PasswordFieldProps {
  * import { PasswordField } from "@instincthub/react-ui";
  *
  * <PasswordField
- *   ids={["password"]}
- *   names={["password"]}
- *   labels={["Password"]}
- *   notes={["Enter your password"]}
- *   requireds={true}
- *   defaultValues={""}
- *   setValues={(name, value) => {
- *     console.log(name, value);
+ *   id={["password"]}
+ *   name={["password"]}
+ *   label={["Password"]}
+ *   note={["Enter your password"]}
+ *   required={true}
+ *   defaultValue={""}
+ *   setValue={(value) => {
+ *     console.log(value);
  *   }}
- *   inputEvent={(e) => {
+ *   onChange={(e) => {
  *     console.log(e);
  *   }}
  * />
  * ```
  * Props interface for the PasswordField component
- * @property {string[]} ids - Array of IDs for the input field
- * @property {string[]} names - Array of names for the input field
- * @property {string[]} labels - Array of labels for the input field
- * @property {string[]} notes - Array of notes for the input field
- * @property {boolean} requireds - Whether the field is required
- * @property {string} defaultValues - Default value for the input field
- * @property {(name: string, value: string) => void} setValues - Callback for setting values
- * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} inputEvent - Callback for input events
+ * @property {string} id - ID for the input field
+ * @property {string} name - Name for the input field
+ * @property {string} label - Label for the input field
+ * @property {string} note - Note for the input field
+ * @property {boolean} required - Whether the field is required
+ * @property {string} defaultValue - Default value for the input field
+ * @property {(value: string) => void} setValue - Callback for setting values
+ * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChange - Callback for input events
  */
 export default function PasswordField({
-  ids,
-  names,
-  labels,
-  notes,
-  requireds = false,
-  defaultValues = "",
-  setValues,
-  inputEvent,
+  id,
+  name,
+  label,
+  note,
+  required = false,
+  defaultValue = "",
+  setValue,
+  onChange,
   setNameValue,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -70,34 +70,34 @@ export default function PasswordField({
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === defaultValues) return;
+    if (value === defaultValue) return;
     setPassword(value);
 
     const parentDiv = e.target.parentElement?.parentElement;
     if (value) {
       parentDiv?.classList.add("value");
-      if (setValues) setValues(value);
-      if (inputEvent) inputEvent(e);
-      if (setNameValue) setNameValue(names, value);
+      if (setValue) setValue(value);
+      if (onChange) onChange(e);
+      if (setNameValue) setNameValue(name, value);
     } else {
       parentDiv?.classList.remove("value");
     }
   };
 
   useEffect(() => {
-    setPassword(defaultValues);
-  }, [defaultValues]);
+    setPassword(defaultValue);
+  }, [defaultValue]);
 
   return (
-    <div className={names}>
+    <div className={name}>
       <div className="field">
         <div className="ihub-password-wrapper">
           <div className="input_icon">
             <input
               type={showPassword ? "text" : "password"}
-              id={ids || "password"}
-              name={names}
-              required={requireds}
+              id={id || "password"}
+              name={name}
+              required={required}
               value={password}
               onChange={handlePasswordChange}
               onFocus={() => setFocused(true)}
@@ -111,10 +111,10 @@ export default function PasswordField({
           <span
             className={`text_label ${focused || password ? "focused" : ""}`}
           >
-            {labels}
+            {label}
           </span>
         </div>
-        {notes && <p className="ihub-input-notes">{notes}</p>}
+        {note && <p className="ihub-input-notes">{note}</p>}
       </div>
     </div>
   );

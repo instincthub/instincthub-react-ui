@@ -82,6 +82,11 @@ interface InputTextProps {
    * Note text to display below the input
    */
   note?: string;
+
+  /**
+   * The id of the input
+   */
+  id?: string;
 }
 
 /**
@@ -90,7 +95,7 @@ interface InputTextProps {
  * ```tsx
  * <InputText label="Name" name="name" />
  * ```
- * @prop {string} label - The label text for the input field    
+ * @prop {string} label - The label text for the input field
  * @prop {string} name - The name attribute for the input element
  * @prop {string} value - The current value of the input field
  * @prop {string} placeholder - Placeholder text to display when input is empty
@@ -105,6 +110,8 @@ interface InputTextProps {
  * @prop {function} onChange - Callback for value changes
  * @prop {function} onBlur - Callback for blur events
  * @prop {string} helperText - Helper text or notes to display below the input
+ * @prop {string} note - Note text to display below the input
+ * @prop {string} id - The id of the input
  */
 const InputText: React.FC<InputTextProps> = ({
   label,
@@ -123,15 +130,21 @@ const InputText: React.FC<InputTextProps> = ({
   onBlur,
   helperText,
   note,
+  id,
 }) => {
-  const [hasValue, setHasValue] = useState<boolean>(!!value);
+  const [inputValue, setInputValue] = useState<string>();
+  const [hasValue, setHasValue] = useState<boolean>();
 
   useEffect(() => {
+    if (value !== inputValue) {
+      setInputValue(value);
+    }
     setHasValue(!!value);
   }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setHasValue(!!e.target.value);
+    setInputValue(e.target.value);
     if (onChange) onChange(e);
   };
 
@@ -150,9 +163,9 @@ const InputText: React.FC<InputTextProps> = ({
     >
       <input
         type={type}
-        id={name}
+        id={id}
         name={name}
-        value={value}
+        value={inputValue}
         className="ihub-input"
         placeholder={placeholder}
         required={required}
@@ -172,7 +185,7 @@ const InputText: React.FC<InputTextProps> = ({
       {error && <p className="ihub-notes ihub-is_invalid">{error}</p>}
 
       {note && (
-        <p className="ihub-input-notes" id={`${name}-note`}>
+        <p className="ihub-input-notes" id={`${id}-note`}>
           {note}
         </p>
       )}

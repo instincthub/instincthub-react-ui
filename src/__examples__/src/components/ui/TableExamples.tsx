@@ -300,7 +300,7 @@ const EnhancedTableExample: React.FC = () => {
         emptyStateMessage="No users found. Add a new user to get started."
         actions={
           <button className="ihub-important-btn" onClick={handleAddUser}>
-            <PersonOutlinedIcon />
+            <PersonOutlinedIcon style={{ color: "#fff" }} className="ihub-mr-1" />
             Add User
           </button>
         }
