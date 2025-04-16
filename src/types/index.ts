@@ -184,10 +184,20 @@ export interface VerticalTabItemType {
   disabled?: boolean;
 }
 
-
 // Define interface for data items
 export interface SearchObjectItemType {
   id?: number | string;
   username?: string;
   [key: string]: any; // Allow for dynamic properties
+}
+
+// Table Column Type
+export interface TableColumnType<T> {
+  header: string;
+  accessor: keyof T | ((row: T) => React.ReactNode);
+  sortable?: boolean;
+  filterable?: boolean;
+  width?: string;
+  cell?: (row: T) => React.ReactNode;
+  tooltip?: boolean;
 }

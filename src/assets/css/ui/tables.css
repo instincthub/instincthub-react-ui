@@ -1,0 +1,606 @@
+/* InstinctHub Table Styles */
+.ihub-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--Nunito);
+  margin-bottom: 20px;
+  background-color: var(--White);
+  box-shadow: var(--lightShadow);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ihub-table th,
+.ihub-table td {
+  padding: 14px 16px;
+  border-bottom: var(--borderDefault);
+  text-align: left;
+}
+
+.ihub-table th {
+  background-color: var(--Magnolia);
+  font-weight: 600;
+  color: var(--Gunmetal);
+  position: relative;
+}
+
+.ihub-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ihub-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.ihub-table tbody tr:hover {
+  background-color: rgba(197, 192, 219, 0.1);
+}
+
+.ihub-clickable-row {
+  cursor: pointer;
+}
+
+.ihub-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ihub-sort-icon {
+  margin-left: 5px;
+  font-size: 12px;
+  color: var(--ChineseSilver);
+}
+
+.ihub-sortable-column {
+  cursor: pointer;
+  user-select: none;
+}
+
+.ihub-sorted-asc .ihub-sort-icon,
+.ihub-sorted-desc .ihub-sort-icon {
+  color: var(--DarkCyan);
+}
+
+.ihub-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.ihub-table-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.ihub-search-input {
+  padding: 10px 15px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  min-width: 240px;
+  font-family: var(--Nunito);
+  transition: border-color 0.3s ease;
+}
+
+.ihub-search-input:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+}
+
+.ihub-table-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ihub-pagination-info {
+  color: var(--Gunmetal);
+  font-size: 0.9rem;
+}
+
+.ihub-pagination-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.ihub-pagination-button {
+  padding: 8px 12px;
+  background-color: var(--White);
+  border: var(--borderDefault);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.ihub-pagination-button:hover:not(:disabled) {
+  background-color: var(--Magnolia);
+  border-color: var(--ChineseSilver);
+}
+
+.ihub-pagination-button:disabled {
+  color: var(--ChineseSilver);
+  cursor: not-allowed;
+}
+
+.ihub-pagination-button.ihub-active {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+  border-color: var(--DarkCyan);
+}
+
+.ihub-rows-per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ihub-rows-select {
+  padding: 6px 8px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  background-color: var(--White);
+  font-family: var(--Nunito);
+}
+
+.ihub-sticky-header {
+  overflow: auto;
+}
+
+.ihub-sticky-header table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ihub-empty-state {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--ChineseSilver);
+  background-color: var(--White);
+  border-radius: 5px;
+  box-shadow: var(--lightShadow);
+}
+
+.ihub-empty-state span {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Custom scrollbar for table container */
+.ihub-scroll-container {
+  overflow: auto;
+  border-radius: 5px;
+}
+
+.ihub-scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ihub-scroll-container::-webkit-scrollbar-track {
+  background: var(--Gray);
+  border-radius: 3px;
+}
+
+.ihub-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--ChineseSilver);
+  border-radius: 3px;
+}
+
+.ihub-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--OldLavender);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ihub-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .ihub-table-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ihub-search-input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .ihub-hide-on-mobile thead {
+    display: none;
+  }
+
+  .ihub-hide-on-mobile tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    box-shadow: var(--lightShadow);
+    border-radius: 5px;
+  }
+
+  .ihub-hide-on-mobile tbody td {
+    display: flex;
+    text-align: right;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(44, 51, 58, 0.1);
+  }
+
+  .ihub-hide-on-mobile tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .ihub-hide-on-mobile tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .ihub-table-pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ihub-pagination-controls {
+    order: 1;
+  }
+
+  .ihub-pagination-info {
+    order: 2;
+  }
+
+  .ihub-rows-per-page {
+    order: 3;
+    margin-top: 8px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ihub-table th {
+    background-color: var(--Gunmetal);
+    color: var(--White);
+  }
+
+  .ihub-table {
+    background-color: rgba(44, 51, 58, 0.95);
+    color: var(--White);
+  }
+
+  .ihub-table tbody tr:hover {
+    background-color: rgba(44, 51, 58, 0.5);
+  }
+
+  .ihub-pagination-button {
+    background-color: var(--Gunmetal);
+    color: var(--White);
+    border-color: rgba(197, 192, 219, 0.3);
+  }
+
+  .ihub-pagination-button:hover:not(:disabled) {
+    background-color: var(--DarkSlateGray);
+  }
+
+  .ihub-rows-select {
+    background-color: var(--Gunmetal);
+    color: var(--White);
+    border-color: rgba(197, 192, 219, 0.3);
+  }
+
+  .ihub-search-input {
+    background-color: var(--Gunmetal);
+    color: var(--White);
+    border-color: rgba(197, 192, 219, 0.3);
+  }
+
+  .ihub-empty-state {
+    background-color: var(--Gunmetal);
+    color: var(--LavenderGray);
+  }
+}
+
+
+/* Status Badge Styles */
+.ihub-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 80px;
+  }
+  
+  .ihub-status-active {
+    background-color: rgba(0, 197, 162, 0.15);
+    color: var(--CaribbeanGreen);
+  }
+  
+  .ihub-status-inactive {
+    background-color: rgba(197, 192, 219, 0.15);
+    color: var(--OldLavender);
+  }
+  
+  .ihub-status-pending {
+    background-color: rgba(251, 235, 91, 0.15);
+    color: #d4b400; /* Darker shade of Corn */
+  }
+  
+  .ihub-status-rejected {
+    background-color: rgba(234, 95, 94, 0.15);
+    color: var(--Danger);
+  }
+  
+  .ihub-status-approved {
+    background-color: rgba(75, 225, 51, 0.15);
+    color: var(--LimeGreen);
+  }
+  
+  /* User link styling */
+  .ihub-user-link {
+    color: var(--DarkCyan);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+  
+  .ihub-user-link:hover {
+    color: var(--ViridianGreen);
+    text-decoration: underline;
+  }
+  
+  /* Mobile responsive adjustments for status badges */
+  @media (max-width: 768px) {
+    .ihub-status-badge {
+      width: 100%;
+      min-width: unset;
+      text-align: center;
+    }
+  }
+  
+  /* Tooltip for table cells with truncated content */
+  .ihub-cell-tooltip {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .ihub-cell-tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 999;
+    background-color: var(--Gunmetal);
+    color: var(--White);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    white-space: normal;
+    max-width: 250px;
+    box-shadow: var(--shadow);
+    margin-top: 5px;
+  }
+  
+  /* Table row selection styles */
+  .ihub-table tr.ihub-selected-row {
+    background-color: rgba(0, 131, 143, 0.1);
+  }
+  
+  .ihub-table tr.ihub-selected-row:hover {
+    background-color: rgba(0, 131, 143, 0.15);
+  }
+  
+  /* Checkbox cell styling */
+  .ihub-checkbox-cell {
+    width: 40px;
+    text-align: center;
+  }
+  
+  .ihub-checkbox-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Filter dropdown styles */
+  .ihub-column-filter {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .ihub-filter-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--ChineseSilver);
+    padding: 0;
+    margin-left: 8px;
+  }
+  
+  .ihub-filter-button:hover {
+    color: var(--DarkCyan);
+  }
+  
+  .ihub-filter-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--White);
+    border: var(--borderDefault);
+    border-radius: 4px;
+    padding: 12px;
+    min-width: 200px;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    margin-top: 5px;
+  }
+  
+  .ihub-filter-dropdown label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .ihub-filter-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: var(--borderDefault);
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  
+  .ihub-filter-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .ihub-filter-actions button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  /* Table row hover actions */
+  .ihub-row-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .ihub-table tr:hover .ihub-row-actions {
+    opacity: 1;
+  }
+  
+  /* Table cell with icon */
+  .ihub-cell-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .ihub-cell-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Export buttons styling */
+  .ihub-export-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .ihub-export-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--White);
+    border: var(--borderDefault);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .ihub-export-button:hover {
+    background-color: var(--Magnolia);
+  }
+  
+  .ihub-export-csv {
+    color: var(--DarkCyan);
+  }
+  
+  .ihub-export-excel {
+    color: #217346; /* Excel green */
+  }
+  
+  .ihub-export-pdf {
+    color: #f40f02; /* PDF red */
+  }
+  
+  /* Table context menu */
+  .ihub-context-menu {
+    position: fixed;
+    z-index: 1000;
+    background-color: var(--White);
+    border: var(--borderDefault);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    min-width: 160px;
+  }
+  
+  .ihub-context-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .ihub-context-menu-item:hover {
+    background-color: var(--Magnolia);
+  }
+  
+  .ihub-context-menu-separator {
+    height: 1px;
+    background-color: var(--ChineseSilver);
+    margin: 4px 0;
+  }
+  
+  /* Expanded row details */
+  .ihub-expanded-row {
+    background-color: var(--Magnolia);
+    border-top: 1px solid var(--ChineseSilver);
+  }
+  
+  .ihub-row-details {
+    padding: 16px;
+  }
+  
+  .ihub-row-detail-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .ihub-row-detail-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  
+  .ihub-detail-item {
+    margin-bottom: 8px;
+  }
+  
+  .ihub-detail-label {
+    font-size: 0.8rem;
+    color: var(--ChineseSilver);
+    margin-bottom: 4px;
+  }
+  
+  .ihub-detail-value {
+    font-weight: 500;
+  }

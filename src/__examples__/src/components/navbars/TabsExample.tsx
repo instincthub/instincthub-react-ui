@@ -49,9 +49,9 @@ export default function TabsExample() {
       <Link
         rel="noreferrer noopener"
         target="_blank"
-        href="https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/tabs"
+        href="https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/navbars/TabsExample.tsx"
       >
-        <button>View codebase</button>
+        <button className="ihub-outlined-btn">View codebase</button>
       </Link>
     </div>
   );

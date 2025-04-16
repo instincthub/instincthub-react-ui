@@ -61,6 +61,7 @@ export { default as CustomTextEditor } from "./components/ui/editor/CustomTextEd
 export { default as ContentViewer } from "./components/ui/viewer/ContentViewer";
 export { default as ContentViewOrEdit } from "./components/ui/viewer/ContentViewOrEdit";
 export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";
+export { default as IHubTable } from "./components/ui/tables/IHubTable";
 
 // Theme components
 export { default as ChangeStyleVariable } from "./components/theme/ChangeStyleVariable";
