@@ -88,64 +88,11 @@
   margin-top: 25px;
 }
 
-.ihub-password-wrapper span {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  transition: all 0.3s ease;
-  pointer-events: none;
-  font-size: 1rem;
-  color: var(--Gunmetal);
-}
-
-.ihub-password-wrapper input {
-  border: var(--borderDefault);
-}
-
-/* Chrome, Safari, Edge, Opera */
-.ihub-password-wrapper input::-webkit-outer-spin-button,
-.ihub-password-wrapper input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-.ihub-password-wrapper input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.ihub-password-wrapper input:disabled {
-  background: #f4f4f4;
-}
-
-.ihub-password-wrapper .focused,
-.ihub-password-wrapper.value span {
-  background: var(--White);
-  top: -10px;
-  height: 20px;
-  padding: 5px;
-  margin: 0;
-  color: var(--DarkCyan);
-  font-size: 14px;
-  pointer-events: initial;
-  left: 15px;
-  line-height: 10px;
-  width: auto;
-}
-
-.ihub-password-wrapper input.width_auto {
-  width: auto;
-}
-
-.ihub-password-wrapper .input_icon {
-  position: relative;
-}
-
 .ihub-password-wrapper .input_icon .material-symbols-outlined,
 .ihub-password-wrapper .input_icon .symbols {
   position: absolute;
-  right: 5%;
-  top: 10%;
+  right: 3%;
+  top: 23%;
   cursor: pointer;
   z-index: 10;
   width: auto;

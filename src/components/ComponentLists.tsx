@@ -277,6 +277,18 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/PasswordsMatch.tsx",
     },
+    {
+      name: "FromInstinctHub",
+      description: "From InstinctHub component",
+      category: "Auth",
+      repo_path: "src/components/auth/FromInstinctHub.tsx",
+    },
+    {
+      name: "LoginForm",
+      description: "Login form component",
+      category: "Auth",
+      repo_path: "src/components/auth/LoginForm.tsx",
+    },
 
     // Navbar
     {
@@ -334,6 +346,12 @@ const ComponentLists = () => {
       description: "InstinctHub server table component",
       category: "UI",
       repo_path: "src/components/ui/tables/IHubTableServer.tsx",
+    },
+    {
+      name: "OrDivider",
+      description: "Or divider component",
+      category: "UI",
+      repo_path: "src/components/ui/OrDivider.tsx",
     },
 
     // Theme

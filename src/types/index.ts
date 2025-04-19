@@ -100,6 +100,11 @@ export type SearchParamsType = {
   [key: string]: string;
 };
 
+export interface SearchParamsPageProps {
+  params: SearchParamsType;
+  searchParams: SearchParamsType;
+}
+
 /**
  * Response interface for S3 uploads
  */

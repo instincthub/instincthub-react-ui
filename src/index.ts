@@ -19,6 +19,8 @@ export { default as PageLoading } from "./components/forms/PageLoading";
 export { default as IsUsernameEmailTaken } from "./components/auth/IsUsernameEmailTaken";
 export { default as ClientDetector } from "./components/auth/ClientDetector";
 export { default as PasswordsMatch } from "./components/auth/PasswordsMatch";
+export { default as FromInstinctHub } from "./components/auth/FromInstinctHub";
+export { default as LoginForm } from "./components/auth/LoginForm";
 
 // Correcting incorrect assignments
 export { default as PhoneNumberInput } from "./components/forms/PhoneNumberInput";
@@ -63,6 +65,7 @@ export { default as ContentViewOrEdit } from "./components/ui/viewer/ContentView
 export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";
 export { default as IHubTable } from "./components/ui/tables/IHubTable";
 export { default as IHubTableServer } from "./components/ui/tables/IHubTableServer";
+export { default as OrDivider } from "./components/ui/OrDivider";
 
 // Theme components
 export { default as ChangeStyleVariable } from "./components/theme/ChangeStyleVariable";

@@ -30,7 +30,7 @@ interface PasswordFieldProps {
  *   label={["Password"]}
  *   note={["Enter your password"]}
  *   required={true}
- *   defaultValue={""}
+ *   value={""}
  *   setValue={(value) => {
  *     console.log(value);
  *   }}
@@ -45,7 +45,7 @@ interface PasswordFieldProps {
  * @property {string} label - Label for the input field
  * @property {string} note - Note for the input field
  * @property {boolean} required - Whether the field is required
- * @property {string} defaultValue - Default value for the input field
+ * @property {string} value - Default value for the input field
  * @property {(value: string) => void} setValue - Callback for setting values
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChange - Callback for input events
  */
@@ -55,7 +55,7 @@ export default function PasswordField({
   label,
   note,
   required = false,
-  defaultValue = "",
+  value = "",
   setValue,
   onChange,
   setNameValue,
@@ -63,59 +63,65 @@ export default function PasswordField({
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [focused, setFocused] = useState(false);
+  const [hasValue, setHasValue] = useState(false);
+
+  useEffect(() => {
+    if (value !== password) {
+      setPassword(value);
+    }
+    setHasValue(!!value);
+  }, [value]);
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === defaultValue) return;
-    setPassword(value);
+    const inputValue = e.target.value;
 
-    const parentDiv = e.target.parentElement?.parentElement;
-    if (value) {
-      parentDiv?.classList.add("value");
-      if (setValue) setValue(value);
+    // If the input value is the same as the password, return
+    if (value === inputValue) return;
+
+    // Set the password and the hasValue state
+    setPassword(inputValue);
+    setHasValue(!!inputValue);
+
+    // If the input value is not empty, set the value, call the onChange event, and set the name value
+    if (inputValue) {
+      if (setValue) setValue(inputValue);
       if (onChange) onChange(e);
-      if (setNameValue) setNameValue(name, value);
-    } else {
-      parentDiv?.classList.remove("value");
+      if (setNameValue) setNameValue(name, inputValue);
     }
   };
 
-  useEffect(() => {
-    setPassword(defaultValue);
-  }, [defaultValue]);
-
   return (
-    <div className={name}>
-      <div className="field">
-        <div className="ihub-password-wrapper">
-          <div className="input_icon">
-            <input
-              type={showPassword ? "text" : "password"}
-              id={id || "password"}
-              name={name}
-              required={required}
-              value={password}
-              onChange={handlePasswordChange}
-              onFocus={() => setFocused(true)}
-              onMouseOut={() => setFocused(false)}
-            />
+    <div
+      className={`field ihub-wrapper ${hasValue ? "ihub-value" : ""} ${name}`}
+    >
+      <div className="ihub-password-wrapper">
+        <div className="input_icon">
+          <input
+            type={showPassword ? "text" : "password"}
+            id={id || "password"}
+            name={name}
+            required={required}
+            value={password}
+            onChange={handlePasswordChange}
+            onFocus={() => setFocused(true)}
+            onMouseOut={() => setFocused(false)}
+            className="ihub-input"
+          />
 
-            <div onClick={handleShowPassword} className="symbols ihub-d-inline">
-              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-            </div>
-          </div>
-          <span
-            className={`text_label ${focused || password ? "focused" : ""}`}
-          >
+          <label htmlFor={name} className="ihub-text-label">
             {label}
-          </span>
+            {required && <span className="ihub-required">*</span>}
+          </label>
+          <div onClick={handleShowPassword} className="symbols ihub-d-inline">
+            {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+          </div>
         </div>
-        {note && <p className="ihub-input-notes">{note}</p>}
       </div>
+      {note && <p className="ihub-input-notes">{note}</p>}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Tabs from "@/components/ui/Tabs";
+import { Tabs } from "../../../../index";
 
 const TabsExample: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");

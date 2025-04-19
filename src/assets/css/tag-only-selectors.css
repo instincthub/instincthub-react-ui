@@ -76,6 +76,12 @@ input {
   outline: 0;
   background-color: var(--White);
 }
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: var(--OpacityBackground) !important;
+  color: var(--Gunmetal) !important;
+}
 a {
   color: unset;
 }

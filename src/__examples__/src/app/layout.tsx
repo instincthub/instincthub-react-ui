@@ -4,7 +4,7 @@ import "../assets/styles/header.css";
 import MainNavigation from "../components/navbars/MainNavigation";
 import MainFooter from "../components/navbars/MainFooter";
 import CursorProviders from "../components/navbars/CursorProviders";
-
+import ReactClientProviders from "../components/auths/ReactClientProviders";
 export const metadata = {
   title: "InstinctHub React UI",
   description: "A modern React UI component library by InstinctHub",
@@ -12,8 +12,10 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  session,
+}: Readonly<{ 
   children: React.ReactNode;
+  session: any;
 }>) {
   return (
     <CursorProviders>
@@ -29,9 +31,11 @@ export default function RootLayout({
           />
         </head>
         <body>
-          <MainNavigation />
-          {children}
-          <MainFooter />
+          <ReactClientProviders session={session}>
+            <MainNavigation />
+            {children}
+            <MainFooter />
+          </ReactClientProviders>
         </body>
       </html>
     </CursorProviders>
