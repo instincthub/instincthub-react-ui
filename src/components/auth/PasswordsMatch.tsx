@@ -41,20 +41,22 @@ export default function PasswordsMatch(): JSX.Element {
   return (
     <div>
       <PasswordField
-        labels="Password *"
-        names="password"
-        requireds={true}
-        inputEvent={validatePassword}
-        ids="password"
-        notes={password}
+        label="Password *"
+        name="password"
+        required={true}
+        onChange={validatePassword}
+        id="password"
+        error={password}
+        helperText="Password must be above 8 characters"
       />
       <PasswordField
-        labels="Confirm Password *"
-        names="password2"
-        requireds={true}
-        inputEvent={validatePassword}
-        ids="password1"
-        notes={password2}
+        label="Confirm Password *"
+        name="password2"
+        required={true}
+        onChange={validatePassword}
+        id="password2"
+        error={password2}
+        helperText="Passwords must match"
       />
     </div>
   );

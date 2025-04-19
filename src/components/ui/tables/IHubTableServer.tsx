@@ -724,7 +724,7 @@ export function IHubTableServer<T extends object>({
               { length: Math.min(5, pagination.totalPages) },
               (_, i) => {
                 // Show pages around current page
-                let pageNum;
+                let pageNum: number;
                 if (pagination.totalPages <= 5) {
                   pageNum = i + 1;
                 } else if (pagination.currentPage <= 3) {
@@ -744,7 +744,7 @@ export function IHubTableServer<T extends object>({
                     className={`ihub-pagination-button ${
                       pagination.currentPage === pageNum ? "ihub-active" : ""
                     }`}
-                    onClick={() => handlePageChange(pageNum)}
+                    onClick={() => handlePageChange(Number(pageNum))}
                     disabled={loading}
                   >
                     {pageNum}

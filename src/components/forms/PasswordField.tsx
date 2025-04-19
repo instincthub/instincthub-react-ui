@@ -15,6 +15,9 @@ interface PasswordFieldProps {
   setValue?: (value: string) => void; // Optional callback for value changes
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null; // Optional input event handler
   setNameValue?: (name: string, value: string) => void | null; // Optional input event handler
+  error?: string | null; // Optional error message
+  className?: string | null; // Optional class name
+  helperText?: string | null; // Optional helper text
 }
 
 /**
@@ -31,6 +34,8 @@ interface PasswordFieldProps {
  *   note={["Enter your password"]}
  *   required={true}
  *   value={""}
+ *   error={""}
+ *   className={""}
  *   setValue={(value) => {
  *     console.log(value);
  *   }}
@@ -59,6 +64,9 @@ export default function PasswordField({
   setValue,
   onChange,
   setNameValue,
+  error,
+  className,
+  helperText,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -79,9 +87,6 @@ export default function PasswordField({
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
 
-    // If the input value is the same as the password, return
-    if (value === inputValue) return;
-
     // Set the password and the hasValue state
     setPassword(inputValue);
     setHasValue(!!inputValue);
@@ -96,7 +101,9 @@ export default function PasswordField({
 
   return (
     <div
-      className={`field ihub-wrapper ${hasValue ? "ihub-value" : ""} ${name}`}
+      className={`ihub-wrapper ihub-mb-4 ${hasValue ? "ihub-value" : ""} ${
+        error ? "ihub-is_invalid" : ""
+      } ${className}`}
     >
       <div className="ihub-password-wrapper">
         <div className="input_icon">
@@ -121,7 +128,15 @@ export default function PasswordField({
           </div>
         </div>
       </div>
-      {note && <p className="ihub-input-notes">{note}</p>}
+      {helperText && !error && <p className="ihub-notes">{helperText}</p>}
+
+      {error && <p className="ihub-notes ihub-is_invalid">{error}</p>}
+
+      {note && (
+        <p className="ihub-input-notes" id={`${id}-note`}>
+          {note}
+        </p>
+      )}
     </div>
   );
 }

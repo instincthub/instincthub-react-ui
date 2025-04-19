@@ -92,6 +92,9 @@ const LoginForm = ({
   const { data: session } = useSession();
   const user = session?.user as SessionUserType;
   const handle = user?.name?.channels?.active?.channel?.username;
+  const token = user?.name?.token;
+  const uuid = user?.name?.uuid;
+  const email = user?.name?.email;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -143,30 +146,34 @@ const LoginForm = ({
   };
 
   const handleValidate = async () => {
+    if (!token || !uuid) {
+      return;
+    }
+
     const cookiesCallbackUrl = getCookie("callbackUrl");
 
     // Only redirect if the user details are valid.
     const funcParams = {
-      path: `auth/skills/validate-user-token/?access_token=${user?.name?.token}&user_uuid=${user?.name?.uuid}`,
-      token: user?.name?.token,
+      path: `auth/skills/validate-user-token/?access_token=${token}&user_uuid=${uuid}`,
+      token: token,
     };
     const res = await getData(funcParams);
 
     if (res?.detail === "Unauthorized" || res?.detail === "Not found.") {
       openToast("Couldn't login. Please try again.", 400);
       return; // Don't do anything if not valid.
-    } else if (user && !user.verified) {
+    } else if (user && !user?.name?.verified) {
       const msg =
         "You need to verify your email address, click okay to request for a one time password (OTP).";
-      const verifyPath = `${verificationPath || "/auth/verify-email"}?email=${
-        user.email
-      }`;
+      const verifyPath = `${
+        verificationPath || "/auth/verify-email"
+      }?email=${email}`;
 
       // If user not verified, open confirm modal to request for OTP.
       // And redirect to verify email page.
       openConfirmModal(msg).then((res: boolean) => {
-        if (res && user.email) {
-          handleResendOTP(user.email);
+        if (res && email) {
+          handleResendOTP(email);
           router.push(verifyPath);
         } else {
           signOut();
@@ -211,10 +218,10 @@ const LoginForm = ({
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (token && uuid) {
       handleValidate();
     }
-  }, [user]);
+  }, [token, uuid]);
 
   return (
     <form onSubmit={handleSubmit} className="ihub-max-w-500 ihub-mx-auto">
