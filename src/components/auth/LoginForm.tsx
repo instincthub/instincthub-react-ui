@@ -91,7 +91,7 @@ const LoginForm = ({
 
   const { data: session } = useSession();
   const user = session?.user as SessionUserType;
-  const handle = user?.channels?.active?.channel?.username;
+  const handle = user?.name?.channels?.active?.channel?.username;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -147,8 +147,8 @@ const LoginForm = ({
 
     // Only redirect if the user details are valid.
     const funcParams = {
-      path: `auth/skills/validate-user-token/?access_token=${user?.token}&user_uuid=${user?.uuid}`,
-      token: user?.token,
+      path: `auth/skills/validate-user-token/?access_token=${user?.name?.token}&user_uuid=${user?.name?.uuid}`,
+      token: user?.name?.token,
     };
     const res = await getData(funcParams);
 
@@ -217,7 +217,7 @@ const LoginForm = ({
   }, [user]);
 
   return (
-    <form onSubmit={handleSubmit} className="ihub-max-w-600 ihub-mx-auto">
+    <form onSubmit={handleSubmit} className="ihub-max-w-500 ihub-mx-auto">
       <h1 className="ihub-fs-32">Login Form</h1>
       {error && (
         <p className="err">
