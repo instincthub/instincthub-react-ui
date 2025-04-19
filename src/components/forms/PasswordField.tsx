@@ -11,14 +11,14 @@ interface PasswordFieldProps {
   label: string; // Label text
   note?: string | null; // Optional validation message
   required?: boolean; // Optional required flag
-  defaultValue?: string; // Optional default value
+  value?: string; // Optional default value
   setValue?: (value: string) => void; // Optional callback for value changes
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null; // Optional input event handler
   setNameValue?: (name: string, value: string) => void | null; // Optional input event handler
 }
 
 /**
- *
+ * PasswordField component
  * @component
  * @example
  * ```jsx

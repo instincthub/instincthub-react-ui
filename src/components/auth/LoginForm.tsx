@@ -47,6 +47,35 @@ interface LoginResponse {
   [key: string]: any; // For additional properties
 }
 
+/**
+ * LoginForm component
+ * @example
+ * ```tsx
+ * <LoginForm
+ *   params={{
+ *     error: "Invalid username or password",
+ *     callbackUrl: "/dashboard",
+ *   }}
+ *   searchParams={{
+ *     error: "Invalid username or password",
+ *     callbackUrl: "/dashboard",
+ *   }}
+ *   endpointPath="/api/auth/login"
+ *   verificationPath="/auth/verify-email"
+ *   redirectPath="/dashboard"
+ *   type="skills"
+ * />
+ * ```
+ * @param {LoginFormProps} props - The props for the LoginForm component
+ * @property {SearchParamsType} params - The params for the LoginForm component
+ * @property {SearchParamsType} searchParams - The searchParams for the LoginForm component
+ * @property {string} endpointPath - The endpoint path for the LoginForm component
+ * @property {string} verificationPath - The verification path for the LoginForm component
+ * @property {string} redirectPath - The redirect path for the LoginForm component
+ * @property {string} type - The type for the LoginForm component | sis, skills, lms, crm, ecommerce, inventory, hr.
+ *
+ * @returns {React.ReactElement} The LoginForm component
+ */
 const LoginForm = ({
   params,
   searchParams,
@@ -168,6 +197,8 @@ const LoginForm = ({
           }
         });
       }
+    } else if (user && redirectPath) {
+      router.push(`${redirectPath}`);
     } else if (user) {
       router.push(`/`);
     }
@@ -187,7 +218,7 @@ const LoginForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="ihub-max-w-600 ihub-mx-auto">
-      <h1>Login Form</h1>
+      <h1 className="ihub-fs-32">Login Form</h1>
       {error && (
         <p className="err">
           Sign in failed. Check the details you provided are correct.

@@ -11,7 +11,14 @@ const LoginExample: React.FC<SearchParamsPageProps> = ({
 }) => {
   return (
     <section className="ihub-container">
-      <LoginForm params={params} searchParams={searchParams} />
+      <LoginForm
+        params={params}
+        searchParams={searchParams}
+        endpointPath="/api/auth/login"
+        verificationPath="/auth/verify-email"
+        redirectPath="/dashboard"
+        type="skills"
+      />
 
       <Link
         rel="noreferrer noopener"
