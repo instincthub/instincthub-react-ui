@@ -1,5 +1,5 @@
-import { SearchParamsPageProps } from "../../../../../../types";
-import LoginExample from "../../../../components/auths/LoginExample";
+import { SearchParamsPageProps } from "../../../../../types";
+import LoginExample from "../../../components/auths/LoginExample";
 
 export default async function LoginFormPage({
   params,

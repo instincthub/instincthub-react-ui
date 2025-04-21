@@ -309,6 +309,18 @@ const ComponentLists = () => {
       category: "Navbar",
       repo_path: "src/components/navbar/Breadcrumb.tsx",
     },
+    {
+      name: "ResponsiveNavbar",
+      description: "Responsive navbar component",
+      category: "Navbar",
+      repo_path: "src/components/navbar/ResponsiveNavbar.tsx",
+    },
+    {
+      name: "SideNavbar",
+      description: "Side navbar component",
+      category: "Navbar",
+      repo_path: "src/components/navbar/SideNavbar.tsx",
+    },
 
     // UI
     {
@@ -353,6 +365,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/OrDivider.tsx",
     },
+
 
     // Theme
     {

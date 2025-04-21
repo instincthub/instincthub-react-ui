@@ -75,6 +75,33 @@ Maximum width utilities constrain an element's width to a maximum value.
 | `.ihub-max-w-full` | Sets max-width to 100%       |
 | `.ihub-max-w-none` | Removes max-width constraint |
 
+### Minimum Widths
+
+Minimum width utilities set a minimum width for an element.
+
+| Class                | Description              |
+| -------------------- | ------------------------ |
+| `.ihub-min-w-0`      | Sets min-width to 0     |
+| `.ihub-min-w-100`    | Sets min-width to 100px |
+| `.ihub-min-w-200`    | Sets min-width to 200px |
+| `.ihub-min-w-300`    | Sets min-width to 300px |
+| `.ihub-min-w-400`    | Sets min-width to 400px |
+| `.ihub-min-w-500`    | Sets min-width to 500px |
+| `.ihub-min-w-600`    | Sets min-width to 600px |
+| `.ihub-min-w-700`    | Sets min-width to 700px |
+| `.ihub-min-w-800`    | Sets min-width to 800px |
+| `.ihub-min-w-900`    | Sets min-width to 900px |
+| `.ihub-min-w-1000`   | Sets min-width to 1000px|
+| `.ihub-min-w-1100`   | Sets min-width to 1100px |
+| `.ihub-min-w-1200`   | Sets min-width to 1200px |
+| `.ihub-min-w-1300`   | Sets min-width to 1300px |
+| `.ihub-min-w-1400`   | Sets min-width to 1400px |
+| `.ihub-min-w-1500`   | Sets min-width to 1500px |
+| `.ihub-min-w-full`   | Sets min-width to 100%  |
+| `.ihub-min-w-screen` | Sets min-width to 100vh |
+
+
+
 ## Height Utilities
 
 Height utilities control the vertical space an element occupies.
@@ -144,8 +171,19 @@ Minimum height utilities set a minimum height for an element.
 | `.ihub-min-h-300`    | Sets min-height to 300px |
 | `.ihub-min-h-400`    | Sets min-height to 400px |
 | `.ihub-min-h-500`    | Sets min-height to 500px |
+| `.ihub-min-h-600`    | Sets min-height to 600px |
+| `.ihub-min-h-700`    | Sets min-height to 700px |
+| `.ihub-min-h-800`    | Sets min-height to 800px |
+| `.ihub-min-h-900`    | Sets min-height to 900px |
+| `.ihub-min-h-1000`   | Sets min-height to 1000px|
+| `.ihub-min-h-1100`   | Sets min-height to 1100px |
+| `.ihub-min-h-1200`   | Sets min-height to 1200px |
+| `.ihub-min-h-1300`   | Sets min-height to 1300px |
+| `.ihub-min-h-1400`   | Sets min-height to 1400px |
+| `.ihub-min-h-1500`   | Sets min-height to 1500px |
 | `.ihub-min-h-full`   | Sets min-height to 100%  |
 | `.ihub-min-h-screen` | Sets min-height to 100vh |
+
 
 ## Padding Utilities
 

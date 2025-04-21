@@ -539,3 +539,60 @@ export const APPLICATION_FEE_TYPE_OPTIONS: ApplicationFeeOption[] = [
   { id: "ACCEPTANCE_FEE", title: "Acceptance Fee" },
   { id: "SCHOOL_FEE", title: "School Fee" },
 ];
+
+/**
+ * NextAuth session data dummy for testing and development
+ */
+export interface NextAuthSessionData {
+  user: {
+    id: string;
+    name: any;
+    email: string;
+    image?: string;
+    role?: string;
+    permissions?: string[];
+  };
+  expires: string;
+  accessToken?: string;
+  refreshToken?: string;
+}
+
+export const NEXT_AUTH_SESSION_DATA_DUMMY: NextAuthSessionData = {
+  user: {
+    id: "user-123",
+    name: {
+      full_name: "John Doe",
+      first_name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
+      picture: "/public/globe.svg",
+      role: "ADMIN",
+      permissions: ["LEARNER", "BLOGGER", "INSTRUCTOR", "ADMIN"],
+      category: "Instructor",
+      phone: "+2347000000000",
+      country: "Nigeria",
+      state: "Lagos",
+      city: "Lagos",
+      address: "123 Main St, Lagos",
+      zip_code: "12345",
+      created_at: "2021-01-01",
+      updated_at: "2021-01-01",
+      is_active: true,
+      is_verified: true,
+      is_email_verified: true,
+      is_phone_verified: true,
+      is_address_verified: true,
+      is_city_verified: true,
+      is_state_verified: true,
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1OTYzODQwLCJpYXQiOjE3NDUwOTk4NDAsImp0aSI6IjczNmEyZmI1MjI2MzRmZDQ5ZjVjOGVjY2M2NWMwZTk5IiwidXNlcl9pZCI6MX0.PFOvGYlhn2XHrEz2VM6oacpFEUtdhdrit54tKfnKDYQ",
+    },
+    email: "john.doe@example.com",
+    image: "https://via.placeholder.com/150",
+    role: "ADMIN",
+    permissions: ["LEARNER", "BLOGGER", "INSTRUCTOR", "ADMIN"],
+  },
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours from now
+  accessToken: "dummy-access-token-12345",
+  refreshToken: "dummy-refresh-token-67890",
+};

@@ -240,3 +240,46 @@ export interface DataResponseType {
   id: string;
   [key: string]: any;
 }
+
+// Navbar Types
+
+export interface SubMenuItemType {
+  title: string;
+  href: string;
+  isExternal?: boolean;
+  icon?: string | React.ReactNode;
+}
+
+export interface NavLinkType {
+  title: string;
+  href: string;
+  isExternal?: boolean;
+  highlight?: boolean;
+  submenu?: SubMenuItemType[];
+}
+
+export interface UserSubMenuItemType {
+  title: string;
+  href: string;
+  isExternal?: boolean;
+  icon?: string | React.ReactNode;
+}
+
+export interface UserAreaLinkType {
+  title: string;
+  href: string;
+  icon?: string | React.ReactNode;
+  isButton?: boolean;
+  buttonStyle?: "primary" | "outline";
+  submenu?: UserSubMenuItemType[];
+}
+
+export interface NavbarPropsType {
+  session: SessionType | null;
+  logoSrc: string;
+  logoAlt?: string;
+  navLinks: NavLinkType[];
+  userAreaLinks?: UserAreaLinkType[];
+  theme?: "LightMode" | "DarkMode";
+  containerClass?: string;
+}

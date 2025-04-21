@@ -1,0 +1,548 @@
+/* Add these styles to your CSS file (e.g., input-fields.css) */
+
+/* Navbar base styles */
+.ihub-navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* padding: 0px; */
+  background-color: var(--White);
+  box-shadow: var(--lightShadow);
+  z-index: var(--z-overlay);
+  transition: all 0.3s ease;
+}
+
+.ihub-navbar-scrolled {
+  box-shadow: var(--shadow);
+}
+
+.ihub-navbar-dark {
+  background-color: var(--White);
+}
+
+.ihub-navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* Logo styles */
+.ihub-navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.DarkMode .ihub-logo-image {
+  filter: brightness(0) invert(1);
+}
+
+/* Navigation element container */
+.ihub-navbar-elements {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 40px;
+}
+
+/* Navigation links */
+.ihub-nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.ihub-nav-item {
+  margin: 0 15px;
+  position: relative;
+}
+
+.ihub-nav-item a {
+  font-family: var(--Nunito);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--Gunmetal);
+  text-decoration: none;
+  padding: 5px 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ihub-nav-item a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--Main-Gradient);
+  transition: width 0.3s ease;
+}
+
+.ihub-nav-item a:hover {
+  color: var(--DarkCyan);
+}
+
+.ihub-nav-item a:hover::before {
+  width: 100%;
+}
+
+.ihub-nav-highlight {
+  font-weight: 600 !important;
+  color: var(--DarkCyan) !important;
+}
+
+/* User area */
+.ihub-navbar-user-area {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.ihub-user-dropdown {
+  position: relative;
+}
+
+.ihub-user-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.ihub-user-profile:hover {
+  background: var(--OpacityBackground);
+}
+
+.ihub-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ihub-user-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--DarkCyan);
+  color: var(--White);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.ihub-user-name {
+  margin-left: 10px;
+  font-weight: 600;
+  font-family: var(--Nunito);
+}
+
+/* Navigation submenu styles */
+.ihub-has-submenu {
+  position: relative;
+}
+
+.ihub-dropdown-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 6px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid currentColor;
+  transition: transform 0.2s ease;
+  vertical-align: middle;
+}
+
+.ihub-submenu-active .ihub-dropdown-arrow,
+.ihub-submenu-caret.ihub-active {
+  transform: rotate(180deg);
+}
+
+.ihub-submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ihub-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background-color: var(--White);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: var(--z-popup);
+  padding: 5px 0;
+  opacity: 1;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.ihub-submenu-item {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.ihub-submenu-item a {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: var(--Gunmetal) !important;
+  text-decoration: none;
+  font-weight: 400 !important;
+  transition: background-color 0.2s ease;
+  font-family: var(--Nunito);
+  font-size: 0.9rem;
+}
+
+.ihub-submenu-item a:hover {
+  background-color: var(--Gray);
+}
+
+.ihub-submenu-item a::before {
+  display: none;
+}
+
+.ihub-submenu-icon {
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User dropdown menu */
+.ihub-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: var(--White);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 220px;
+  overflow: visible;
+  z-index: var(--z-popup);
+  padding: 5px 0;
+}
+
+.ihub-dropdown-item-wrapper {
+  position: relative;
+}
+
+.ihub-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: var(--Gunmetal);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  font-family: var(--Nunito);
+}
+
+.ihub-dropdown-parent {
+  cursor: pointer;
+}
+
+.ihub-dropdown-with-submenu {
+  position: relative;
+}
+
+.ihub-submenu-caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: auto;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid currentColor;
+  transition: transform 0.2s ease;
+}
+
+.ihub-user-submenu {
+  border-radius: 8px;
+  background-color: var(--White);
+  box-shadow: var(--shadow);
+  padding: 5px 0;
+  z-index: calc(var(--z-popup) + 1);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ihub-dropdown-subitem {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px 10px 30px;
+  color: var(--Gunmetal);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  font-family: var(--Nunito);
+  font-size: 0.9rem;
+}
+
+.ihub-dropdown-item:hover,
+.ihub-dropdown-subitem:hover {
+  background-color: var(--Gray);
+}
+
+.ihub-dropdown-icon {
+  margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  text-align: center;
+}
+
+.ihub-signout {
+  border-top: var(--borderDefault);
+  color: var(--Danger);
+}
+
+/* Auth buttons */
+.ihub-auth-buttons {
+  display: flex;
+  align-items: center;
+}
+.ihub-auth-buttons .ihub-important-btn {
+  margin: 0px;
+}
+
+.ihub-auth-link {
+  margin-right: 15px;
+  font-weight: 600;
+  color: var(--Gunmetal);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.ihub-auth-link:hover {
+  color: var(--DarkCyan);
+}
+
+.ihub-btn {
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-family: var(--Montserat);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+/* Hamburger menu */
+.ihub-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+  z-index: var(--z-navigation);
+}
+
+.ihub-hamburger-line {
+  width: 100%;
+  height: 2px;
+  background-color: var(--Gunmetal);
+  transition: all 0.3s ease;
+}
+
+.ihub-navbar-dark .ihub-hamburger-line {
+  background-color: var(--Gunmetal);
+}
+
+.ihub-hamburger-line.ihub-active:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.ihub-hamburger-line.ihub-active:nth-child(2) {
+  opacity: 0;
+}
+
+.ihub-hamburger-line.ihub-active:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .ihub-nav-item {
+    margin: 0 10px;
+  }
+
+  .ihub-auth-buttons .ihub-btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ihub-hamburger {
+    display: flex;
+  }
+
+  .ihub-navbar-elements {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-left: 0;
+    z-index: var(--z-navigation);
+    transform: translateY(-100vh);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px);
+  }
+
+  .ihub-navbar-dark .ihub-navbar-elements {
+    background-color: var(--White);
+  }
+
+  .ihub-navbar-elements.ihub-active {
+    transform: translateY(0);
+  }
+
+  .ihub-nav-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ihub-nav-item {
+    margin: 10px 0;
+    width: 100%;
+    text-align: left;
+  }
+
+  .ihub-nav-item a {
+    display: block;
+    padding: 10px 0;
+  }
+
+  /* Mobile submenu styles */
+  .ihub-submenu {
+    position: relative;
+    width: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    margin-top: 5px;
+    padding: 5px 0;
+  }
+
+  .ihub-submenu-item a {
+    padding-left: 30px;
+  }
+
+  .ihub-submenu-toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ihub-navbar-user-area {
+    margin-top: 20px;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .ihub-user-dropdown {
+    width: 100%;
+  }
+
+  .ihub-user-profile {
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .ihub-dropdown {
+    position: relative;
+    top: 10px;
+    width: 100%;
+    box-shadow: none;
+    border: var(--borderDefault);
+  }
+
+  /* Mobile user submenu styles */
+  .ihub-user-submenu {
+    position: relative;
+    width: 100%;
+    box-shadow: none;
+    border-top: var(--borderDefault);
+    border-bottom: var(--borderDefault);
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 0;
+    margin: 5px 0;
+  }
+
+  .ihub-dropdown-subitem {
+    padding-left: 45px;
+  }
+
+  .ihub-auth-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ihub-auth-link {
+    margin-right: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    display: block;
+  }
+
+  .ihub-auth-buttons .ihub-btn {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .ihub-hide-sm {
+    display: none;
+  }
+}
+
+/* Animation for navbar appearance */
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    visibility: visible;
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.ihub-navbar-scrolled {
+  animation: slideInDown 0.5s ease-in-out;
+}

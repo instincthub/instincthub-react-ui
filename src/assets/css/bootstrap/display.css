@@ -1,0 +1,312 @@
+/* 
+  InstinctHub Display Utility Classes
+  Prefix: ihub-
+  Based on Bootstrap's display utility system
+*/
+
+/* Display Values */
+.ihub-d-none {
+  display: none !important;
+}
+.ihub-d-inline {
+  display: inline !important;
+}
+.ihub-d-inline-block {
+  display: inline-block !important;
+}
+.ihub-d-block {
+  display: block !important;
+}
+.ihub-d-table {
+  display: table !important;
+}
+.ihub-d-table-row {
+  display: table-row !important;
+}
+.ihub-d-table-cell {
+  display: table-cell !important;
+}
+.ihub-d-flex {
+  display: flex !important;
+}
+.ihub-d-inline-flex {
+  display: inline-flex !important;
+}
+.ihub-d-grid {
+  display: grid !important;
+}
+.ihub-d-inline-grid {
+  display: inline-grid !important;
+}
+
+/* Responsive display classes */
+/* Small devices (sm) */
+@media (min-width: 576px) {
+  .ihub-d-sm-none {
+    display: none !important;
+  }
+  .ihub-d-sm-inline {
+    display: inline !important;
+  }
+  .ihub-d-sm-inline-block {
+    display: inline-block !important;
+  }
+  .ihub-d-sm-block {
+    display: block !important;
+  }
+  .ihub-d-sm-table {
+    display: table !important;
+  }
+  .ihub-d-sm-table-row {
+    display: table-row !important;
+  }
+  .ihub-d-sm-table-cell {
+    display: table-cell !important;
+  }
+  .ihub-d-sm-flex {
+    display: flex !important;
+  }
+  .ihub-d-sm-inline-flex {
+    display: inline-flex !important;
+  }
+  .ihub-d-sm-grid {
+    display: grid !important;
+  }
+  .ihub-d-sm-inline-grid {
+    display: inline-grid !important;
+  }
+}
+
+/* Medium devices (md) */
+@media (min-width: 768px) {
+  .ihub-d-md-none {
+    display: none !important;
+  }
+  .ihub-d-md-inline {
+    display: inline !important;
+  }
+  .ihub-d-md-inline-block {
+    display: inline-block !important;
+  }
+  .ihub-d-md-block {
+    display: block !important;
+  }
+  .ihub-d-md-table {
+    display: table !important;
+  }
+  .ihub-d-md-table-row {
+    display: table-row !important;
+  }
+  .ihub-d-md-table-cell {
+    display: table-cell !important;
+  }
+  .ihub-d-md-flex {
+    display: flex !important;
+  }
+  .ihub-d-md-inline-flex {
+    display: inline-flex !important;
+  }
+  .ihub-d-md-grid {
+    display: grid !important;
+  }
+  .ihub-d-md-inline-grid {
+    display: inline-grid !important;
+  }
+}
+
+/* Large devices (lg) */
+@media (min-width: 992px) {
+  .ihub-d-lg-none {
+    display: none !important;
+  }
+  .ihub-d-lg-inline {
+    display: inline !important;
+  }
+  .ihub-d-lg-inline-block {
+    display: inline-block !important;
+  }
+  .ihub-d-lg-block {
+    display: block !important;
+  }
+  .ihub-d-lg-table {
+    display: table !important;
+  }
+  .ihub-d-lg-table-row {
+    display: table-row !important;
+  }
+  .ihub-d-lg-table-cell {
+    display: table-cell !important;
+  }
+  .ihub-d-lg-flex {
+    display: flex !important;
+  }
+  .ihub-d-lg-inline-flex {
+    display: inline-flex !important;
+  }
+  .ihub-d-lg-grid {
+    display: grid !important;
+  }
+  .ihub-d-lg-inline-grid {
+    display: inline-grid !important;
+  }
+}
+
+/* Extra large devices (xl) */
+@media (min-width: 1200px) {
+  .ihub-d-xl-none {
+    display: none !important;
+  }
+  .ihub-d-xl-inline {
+    display: inline !important;
+  }
+  .ihub-d-xl-inline-block {
+    display: inline-block !important;
+  }
+  .ihub-d-xl-block {
+    display: block !important;
+  }
+  .ihub-d-xl-table {
+    display: table !important;
+  }
+  .ihub-d-xl-table-row {
+    display: table-row !important;
+  }
+  .ihub-d-xl-table-cell {
+    display: table-cell !important;
+  }
+  .ihub-d-xl-flex {
+    display: flex !important;
+  }
+  .ihub-d-xl-inline-flex {
+    display: inline-flex !important;
+  }
+  .ihub-d-xl-grid {
+    display: grid !important;
+  }
+  .ihub-d-xl-inline-grid {
+    display: inline-grid !important;
+  }
+}
+
+/* Special cases for print */
+@media print {
+  .ihub-d-print-none {
+    display: none !important;
+  }
+  .ihub-d-print-inline {
+    display: inline !important;
+  }
+  .ihub-d-print-inline-block {
+    display: inline-block !important;
+  }
+  .ihub-d-print-block {
+    display: block !important;
+  }
+  .ihub-d-print-table {
+    display: table !important;
+  }
+  .ihub-d-print-table-row {
+    display: table-row !important;
+  }
+  .ihub-d-print-table-cell {
+    display: table-cell !important;
+  }
+  .ihub-d-print-flex {
+    display: flex !important;
+  }
+  .ihub-d-print-inline-flex {
+    display: inline-flex !important;
+  }
+}
+
+/* Visibility utilities */
+.ihub-visible {
+  visibility: visible !important;
+}
+.ihub-invisible {
+  visibility: hidden !important;
+}
+
+/* Hide/Show utilities for accessibility - visually hidden but accessible to screen readers */
+.ihub-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.ihub-sr-only-focusable:not(:focus) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Hide on specific screen sizes */
+.ihub-hide-sm-only {
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    display: none !important;
+  }
+}
+
+.ihub-hide-md-only {
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    display: none !important;
+  }
+}
+
+.ihub-hide-lg-only {
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    display: none !important;
+  }
+}
+
+.ihub-hide-xl-only {
+  @media (min-width: 1200px) {
+    display: none !important;
+  }
+}
+
+/* Show on specific screen sizes */
+.ihub-show-sm-only {
+  @media (max-width: 575.98px), (min-width: 768px) {
+    display: none !important;
+  }
+}
+
+.ihub-show-md-only {
+  @media (max-width: 767.98px), (min-width: 992px) {
+    display: none !important;
+  }
+}
+
+.ihub-show-lg-only {
+  @media (max-width: 991.98px), (min-width: 1200px) {
+    display: none !important;
+  }
+}
+
+.ihub-show-xl-only {
+  @media (max-width: 1199.98px) {
+    display: none !important;
+  }
+}
+
+/* Custom InstinctHub display helpers matching existing patterns in InstinctHub CSS */
+.ihub-ghost {
+  display: none;
+}
+.ihub-flex {
+  display: flex;
+  justify-content: space-between;
+}

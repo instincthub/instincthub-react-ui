@@ -5,6 +5,7 @@ import React, {
   useCallback,
   createContext,
   useContext,
+  useState,
 } from "react";
 
 export type Theme = "DarkMode" | "LightMode" | "Device";
@@ -50,6 +51,9 @@ export default function DarkModeProvider({
   defaultTheme = "Device",
   onChange,
 }: DarkModeProviderProps) {
+  // Initialize with default theme for SSR
+  const [theme, setThemeState] = useState<Theme>(defaultTheme);
+
   // Get initial theme from localStorage or default
   const getInitialTheme = useCallback((): Theme => {
     if (typeof window === "undefined") return defaultTheme;
@@ -82,7 +86,10 @@ export default function DarkModeProvider({
   // Set theme and store in localStorage
   const setTheme = useCallback(
     (newTheme: Theme) => {
-      localStorage.setItem("theme", newTheme);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("theme", newTheme);
+      }
+      setThemeState(newTheme);
       const effectiveTheme = applyThemeToDOM(newTheme);
       if (effectiveTheme && onChange) onChange(effectiveTheme);
     },
@@ -92,21 +99,24 @@ export default function DarkModeProvider({
   // Initialize theme on mount
   useEffect(() => {
     const currentTheme = getInitialTheme();
+    setThemeState(currentTheme);
     const effectiveTheme = applyThemeToDOM(currentTheme);
     if (effectiveTheme && onChange) onChange(effectiveTheme);
 
     // Set up listener for system preference changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (localStorage.getItem("theme") === "Device") {
-        const newEffectiveTheme = applyThemeToDOM("Device");
-        if (newEffectiveTheme && onChange) onChange(newEffectiveTheme);
-      }
-    };
+    if (typeof window !== "undefined") {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = () => {
+        if (localStorage.getItem("theme") === "Device") {
+          const newEffectiveTheme = applyThemeToDOM("Device");
+          if (newEffectiveTheme && onChange) onChange(newEffectiveTheme);
+        }
+      };
 
-    // Add event listener with browser compatibility
-    const cleanup = attachMediaQueryListener(mediaQuery, handleChange);
-    return cleanup;
+      // Add event listener with browser compatibility
+      const cleanup = attachMediaQueryListener(mediaQuery, handleChange);
+      return cleanup;
+    }
   }, [getInitialTheme, applyThemeToDOM, onChange]);
 
   // Helper for media query listeners
@@ -121,7 +131,7 @@ export default function DarkModeProvider({
   }
 
   const contextValue = {
-    theme: getInitialTheme(),
+    theme,
     setTheme,
   };
 

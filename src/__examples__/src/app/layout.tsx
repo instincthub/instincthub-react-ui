@@ -1,7 +1,6 @@
 import "../../../assets/css/styles.css";
 import "../assets/styles/globals.css";
 import "../assets/styles/header.css";
-import MainNavigation from "../components/navbars/MainNavigation";
 import MainFooter from "../components/navbars/MainFooter";
 import CursorProviders from "../components/navbars/CursorProviders";
 import ReactClientProviders from "../components/auths/ReactClientProviders";
@@ -13,7 +12,7 @@ export const metadata = {
 export default function RootLayout({
   children,
   session,
-}: Readonly<{ 
+}: Readonly<{
   children: React.ReactNode;
   session: any;
 }>) {
@@ -32,7 +31,6 @@ export default function RootLayout({
         </head>
         <body>
           <ReactClientProviders session={session}>
-            <MainNavigation />
             {children}
             <MainFooter />
           </ReactClientProviders>

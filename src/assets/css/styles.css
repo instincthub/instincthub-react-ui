@@ -16,21 +16,10 @@
 @import url("./tabs/style.css");
 
 /* Forms Styles */
-@import url("./forms/input-fields.css");
-@import url("./forms/ihub-file-uploader.css");
-@import url("./forms/unsplash-random-image.css");
-@import url("./forms/submit-button.css");
-@import url("./forms/search-field-db.css");
-@import url("./forms/download-as-excel.css");
-@import url("./forms/thead-sort-btn.css");
-@import url("./forms/table-data-list.css");
-@import url("./forms/action-call-back-dropdown.css");
-@import url("./forms/search-objects-from-db.css");
+@import url("./forms/forms-index.css");
 
 /* Navbar Styles */
-@import url("./navbar/channel-list-avatar.css");
-@import url("./navbar/menu-dropdown.css");
-@import url("./navbar/breadcrumb.css");
+@import url("./navbar/navbar-index.css");
 
 /* Cursor Styles */
 @import url("./cursors/style.css");
@@ -39,13 +28,7 @@
 @import url("./status/error-state.css");
 
 /* UI Styles */
-@import url("./ui/parent-list-styles.css");
-@import url("./ui/list-styles.css");
-@import url("./ui/editor.css");
-@import url("./ui/content-viewer.css");
-@import url("./ui/code-display.css");
-@import url("./ui/signout-session.css");
-@import url("./ui/tables.css");
+@import url("./ui/ui-index.css");
 
 /* Third-party Framework Styles */
 @import url("./material-ui.css");

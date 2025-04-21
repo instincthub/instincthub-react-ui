@@ -66,12 +66,16 @@ Custom scrollbar styling for elements with overflow.
 <div class="ihub-overflow-auto ihub-scrollbar-thin">
   <!-- Content with custom-styled scrollbars -->
 </div>
+<div class="ihub-overflow-auto ihub-scrollbar-thin-light">
+  <!-- Content with custom-styled scrollbars -->
+</div>
 ```
 
 ### Hidden Scrollbars
 
 ```html
-<div class="ihub-overflow-auto ihub-scrollbar-hidden">
+<div class="
+ ihub-scrollbar-hidden">
   <!-- Content with functional but invisible scrollbars -->
 </div>
 ```

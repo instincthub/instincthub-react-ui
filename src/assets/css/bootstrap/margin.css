@@ -1,0 +1,525 @@
+/* 
+  InstinctHub Margin Utility Classes
+  Prefix: ihub-
+  Based on Bootstrap's margin utility system
+*/
+
+/* Margin - all sides */
+.ihub-m-0 {
+  margin: 0 !important;
+}
+.ihub-m-1 {
+  margin: 10px !important;
+}
+.ihub-m-2 {
+  margin: 20px !important;
+}
+.ihub-m-3 {
+  margin: 30px !important;
+}
+.ihub-m-4 {
+  margin: 40px !important;
+}
+.ihub-m-5 {
+  margin: 50px !important;
+}
+.ihub-m-6 {
+  margin: 60px !important;
+}
+.ihub-m-7 {
+  margin: 70px !important;
+}
+.ihub-m-8 {
+  margin: 80px !important;
+}
+.ihub-m-9 {
+  margin: 90px !important;
+}
+.ihub-m-10 {
+  margin: 100px !important;
+}
+.ihub-m-auto {
+  margin: auto !important;
+}
+
+/* Margin Top */
+.ihub-mt-0 {
+  margin-top: 0 !important;
+}
+.ihub-mt-1 {
+  margin-top: 10px !important;
+}
+.ihub-mt-2 {
+  margin-top: 20px !important;
+}
+.ihub-mt-3 {
+  margin-top: 30px !important;
+}
+.ihub-mt-4 {
+  margin-top: 40px !important;
+}
+.ihub-mt-5 {
+  margin-top: 50px !important;
+}
+.ihub-mt-6 {
+  margin-top: 60px !important;
+}
+.ihub-mt-7 {
+  margin-top: 70px !important;
+}
+.ihub-mt-8 {
+  margin-top: 80px !important;
+}
+.ihub-mt-9 {
+  margin-top: 90px !important;
+}
+.ihub-mt-10 {
+  margin-top: 100px !important;
+}
+.ihub-mt-auto {
+  margin-top: auto !important;
+}
+
+/* Margin Right */
+.ihub-mr-0 {
+  margin-right: 0 !important;
+}
+.ihub-mr-1 {
+  margin-right: 10px !important;
+}
+.ihub-mr-2 {
+  margin-right: 20px !important;
+}
+.ihub-mr-3 {
+  margin-right: 30px !important;
+}
+.ihub-mr-4 {
+  margin-right: 40px !important;
+}
+.ihub-mr-5 {
+  margin-right: 50px !important;
+}
+.ihub-mr-6 {
+  margin-right: 60px !important;
+}
+.ihub-mr-7 {
+  margin-right: 70px !important;
+}
+.ihub-mr-8 {
+  margin-right: 80px !important;
+}
+.ihub-mr-9 {
+  margin-right: 90px !important;
+}
+.ihub-mr-10 {
+  margin-right: 100px !important;
+}
+.ihub-mr-auto {
+  margin-right: auto !important;
+}
+
+/* Margin Bottom */
+.ihub-mb-0 {
+  margin-bottom: 0 !important;
+}
+.ihub-mb-1 {
+  margin-bottom: 10px !important;
+}
+.ihub-mb-2 {
+  margin-bottom: 20px !important;
+}
+.ihub-mb-3 {
+  margin-bottom: 30px !important;
+}
+.ihub-mb-4 {
+  margin-bottom: 40px !important;
+}
+.ihub-mb-5 {
+  margin-bottom: 50px !important;
+}
+.ihub-mb-6 {
+  margin-bottom: 60px !important;
+}
+.ihub-mb-7 {
+  margin-bottom: 70px !important;
+}
+.ihub-mb-8 {
+  margin-bottom: 80px !important;
+}
+.ihub-mb-9 {
+  margin-bottom: 90px !important;
+}
+.ihub-mb-10 {
+  margin-bottom: 100px !important;
+}
+.ihub-mb-auto {
+  margin-bottom: auto !important;
+}
+
+/* Margin Left */
+.ihub-ml-0 {
+  margin-left: 0 !important;
+}
+.ihub-ml-1 {
+  margin-left: 10px !important;
+}
+.ihub-ml-2 {
+  margin-left: 20px !important;
+}
+.ihub-ml-3 {
+  margin-left: 30px !important;
+}
+.ihub-ml-4 {
+  margin-left: 40px !important;
+}
+.ihub-ml-5 {
+  margin-left: 50px !important;
+}
+.ihub-ml-6 {
+  margin-left: 60px !important;
+}
+.ihub-ml-7 {
+  margin-left: 70px !important;
+}
+.ihub-ml-8 {
+  margin-left: 80px !important;
+}
+.ihub-ml-9 {
+  margin-left: 90px !important;
+}
+.ihub-ml-10 {
+  margin-left: 100px !important;
+}
+.ihub-ml-auto {
+  margin-left: auto !important;
+}
+
+/* Margin X-axis (left and right) */
+.ihub-mx-0 {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.ihub-mx-1 {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+.ihub-mx-2 {
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+}
+.ihub-mx-3 {
+  margin-left: 30px !important;
+  margin-right: 30px !important;
+}
+.ihub-mx-4 {
+  margin-left: 40px !important;
+  margin-right: 40px !important;
+}
+.ihub-mx-5 {
+  margin-left: 50px !important;
+  margin-right: 50px !important;
+}
+.ihub-mx-6 {
+  margin-left: 60px !important;
+  margin-right: 60px !important;
+}
+.ihub-mx-7 {
+  margin-left: 70px !important;
+  margin-right: 70px !important;
+}
+.ihub-mx-8 {
+  margin-left: 80px !important;
+  margin-right: 80px !important;
+}
+.ihub-mx-9 {
+  margin-left: 90px !important;
+  margin-right: 90px !important;
+}
+.ihub-mx-10 {
+  margin-left: 100px !important;
+  margin-right: 100px !important;
+}
+.ihub-mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Margin Y-axis (top and bottom) */
+.ihub-my-0 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.ihub-my-1 {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+.ihub-my-2 {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+.ihub-my-3 {
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+}
+.ihub-my-4 {
+  margin-top: 40px !important;
+  margin-bottom: 40px !important;
+}
+.ihub-my-5 {
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
+}
+.ihub-my-6 {
+  margin-top: 60px !important;
+  margin-bottom: 60px !important;
+}
+.ihub-my-7 {
+  margin-top: 70px !important;
+  margin-bottom: 70px !important;
+}
+.ihub-my-8 {
+  margin-top: 80px !important;
+  margin-bottom: 80px !important;
+}
+.ihub-my-9 {
+  margin-top: 90px !important;
+  margin-bottom: 90px !important;
+}
+.ihub-my-10 {
+  margin-top: 100px !important;
+  margin-bottom: 100px !important;
+}
+.ihub-my-auto {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+/* Responsive margin classes for different breakpoints */
+@media (max-width: 576px) {
+  /* Small devices (sm) */
+  .ihub-m-sm-0 {
+    margin: 0 !important;
+  }
+  .ihub-m-sm-1 {
+    margin: 10px !important;
+  }
+  .ihub-m-sm-2 {
+    margin: 20px !important;
+  }
+  .ihub-m-sm-3 {
+    margin: 30px !important;
+  }
+  .ihub-m-sm-4 {
+    margin: 40px !important;
+  }
+  .ihub-m-sm-5 {
+    margin: 50px !important;
+  }
+  .ihub-m-sm-auto {
+    margin: auto !important;
+  }
+
+  .ihub-mt-sm-0 {
+    margin-top: 0 !important;
+  }
+  .ihub-mt-sm-1 {
+    margin-top: 10px !important;
+  }
+  .ihub-mt-sm-2 {
+    margin-top: 20px !important;
+  }
+  .ihub-mt-sm-3 {
+    margin-top: 30px !important;
+  }
+  .ihub-mt-sm-4 {
+    margin-top: 40px !important;
+  }
+  .ihub-mt-sm-5 {
+    margin-top: 50px !important;
+  }
+  .ihub-mt-sm-auto {
+    margin-top: auto !important;
+  }
+
+  /* Similar patterns for other directions */
+}
+
+@media (min-width: 577px) {
+  /* Medium devices (md) */
+  .ihub-m-md-0 {
+    margin: 0 !important;
+  }
+  .ihub-m-md-1 {
+    margin: 10px !important;
+  }
+  .ihub-m-md-2 {
+    margin: 20px !important;
+  }
+  .ihub-m-md-3 {
+    margin: 30px !important;
+  }
+  .ihub-m-md-4 {
+    margin: 40px !important;
+  }
+  .ihub-m-md-5 {
+    margin: 50px !important;
+  }
+  .ihub-m-md-auto {
+    margin: auto !important;
+  }
+
+  .ihub-mt-md-0 {
+    margin-top: 0 !important;
+  }
+  .ihub-mt-md-1 {
+    margin-top: 10px !important;
+  }
+  .ihub-mt-md-2 {
+    margin-top: 20px !important;
+  }
+  .ihub-mt-md-3 {
+    margin-top: 30px !important;
+  }
+  .ihub-mt-md-4 {
+    margin-top: 40px !important;
+  }
+  .ihub-mt-md-5 {
+    margin-top: 50px !important;
+  }
+  .ihub-mt-md-auto {
+    margin-top: auto !important;
+  }
+
+  /* Similar patterns for other directions */
+}
+
+@media (min-width: 992px) {
+  /* Large devices (lg) */
+  .ihub-m-lg-0 {
+    margin: 0 !important;
+  }
+  .ihub-m-lg-1 {
+    margin: 10px !important;
+  }
+  .ihub-m-lg-2 {
+    margin: 20px !important;
+  }
+  .ihub-m-lg-3 {
+    margin: 30px !important;
+  }
+  .ihub-m-lg-4 {
+    margin: 40px !important;
+  }
+  .ihub-m-lg-5 {
+    margin: 50px !important;
+  }
+  .ihub-m-lg-auto {
+    margin: auto !important;
+  }
+
+  .ihub-mt-lg-0 {
+    margin-top: 0 !important;
+  }
+  .ihub-mt-lg-1 {
+    margin-top: 10px !important;
+  }
+  .ihub-mt-lg-2 {
+    margin-top: 20px !important;
+  }
+  .ihub-mt-lg-3 {
+    margin-top: 30px !important;
+  }
+  .ihub-mt-lg-4 {
+    margin-top: 40px !important;
+  }
+  .ihub-mt-lg-5 {
+    margin-top: 50px !important;
+  }
+  .ihub-mt-lg-auto {
+    margin-top: auto !important;
+  }
+
+  /* Similar patterns for other directions */
+}
+
+@media (min-width: 1200px) {
+  /* Extra large devices (xl) */
+  .ihub-m-xl-0 {
+    margin: 0 !important;
+  }
+  .ihub-m-xl-1 {
+    margin: 10px !important;
+  }
+  .ihub-m-xl-2 {
+    margin: 20px !important;
+  }
+  .ihub-m-xl-3 {
+    margin: 30px !important;
+  }
+  .ihub-m-xl-4 {
+    margin: 40px !important;
+  }
+  .ihub-m-xl-5 {
+    margin: 50px !important;
+  }
+  .ihub-m-xl-auto {
+    margin: auto !important;
+  }
+
+  .ihub-mt-xl-0 {
+    margin-top: 0 !important;
+  }
+  .ihub-mt-xl-1 {
+    margin-top: 10px !important;
+  }
+  .ihub-mt-xl-2 {
+    margin-top: 20px !important;
+  }
+  .ihub-mt-xl-3 {
+    margin-top: 30px !important;
+  }
+  .ihub-mt-xl-4 {
+    margin-top: 40px !important;
+  }
+  .ihub-mt-xl-5 {
+    margin-top: 50px !important;
+  }
+  .ihub-mt-xl-auto {
+    margin-top: auto !important;
+  }
+
+  /* Similar patterns for other directions */
+}
+
+/* Negative margins for advanced layout needs */
+.ihub-m-n1 {
+  margin: -10px !important;
+}
+.ihub-m-n2 {
+  margin: -20px !important;
+}
+.ihub-m-n3 {
+  margin: -30px !important;
+}
+.ihub-m-n4 {
+  margin: -40px !important;
+}
+.ihub-m-n5 {
+  margin: -50px !important;
+}
+
+.ihub-mt-n1 {
+  margin-top: -10px !important;
+}
+.ihub-mt-n2 {
+  margin-top: -20px !important;
+}
+.ihub-mt-n3 {
+  margin-top: -30px !important;
+}
+.ihub-mt-n4 {
+  margin-top: -40px !important;
+}
+.ihub-mt-n5 {
+  margin-top: -50px !important;
+}

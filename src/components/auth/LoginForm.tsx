@@ -95,6 +95,7 @@ const LoginForm = ({
   const token = user?.name?.token;
   const uuid = user?.name?.uuid;
   const email = user?.name?.email;
+  const verifyEmail = user?.name?.verified;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -162,7 +163,7 @@ const LoginForm = ({
     if (res?.detail === "Unauthorized" || res?.detail === "Not found.") {
       openToast("Couldn't login. Please try again.", 400);
       return; // Don't do anything if not valid.
-    } else if (user && !user?.name?.verified) {
+    } else if (verifyEmail === false) {
       const msg =
         "You need to verify your email address, click okay to request for a one time password (OTP).";
       const verifyPath = `${

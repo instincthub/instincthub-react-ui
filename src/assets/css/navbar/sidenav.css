@@ -1,0 +1,619 @@
+/* Side Navigation Bar Styles */
+
+/* Container */
+.ihub-sidenav-container {
+  display: flex;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+}
+
+.ihub-sidenav-container-left {
+  flex-direction: row;
+}
+
+.ihub-sidenav-container-right {
+  flex-direction: row-reverse;
+}
+
+/* Backdrop for mobile view */
+.ihub-sidenav-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-overlay, 500);
+  animation: ihub-fade-in 0.3s ease;
+}
+
+/* Main sidebar container */
+.ihub-sidenav {
+  position: fixed;
+  height: 100vh;
+  background-color: var(--White, #ffffff);
+  box-shadow: var(--lightShadow, 0px 1px 8px rgba(0, 0, 0, 0.1));
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+  z-index: var(--z-navigation, 100);
+}
+
+/* Left & right positioning */
+.ihub-sidenav-left {
+  border-right: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  left: 0;
+}
+
+.ihub-sidenav-right {
+  border-left: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  right: 0;
+}
+
+/* Expanded & collapsed states */
+.ihub-sidenav-expanded {
+  width: 240px;
+}
+
+.ihub-sidenav-collapsed {
+  width: 64px;
+}
+
+/* Animation variants */
+.ihub-sidenav-slide.ihub-sidenav-collapsed.ihub-sidenav-left {
+  /* transform: translateX(-200px); */
+  width: 264px; /* 64px visible + 200px hidden */
+}
+
+.ihub-sidenav-slide.ihub-sidenav-collapsed.ihub-sidenav-right {
+  transform: translateX(200px);
+  width: 264px; /* 64px visible + 200px hidden */
+}
+
+.ihub-sidenav-fade .ihub-sidenav-text,
+.ihub-sidenav-fade .ihub-sidenav-arrow,
+.ihub-sidenav-fade .ihub-sidenav-badge {
+  transition: opacity 0.3s ease;
+}
+
+.ihub-sidenav-fade.ihub-sidenav-collapsed .ihub-sidenav-text,
+.ihub-sidenav-fade.ihub-sidenav-collapsed .ihub-sidenav-arrow,
+.ihub-sidenav-fade.ihub-sidenav-collapsed .ihub-sidenav-badge {
+  opacity: 0;
+}
+
+/* Mobile responsiveness */
+.ihub-sidenav-mobile {
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.ihub-sidenav-mobile.ihub-sidenav-right {
+  left: auto;
+  right: 0;
+}
+
+.ihub-sidenav-mobile.ihub-sidenav-collapsed {
+  transform: translateX(-100%);
+}
+
+.ihub-sidenav-mobile.ihub-sidenav-right.ihub-sidenav-collapsed {
+  transform: translateX(100%);
+}
+
+.ihub-sidenav-mobile.ihub-sidenav-expanded {
+  transform: translateX(0);
+}
+
+/* Mobile main content adjustments */
+.ihub-sidenav-mobile + .ihub-sidenav-main {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Compact variant */
+.ihub-sidenav-compact.ihub-sidenav-expanded {
+  width: 200px;
+}
+
+.ihub-sidenav-compact .ihub-sidenav-item {
+  padding: 8px 16px;
+}
+
+/* Mini variant */
+.ihub-sidenav-mini.ihub-sidenav-expanded {
+  width: 180px;
+}
+
+.ihub-sidenav-mini .ihub-sidenav-item {
+  padding: 6px 12px;
+}
+
+/* Overlay variant */
+.ihub-sidenav-overlay {
+  position: fixed;
+  z-index: var(--z-overlay, 500);
+  height: 100%;
+}
+
+/* Dark mode */
+.ihub-sidenav-dark {
+  background-color: var(--Gunmetal, #2c333a);
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-item {
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-divider {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-divider-text {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-toggle,
+.ihub-sidenav-dark .ihub-sidenav-resize-handle {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-resize-handle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Logo section */
+.ihub-sidenav-logo {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  height: 64px;
+  overflow: hidden;
+}
+
+.ihub-sidenav-collapsed .ihub-sidenav-logo {
+  padding: 12px;
+}
+
+/* Toggle button */
+.ihub-sidenav-toggle {
+  position: absolute;
+  top: -5px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--White, #ffffff);
+  border: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.3s ease;
+  color: var(--Gunmetal, #2c333a);
+}
+
+.ihub-sidenav-left .ihub-sidenav-toggle {
+  right: -12px;
+  transform: translateX(0);
+  background: transparent;
+  border: transparent;
+}
+
+.ihub-sidenav-right .ihub-sidenav-toggle {
+  left: -12px;
+  transform: translateX(0);
+}
+
+/* Remove the old toggle icon styles since we're using MUI icons now */
+.ihub-sidenav-toggle-icon {
+  display: none;
+}
+
+.ihub-sidenav-toggle-icon::before,
+.ihub-sidenav-toggle-icon::after {
+  display: none;
+}
+
+/* Ensure toggle button is visible when navbar is collapsed */
+.ihub-sidenav-collapsed .ihub-sidenav-toggle {
+  display: flex;
+  z-index: 20;
+}
+
+/* Dark mode styles for toggle button */
+.ihub-sidenav-dark .ihub-sidenav-toggle {
+  background-color: var(--Gunmetal, #2c333a);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--White, #ffffff);
+}
+
+/* Resize handle */
+.ihub-sidenav-resize-handle {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: ew-resize;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-sidenav-resize-handle-left {
+  right: 0;
+}
+
+.ihub-sidenav-resize-handle-right {
+  left: 0;
+}
+
+.ihub-sidenav-resize-handle:hover,
+.ihub-sidenav-resize-handle:active {
+  background-color: var(--DarkCyan, #00838f);
+}
+
+/* Main content area */
+.ihub-sidenav-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Navigation */
+.ihub-sidenav-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+/* Navigation items */
+.ihub-sidenav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  color: var(--Gunmetal, #2c333a);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 0;
+  border: none;
+  background: none;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+
+.ihub-sidenav-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.ihub-sidenav-active {
+  background-color: rgba(0, 131, 143, 0.1);
+  color: var(--DarkCyan, #00838f);
+  font-weight: 600;
+}
+
+.ihub-sidenav-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: var(--DarkCyan, #00838f);
+}
+
+.ihub-sidenav-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icons */
+.ihub-sidenav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.ihub-sidenav-collapsed .ihub-sidenav-icon {
+  margin-right: 0;
+}
+
+/* Text */
+.ihub-sidenav-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.3s ease;
+}
+
+.ihub-sidenav-text-hidden {
+  opacity: 0;
+  width: 0;
+}
+
+/* Badges */
+.ihub-sidenav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--Gray, #f4f4f4);
+  color: var(--Gunmetal, #2c333a);
+  margin-left: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.ihub-sidenav-badge-primary {
+  background-color: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-badge-success {
+  background-color: var(--CaribbeanGreen, #00c5a2);
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-badge-warning {
+  background-color: var(--Corn, #fbeb5b);
+  color: var(--Gunmetal, #2c333a);
+}
+
+.ihub-sidenav-badge-danger {
+  background-color: var(--Danger, #ea5f5e);
+  color: var(--White, #ffffff);
+}
+
+/* Arrow indicator for groups */
+.ihub-sidenav-arrow {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  position: relative;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.ihub-sidenav-arrow::before {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid var(--Gunmetal, #2c333a);
+  border-bottom: 2px solid var(--Gunmetal, #2c333a);
+  transform: rotate(-45deg);
+  top: 4px;
+  left: 5px;
+}
+
+.ihub-sidenav-arrow-expanded {
+  transform: rotate(180deg);
+}
+
+.ihub-sidenav-arrow-hidden {
+  opacity: 0;
+  width: 0;
+  margin-left: 0;
+}
+
+/* Group items */
+.ihub-sidenav-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ihub-sidenav-group-header {
+  font-weight: 500;
+}
+
+.ihub-sidenav-group-active > .ihub-sidenav-group-header {
+  color: var(--DarkCyan, #00838f);
+}
+
+.ihub-sidenav-group-items {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.ihub-sidenav-group-expanded {
+  max-height: 1000px; /* Arbitrary large value, will be constrained by content */
+}
+
+.ihub-sidenav-group-collapsed {
+  display: none;
+}
+
+/* Indentation for nested items */
+.ihub-sidenav-indent-1 {
+  padding-left: 32px;
+}
+
+.ihub-sidenav-indent-2 {
+  padding-left: 48px;
+}
+
+.ihub-sidenav-indent-3 {
+  padding-left: 64px;
+}
+
+/* Dividers */
+.ihub-sidenav-divider {
+  height: 1px;
+  background-color: #a0a0a0;
+  margin: 20px 16px;
+  position: relative;
+}
+
+.ihub-sidenav-divider-text {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: var(--White, #ffffff);
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #a0a0a0;
+  text-transform: uppercase;
+}
+
+/* Footer */
+.ihub-sidenav-footer {
+  border-top: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  padding: 16px;
+}
+
+.ihub-sidenav-collapsed .ihub-sidenav-footer {
+  padding: 8px;
+}
+
+/* User profile */
+.ihub-sidenav-user {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+}
+
+.ihub-sidenav-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.ihub-sidenav-user-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.ihub-sidenav-user-info {
+  overflow: hidden;
+}
+
+.ihub-sidenav-user-name {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ihub-sidenav-user-role {
+  font-size: 12px;
+  color: rgba(44, 51, 58, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ihub-sidenav-footer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ihub-sidenav-footer-content {
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+/* Main content area */
+.ihub-sidenav-main {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease, margin-right 0.3s ease;
+  width: 100%;
+}
+
+/* Adjust main content based on sidebar position and state */
+.ihub-sidenav-container-left .ihub-sidenav-main {
+  margin-left: 64px; /* Default margin for collapsed state */
+}
+
+.ihub-sidenav-container-left .ihub-sidenav-expanded + .ihub-sidenav-main {
+  margin-left: 240px; /* Margin for expanded state */
+}
+
+.ihub-sidenav-container-right .ihub-sidenav-main {
+  margin-right: 64px; /* Default margin for collapsed state */
+}
+
+.ihub-sidenav-container-right .ihub-sidenav-expanded + .ihub-sidenav-main {
+  margin-right: 240px; /* Margin for expanded state */
+}
+
+/* Tooltips for collapsed state */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--Gunmetal, #2c333a);
+  color: var(--White, #ffffff);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: 8px;
+  z-index: 10;
+}
+
+.ihub-sidenav-right [data-tooltip]:hover::after {
+  left: auto;
+  right: 100%;
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+/* Animations */
+@keyframes ihub-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

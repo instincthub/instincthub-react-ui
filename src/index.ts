@@ -53,6 +53,8 @@ export { default as SearchObjectsFromDB } from "./components/forms/SearchObjects
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
 export { default as MenuDropdown } from "./components/navbar/MenuDropdown";
 export { default as Breadcrumb } from "./components/navbar/Breadcrumb";
+export { default as ResponsiveNavbar } from "./components/navbar/ResponsiveNavbar";
+export { default as SideNavbar } from "./components/navbar/SideNavbar";
 
 // Upload components
 export { default as FileUploader } from "./components/forms/uploads/FileUploader";
