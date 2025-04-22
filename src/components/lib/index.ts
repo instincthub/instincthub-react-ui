@@ -24,6 +24,9 @@ export * from "./paystack";
 export * from "./permissions";
 export * from "./utils";
 
+// Charts
+export * from "./charts";
+
 // Modals
 export * from "./modals/modals";
 export * from "./modals/openConfirmDelete";

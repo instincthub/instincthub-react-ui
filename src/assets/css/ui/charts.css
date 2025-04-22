@@ -1,0 +1,451 @@
+/* Chart Utility Functions Demo */
+.ihub-chart-utility-demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.ihub-utility-demo {
+  background-color: var(--White);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: var(--lightShadow);
+}
+
+.ihub-utility-demo h3 {
+  font-family: var(--Montserat);
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--DarkCyan);
+}
+
+.ihub-utility-demo code {
+  display: block;
+  background-color: var(--Magnolia);
+  padding: 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.ihub-utility-demo p {
+  font-family: var(--Nunito);
+  font-weight: 600;
+  color: var(--Gunmetal);
+}
+
+.ihub-color-samples {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ihub-color-sample {
+  padding: 10px;
+  border-radius: 4px;
+  color: white;
+  font-family: monospace;
+  font-size: 14px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Loading animation */
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--DarkCyan);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+} /* InstinctHub Chart System Styles */
+
+/* Chart Container */
+.ihub-chart-container {
+  background-color: var(--White);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: var(--lightShadow);
+  margin-bottom: 20px;
+  width: 100%;
+  font-family: var(--Nunito);
+}
+
+.ihub-chart-title {
+  font-family: var(--Montserat);
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--Gunmetal);
+}
+
+.ihub-chart-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Tooltip styling */
+.recharts-tooltip-wrapper {
+  background-color: var(--White) !important;
+  border-radius: 5px !important;
+  box-shadow: var(--shadow) !important;
+  border: var(--borderDefault) !important;
+}
+
+/* Legend styling */
+.recharts-legend-wrapper {
+  padding: 10px 0 !important;
+}
+
+.recharts-legend-item-text {
+  font-family: var(--Nunito) !important;
+  font-size: 12px !important;
+  color: var(--Gunmetal) !important;
+}
+
+/* Axis styling */
+.recharts-cartesian-axis-tick-value {
+  font-family: var(--Nunito) !important;
+  font-size: 12px !important;
+  fill: var(--Gunmetal) !important;
+}
+
+/* Chart Dashboard Styles */
+.ihub-chart-dashboard {
+  width: 100%;
+  padding: 20px;
+  background-color: var(--Gray);
+  border-radius: 5px;
+}
+
+.ihub-chart-dashboard-header {
+  margin-bottom: 30px;
+}
+
+.ihub-chart-dashboard-header h2 {
+  font-family: var(--Montserat);
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--DarkCyan);
+}
+
+.ihub-chart-dashboard-header p {
+  font-family: var(--Nunito);
+  font-size: 14px;
+  color: var(--Gunmetal);
+  margin: 0;
+}
+
+.ihub-chart-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.ihub-chart-dashboard-item {
+  background-color: var(--White);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ihub-chart-dashboard-item-wide {
+  grid-column: span 2;
+}
+
+/* Loader state for charts */
+.ihub-chart-loader {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ihub-chart-loader span {
+  color: var(--DarkCyan);
+}
+
+/* Empty state styling */
+.ihub-chart-empty {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--Gunmetal);
+  opacity: 0.6;
+  flex-direction: column;
+}
+
+.ihub-chart-empty span {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+/* Responsive Chart Grid Adjustments */
+@media (max-width: 992px) {
+  .ihub-chart-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ihub-chart-dashboard-item-wide {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .ihub-chart-container {
+    padding: 15px;
+  }
+
+  .ihub-chart-dashboard {
+    padding: 15px;
+  }
+
+  .ihub-chart-dashboard-header h2 {
+    font-size: 20px;
+  }
+}
+
+/* Additional chart element styling */
+.recharts-surface {
+  overflow: visible;
+}
+
+.recharts-responsive-container {
+  width: 100% !important;
+}
+
+/* Chart Configurator Styles */
+.ihub-chart-configurator {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 40px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  .ihub-chart-configurator {
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "sidebar preview"
+      "code code";
+  }
+}
+
+.ihub-chart-config-panel {
+  background-color: var(--White);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: var(--lightShadow);
+  grid-area: sidebar;
+}
+
+.ihub-chart-preview {
+  grid-area: preview;
+}
+
+.ihub-chart-config-code {
+  grid-area: code;
+  background-color: var(--Magnolia);
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.ihub-chart-config-code pre {
+  background-color: var(--White);
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-family: monospace;
+  border: var(--borderDefault);
+}
+
+.ihub-chart-config-title {
+  font-family: var(--Montserat);
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--DarkCyan);
+}
+
+.ihub-chart-config-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: var(--borderDefault);
+}
+
+.ihub-chart-config-section h4 {
+  font-family: var(--Montserat);
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: var(--Gunmetal);
+}
+
+.ihub-chart-config-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ihub-chart-config-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: var(--Gray);
+  border: var(--borderDefault);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--Nunito);
+  font-size: 14px;
+  color: var(--Gunmetal);
+}
+
+.ihub-chart-config-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.ihub-chart-config-btn-active {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+  border-color: var(--DarkCyan);
+}
+
+.ihub-chart-config-btn-active:hover {
+  background-color: #006b75;
+}
+
+.ihub-chart-config-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ihub-chart-config-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--Nunito);
+  font-size: 14px;
+}
+
+.ihub-chart-config-checkbox input {
+  margin-right: 8px;
+}
+
+.ihub-chart-config-range {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ihub-chart-config-range input {
+  flex: 1;
+}
+
+.ihub-chart-config-range span {
+  font-family: var(--Nunito);
+  font-size: 14px;
+  color: var(--Gunmetal);
+  width: 60px;
+}
+
+.ihub-chart-config-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.ihub-chart-config-color {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ihub-chart-config-color span {
+  font-family: var(--Nunito);
+  font-size: 14px;
+}
+
+.ihub-chart-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.ihub-chart-custom-item {
+  background-color: var(--White);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+@media (max-width: 576px) {
+  .ihub-chart-custom-grid {
+    grid-template-columns: 1fr;
+  }
+}

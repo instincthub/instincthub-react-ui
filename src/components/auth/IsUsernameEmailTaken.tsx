@@ -9,11 +9,11 @@ import {
 
 // Define props interface
 interface IsUsernameEmailTakenProps {
-  names: "username" | "email"; // Restrict to specific field names
+  name: "username" | "email" | string; // Restrict to specific field names
   types: string; // HTML input type (e.g., "text", "email")
-  labels: string;
-  requireds: boolean;
-  keys: string | number; // Assuming this is a key for React's key prop
+  label: string;
+  required: boolean;
+  key: string | number; // Assuming this is a key for React's key prop
 }
 
 // Define state interface
@@ -23,7 +23,7 @@ interface FieldState {
 }
 
 export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
-  const { names, types, labels, requireds, keys } = props;
+  const { name, types, label, required, key } = props;
   const [field, setField] = useState<FieldState>({
     note: "",
     valid: false,
@@ -32,7 +32,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
   // Async function to check if username/email is taken
   async function usernameEmailTaken(value: string): Promise<string> {
     const formData = new FormData();
-    formData.append("field", names);
+    formData.append("field", name);
     formData.append("field_value", value);
 
     const options = reqOptions("POST", formData); // Assuming reqOptions returns RequestInit
@@ -49,9 +49,9 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
   ): Promise<void> => {
     let validInput: boolean | null = null;
 
-    if (names.includes("username")) {
+    if (name.includes("username")) {
       validInput = isValidAlphanumeric(e.target.value); // Assuming this returns boolean
-    } else if (names === "email") {
+    } else if (name === "email") {
       validInput = isValidEmail(e.target.value); // Assuming this returns boolean
     }
 
@@ -59,7 +59,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
       e.target.classList.add("ihub-is_invalid");
       setField({
         valid: false,
-        note: names.includes("username")
+        note: name.includes("username")
           ? "Should contain only letters (a-z, A-Z) and numbers (0-9)."
           : "Please enter a valid email.",
       });
@@ -70,7 +70,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
         e.target.classList.add("ihub-is_invalid");
         setField({
           valid: false,
-          note: `This ${names} is already taken. Please try a different ${names}.`,
+          note: `This ${name} is already taken. Please try a different ${name}.`,
         });
       } else {
         e.target.style.borderColor = "#69779B";
@@ -102,12 +102,12 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
   }, [field]);
 
   return (
-    <div key={keys}>
+    <div key={key}>
       <TextField
-        name={names}
+        name={name}
         types={types}
-        label={labels}
-        required={requireds}
+        label={label}
+        required={required}
         onChange={isUsernameValid}
         note={field.note}
         TextTransform="lowercase"

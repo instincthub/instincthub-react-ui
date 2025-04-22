@@ -1,8 +1,19 @@
-export { default as Card } from "./Card";
-export { default as CardList } from "./CardList";
-export { default as CardGrid } from "./CardGrid";
-export { default as FeatureCard } from "./FeatureCard";
-export { default as HorizontalCard } from "./HorizontalCard";
-export { default as MediaCard } from "./MediaCard";
-export { default as PricingCard } from "./PricingCard";
-export { default as ProfileCard } from "./ProfileCard";
+import CardComponent from "./Card";
+import CardList from "./CardList";
+import CardGrid from "./CardGrid";
+import FeatureCard from "./FeatureCard";
+import HorizontalCard from "./HorizontalCard";
+import MediaCard from "./MediaCard";
+import PricingCard from "./PricingCard";
+import ProfileCard from "./ProfileCard";
+
+export {
+  CardComponent as Card,
+  CardList,
+  CardGrid,
+  FeatureCard,
+  HorizontalCard,
+  MediaCard,
+  PricingCard,
+  ProfileCard,
+};

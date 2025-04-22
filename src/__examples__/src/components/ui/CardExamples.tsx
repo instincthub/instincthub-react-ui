@@ -13,7 +13,7 @@ import {
 import PhotoCameraFrontOutlinedIcon from "@mui/icons-material/PhotoCameraFrontOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import InsertChartOutlinedIcon from "@mui/icons-material/InsertChartOutlined";
-import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 // Import Material UI icons
 // Note: In a real implementation, you would import these from @mui/icons-material
 // For this example, we're using the Material Symbols that are in your existing CSS
@@ -26,12 +26,7 @@ export default function CardExamples() {
       <section className="ihub-mb-10">
         <h2 className="mb-4">Basic Cards</h2>
         <CardGrid>
-          <Card
-            title="Standard Card"
-            accent="cyan"
-            border={false}
-            shadow={false}
-          >
+          <Card title="Standard Card" accent="cyan" border={false} shadow={false}>
             <p>
               This is a standard card with a cyan accent. Cards can be used for
               various content types and are fully responsive.
@@ -89,7 +84,8 @@ export default function CardExamples() {
             badge={{ text: "Featured", color: "var(--DarkCyan)" }}
             footer={
               <a href="#" className="link-style">
-                View details <ChevronRightOutlinedIcon />
+                View details{" "}
+                <ChevronRightOutlinedIcon />
               </a>
             }
           >

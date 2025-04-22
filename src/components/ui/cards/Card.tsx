@@ -1,18 +1,12 @@
 "use client";
 
-import {
-  CardPropsType,
-  FeatureCardPropsType,
-  MediaCardPropsType,
-  PricingCardPropsType,
-  ProfileCardPropsType,
-} from "@/types/card";
 import React from "react";
+import { CardPropsType } from "@/types/card";
 
 /**
  * Basic Card component - foundation for all card variants
  */
-export const Card = ({
+function CardComponent({
   title,
   accentHeader = false,
   footer,
@@ -25,7 +19,7 @@ export const Card = ({
   border = true,
   shadow = true,
   onClick,
-}: CardPropsType) => {
+}: CardPropsType) {
   // Construct class names
   const cardClasses = [
     "ihub-card",
@@ -52,6 +46,8 @@ export const Card = ({
       {footer && <div className="ihub-card-footer">{footer}</div>}
     </div>
   );
-};
+}
 
-export default Card;
+// Export as both named and default export
+export const Card = CardComponent;
+export default CardComponent;

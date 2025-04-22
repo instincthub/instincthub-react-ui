@@ -4,13 +4,6 @@ import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  PasswordField,
-  SubmitButton,
-  InputText,
-  FromInstinctHub,
-  OrDivider,
-} from "../../index";
-import {
   openConfirmModal,
   openToast,
   handleResendOTP,
@@ -19,25 +12,14 @@ import {
   getData,
   getCookie,
 } from "../../components/lib";
-import { SearchParamsType, SessionUserType } from "../../types";
+import { SessionUserType, LoginFormPropsType } from "../../types";
+import PasswordField from "../forms/PasswordField";
+import InputText from "../forms/InputText";
+import OrDivider from "../ui/OrDivider";
+import FromInstinctHub from "./FromInstinctHub";
+import SubmitButton from "../forms/SubmitButton";
 
-// Define props interface
-export interface LoginFormProps {
-  params?: SearchParamsType;
-  searchParams: SearchParamsType;
-  endpointPath?: string;
-  verificationPath?: string;
-  redirectPath?: string;
-  type?:
-    | string
-    | "sis"
-    | "skills"
-    | "lms"
-    | "crm"
-    | "ecommerce"
-    | "inventory"
-    | "hr";
-}
+
 
 // Define response type from API
 interface LoginResponse {
@@ -67,8 +49,6 @@ interface LoginResponse {
  * />
  * ```
  * @param {LoginFormProps} props - The props for the LoginForm component
- * @property {SearchParamsType} params - The params for the LoginForm component
- * @property {SearchParamsType} searchParams - The searchParams for the LoginForm component
  * @property {string} endpointPath - The endpoint path for the LoginForm component
  * @property {string} verificationPath - The verification path for the LoginForm component
  * @property {string} redirectPath - The redirect path for the LoginForm component
@@ -83,7 +63,7 @@ const LoginForm = ({
   verificationPath,
   redirectPath,
   type,
-}: LoginFormProps) => {
+}: LoginFormPropsType) => {
   const router = useRouter();
   const { error, callbackUrl } = searchParams;
   const [message, setMessage] = useState<string>("");

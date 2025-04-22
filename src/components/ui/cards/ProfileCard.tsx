@@ -1,6 +1,6 @@
 import React from "react";
 import { ProfileCardPropsType } from "@/types/card";
-import { Card } from "./Card";
+import CardComponent from "./Card";
 
 /**
  * Profile Card - For displaying user information
@@ -15,7 +15,7 @@ const ProfileCard = ({
   ...cardProps
 }: ProfileCardPropsType) => {
   return (
-    <Card {...cardProps} title={null}>
+    <CardComponent {...cardProps} title={null}>
       <div className="ihub-profile-card">
         <img src={imageUrl} alt={name} className="ihub-profile-image" />
         <h4>{name}</h4>
@@ -39,7 +39,7 @@ const ProfileCard = ({
           </div>
         )}
       </div>
-    </Card>
+    </CardComponent>
   );
 };
 

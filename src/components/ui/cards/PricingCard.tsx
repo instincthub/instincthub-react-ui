@@ -1,6 +1,6 @@
 import React from "react";
 import { PricingCardPropsType } from "@/types/card";
-import { Card } from "./Card";
+import CardComponent from "./Card";
 
 /**
  * Pricing Card - For subscription plans
@@ -18,7 +18,7 @@ const PricingCard = ({
   const { className = "", ...otherProps } = cardProps;
 
   return (
-    <Card
+    <CardComponent
       {...otherProps}
       className={`${className} ${recommended ? "ihub-card-accent-cyan" : ""}`}
       title={null}
@@ -45,7 +45,7 @@ const PricingCard = ({
           </button>
         )}
       </div>
-    </Card>
+    </CardComponent>
   );
 };
 

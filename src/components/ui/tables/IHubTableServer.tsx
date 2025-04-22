@@ -726,16 +726,16 @@ export function IHubTableServer<T extends object>({
                 // Show pages around current page
                 let pageNum: number;
                 if (pagination.totalPages <= 5) {
-                  pageNum = i + 1;
+                  pageNum = (i + 1) as number;
                 } else if (pagination.currentPage <= 3) {
-                  pageNum = i + 1;
+                  pageNum = (i + 1) as number;
                 } else if (
                   pagination.currentPage >=
                   pagination.totalPages - 2
                 ) {
-                  pageNum = pagination.totalPages - 4 + i;
+                  pageNum = (pagination.totalPages - 4 + i) as number;
                 } else {
-                  pageNum = pagination.currentPage - 2 + i;
+                  pageNum = (pagination.currentPage - 2 + i) as number;
                 }
 
                 return (

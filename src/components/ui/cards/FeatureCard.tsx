@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "./Card";
+import CardComponent from "./Card";
 import { FeatureCardPropsType } from "@/types/card";
 
 /**
@@ -13,14 +13,14 @@ const FeatureCard = ({
   ...cardProps
 }: FeatureCardPropsType) => {
   return (
-    <Card {...cardProps} title={null}>
+    <CardComponent {...cardProps} title={null}>
       <div className="ihub-feature-card">
         <div className="ihub-feature-icon">{icon}</div>
         <h3>{title}</h3>
         <p>{description}</p>
         {children}
       </div>
-    </Card>
+    </CardComponent>
   );
 };
 

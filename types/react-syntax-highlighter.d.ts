@@ -8,7 +8,13 @@ export interface SyntaxHighlighterProps {
   [key: string]: any; // For additional props
 }
 
-declare module "react-syntax-highlighter" {
+declare module "react-syntax-highlighter/dist/cjs/prism" {
   const SyntaxHighlighter: ComponentType<SyntaxHighlighterProps>;
   export default SyntaxHighlighter;
+}
+
+declare module "react-syntax-highlighter/dist/cjs/styles/prism" {
+  const tomorrow: any;
+  const oneLight: any;
+  export { tomorrow, oneLight };
 }

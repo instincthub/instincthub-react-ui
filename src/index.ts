@@ -69,6 +69,7 @@ export { default as IHubTable } from "./components/ui/tables/IHubTable";
 export { default as IHubTableServer } from "./components/ui/tables/IHubTableServer";
 export { default as OrDivider } from "./components/ui/OrDivider";
 export * from "./components/ui/cards";
+export * from "./components/ui/charts";
 
 // Theme components
 export { default as ChangeStyleVariable } from "./components/theme/ChangeStyleVariable";

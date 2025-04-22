@@ -283,3 +283,23 @@ export interface NavbarPropsType {
   theme?: "LightMode" | "DarkMode";
   containerClass?: string;
 }
+
+
+
+// Define props interface
+export interface LoginFormPropsType {
+  params?: SearchParamsType;
+  searchParams: SearchParamsType;
+  endpointPath?: string;
+  verificationPath?: string;
+  redirectPath?: string;
+  type?:
+    | string
+    | "sis"
+    | "skills"
+    | "lms"
+    | "crm"
+    | "ecommerce"
+    | "inventory"
+    | "hr";
+}

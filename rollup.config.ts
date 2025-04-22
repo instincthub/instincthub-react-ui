@@ -63,7 +63,7 @@ export default {
         ".next/**",
         ".cursor/**",
         ".rollup.cache/**",
-        ".vscode/**",        
+        ".vscode/**",
       ],
     }),
     resolve({
@@ -88,5 +88,7 @@ export default {
     "react-dom",
     "styled-components",
     "react/jsx-runtime",
+    "recharts",
+    "d3-interpolate",
   ],
 };
