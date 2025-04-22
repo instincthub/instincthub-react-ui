@@ -186,7 +186,7 @@
 /* Toggle button */
 .ihub-sidenav-toggle {
   position: absolute;
-  top: -5px;
+  top: 10px;
   width: 24px;
   height: 24px;
   background-color: var(--White, #ffffff);
@@ -403,13 +403,13 @@
   height: 6px;
   border-right: 2px solid var(--Gunmetal, #2c333a);
   border-bottom: 2px solid var(--Gunmetal, #2c333a);
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
   top: 4px;
   left: 5px;
 }
 
-.ihub-sidenav-arrow-expanded {
-  transform: rotate(180deg);
+.ihub-sidenav-arrow-expanded::before {
+  transform: rotate(224deg);
 }
 
 .ihub-sidenav-arrow-hidden {

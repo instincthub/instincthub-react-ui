@@ -365,7 +365,54 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/OrDivider.tsx",
     },
-
+    {
+      name: "Card",
+      description: "Card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/Card.tsx",
+    },
+    {
+      name: "CardList",
+      description: "Card list component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/CardList.tsx",
+    },
+    {
+      name: "CardGrid",
+      description: "Card grid component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/CardGrid.tsx",
+    },
+    {
+      name: "HorizontalCard",
+      description: "Horizontal card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/HorizontalCard.tsx",
+    },
+    {
+      name: "FeatureCard",
+      description: "Feature card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/FeatureCard.tsx",
+    },
+    {
+      name: "MediaCard",
+      description: "Media card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/MediaCard.tsx",
+    },
+    {
+      name: "PricingCard",
+      description: "Pricing card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/PricingCard.tsx",
+    },
+    {
+      name: "ProfileCard",
+      description: "Profile card component",
+      category: "UI",
+      repo_path: "src/components/ui/cards/ProfileCard.tsx",
+    },
 
     // Theme
     {
@@ -404,6 +451,7 @@ const ComponentLists = () => {
       category: "Theme",
       repo_path: "src/components/theme/signout/SignOutSession.tsx",
     },
+
 
     // Status
     {

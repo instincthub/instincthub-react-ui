@@ -2,6 +2,7 @@ import { SearchParamsType } from "../../../../../../types";
 import ResponsiveNavbarExample from "../../../../components/navbars/ResponsiveNavbarExample";
 import SideNavbarExample from "../../../../components/navbars/SideNavbarExample";
 import { auth } from "../../../api/auth/[...nextauth]/auth";
+import CodebaseLink from "../../../../components/ui/CodebaseLink";
 
 export default async function SideNavbarPage({
   params,
@@ -21,6 +22,7 @@ export default async function SideNavbarPage({
         />
         <SideNavbarExample />
       </div>
+      <CodebaseLink url="https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/navbars/SideNavbarExample.tsx" />
     </section>
   );
 }

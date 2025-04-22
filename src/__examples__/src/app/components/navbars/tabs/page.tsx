@@ -5,7 +5,7 @@ export default async function TabsPage() {
   return (
     <>
       <MainNavigation />
-      <section className="ihub-container ihub-mt-10">
+      <section className="ihub-container ihub-mt-7">
         <div className="ihub-course-page">
           <TabsExample />
         </div>
