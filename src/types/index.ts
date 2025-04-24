@@ -285,8 +285,6 @@ export interface NavbarPropsType {
   containerClass?: string;
 }
 
-
-
 // Define props interface
 export interface LoginFormPropsType {
   params?: SearchParamsType;
@@ -303,4 +301,26 @@ export interface LoginFormPropsType {
     | "ecommerce"
     | "inventory"
     | "hr";
+}
+
+// Option interface for dropdown items
+export interface DropdownOptionType {
+  label: string;
+  value: string | number;
+  disabled?: boolean;
+}
+
+// Props interface for the Dropdown component
+export interface DropdownPropsType {
+  options: DropdownOptionType[];
+  selectedValue?: string | number | (string | number)[];
+  onChange: (value: string | number | (string | number)[]) => void;
+  placeholder?: string;
+  className?: string;
+  isMulti?: boolean;
+  isSearchable?: boolean;
+  noOptionsMessage?: string;
+  isDisabled?: boolean;
+  maxHeight?: number;
+  renderOption?: (option: DropdownOptionType) => React.ReactNode;
 }

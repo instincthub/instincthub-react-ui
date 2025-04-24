@@ -443,6 +443,12 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/Action.tsx",
     },
+    {
+      name: "Dropdown",
+      description: "A reusable Dropdown component",
+      category: "UI",
+      repo_path: "src/components/ui/Dropdown.tsx",
+    },
 
     // Theme
     {
