@@ -1,7 +1,10 @@
 "use client";
 import Link from "next/link";
-import { IHubTableServer } from "../../../../index";
+import { Badge, Action, IHubTableServer } from "../../../../index";
 import { DataResponseType } from "../../../../types";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 // Example page component
 export default function ProgramCoursesPage() {
@@ -70,6 +73,118 @@ export default function ProgramCoursesPage() {
     },
   ];
 
+  const columns2 = [
+    {
+      header: "Invoice",
+      accessor: "id",
+      sortable: true,
+      width: "100px",
+    },
+    {
+      header: "Student",
+      accessor: "student",
+      sortable: true,
+    },
+    {
+      header: "Category",
+      accessor: "category",
+      sortable: true,
+    },
+    {
+      header: "Amount",
+      accessor: "amount",
+      sortable: true,
+      cell: (row: any) => `$${row.amount}`,
+      width: "100px",
+    },
+    {
+      header: "Date",
+      accessor: "date",
+      sortable: true,
+      cell: (row: any) => new Date(row.date).toLocaleDateString(),
+      width: "120px",
+    },
+    {
+      header: "Due Date",
+      accessor: "dueDate",
+      sortable: true,
+      cell: (row: any) => new Date(row.dueDate).toLocaleDateString(),
+      width: "120px",
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      sortable: true,
+      cell: (row: any) => (
+        <Badge
+          variant={
+            row.status === "paid"
+              ? "success"
+              : row.status === "pending"
+              ? "warning"
+              : "danger"
+          }
+          shape="pill"
+        >
+          {row.status}
+        </Badge>
+      ),
+      width: "100px",
+    },
+    {
+      header: "Actions",
+      cell: (row: any) => (
+        <Action
+          label="Actions"
+          dropdown
+          variant="outline"
+          dropdownItems={[
+            {
+              label: "View Details",
+              iconBefore: <FileDownloadOutlinedIcon className="mui-icon" />,
+              onClick: () => console.log(row),
+            },
+            {
+              label: "Download Invoice",
+              iconBefore: <RemoveRedEyeOutlinedIcon className="mui-icon" />,
+              onClick: () => console.log(row),
+            },
+            {
+              label: "Send Reminder",
+              iconBefore: <SendOutlinedIcon className="mui-icon" />,
+              onClick: () => console.log(row),
+            },
+          ]}
+        />
+      ),
+      width: "100px",
+    },
+  ];
+
+  // Mock data for demo purposes
+  // In a real implementation, this would be fetched from an API
+  const mockData = [
+    {
+      id: "INV-001",
+      student: "John Smith",
+      amount: 1250,
+      category: "Tuition Fees",
+      date: "2023-04-12",
+      dueDate: "2023-05-12",
+      status: "paid",
+    },
+    {
+      id: "INV-002",
+      student: "Sarah Johnson",
+      amount: 450,
+      category: "ICT Fees",
+      date: "2023-04-10",
+      dueDate: "2023-05-10",
+      status: "paid",
+    },
+    // ... other payment data
+  ];
+
   // Action handlers
   const handleRowClick = (row: DataResponseType) => {
     console.log("Row clicked:", row);
@@ -109,6 +224,7 @@ export default function ProgramCoursesPage() {
 
   return (
     <div className="program-courses-page">
+      <h2>Valid Endpoint</h2>
       <IHubTableServer
         token={process.env.NEXT_PUBLIC_TOKEN}
         columns={columns}
@@ -133,6 +249,33 @@ export default function ProgramCoursesPage() {
         keyExtractor={(row) => row.id}
         stickyHeader={true}
         maxHeight="600px"
+      />
+
+      <h2>Dummy Data</h2>
+      <IHubTableServer
+        columns={columns2}
+        defaultData={mockData} // For demo, in production use endpoint
+        // endpointPath="finance/payments" // Use in production
+        // token={process.env.NEXT_PUBLIC_TOKEN} // Use in production
+        initialParams={{
+          sort: "date",
+          direction: "desc",
+        }}
+        title="Student Payments"
+        endpointPath=""
+        showSearch={true}
+        searchPlaceholder="Search by invoice or student..."
+        enableSorting={true}
+        enableExport={true}
+        exportOptions={{
+          csv: true,
+          excel: true,
+          fileName: "student-payments-export",
+        }}
+        // onRowClick={handleRowClick}
+        // keyExtractor={(row) => row.id}
+        stickyHeader={true}
+        maxHeight="500px"
       />
 
       <Link

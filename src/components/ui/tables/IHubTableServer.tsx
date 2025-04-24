@@ -17,6 +17,8 @@ interface IHubTableServerPropsType<T> {
   // Core data
   columns: TableColumnType<T>[];
 
+  defaultData?: any[];
+
   // API and fetching
   endpointPath: string;
   initialParams?: Partial<FetchParamsType>;
@@ -95,6 +97,7 @@ interface IHubTableServerPropsType<T> {
  * ```
  * @prop {string} token - The token for authentication
  * @prop {TableColumnType<T>[]} columns - The columns of the table
+ * @prop {any<T>[]} defaultData - The default data of the table
  * @prop {string} endpointPath - The path to the API endpoint
  * @prop {Partial<FetchParamsType>} initialParams - The initial parameters for the API request
  * @prop {string} title - The title of the table
@@ -118,6 +121,7 @@ interface IHubTableServerPropsType<T> {
 export function IHubTableServer<T extends object>({
   token,
   columns,
+  defaultData,
   endpointPath,
   initialParams = {},
   dataAdapter,
@@ -147,7 +151,7 @@ export function IHubTableServer<T extends object>({
   const tableRef = useRef<HTMLDivElement>(null);
 
   // Data state
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<T[]>(defaultData || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -182,6 +186,20 @@ export function IHubTableServer<T extends object>({
     []
   );
 
+  const defaultDataObj = {
+    data: defaultData || [],
+    pagination: {
+      totalCount: defaultData?.length,
+      currentPage: "",
+      perPage: 10,
+      totalPages: Math.ceil((defaultData?.length || 10) / 10),
+    },
+    links: {
+      next: "",
+      previous: "",
+    },
+  } as any;
+
   // Function to fetch data from your API
   const handleFetchData = useCallback(
     async (
@@ -189,6 +207,10 @@ export function IHubTableServer<T extends object>({
     ): Promise<ApiResponseType<DataResponseType>> => {
       setLoading(true);
       try {
+        if (!endpointPath) {
+          return defaultDataObj;
+        }
+
         // Prepare API parameters
         const apiParams = new URLSearchParams({
           limit: params.limit.toString(),
@@ -323,41 +345,43 @@ export function IHubTableServer<T extends object>({
         };
 
         const response = await handleFetchData(exportParams);
-        const exportData = dataAdapter
-          ? dataAdapter(response).data
-          : response.data;
+        if (response) {
+          const exportData = dataAdapter
+            ? dataAdapter(response).data
+            : response.data;
 
-        const fileName = exportOptions.fileName || "table-export";
+          const fileName = exportOptions.fileName || "table-export";
 
-        // Simple CSV export example
-        if (type === "csv") {
-          const headers = columns
-            .filter((col) => typeof col.accessor === "string")
-            .map((col) => col.header);
-
-          const csvData = exportData.map((row: any) =>
-            columns
+          // Simple CSV export example
+          if (type === "csv") {
+            const headers = columns
               .filter((col) => typeof col.accessor === "string")
-              .map((col) => {
-                const accessor = col.accessor as keyof T;
-                return String(row[accessor] ?? "");
-              })
-              .join(",")
-          );
+              .map((col) => col.header);
 
-          const csv = [headers.join(","), ...csvData].join("\n");
+            const csvData = exportData.map((row: any) =>
+              columns
+                .filter((col) => typeof col.accessor === "string")
+                .map((col) => {
+                  const accessor = col.accessor as keyof T;
+                  return String(row[accessor] ?? "");
+                })
+                .join(",")
+            );
 
-          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-          const link = document.createElement("a");
-          const url = URL.createObjectURL(blob);
+            const csv = [headers.join(","), ...csvData].join("\n");
 
-          link.setAttribute("href", url);
-          link.setAttribute("download", `${fileName}.csv`);
-          link.style.visibility = "hidden";
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
 
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `${fileName}.csv`);
+            link.style.visibility = "hidden";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         }
       } catch (error) {
         console.error("Export error:", error);
@@ -402,7 +426,7 @@ export function IHubTableServer<T extends object>({
             if (adaptedResponse.pagination) {
               setPagination(adaptedResponse.pagination);
             }
-          } else {
+          } else if (response) {
             setData(response.data as T[]);
             if (response.pagination) {
               setPagination(response.pagination);
