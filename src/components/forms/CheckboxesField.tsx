@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface Option {
   id: string | number;
@@ -41,23 +41,40 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   disabled = false,
   error,
   onChange,
-  onBlur
+  onBlur,
 }) => {
   // Initialize state with default values
-  const [checkboxValues, setCheckboxValues] = useState<Record<string, boolean>>({});
+  const [checkboxValues, setCheckboxValues] = useState<Record<string, boolean>>(
+    {}
+  );
   const [touched, setTouched] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
-  
+
+  // Use a ref to track internal changes vs external changes
+  const isInternalChange = useRef(false);
+
   // Initialize values from options when component mounts or options change
   useEffect(() => {
-    const initialValues = Object.values(options).reduce((acc, option) => ({
-      ...acc,
-      [option.id]: defaultValues ? option.status || false : false
-    }), {});
-    
-    setCheckboxValues(initialValues);
-  }, [options, defaultValues]);
+    // Check if values need initialization (empty or keys don't match options)
+    const optionIds = Object.keys(options);
+    const valueIds = Object.keys(checkboxValues);
+    const needsInitialization =
+      valueIds.length === 0 || !optionIds.every((id) => valueIds.includes(id));
+
+    if (needsInitialization) {
+      const initialValues = Object.values(options).reduce(
+        (acc, option) => ({
+          ...acc,
+          [option.id]: defaultValues ? option.status || false : false,
+        }),
+        {}
+      );
+
+      isInternalChange.current = true;
+      setCheckboxValues(initialValues);
+    }
+  }, [options, defaultValues, checkboxValues]);
 
   // Update error state when error prop changes
   useEffect(() => {
@@ -65,10 +82,10 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
     setHasError(!!error);
   }, [error]);
 
-  // Validate when values change or field is touched
+  // Validation effect
   useEffect(() => {
     if (touched) {
-      if (required && Object.values(checkboxValues).every(value => !value)) {
+      if (required && Object.values(checkboxValues).every((value) => !value)) {
         setHasError(true);
         setErrorMessage("Please select at least one option");
       } else {
@@ -76,20 +93,27 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
         setErrorMessage(undefined);
       }
     }
-    
-    // Notify parent component of value changes
-    if (onChange) {
+
+    // Notify parent component of value changes, but only if change was internal
+    // and not triggered by parent (prevents infinite loop)
+    if (
+      onChange &&
+      isInternalChange.current &&
+      Object.keys(checkboxValues).length > 0
+    ) {
       onChange(checkboxValues);
+      isInternalChange.current = false;
     }
   }, [checkboxValues, touched, required, onChange]);
 
   // Handle checkbox change
   const handleChange = (id: string | number, checked: boolean) => {
-    setCheckboxValues(prev => ({
+    isInternalChange.current = true;
+    setCheckboxValues((prev) => ({
       ...prev,
-      [id]: checked
+      [id]: checked,
     }));
-    
+
     if (!touched) {
       setTouched(true);
     }
@@ -100,7 +124,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
     if (!touched) {
       setTouched(true);
     }
-    
+
     if (onBlur) {
       onBlur();
     }
@@ -118,16 +142,16 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
           <p className="ihub-error-message">{errorMessage}</p>
         )}
       </div>
-      
-      <div 
-        className={`ihub-checkbox-wrapper ${hasError ? 'ihub-has-error' : ''}`}
+
+      <div
+        className={`ihub-checkbox-wrapper ${hasError ? "ihub-has-error" : ""}`}
         onBlur={handleBlur}
       >
         {optionsArray.map((option) => (
           <div className="ihub-checkbox-item" key={option.id}>
-            <label 
-              htmlFor={`${name}_${option.id}`} 
-              className={`label-cbx ${disabled ? 'ihub-disabled' : ''}`}
+            <label
+              htmlFor={`${name}_${option.id}`}
+              className={`label-cbx ${disabled ? "ihub-disabled" : ""}`}
             >
               <input
                 id={`${name}_${option.id}`}
