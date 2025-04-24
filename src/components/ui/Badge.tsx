@@ -14,7 +14,7 @@ export interface BadgeProps {
   /**
    * The content to display inside the badge
    */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   /**
    * The visual style variant of the badge

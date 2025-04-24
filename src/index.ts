@@ -72,6 +72,7 @@ export { default as OrDivider } from "./components/ui/OrDivider";
 export { default as RandomGradientImage } from "./components/ui/images/RandomGradientImage";
 export { default as Dialog } from "./components/ui/dialogs/Dialog";
 export { default as Badge } from "./components/ui/Badge";
+export { default as Action } from "./components/ui/Action";
 export * from "./components/ui/cards";
 export * from "./components/ui/charts";
 

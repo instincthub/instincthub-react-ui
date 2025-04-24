@@ -259,12 +259,10 @@ const ComponentLists = () => {
     },
     {
       name: "ToggleButton",
-      description:
-        "ToggleButton component for changing state.",
+      description: "ToggleButton component for changing state.",
       category: "Form",
       repo_path: "src/components/forms/ToggleButton.tsx",
     },
-
 
     // Auth
     {
@@ -439,6 +437,12 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/Badge.tsx",
     },
+    {
+      name: "Action",
+      description: "A reusable Action component",
+      category: "UI",
+      repo_path: "src/components/ui/Action.tsx",
+    },
 
     // Theme
     {
@@ -477,7 +481,6 @@ const ComponentLists = () => {
       category: "Theme",
       repo_path: "src/components/theme/signout/SignOutSession.tsx",
     },
-
 
     // Status
     {
