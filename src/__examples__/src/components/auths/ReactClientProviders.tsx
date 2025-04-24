@@ -5,7 +5,6 @@ import {
   SessionProviders,
   DarkModeProvider,
   SessionHandleProvider,
-  ReactTimeTracker,
 } from "../../../../index";
 import { ReactNode } from "react";
 
@@ -24,11 +23,11 @@ export default function ReactClientProviders({
       <SessionExpiresLogout session={session}>
         <DarkModeProvider>
           <SessionHandleProvider>
-            <ReactTimeTracker
+            {/* <ReactTimeTracker
               channel_username={handle}
               session={session}
               endpoint={"/api/user-ip-address"}
-            />
+            /> */}
             {/* <ChangeStyleVariable primaryColor={"#007bff"} /> */}
             <>{children}</>
           </SessionHandleProvider>

@@ -49,6 +49,7 @@ export { default as InputText } from "./components/forms/InputText";
 export { default as InputTextarea } from "./components/forms/InputTextarea";
 export { default as SearchObjectsFromDB } from "./components/forms/SearchObjectsFromDB";
 export { default as ToggleButton } from "./components/forms/ToggleButton";
+export { default as CheckboxesField } from "./components/forms/CheckboxesField";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
