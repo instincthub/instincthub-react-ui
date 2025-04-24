@@ -1,5 +1,11 @@
 "use client";
-import React, { forwardRef, ReactNode, useCallback, useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 interface SubmitButtonProps {
@@ -112,7 +118,7 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
           } ${className}`}
           disabled={isDisabled}
           onClick={handleClick}
-          aria-label={ariaLabel || label}
+          aria-label={ariaLabel || (typeof label === "string" ? label : "")}
           aria-busy={isLoading}
         >
           {isLoading && (
