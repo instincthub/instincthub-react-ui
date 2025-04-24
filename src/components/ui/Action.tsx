@@ -61,7 +61,7 @@ interface ActionProps {
  * A versatile Action component that can be rendered as a button or link
  * with various styles, sizes, icon options, and dropdown functionality
  */
-const Action: React.FC<ActionProps> = ({
+const Action = ({
   label,
   onClick,
   href,
@@ -78,7 +78,7 @@ const Action: React.FC<ActionProps> = ({
   dropdown = false,
   dropdownItems = [],
   dropdownPosition = "right",
-}) => {
+}: ActionProps) => {
   // State to manage dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -141,6 +141,7 @@ const Action: React.FC<ActionProps> = ({
             viewBox="0 0 12 7"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            style={variant === "primary" ? { color: "#fff" } : {}}
           >
             <path
               d="M1 1L6 6L11 1"

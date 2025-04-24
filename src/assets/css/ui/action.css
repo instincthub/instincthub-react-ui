@@ -25,7 +25,7 @@
 /* Variants */
 .ihub-action-primary {
   background-color: var(--DarkCyan);
-  color: var(--White);
+  color: #fff;
 }
 
 .ihub-action-primary:hover:not(.ihub-action-disabled) {
@@ -43,7 +43,13 @@
 
 .ihub-action-danger {
   background-color: var(--Danger);
-  color: var(--White);
+  color: #fff;
+}
+.ihub-action-label {
+  color: unset;
+}
+.ihub-action-disabled .ihub-action-label {
+  color: #fff;
 }
 
 .ihub-action-danger:hover:not(.ihub-action-disabled) {
