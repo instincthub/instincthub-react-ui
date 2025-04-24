@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { ChartDataPointType } from "@/types/charts";
 import InstinctHubChart from "./InstinctHubChart";
@@ -79,7 +80,7 @@ const InstinctHubChartDashboard = ({ className = "" }: DashboardProps) => {
           <InstinctHubChart
             type="bar"
             data={trafficData}
-            dataKeys={["users", "sessions"]}
+            dataKeys={["users", "sessions", "pageviews"]}
             title="Website Traffic"
             height={300}
             showGrid={true}

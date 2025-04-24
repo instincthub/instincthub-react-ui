@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import countryObjects from "../lib/json/countryObjects";
 import CloseIcon from "@mui/icons-material/Close";

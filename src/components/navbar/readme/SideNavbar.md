@@ -28,10 +28,10 @@ npm install @instincthub/react-ui
 
 ```tsx
 import { SideNavbar } from "@instincthub/react-ui";
-import { NavItem } from "@instincthub/react-ui/types";
+import { NavItemType } from "@instincthub/react-ui/types";
 
 // Define your navigation items
-const navItems: NavItem[] = [
+const navItems: NavItemType[] = [
   {
     id: "dashboard",
     title: "Dashboard",
@@ -86,7 +86,7 @@ const YourComponent = () => (
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `NavItem[]` | Required | Array of navigation items |
+| `items` | `NavItemType[]` | Required | Array of navigation items |
 | `defaultExpanded` | `boolean` | `true` | Initial expanded state of the sidebar |
 | `isExpanded` | `boolean` | - | Controlled expanded state |
 | `onExpandedChange` | `(expanded: boolean) => void` | - | Callback when expanded state changes |

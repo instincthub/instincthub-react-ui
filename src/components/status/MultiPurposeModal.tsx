@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, ReactNode } from "react";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 interface MultiPurposeModalProps {
   isOpen: boolean;
@@ -133,7 +134,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = ({
                 onClick={onClose}
                 aria-label="Close modal"
               >
-                <span className="material-symbols-outlined">close</span>
+                <CloseOutlinedIcon />
               </button>
             )}
           </div>

@@ -1,3 +1,4 @@
+"use client"
 import { ContentViewer } from "../../../../index";
 
 export default function ListStylesDemoTwo() {

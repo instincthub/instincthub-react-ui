@@ -18,7 +18,7 @@ export default function ContentViewOrEditSample() {
       <ContentViewer
         content={content}
         title="Course Module: Introduction"
-        onEdit={toggleEditMode}
+        onContentChange={toggleEditMode}
         showToolbar={true}
       />
 

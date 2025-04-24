@@ -48,6 +48,7 @@ export { default as InputNumber } from "./components/forms/InputNumber";
 export { default as InputText } from "./components/forms/InputText";
 export { default as InputTextarea } from "./components/forms/InputTextarea";
 export { default as SearchObjectsFromDB } from "./components/forms/SearchObjectsFromDB";
+export { default as ToggleButton } from "./components/forms/ToggleButton";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
@@ -68,6 +69,9 @@ export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";
 export { default as IHubTable } from "./components/ui/tables/IHubTable";
 export { default as IHubTableServer } from "./components/ui/tables/IHubTableServer";
 export { default as OrDivider } from "./components/ui/OrDivider";
+export { default as RandomGradientImage } from "./components/ui/images/RandomGradientImage";
+export { default as Dialog } from "./components/ui/dialogs/Dialog";
+export { default as Badge } from "./components/ui/Badge";
 export * from "./components/ui/cards";
 export * from "./components/ui/charts";
 

@@ -51,6 +51,12 @@ export default function ResponsiveNavbarExample({
   const userAreaLinks = [
     { title: "Dashboard", href: "/dashboard", icon: "🏠" },
     {
+      title: "Library",
+      href: "https://skills.instincthub.com/library",
+      isExternal: true,
+      icon: "📚",
+    },
+    {
       title: "Account",
       href: "#",
       icon: "👤",

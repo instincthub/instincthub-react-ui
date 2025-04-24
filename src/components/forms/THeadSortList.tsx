@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { fetchAPI, reqOptions } from "../lib/helpFunction";
 import THeadSortBtn from "./THeadSortBtn";

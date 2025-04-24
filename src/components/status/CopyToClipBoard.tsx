@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";

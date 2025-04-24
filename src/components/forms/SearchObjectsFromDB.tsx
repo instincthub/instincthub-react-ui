@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState, useCallback, memo } from "react";
 import { API_HOST_URL, reqOptions } from "../lib";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";

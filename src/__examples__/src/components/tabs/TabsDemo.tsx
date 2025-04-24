@@ -1,3 +1,4 @@
+"use client"
 import { TabContent, Tabs, VerticalTabs } from "../../../../index";
 
 // Icons for demo

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";

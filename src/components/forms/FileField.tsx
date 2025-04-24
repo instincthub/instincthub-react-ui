@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState, ChangeEvent } from "react";
 import { openToast } from "../lib/modals/modals";
 

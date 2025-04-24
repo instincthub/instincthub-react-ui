@@ -3,7 +3,7 @@
 import React, { useRef, ChangeEvent } from "react";
 
 interface TextFieldProps {
-  types: string;
+  type: string;
   name: string;
   label: string;
   required?: boolean;
@@ -71,7 +71,7 @@ function TextField(props: TextFieldProps) {
     let inputValue = e.target.value;
 
     // Ensure no letters if type is tel
-    if (props.types === "tel") {
+    if (props.type === "tel") {
       // Remove all characters that are not digits or the plus sign
       inputValue = inputValue.replace(/[^0-9+]/g, "");
 
@@ -105,7 +105,7 @@ function TextField(props: TextFieldProps) {
             props.defaultValue !== undefined ||
             props.defaultValue === false ||
             props.active ||
-            props.types === "file"
+            props.type === "file"
               ? "ihub-value"
               : ""
           }`}
@@ -113,7 +113,7 @@ function TextField(props: TextFieldProps) {
         >
           <input
             ref={inputRef}
-            type={props.types}
+            type={props.type}
             name={props.name}
             required={props.required}
             defaultValue={

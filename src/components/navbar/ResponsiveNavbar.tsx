@@ -4,8 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Session } from "next-auth";
-import { NavbarPropsType, NavLinkType, UserAreaLinkType } from "../../types";
+import { NavbarPropsType } from "../../types";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
@@ -303,6 +302,12 @@ const ResponsiveNavbar = ({
                                 href="#"
                                 className="ihub-dropdown-item ihub-dropdown-parent"
                                 onClick={(e) => toggleUserSubmenu(index, e)}
+                                target={link.isExternal ? "_blank" : undefined}
+                                rel={
+                                  link.isExternal
+                                    ? "noopener noreferrer"
+                                    : undefined
+                                }
                               >
                                 {link.icon && (
                                   <span className="ihub-dropdown-icon">
@@ -380,11 +385,19 @@ const ResponsiveNavbar = ({
                       <Link
                         key={index}
                         href={link.href}
-                        className={`ihub-btn ${
+                        className={`${
                           link.buttonStyle === "outline"
                             ? "ihub-outlined-btn"
                             : "ihub-important-btn"
                         }`}
+                        target={
+                          link.isExternal
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          link.isExternal ? "noopener noreferrer" : undefined
+                        }
                       >
                         {link.title}
                       </Link>

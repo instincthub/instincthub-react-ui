@@ -1,3 +1,4 @@
+"use client";
 import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useRouter } from "next/navigation";

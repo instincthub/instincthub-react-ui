@@ -7,7 +7,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   SideNavbarProps,
-  NavItem,
+  NavItemType,
   NavLinkItem,
   NavGroupItem,
   NavButtonItem,
@@ -97,7 +97,7 @@ const SideNavbar = ({
     const defaultExpandedGroups = new Set<string>();
 
     const findDefaultExpanded = (
-      navItems: NavItem[],
+      navItems: NavItemType[],
       parentExpanded = false
     ) => {
       navItems.forEach((item) => {
@@ -128,7 +128,7 @@ const SideNavbar = ({
   // Find active item based on current route
   useEffect(() => {
     // This would typically check against the current route
-    const findActiveItem = (navItems: NavItem[]): string | null => {
+    const findActiveItem = (navItems: NavItemType[]): string | null => {
       for (const item of navItems) {
         if ("isActive" in item && item.isActive) {
           return item.id;
@@ -316,7 +316,7 @@ const SideNavbar = ({
   };
 
   // Render navigation items
-  const renderNavItem = (item: NavItem, level = 0) => {
+  const renderNavItem = (item: NavItemType, level = 0) => {
     // Use custom render function if provided
     if (renderItem) {
       return renderItem(item, level);

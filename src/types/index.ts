@@ -268,6 +268,7 @@ export interface UserSubMenuItemType {
 export interface UserAreaLinkType {
   title: string;
   href: string;
+  isExternal?: boolean;
   icon?: string | React.ReactNode;
   isButton?: boolean;
   buttonStyle?: "primary" | "outline";

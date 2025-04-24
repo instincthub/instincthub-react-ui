@@ -257,6 +257,14 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/SearchObjectsFromDB.tsx",
     },
+    {
+      name: "ToggleButton",
+      description:
+        "ToggleButton component for changing state.",
+      category: "Form",
+      repo_path: "src/components/forms/ToggleButton.tsx",
+    },
+
 
     // Auth
     {
@@ -412,6 +420,24 @@ const ComponentLists = () => {
       description: "Profile card component",
       category: "UI",
       repo_path: "src/components/ui/cards/ProfileCard.tsx",
+    },
+    {
+      name: "RandomGradientImage",
+      description: "Random gradient image component",
+      category: "UI",
+      repo_path: "src/components/ui/images/RandomGradientImage.tsx",
+    },
+    {
+      name: "Dialog",
+      description: "A reusable dialog component",
+      category: "UI",
+      repo_path: "src/components/ui/dialogs/Dialog.tsx",
+    },
+    {
+      name: "Badge",
+      description: "A reusable Badge component",
+      category: "UI",
+      repo_path: "src/components/ui/Badge.tsx",
     },
 
     // Theme

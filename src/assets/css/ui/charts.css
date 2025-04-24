@@ -145,11 +145,14 @@
 }
 
 /* Tooltip styling */
-.recharts-tooltip-wrapper {
+.recharts-tooltip-wrapper .recharts-default-tooltip {
   background-color: var(--White) !important;
   border-radius: 5px !important;
   box-shadow: var(--shadow) !important;
   border: var(--borderDefault) !important;
+}
+.recharts-tooltip-cursor{
+  fill: var(--OpacityBackground);
 }
 
 /* Legend styling */

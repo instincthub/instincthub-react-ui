@@ -1,9 +1,10 @@
-import React, { forwardRef, useCallback, useEffect, useState } from "react";
+"use client";
+import React, { forwardRef, ReactNode, useCallback, useEffect, useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 interface SubmitButtonProps {
   /** Button label text */
-  label: string;
+  label: string | ReactNode;
   /** Loading state: 0 = loading, 1 = ready, 2 = success, 3 = error */
   status?: number;
   /** Button type attribute */

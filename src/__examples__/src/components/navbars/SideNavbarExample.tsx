@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import SideNavbar from "../../../../components/navbar/SideNavbar";
-import { NavItem } from "../../../../types/navbar";
+import { NavItemType } from "../../../../types/navbar";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -16,7 +16,7 @@ const SideNavbarExample: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   // Sample navigation items
-  const navItems: NavItem[] = [
+  const navItems: NavItemType[] = [
     {
       id: "dashboard",
       title: "Dashboard",

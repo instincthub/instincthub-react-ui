@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import InstinctHubChart from "./InstinctHubChart";
 import { generateChartColors } from "../../lib/charts";

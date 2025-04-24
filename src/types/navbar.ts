@@ -83,7 +83,7 @@ export interface NavDividerItem {
 /**
  * Union of all navigation item types
  */
-export type NavItem = NavLinkItem | NavGroupItem | NavButtonItem | NavDividerItem;
+export type NavItemType = NavLinkItem | NavGroupItem | NavButtonItem | NavDividerItem;
 
 /**
  * Logo configuration
@@ -154,7 +154,7 @@ export interface SideNavPositioning {
  */
 export interface SideNavbarProps {
   /** Array of navigation items */
-  items: NavItem[];
+  items: NavItemType[];
   
   /** Initial expanded state */
   defaultExpanded?: boolean;
@@ -229,7 +229,7 @@ export interface SideNavbarProps {
   lazyRender?: boolean;
   
   /** Custom renderer for nav items */
-  renderItem?: (item: NavItem, level: number) => React.ReactNode;
+  renderItem?: (item: NavItemType, level: number) => React.ReactNode;
   
   /** Custom tooltip component or configuration */
   tooltip?: {

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { reqOptions, API_HOST_URL, fetchAPI } from "../lib";
 import { SessionUserType } from "../../types";

@@ -2,7 +2,6 @@
 /* import "@/styles/app/data-list.css"; */
 
 .ihub-data-list-container {
-  margin-top: 50px;
   margin-bottom: 30px;
 }
 
@@ -29,10 +28,6 @@
 .ihub-data-list-container table td {
   padding: 10px;
   border-bottom: var(--borderDefault);
-}
-
-.ihub-data-list-header {
-  padding: 20px;
 }
 
 .ihub-data-controls {

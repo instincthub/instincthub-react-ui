@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, KeyboardEvent, ChangeEvent, FocusEvent } from "react";
 
 interface EmailListProps {

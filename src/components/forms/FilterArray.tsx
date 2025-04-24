@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 
 // Define the props interface for the FilterArray component

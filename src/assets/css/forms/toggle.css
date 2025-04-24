@@ -1,0 +1,140 @@
+/* Toggle Button Component Styles */
+.ihub-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.ihub-toggle-reverse {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.ihub-toggle-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.ihub-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ihub-toggle-track {
+  width: 48px;
+  height: 24px;
+  background-color: var(--ChineseSilver);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.ihub-toggle-active {
+  background-color: var(--DarkCyan);
+}
+
+.ihub-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--White);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ihub-toggle-input:checked + .ihub-toggle-track .ihub-toggle-thumb {
+  transform: translateX(24px);
+}
+
+.ihub-toggle-no-animation .ihub-toggle-thumb {
+  transition: none;
+}
+
+.ihub-toggle-label {
+  font-family: var(--Nunito);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--Gunmetal);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Size variations */
+.ihub-toggle-sm .ihub-toggle-track {
+  width: 36px;
+  height: 18px;
+  border-radius: 9px;
+}
+
+.ihub-toggle-sm .ihub-toggle-thumb {
+  width: 14px;
+  height: 14px;
+}
+
+.ihub-toggle-sm
+  .ihub-toggle-input:checked
+  + .ihub-toggle-track
+  .ihub-toggle-thumb {
+  transform: translateX(18px);
+}
+
+.ihub-toggle-lg .ihub-toggle-track {
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+}
+
+.ihub-toggle-lg .ihub-toggle-thumb {
+  width: 26px;
+  height: 26px;
+}
+
+.ihub-toggle-lg
+  .ihub-toggle-input:checked
+  + .ihub-toggle-track
+  .ihub-toggle-thumb {
+  transform: translateX(30px);
+}
+
+/* Disabled state */
+.ihub-toggle-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ihub-toggle-disabled .ihub-toggle-track {
+  cursor: not-allowed;
+}
+
+.ihub-toggle-disabled + .ihub-toggle-label {
+  cursor: not-allowed;
+}
+
+/* Focus state for accessibility */
+.ihub-toggle-input:focus + .ihub-toggle-track {
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.3);
+}
+
+/* Hover state */
+.ihub-toggle-track:hover:not(.ihub-toggle-disabled) {
+  background-color: var(--Gray);
+}
+
+.ihub-toggle-track:hover:not(.ihub-toggle-disabled).ihub-toggle-active {
+  opacity: 0.9;
+}
+
+/* For dark mode support, if implemented */
+@media (prefers-color-scheme: dark) {
+  .ihub-toggle-track {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}

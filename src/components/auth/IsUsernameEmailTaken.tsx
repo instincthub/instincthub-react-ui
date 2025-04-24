@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, ChangeEvent } from "react";
 import TextField from "../forms/TextField";
 import {
@@ -9,8 +11,8 @@ import {
 
 // Define props interface
 interface IsUsernameEmailTakenProps {
-  name: "username" | "email" | string; // Restrict to specific field names
-  types: string; // HTML input type (e.g., "text", "email")
+  name: "username" | "channel" | "email" | string; // Restrict to specific field names
+  type: string; // HTML input type (e.g., "text", "email")
   label: string;
   required: boolean;
   key: string | number; // Assuming this is a key for React's key prop
@@ -23,7 +25,7 @@ interface FieldState {
 }
 
 export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
-  const { name, types, label, required, key } = props;
+  const { name, type, label, required, key } = props;
   const [field, setField] = useState<FieldState>({
     note: "",
     valid: false,
@@ -105,7 +107,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
     <div key={key}>
       <TextField
         name={name}
-        types={types}
+        type={type}
         label={label}
         required={required}
         onChange={isUsernameValid}

@@ -1,3 +1,4 @@
+"use client";
 // components/CountryStateInput.tsx
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";

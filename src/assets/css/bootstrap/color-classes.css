@@ -1,0 +1,348 @@
+/* InstinctHub Color Utility Classes
+ * This file includes both text and background color utilities
+ * for the InstinctHub design system. 
+ * Prefix: ihub-
+ */
+
+/* Text Color Classes */
+.ihub-text-DarkCyan {
+  color: var(--DarkCyan);
+}
+.ihub-text-TurkishRose {
+  color: var(--TurkishRose);
+}
+.ihub-text-Gunmetal {
+  color: var(--Gunmetal);
+}
+.ihub-text-ViridianGreen {
+  color: var(--ViridianGreen);
+}
+.ihub-text-White {
+  color: var(--White);
+}
+.ihub-text-Danger {
+  color: var(--Danger);
+}
+
+.ihub-text-Rhythm {
+  color: var(--Rhythm);
+}
+.ihub-text-CaribbeanGreen {
+  color: var(--CaribbeanGreen);
+}
+.ihub-text-OldLavender {
+  color: var(--OldLavender);
+}
+.ihub-text-AmericanPurple {
+  color: var(--AmericanPurple);
+}
+.ihub-text-ChineseBlue {
+  color: var(--ChineseBlue);
+}
+.ihub-text-DarkSlateGray {
+  color: var(--DarkSlateGray);
+}
+.ihub-text-MaximumRedPurple {
+  color: var(--MaximumRedPurple);
+}
+.ihub-text-DarkLavender {
+  color: var(--DarkLavender);
+}
+.ihub-text-MetallicBlue {
+  color: var(--MetallicBlue);
+}
+.ihub-text-TiffanyBlue {
+  color: var(--TiffanyBlue);
+}
+.ihub-text-PoliceBlue {
+  color: var(--PoliceBlue);
+}
+.ihub-text-Corn {
+  color: var(--Corn);
+}
+.ihub-text-LimeGreen {
+  color: var(--LimeGreen);
+}
+.ihub-text-OldRose {
+  color: var(--OldRose);
+}
+.ihub-text-Magnolia {
+  color: var(--Magnolia);
+}
+.ihub-text-ChineseSilver {
+  color: var(--ChineseSilver);
+}
+.ihub-text-LavenderGray {
+  color: var(--LavenderGray);
+}
+
+/* Background Color Classes */
+.ihub-bg-DarkCyan {
+  background-color: var(--DarkCyan);
+}
+.ihub-bg-TurkishRose {
+  background-color: var(--TurkishRose);
+}
+.ihub-bg-Gunmetal {
+  background-color: var(--Gunmetal);
+}
+.ihub-bg-ViridianGreen {
+  background-color: var(--ViridianGreen);
+}
+.ihub-bg-White {
+  background-color: var(--White);
+}
+.ihub-bg-Danger {
+  background-color: var(--Danger);
+}
+.ihub-bg-FadeGlass {
+  background-color: var(--FadeGlass);
+}
+
+.ihub-bg-Rhythm {
+  background-color: var(--Rhythm);
+}
+.ihub-bg-CaribbeanGreen {
+  background-color: var(--CaribbeanGreen);
+}
+.ihub-bg-OldLavender {
+  background-color: var(--OldLavender);
+}
+.ihub-bg-AmericanPurple {
+  background-color: var(--AmericanPurple);
+}
+.ihub-bg-ChineseBlue {
+  background-color: var(--ChineseBlue);
+}
+.ihub-bg-DarkSlateGray {
+  background-color: var(--DarkSlateGray);
+}
+.ihub-bg-MaximumRedPurple {
+  background-color: var(--MaximumRedPurple);
+}
+.ihub-bg-DarkLavender {
+  background-color: var(--DarkLavender);
+}
+.ihub-bg-MetallicBlue {
+  background-color: var(--MetallicBlue);
+}
+.ihub-bg-TiffanyBlue {
+  background-color: var(--TiffanyBlue);
+}
+.ihub-bg-PoliceBlue {
+  background-color: var(--PoliceBlue);
+}
+.ihub-bg-Corn {
+  background-color: var(--Corn);
+}
+.ihub-bg-LimeGreen {
+  background-color: var(--LimeGreen);
+}
+.ihub-bg-OldRose {
+  background-color: var(--OldRose);
+}
+.ihub-bg-Magnolia {
+  background-color: var(--Magnolia);
+}
+.ihub-bg-ChineseSilver {
+  background-color: var(--ChineseSilver);
+}
+.ihub-bg-LavenderGray {
+  background-color: var(--LavenderGray);
+}
+.ihub-bg-Gray {
+  background-color: var(--Gray);
+}
+
+/* Gradient Backgrounds */
+.ihub-bg-Main-Gradient {
+  background: var(--Main-Gradient);
+}
+.ihub-bg-Dark-Gradient {
+  background: var(--Dark-Gradient);
+}
+
+/* Special Color Classes */
+.ihub-bg-blue {
+  background-color: var(--blue);
+}
+.ihub-text-blue {
+  color: var(--blue);
+}
+.ihub-bg-white {
+  background-color: var(--white);
+}
+.ihub-text-white {
+  color: var(--white);
+}
+.ihub-bg-DeepGreen-CyanTurquoise {
+  background-color: var(--DeepGreen-CyanTurquoise);
+}
+.ihub-text-DeepGreen-CyanTurquoise {
+  color: var(--DeepGreen-CyanTurquoise);
+}
+.ihub-bg-nesgBlue {
+  background-color: var(--nesgBlue);
+}
+.ihub-text-nesgBlue {
+  color: var(--nesgBlue);
+}
+.ihub-bg-nesgBlueOpacity {
+  background-color: var(--nesgBlueOpacity);
+}
+.ihub-text-nesgBlueOpacity {
+  color: var(--nesgBlueOpacity);
+}
+.ihub-bg-main-color {
+  background-color: var(--main-color);
+}
+.ihub-text-main-color {
+  color: var(--main-color);
+}
+.ihub-bg-second-color {
+  background-color: var(--second-color);
+}
+.ihub-text-second-color {
+  color: var(--second-color);
+}
+.ihub-bg-OpacityBackground {
+  background-color: var(--OpacityBackground);
+}
+
+/* Dark Mode Text Override Classes */
+.DarkMode .ihub-text-dark-emphasis {
+  color: var(--White);
+}
+.DarkMode .ihub-text-dark-medium {
+  color: rgba(255, 255, 255, 0.8);
+}
+.DarkMode .ihub-text-dark-muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+.DarkMode .ihub-text-dark-disabled {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Dark Mode Background Override Classes */
+.DarkMode .ihub-bg-dark-elevated {
+  background-color: #3a424a;
+} /* Lighter than Gunmetal */
+.DarkMode .ihub-bg-dark-surface {
+  background-color: var(--Gunmetal);
+}
+.DarkMode .ihub-bg-dark-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Border utilities for dark mode */
+.DarkMode .ihub-border-dark {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.DarkMode .ihub-border-dark-subtle {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Shadow utilities for dark mode */
+.DarkMode .ihub-shadow-dark-sm {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.DarkMode .ihub-shadow-dark-md {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.DarkMode .ihub-shadow-dark-lg {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover state utilities for dark mode */
+.DarkMode .ihub-hover-dark:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.DarkMode .ihub-hover-dark-text:hover {
+  color: var(--DarkCyan);
+}
+
+/* Focus state utilities for dark mode */
+.DarkMode .ihub-focus-dark:focus {
+  outline-color: var(--DarkCyan);
+}
+
+/* Form element styling for dark mode */
+.DarkMode input,
+.DarkMode select,
+.DarkMode textarea {
+  background-color: #3a424a;
+  color: var(--White);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.DarkMode input::placeholder,
+.DarkMode textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.DarkMode input:focus,
+.DarkMode select:focus,
+.DarkMode textarea:focus {
+  border-color: var(--DarkCyan);
+}
+
+/* Dark mode button styles */
+.DarkMode .ihub-important-btn,
+.DarkMode .ihub-ihub-important-btn {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+}
+
+.DarkMode .ihub-outlined-btn {
+  color: var(--DarkCyan);
+  border: 1px solid var(--DarkCyan);
+  background-color: transparent;
+}
+
+.DarkMode .ihub-outlined-btn:hover {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+}
+
+.DarkMode .ihub-default-btn {
+  background-color: #3a424a;
+  color: var(--White);
+}
+
+/* Add classes for status indicators in dark mode */
+.DarkMode .ihub-status-success {
+  background-color: rgba(0, 197, 162, 0.2);
+  color: var(--CaribbeanGreen);
+}
+.DarkMode .ihub-status-warning {
+  background-color: rgba(251, 235, 91, 0.2);
+  color: var(--Corn);
+}
+.DarkMode .ihub-status-danger {
+  background-color: rgba(234, 95, 94, 0.2);
+  color: var(--Danger);
+}
+.DarkMode .ihub-status-info {
+  background-color: rgba(0, 131, 143, 0.2);
+  color: var(--DarkCyan);
+}
+
+/* Media queries for responsive color adjustments */
+@media (prefers-color-scheme: dark) {
+  :root.ihub-auto-dark-mode {
+    /* Automatically apply dark mode colors when system preference is set to dark */
+    color-scheme: dark;
+  }
+
+  :root.ihub-auto-dark-mode body {
+    color: var(--White);
+    background-color: var(--Gunmetal);
+  }
+
+  /* Apply all the dark-mode overrides automatically */
+  :root.ihub-auto-dark-mode body {
+    /* This inherits all the styles from .DarkMode */
+    color: var(--White);
+    background-color: var(--Gunmetal);
+  }
+}
