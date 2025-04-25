@@ -35,7 +35,6 @@ const ChipsInputExample: React.FC = () => {
         placeholder="Add skills (e.g., JavaScript, React)"
         separator=","
         maxChips={10}
-        validateEmail={true}
         errorMessage="Invalid skill format"
       />
 
