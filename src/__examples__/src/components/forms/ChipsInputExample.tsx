@@ -25,19 +25,6 @@ const ChipsInputExample: React.FC = () => {
     return true;
   };
 
-  /**
-   * Validates an email address
-   * @param value The email to validate
-   * @returns True if valid, error message string if invalid
-   */
-  const validateEmail = (value: string): boolean | string => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      return "Please enter a valid email address";
-    }
-    return true;
-  };
-
   return (
     <div className="ihub-container">
       <h2>Skills Input</h2>
@@ -48,7 +35,7 @@ const ChipsInputExample: React.FC = () => {
         placeholder="Add skills (e.g., JavaScript, React)"
         separator=","
         maxChips={10}
-        validate={validateSkill}
+        validateEmail={true}
         errorMessage="Invalid skill format"
       />
 
@@ -59,7 +46,7 @@ const ChipsInputExample: React.FC = () => {
         onChange={setEmails}
         placeholder="Add email addresses"
         separator=","
-        validate={validateEmail}
+        validateEmail={true}
         errorMessage="Invalid email format"
         size="large"
       />

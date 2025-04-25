@@ -39,17 +39,17 @@ yarn add @instincthub/react-ui
 ## Usage
 
 ```tsx
-import React, { useState } from 'react';
-import { ChipsInput } from '@instincthub/react-ui';
+import React, { useState } from "react";
+import { ChipsInput } from "@instincthub/react-ui";
 
 const TagSelector: React.FC = () => {
-  const [tags, setTags] = useState<string[]>(['React', 'TypeScript']);
-  
+  const [tags, setTags] = useState<string[]>(["React", "TypeScript"]);
+
   const validateTag = (tag: string): boolean | string => {
-    if (tag.length < 2) return 'Tag must be at least 2 characters';
+    if (tag.length < 2) return "Tag must be at least 2 characters";
     return true;
   };
-  
+
   return (
     <ChipsInput
       value={tags}
@@ -65,23 +65,23 @@ const TagSelector: React.FC = () => {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string[]` | Required | Array of current chip values |
-| `onChange` | `(values: string[]) => void` | Required | Callback when chips change |
-| `placeholder` | `string` | `'Add tags...'` | Input placeholder text |
-| `name` | `string` | `false` | It will create an input field with the name and value |
-| `separator` | `string` | `','` | Character to trigger chip creation |
-| `maxChips` | `number` | `undefined` | Maximum number of chips allowed |
-| `allowDuplicates` | `boolean` | `false` | Whether duplicate values are allowed |
-| `disabled` | `boolean` | `false` | Disables the input |
-| `validate` | `(value: string) => boolean \| string` | `undefined` | Validation function |
-| `errorMessage` | `string` | `''` | Default error message |
-| `className` | `string` | `''` | Additional class for container |
-| `chipClassName` | `string` | `''` | Additional class for chips |
-| `inputClassName` | `string` | `''` | Additional class for input |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant |
-| `ariaLabel` | `string` | `'Chips input'` | Accessibility label |
+| Prop              | Type                                   | Default         | Description                                           |
+| ----------------- | -------------------------------------- | --------------- | ----------------------------------------------------- |
+| `value`           | `string[]`                             | Required        | Array of current chip values                          |
+| `onChange`        | `(values: string[]) => void`           | Required        | Callback when chips change                            |
+| `placeholder`     | `string`                               | `'Add tags...'` | Input placeholder text                                |
+| `name`            | `string`                               | `false`         | It will create an input field with the name and value |
+| `separator`       | `string`                               | `','`           | Character to trigger chip creation                    |
+| `maxChips`        | `number`                               | `undefined`     | Maximum number of chips allowed                       |
+| `allowDuplicates` | `boolean`                              | `false`         | Whether duplicate values are allowed                  |
+| `disabled`        | `boolean`                              | `false`         | Disables the input                                    |
+| `validate`        | `(value: string) => boolean \| string` | `undefined`     | Validation function                                   |
+| `errorMessage`    | `string`                               | `''`            | Default error message                                 |
+| `className`       | `string`                               | `''`            | Additional class for container                        |
+| `chipClassName`   | `string`                               | `''`            | Additional class for chips                            |
+| `inputClassName`  | `string`                               | `''`            | Additional class for input                            |
+| `size`            | `'small' \| 'medium' \| 'large'`       | `'medium'`      | Size variant                                          |
+| `ariaLabel`       | `string`                               | `'Chips input'` | Accessibility label                                   |
 
 ## Keyboard Navigation
 
@@ -93,28 +93,21 @@ const TagSelector: React.FC = () => {
 ## Validation
 
 The component supports validation through the `validate` prop, which accepts a function that returns:
+
 - `true` if the value is valid
 - `false` if the value is invalid (uses `errorMessage` prop)
 - A string containing a custom error message
 
 Example:
 
-```tsx
-const validateEmail = (value: string): boolean | string => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(value)) {
-    return 'Please enter a valid email address';
-  }
-  return true;
-};
-
 <ChipsInput
   value={emails}
   onChange={setEmails}
-  validate={validateEmail}
+  validateEmail={true}
   errorMessage="Invalid email format"
 />
-```
+
+````
 
 ## Styling
 
@@ -143,4 +136,4 @@ When using the component, ensure proper labeling for the best user experience:
   onChange={setSkills}
   ariaLabel="skills-label"
 />
-```
+````

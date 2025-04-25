@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { InputText } from "../../../../index";
+import { isValidEmail } from "../../../../components/lib";
 
 const InputTextExample: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -34,11 +35,6 @@ const InputTextExample: React.FC = () => {
     }
   };
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -48,7 +44,7 @@ const InputTextExample: React.FC = () => {
         ...prev,
         [name]: "This field is required",
       }));
-    } else if (name === "email" && !validateEmail(value)) {
+    } else if (name === "email" && !isValidEmail(value)) {
       setFormErrors((prev) => ({
         ...prev,
         email: "Please enter a valid email address",

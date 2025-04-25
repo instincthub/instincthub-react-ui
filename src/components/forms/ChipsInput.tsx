@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, {
   useState,
   useRef,
@@ -6,6 +6,7 @@ import React, {
   ChangeEvent,
   FocusEvent,
 } from "react";
+import { isValidEmail } from "../lib";
 
 /**
  * Props for the ChipsInput component
@@ -27,7 +28,7 @@ interface ChipsInputProps {
   /** Disables the input */
   disabled?: boolean;
   /** Validation function */
-  validate?: (value: string) => boolean | string;
+  validateEmail?: boolean;
   /** Default error message */
   errorMessage?: string;
   /** Additional class for container */
@@ -54,7 +55,7 @@ const ChipsInput: React.FC<ChipsInputProps> = ({
   maxChips,
   allowDuplicates = false,
   disabled = false,
-  validate,
+  validateEmail,
   errorMessage = "",
   className = "",
   chipClassName = "",
@@ -78,12 +79,10 @@ const ChipsInput: React.FC<ChipsInputProps> = ({
     if (!trimmedValue) return;
 
     // Validate if needed
-    if (validate) {
-      const validationResult = validate(trimmedValue);
-      if (typeof validationResult === "string") {
-        setError(validationResult);
-        return;
-      } else if (validationResult === false) {
+    if (validateEmail) {
+      const validationResult = isValidEmail(trimmedValue);
+      if (!validationResult) {
+        setError("Please enter a valid email address");
         setError(errorMessage || "Invalid input");
         return;
       }
