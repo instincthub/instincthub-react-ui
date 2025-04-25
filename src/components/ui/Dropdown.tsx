@@ -27,7 +27,6 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,23 +53,6 @@ const Dropdown: React.FC<DropdownPropsType> = ({
       searchInputRef.current.focus();
     }
   }, [isOpen, isSearchable]);
-
-  // Add this useEffect to your Dropdown component
-  useEffect(() => {
-    // This effect runs whenever selectedValue changes
-    // It ensures the display is synchronized with the current selection
-
-    // If you need to update any internal state based on selectedValue changes
-    // For example, if you have any derived state that depends on selectedValue
-
-    if (selectedValue !== undefined) {
-      getSelectedOptions();
-    }
-
-    // Do not change the open/closed state of the dropdown here
-    // This way, selecting an option in multi-select mode won't close the dropdown
-    // But the display will still update to show the selected items
-  }, [selectedValue, options, isMulti]);
 
   // Filter options based on search term
   const filteredOptions = useMemo(() => {
@@ -146,18 +128,16 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
   // Find selected option(s) for display
   const getSelectedOptions = () => {
-    if (!selectedValue) return setSelectedOptions([]);
+    if (!selectedValue) return [];
 
     if (Array.isArray(selectedValue)) {
-      setSelectedOptions(
-        options.filter((option) => selectedValue.includes(option.value))
-      );
-    } else {
-      setSelectedOptions(
-        options.filter((option) => option.value === selectedValue)
-      );
+      return options.filter((option) => selectedValue.includes(option.value));
     }
+
+    return options.filter((option) => option.value === selectedValue);
   };
+
+  const selectedOptions = getSelectedOptions();
 
   return (
     <div
@@ -192,7 +172,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
                       onClick={(e) => removeItem(option.value, e)}
                       aria-label={`Remove ${option.label}`}
                     >
-                      <CloseOutlinedIcon className="ihub-fs-sm" />
+                      <CloseOutlinedIcon />
                     </button>
                   </div>
                 ))}
