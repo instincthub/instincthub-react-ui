@@ -13,34 +13,6 @@ interface TabsProps {
   contentClassName?: string;
 }
 
-/**
- * Modern Tab component for InstinctHub
- * @component
- * @example
- * const tabs = [
- *   {
- *     id: "tab1",
- *     label: "Tab 1",
- *     content: <div>Tab 1 content</div>,
- *   },
- *   {
- *     id: "tab2",
- *     label: "Tab 2",
- *     content: <div>Tab 2 content</div>,
- *   },
- * ];
- *
- * <Tabs items={tabs} defaultActiveTab="tab1" onChange={(tabItem) => console.log(tabItem)} />
- *
- * @param items Array of tab items containing id, label, and content. See example above.
- * @param defaultActiveTab ID of the tab that should be active by default
- * @param onChange Callback function that fires when a tab is changed
- * @param variant Visual style of tabs: "default", "bordered", or "pills"
- * @param className Additional classes for the main container
- * @param tabsContainerClassName Additional classes for the tabs header container
- * @param contentClassName Additional classes for the content container
- * @type {TabsProps} from src/types
- */
 const Tabs = ({
   items,
   defaultActiveTab,
@@ -50,30 +22,30 @@ const Tabs = ({
   tabsContainerClassName = "",
   contentClassName = "",
 }: TabsProps) => {
-  const [activeItem, setactiveItem] = useState<TabItemType>(
-    (items.length > 0 ? items[0] : null) as TabItemType
+  const [activeTabId, setActiveTabId] = useState<string | number>(
+    defaultActiveTab || (items.length > 0 ? items[0].id : "")
   );
 
   useEffect(() => {
     if (defaultActiveTab) {
-      const defaultItem = items.find(
-        (item) => defaultActiveTab === item.id
-      ) as TabItemType;
-      setactiveItem(defaultItem);
+      setActiveTabId(defaultActiveTab);
     }
   }, [defaultActiveTab]);
 
   const handleTabClick = (item: TabItemType) => {
-    if (items.find((item) => item.id === item.id)?.disabled) {
+    if (item.disabled) {
       return;
     }
 
-    setactiveItem(item);
+    setActiveTabId(item.id);
 
     if (onChange) {
       onChange(item);
     }
   };
+
+  // Find the active tab
+  const activeTab = items.find((item) => item.id === activeTabId) || items[0];
 
   // Generate class names based on variant
   const getTabsContainerClass = () => {
@@ -89,9 +61,9 @@ const Tabs = ({
     }
   };
 
-  const getTabItemClass = (tabId: string, disabled?: boolean) => {
+  const getTabItemClass = (tabId: string | number, disabled?: boolean) => {
     const baseClass = "ihub-tab-item";
-    const activeClass = tabId === activeItem.id ? "ihub-tab-active" : "";
+    const activeClass = tabId === activeTabId ? "ihub-tab-active" : "";
     const disabledClass = disabled ? "ihub-tab-disabled" : "";
 
     return `${baseClass} ${activeClass} ${disabledClass}`;
@@ -106,16 +78,16 @@ const Tabs = ({
             className={getTabItemClass(tab.id, tab.disabled)}
             onClick={() => handleTabClick(tab)}
             role="tab"
-            aria-selected={activeItem.id === tab.id}
+            aria-selected={activeTabId === tab.id}
             tabIndex={tab.disabled ? -1 : 0}
           >
             {tab.label}
           </div>
         ))}
       </div>
-      {activeItem?.content && (
+      {activeTab?.content && (
         <div className={`ihub-tab-content ${contentClassName}`}>
-          {activeItem?.content}
+          {activeTab.content}
         </div>
       )}
     </div>
