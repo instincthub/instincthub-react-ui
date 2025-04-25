@@ -51,6 +51,7 @@ export { default as SearchObjectsFromDB } from "./components/forms/SearchObjects
 export { default as ToggleButton } from "./components/forms/ToggleButton";
 export { default as CheckboxesField } from "./components/forms/CheckboxesField";
 export { default as DateInputPicker } from "./components/forms/DateInputPicker";
+export { default as ChipsInput } from "./components/forms/ChipsInput";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";

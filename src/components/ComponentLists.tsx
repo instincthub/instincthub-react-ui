@@ -269,6 +269,12 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/DateInputPicker.tsx",
     },
+    {
+      name: "ChipsInput",
+      description: "ChipsInput is used to enter multiple values on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/ChipsInput.tsx",
+    },
 
     // Auth
     {
