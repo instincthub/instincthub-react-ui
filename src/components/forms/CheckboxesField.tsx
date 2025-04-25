@@ -15,6 +15,7 @@ interface CheckboxesFieldProps {
   defaultValues?: boolean;
   required?: boolean;
   disabled?: boolean;
+  maxHeight?: string;
   error?: string;
   onChange?: (values: Record<string, boolean>) => void;
   onBlur?: () => void;
@@ -28,6 +29,7 @@ interface CheckboxesFieldProps {
  * @param defaultValues Whether to use status from options as default value
  * @param required Whether the field is required
  * @param disabled Whether the field is disabled
+ * @param maxHeight Used to set the max width
  * @param error Error message to display
  * @param onChange Callback when values change
  * @param onBlur Callback when the field loses focus
@@ -39,6 +41,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   defaultValues = false,
   required = false,
   disabled = false,
+  maxHeight,
   error,
   onChange,
   onBlur,
@@ -146,6 +149,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
       <div
         className={`ihub-checkbox-wrapper ${hasError ? "ihub-has-error" : ""}`}
         onBlur={handleBlur}
+        style={{ maxHeight: maxHeight}}
       >
         {optionsArray.map((option) => (
           <div className="ihub-checkbox-item" key={option.id}>

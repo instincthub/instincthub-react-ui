@@ -1807,7 +1807,6 @@
   }
 }
 
-
 /* React Hook Form Checkbox Component Styles CheckboxesField.tsx */
 .ihub-checkbox-field {
   margin: 30px 0;
@@ -1839,7 +1838,6 @@
 }
 
 .ihub-checkbox-wrapper {
-  max-height: 200px;
   overflow: auto;
   background-color: #f4f4f4;
   padding: 15px;
