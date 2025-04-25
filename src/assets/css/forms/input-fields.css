@@ -103,9 +103,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
   position: relative;
-  margin-top: 25px;
+  align-items: center;
 }
 
 .ihub-date-input {
@@ -160,6 +159,8 @@
 .ihub-date-wrapper,
 .ihub-time-wrapper {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .ihub-datetime-separator {
@@ -172,6 +173,11 @@
   .ihub-datetime-container {
     display: block;
     width: 100%;
+  }
+
+  .ihub-date-input-container {
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .ihub-datetime-separator {
@@ -1879,4 +1885,245 @@
 
 .ihub-checkbox-item .label-cbx.ihub-disabled .checkbox {
   background-color: #e0e0e0;
+}
+
+/* Calendar Picker Styles */
+.ihub-calendar-container {
+  position: absolute;
+  z-index: var(--z-popup, 1000);
+  width: 300px;
+  background: var(--White, #ffffff);
+  border: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  padding: 10px;
+  font-family: var(--Nunito, sans-serif);
+}
+
+.ihub-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px 0;
+}
+
+.ihub-calendar-title {
+  font-weight: 600;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.ihub-calendar-nav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--DarkCyan, #00838f);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  padding: 0px;
+}
+
+.ihub-calendar-nav:hover {
+  background-color: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+.ihub-calendar-days div {
+  padding: 5px;
+}
+
+.ihub-calendar-grid {
+  margin-bottom: 10px;
+}
+
+.ihub-calendar-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.ihub-calendar-cell {
+  padding: 8px 5px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px auto;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-calendar-cell:hover:not(.ihub-disabled) {
+  background-color: rgba(0, 131, 143, 0.1);
+}
+
+.ihub-calendar-cell.ihub-selected {
+  background-color: var(--DarkCyan, #00838f);
+  color: var(--White, white);
+}
+
+.ihub-calendar-cell.ihub-today:not(.ihub-selected) {
+  border: 1px solid var(--DarkCyan, #00838f);
+  font-weight: 600;
+}
+
+.ihub-calendar-cell.ihub-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ihub-calendar-actions {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 10px;
+}
+
+.ihub-calendar-action-btn {
+  background: none;
+  border: 1px solid var(--DarkCyan, #00838f);
+  color: var(--DarkCyan, #00838f);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: var(--Nunito, sans-serif);
+  transition: all 0.2s ease;
+}
+
+.ihub-calendar-action-btn:hover {
+  background-color: var(--DarkCyan, #00838f);
+  color: var(--White, white);
+}
+
+/* Date Input Refinements */
+.ihub-date-separator {
+  font-weight: 600;
+  padding: 0 2px;
+  color: var(--Gunmetal, #2c333a);
+}
+
+.ihub-calendar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  margin-left: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.ihub-calendar-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Lebel Styling */
+.ihub-date-wrapper .ihub-text-label {
+  top: -36px;
+  left: 5px;
+}
+
+/* Error styling */
+.ihub-wrapper.ihub-is_invalid .ihub-text-label {
+  color: var(--Danger, #ea5f5e);
+}
+
+.ihub-error-message {
+  color: var(--Danger, #ea5f5e);
+  font-size: 0.8rem;
+  margin-top: 5px;
+  font-family: var(--Nunito, sans-serif);
+}
+
+/* Required field indicator */
+.ihub-required {
+  color: var(--Danger, #ea5f5e);
+  margin-left: 3px;
+}
+
+/* Override focus state for more visibility */
+.ihub-date-input:focus {
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.2);
+  outline: none;
+}
+
+/* Better hover states for input fields */
+.ihub-date-input:hover:not(:disabled) {
+  border-color: var(--TurkishRose, #bc658d);
+}
+
+/* Improved disabled state */
+.ihub-date-input:disabled {
+  background-color: var(--Gray, #f4f4f4);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Date-time separator styling */
+.ihub-datetime-separator {
+  font-weight: 500;
+  padding: 0 8px;
+  color: var(--Gunmetal, #2c333a);
+}
+
+/* Enhanced quick action links */
+.ihub-date-wrapper .ihub-auto-date {
+  margin-top: 5px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+.ihub-date-picker-action {
+  margin-left: 5px;
+  margin-top: 10x;
+}
+.ihub-auto-date span {
+  transition: color 0.2s ease;
+}
+
+.ihub-auto-date .ihub-set-today:hover,
+.ihub-auto-date .ihub-clear-date:hover {
+  color: var(--TurkishRose, #bc658d);
+  text-decoration: underline;
+}
+
+/* Responsive improvements */
+@media (max-width: 400px) {
+  .ihub-date-input {
+    width: 50px;
+  }
+
+  .ihub-date-year {
+    width: 60px;
+  }
+
+  .ihub-calendar-container {
+    width: 280px;
+  }
+
+  .ihub-calendar-cell {
+    width: 32px;
+    height: 32px;
+  }
 }

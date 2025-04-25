@@ -263,6 +263,12 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/ToggleButton.tsx",
     },
+    {
+      name: "DateInputPicker",
+      description: "DateInputPicker component for picking date and time.",
+      category: "Form",
+      repo_path: "src/components/forms/DateInputPicker.tsx",
+    },
 
     // Auth
     {

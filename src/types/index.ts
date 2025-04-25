@@ -324,3 +324,57 @@ export interface DropdownPropsType {
   maxHeight?: number;
   renderOption?: (option: DropdownOptionType) => React.ReactNode;
 }
+
+/**
+ * Props for the DateInputPicker component
+ */
+export interface DateInputPickerPropsType {
+  /** Input label */
+  label: string;
+  /** Current date value in YYYY-MM-DD format */
+  value?: string;
+  /** Handler called when date changes */
+  onChange?: (date: string) => void;
+  /** Whether the date input is required */
+  required?: boolean;
+  /** Minimum allowed date in YYYY-MM-DD format */
+  minDate?: string;
+  /** Maximum allowed date in YYYY-MM-DD format */
+  maxDate?: string;
+  /** Array of dates to disable (YYYY-MM-DD format) */
+  disabledDates?: string[];
+  /** Error message to display */
+  errorMessage?: string;
+  /** Additional class name */
+  className?: string;
+  /** Format for displaying the date (default: 'YYYY-MM-DD') */
+  displayFormat?: string;
+  /** Locale for date formatting (default: 'en-US') */
+  locale?: string;
+  /** Whether to include time input */
+  includeTime?: boolean;
+  /** Name attribute for the input field */
+  name?: string;
+  /** ID attribute for the input field */
+  id?: string;
+  /** Placeholder text */
+  placeholder?: string;
+  /** Whether the input is disabled */
+  disabled?: boolean;
+  /** Whether to show the calendar picker */
+  showCalendarPicker?: boolean;
+  /** Whether to show today/clear buttons */
+  showQuickActions?: boolean;
+  /** ARIA label for accessibility */
+  ariaLabel?: string;
+}
+
+export interface DateInputPickerTimePropsType
+  extends Omit<DateInputPickerPropsType, "includeTime"> {
+  /** Format for displaying time (12 or 24 hour) */
+  timeFormat?: "12h" | "24h";
+  /** Whether to include seconds in time selection */
+  includeSeconds?: boolean;
+  /** Time step in minutes (default: 1) */
+  minuteStep?: number;
+}
