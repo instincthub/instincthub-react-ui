@@ -19,6 +19,7 @@ interface CheckboxesFieldProps {
   error?: string;
   onChange?: (values: Record<string, boolean>) => void;
   onBlur?: () => void;
+  fontSize?: string;
 }
 
 /**
@@ -33,6 +34,7 @@ interface CheckboxesFieldProps {
  * @param error Error message to display
  * @param onChange Callback when values change
  * @param onBlur Callback when the field loses focus
+ * @param fontSize Font size of the checkbox text
  */
 const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   name,
@@ -45,6 +47,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   error,
   onChange,
   onBlur,
+  fontSize = "ihub-fs-sm",
 }) => {
   // Initialize state with default values
   const [checkboxValues, setCheckboxValues] = useState<Record<string, boolean>>(
@@ -175,7 +178,9 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
                   <polyline points="4 11 8 15 16 6"></polyline>
                 </svg>
               </div>
-              <span>{option.title}</span>
+              <span className={`ihub-checkbox-text ${fontSize}`}>
+                {option.title}
+              </span>
             </label>
           </div>
         ))}

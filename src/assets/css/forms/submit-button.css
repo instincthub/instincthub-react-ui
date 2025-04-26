@@ -59,8 +59,7 @@
   color: var(--Gunmetal);
   border: none;
   min-width: auto;
-  padding-right: 20px;
-  padding-left: 20px;
+  padding: 5px;
 }
 
 .ihub-submit-btn.icon-btn:hover:not(:disabled) {
