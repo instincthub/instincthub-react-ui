@@ -37,7 +37,6 @@ table td {
   margin-top: 0px;
 }
 header {
-  background-color: var(--OpacityBackground);
   border-bottom-width: 3px;
   border-color: #284b5c;
   display: flex;

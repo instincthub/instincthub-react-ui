@@ -21,6 +21,7 @@ export { default as ClientDetector } from "./components/auth/ClientDetector";
 export { default as PasswordsMatch } from "./components/auth/PasswordsMatch";
 export { default as FromInstinctHub } from "./components/auth/FromInstinctHub";
 export { default as LoginForm } from "./components/auth/LoginForm";
+export { default as ReactClientProviders } from "./components/auth/ReactClientProviders";
 
 // Correcting incorrect assignments
 export { default as PhoneNumberInput } from "./components/forms/PhoneNumberInput";

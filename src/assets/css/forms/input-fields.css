@@ -1669,7 +1669,9 @@
 
 /* Improve animation for floating label */
 .ihub-wrapper .ihub-input:focus + .ihub-text-label,
-.ihub-wrapper.ihub-value .ihub-text-label {
+.ihub-wrapper.ihub-value .ihub-text-label,
+.ihub-wrapper .ihub-input:focus + .ihub-chips-label,
+.ihub-wrapper .ihub-chips-label {
   transform: translateY(-22px) scale(0.85);
   transform-origin: left top;
   transition: all 0.2s ease;
@@ -1711,7 +1713,8 @@
   width: 100%;
 }
 
-.ihub-wrapper.ihub-textarea-wrapper .ihub-text-label {
+.ihub-wrapper.ihub-textarea-wrapper .ihub-text-label,
+.ihub-wrapper .ihub-chips-label {
   position: absolute;
   top: 13px;
   left: 15px;
@@ -1766,20 +1769,33 @@
 }
 
 .ihub-wrapper.ihub-textarea-wrapper .ihub-textarea:focus + .ihub-text-label,
-.ihub-wrapper.ihub-textarea-wrapper.ihub-value .ihub-text-label {
+.ihub-wrapper input:focus + .ihub-chips-label,
+.ihub-wrapper.ihub-textarea-wrapper.ihub-value .ihub-text-labe {
   background: var(--White);
   top: -10px;
   height: 20px;
   padding: 5px;
   margin: 0;
   color: var(--DarkCyan);
-  font-size: 14px;
+  font-size: 1rem;
   pointer-events: initial;
   left: 5px;
   top: 15px;
   line-height: 10px;
   width: auto;
   font-family: var(--Nunito);
+}
+.ihub-wrapper .ihub-chips-label {
+  background: var(--White);
+  top: -10px;
+  height: 20px;
+  padding: 5px;
+  margin: 0;
+  font-size: 1.2rem;
+  pointer-events: initial;
+  left: 5px;
+  top: 15px;
+  line-height: 10px;
 }
 
 .ihub-wrapper.ihub-textarea-wrapper.ihub-error

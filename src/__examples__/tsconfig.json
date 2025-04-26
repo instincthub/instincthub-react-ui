@@ -20,6 +20,13 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../components/auth/ReduxProvider.tsx",
+    "../components/auth/ReactClientProviders.tsx"
+  ],
   "exclude": ["node_modules"]
 }

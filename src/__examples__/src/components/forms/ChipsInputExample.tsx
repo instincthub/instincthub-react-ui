@@ -30,6 +30,7 @@ const ChipsInputExample: React.FC = () => {
       <h2>Skills Input</h2>
       <p>Enter your skills (press Enter or comma to add)</p>
       <ChipsInput
+        label="Skills"
         value={skills}
         onChange={setSkills}
         placeholder="Add skills (e.g., JavaScript, React)"

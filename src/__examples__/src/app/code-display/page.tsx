@@ -45,7 +45,6 @@ for i in range(10):
 }
 
 .header {
-  background-color: #f5f5f5;
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

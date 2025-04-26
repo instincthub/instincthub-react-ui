@@ -3,7 +3,7 @@ import "../assets/styles/globals.css";
 import "../assets/styles/header.css";
 import MainFooter from "../components/navbars/MainFooter";
 import CursorProviders from "../components/navbars/CursorProviders";
-import ReactClientProviders from "../components/auths/ReactClientProviders";
+import ReactClientProviders from "../../../components/auth/ReactClientProviders";
 export const metadata = {
   title: "InstinctHub React UI",
   description: "A modern React UI component library by InstinctHub",

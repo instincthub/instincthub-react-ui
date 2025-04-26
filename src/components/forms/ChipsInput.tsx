@@ -12,6 +12,9 @@ import { isValidEmail } from "../lib";
  * Props for the ChipsInput component
  */
 interface ChipsInputProps {
+  /** Label for the input */
+  label?: string;
+  /** Name for the input */
   name?: string;
   /** Array of current chip values */
   value: string[];
@@ -41,12 +44,15 @@ interface ChipsInputProps {
   size?: "small" | "medium" | "large";
   /** Accessibility label */
   ariaLabel?: string;
+  /** Whether the input is required */
+  required?: boolean;
 }
 
 /**
  * A flexible input component that converts text entries into chips/tags
  */
 const ChipsInput: React.FC<ChipsInputProps> = ({
+  label,
   name,
   value = [],
   onChange,
@@ -62,6 +68,7 @@ const ChipsInput: React.FC<ChipsInputProps> = ({
   inputClassName = "",
   size = "medium",
   ariaLabel = "Chips input",
+  required = false,
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -306,7 +313,15 @@ const ChipsInput: React.FC<ChipsInputProps> = ({
             disabled || (maxChips !== undefined && value.length >= maxChips)
           }
           aria-invalid={!!error}
+          required={required}
         />
+
+        {label && (
+          <label htmlFor={name} className="ihub-chips-label ihub-text-label">
+            {label}
+            {required && <span className="ihub-required">*</span>}
+          </label>
+        )}
       </div>
 
       {error && (
