@@ -1,0 +1,198 @@
+/* Radio Button Component Styles */
+
+/* Radio Button Container */
+.ihub-radio-wrapper {
+  position: relative;
+  margin: 10px 0;
+  font-family: var(--Nunito);
+}
+
+.ihub-radio-container {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+/* Hide default radio input while keeping it accessible */
+.ihub-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* Custom radio button styles */
+.ihub-radio-label {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: 4px 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: var(--Nunito);
+  font-size: 1rem;
+  color: var(--Gunmetal);
+  transition: all 0.2s ease;
+}
+
+.ihub-radio-custom {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 2px solid var(--ChineseSilver, #cccccc);
+  border-radius: 50%;
+  background-color: var(--White);
+  transition: all 0.2s ease;
+}
+
+.ihub-radio-text {
+  padding-top: 1px;
+}
+
+/* Required mark */
+.ihub-required-mark {
+  color: var(--Danger, #ea5f5e);
+  margin-left: 4px;
+}
+
+/* Radio states */
+.ihub-radio-input:checked + .ihub-radio-label .ihub-radio-custom {
+  border-color: var(--DarkCyan, #00838f);
+}
+
+.ihub-radio-input:checked + .ihub-radio-label .ihub-radio-custom::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: var(--DarkCyan, #00838f);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ihub-radio-pop 0.2s ease-in-out forwards;
+}
+
+/* Focus state for accessibility */
+.ihub-radio-input:focus + .ihub-radio-label .ihub-radio-custom {
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.2);
+}
+
+/* Hover state */
+.ihub-radio-label:hover .ihub-radio-custom {
+  border-color: var(--DarkCyan, #00838f);
+}
+
+/* Disabled state */
+.ihub-radio-disabled .ihub-radio-label {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.ihub-radio-disabled .ihub-radio-custom {
+  background-color: var(--Gray, #f4f4f4);
+  border-color: var(--ChineseSilver, #cccccc);
+}
+
+.ihub-radio-disabled .ihub-radio-label:hover .ihub-radio-custom {
+  border-color: var(--ChineseSilver, #cccccc);
+}
+
+/* Error state */
+.ihub-radio-error .ihub-radio-custom {
+  border-color: var(--Danger, #ea5f5e);
+}
+
+.ihub-radio-error-message {
+  font-size: 0.875rem;
+  color: var(--Danger, #ea5f5e);
+  margin-top: 4px;
+  padding-left: 30px;
+}
+
+/* Help text */
+.ihub-radio-help-text {
+  font-size: 0.875rem;
+  color: var(--Gunmetal, #2c333a);
+  opacity: 0.7;
+  margin-top: 4px;
+  padding-left: 30px;
+}
+
+/* Animation for radio selection */
+@keyframes ihub-radio-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Radio Group Styles */
+.ihub-radio-group {
+  border: none;
+  padding: 0;
+  margin: 20px 0;
+  min-width: 200px;
+}
+
+.ihub-radio-group-legend {
+  font-family: var(--Nunito);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--Gunmetal, #2c333a);
+  margin-bottom: 12px;
+  padding: 0;
+  float: none;
+  width: 100%;
+}
+
+.ihub-radio-group-description {
+  font-size: 0.875rem;
+  margin-bottom: 15px;
+  color: var(--Gunmetal, #2c333a);
+  opacity: 0.8;
+}
+
+.ihub-radio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Inline radio group layout */
+.ihub-radio-group-inline .ihub-radio-options {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Error state for radio group */
+.ihub-radio-group-error {
+  position: relative;
+}
+
+.ihub-radio-group-error .ihub-radio-group-legend {
+  color: var(--Danger, #ea5f5e);
+}
+
+.ihub-radio-group-error-message {
+  font-size: 0.875rem;
+  color: var(--Danger, #ea5f5e);
+  margin-top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .ihub-radio-group-inline .ihub-radio-options {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

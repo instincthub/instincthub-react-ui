@@ -275,6 +275,18 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/ChipsInput.tsx",
     },
+    {
+      name: "RadioButton",
+      description: "RadioButton is used to enter single value on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/radio-btn/RadioButton.tsx",
+    },
+    {
+      name: "RadioGroup",
+      description: "RadioGroup is used to select each from group value on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/radio-btn/RadioGroup.tsx",
+    },
 
     // Auth
     {

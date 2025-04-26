@@ -1,0 +1,577 @@
+/* 
+  InstinctHub Border Utility Classes
+  Prefix: ihub-
+  Based on Bootstrap's border utility system
+*/
+
+/* Border styles */
+.ihub-border {
+    border: var(--borderDefault) !important;
+  }
+  
+  .ihub-border-0 {
+    border: 0 !important;
+  }
+  
+  /* Border width variations */
+  .ihub-border-1 {
+    border-width: 1px !important;
+  }
+  
+  .ihub-border-2 {
+    border-width: 2px !important;
+  }
+  
+  .ihub-border-3 {
+    border-width: 3px !important;
+  }
+  
+  .ihub-border-4 {
+    border-width: 4px !important;
+  }
+  
+  .ihub-border-5 {
+    border-width: 5px !important;
+  }
+  
+  /* Border directions */
+  .ihub-border-top {
+    border-top: var(--borderDefault) !important;
+  }
+  
+  .ihub-border-top-0 {
+    border-top: 0 !important;
+  }
+  
+  .ihub-border-end {
+    border-right: var(--borderDefault) !important;
+  }
+  
+  .ihub-border-end-0 {
+    border-right: 0 !important;
+  }
+  
+  .ihub-border-bottom {
+    border-bottom: var(--borderDefault) !important;
+  }
+  
+  .ihub-border-bottom-0 {
+    border-bottom: 0 !important;
+  }
+  
+  .ihub-border-start {
+    border-left: var(--borderDefault) !important;
+  }
+  
+  .ihub-border-start-0 {
+    border-left: 0 !important;
+  }
+  
+  /* Border colors using InstinctHub color variables */
+  .ihub-border-DarkCyan {
+    border-color: var(--DarkCyan) !important;
+  }
+  
+  .ihub-border-TurkishRose {
+    border-color: var(--TurkishRose) !important;
+  }
+  
+  .ihub-border-Gunmetal {
+    border-color: var(--Gunmetal) !important;
+  }
+  
+  .ihub-border-ViridianGreen {
+    border-color: var(--ViridianGreen) !important;
+  }
+  
+  .ihub-border-White {
+    border-color: var(--White) !important;
+  }
+  
+  .ihub-border-Danger {
+    border-color: var(--Danger) !important;
+  }
+  
+  .ihub-border-Rhythm {
+    border-color: var(--Rhythm) !important;
+  }
+  
+  .ihub-border-CaribbeanGreen {
+    border-color: var(--CaribbeanGreen) !important;
+  }
+  
+  .ihub-border-OldLavender {
+    border-color: var(--OldLavender) !important;
+  }
+  
+  .ihub-border-AmericanPurple {
+    border-color: var(--AmericanPurple) !important;
+  }
+  
+  .ihub-border-ChineseBlue {
+    border-color: var(--ChineseBlue) !important;
+  }
+  
+  .ihub-border-DarkSlateGray {
+    border-color: var(--DarkSlateGray) !important;
+  }
+  
+  .ihub-border-MaximumRedPurple {
+    border-color: var(--MaximumRedPurple) !important;
+  }
+  
+  .ihub-border-DarkLavender {
+    border-color: var(--DarkLavender) !important;
+  }
+  
+  .ihub-border-MetallicBlue {
+    border-color: var(--MetallicBlue) !important;
+  }
+  
+  .ihub-border-TiffanyBlue {
+    border-color: var(--TiffanyBlue) !important;
+  }
+  
+  .ihub-border-PoliceBlue {
+    border-color: var(--PoliceBlue) !important;
+  }
+  
+  .ihub-border-Corn {
+    border-color: var(--Corn) !important;
+  }
+  
+  .ihub-border-LimeGreen {
+    border-color: var(--LimeGreen) !important;
+  }
+  
+  .ihub-border-Magnolia {
+    border-color: var(--Magnolia) !important;
+  }
+  
+  .ihub-border-ChineseSilver {
+    border-color: var(--ChineseSilver) !important;
+  }
+  
+  .ihub-border-LavenderGray {
+    border-color: var(--LavenderGray) !important;
+  }
+  
+  .ihub-border-Gray {
+    border-color: var(--Gray) !important;
+  }
+  
+  /* Border opacity variations */
+  .ihub-border-opacity-10 {
+    --ihub-border-opacity: 0.1;
+  }
+  
+  .ihub-border-opacity-25 {
+    --ihub-border-opacity: 0.25;
+  }
+  
+  .ihub-border-opacity-50 {
+    --ihub-border-opacity: 0.5;
+  }
+  
+  .ihub-border-opacity-75 {
+    --ihub-border-opacity: 0.75;
+  }
+  
+  .ihub-border-opacity-100 {
+    --ihub-border-opacity: 1;
+  }
+  
+  /* Border styles */
+  .ihub-border-solid {
+    border-style: solid !important;
+  }
+  
+  .ihub-border-dashed {
+    border-style: dashed !important;
+  }
+  
+  .ihub-border-dotted {
+    border-style: dotted !important;
+  }
+  
+  .ihub-border-double {
+    border-style: double !important;
+  }
+  
+  .ihub-border-none {
+    border-style: none !important;
+  }
+  
+  /* Border radius */
+  .ihub-rounded {
+    border-radius: 4px !important;
+  }
+  
+  .ihub-rounded-0 {
+    border-radius: 0 !important;
+  }
+  
+  .ihub-rounded-1 {
+    border-radius: 2px !important;
+  }
+  
+  .ihub-rounded-2 {
+    border-radius: 4px !important;
+  }
+  
+  .ihub-rounded-3 {
+    border-radius: 6px !important;
+  }
+  
+  .ihub-rounded-4 {
+    border-radius: 8px !important;
+  }
+  
+  .ihub-rounded-5 {
+    border-radius: 10px !important;
+  }
+  
+  .ihub-rounded-circle {
+    border-radius: 50% !important;
+  }
+  
+  .ihub-rounded-pill {
+    border-radius: 50rem !important;
+  }
+  
+  /* Corner-specific border radius */
+  .ihub-rounded-top {
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+  }
+  
+  .ihub-rounded-end {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+  }
+  
+  .ihub-rounded-bottom {
+    border-bottom-right-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+  }
+  
+  .ihub-rounded-start {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+  }
+  
+  /* Individual corner border radius */
+  .ihub-rounded-top-start {
+    border-top-left-radius: 4px !important;
+  }
+  
+  .ihub-rounded-top-end {
+    border-top-right-radius: 4px !important;
+  }
+  
+  .ihub-rounded-bottom-end {
+    border-bottom-right-radius: 4px !important;
+  }
+  
+  .ihub-rounded-bottom-start {
+    border-bottom-left-radius: 4px !important;
+  }
+  
+  /* Responsive border utilities */
+  @media (min-width: 576px) {
+    .ihub-border-sm {
+      border: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-sm-0 {
+      border: 0 !important;
+    }
+    
+    .ihub-border-top-sm {
+      border-top: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-top-sm-0 {
+      border-top: 0 !important;
+    }
+    
+    .ihub-border-end-sm {
+      border-right: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-end-sm-0 {
+      border-right: 0 !important;
+    }
+    
+    .ihub-border-bottom-sm {
+      border-bottom: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-bottom-sm-0 {
+      border-bottom: 0 !important;
+    }
+    
+    .ihub-border-start-sm {
+      border-left: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-start-sm-0 {
+      border-left: 0 !important;
+    }
+    
+    .ihub-rounded-sm {
+      border-radius: 4px !important;
+    }
+    
+    .ihub-rounded-sm-0 {
+      border-radius: 0 !important;
+    }
+    
+    .ihub-rounded-sm-circle {
+      border-radius: 50% !important;
+    }
+    
+    .ihub-rounded-sm-pill {
+      border-radius: 50rem !important;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .ihub-border-md {
+      border: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-md-0 {
+      border: 0 !important;
+    }
+    
+    .ihub-border-top-md {
+      border-top: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-top-md-0 {
+      border-top: 0 !important;
+    }
+    
+    .ihub-border-end-md {
+      border-right: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-end-md-0 {
+      border-right: 0 !important;
+    }
+    
+    .ihub-border-bottom-md {
+      border-bottom: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-bottom-md-0 {
+      border-bottom: 0 !important;
+    }
+    
+    .ihub-border-start-md {
+      border-left: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-start-md-0 {
+      border-left: 0 !important;
+    }
+    
+    .ihub-rounded-md {
+      border-radius: 4px !important;
+    }
+    
+    .ihub-rounded-md-0 {
+      border-radius: 0 !important;
+    }
+    
+    .ihub-rounded-md-circle {
+      border-radius: 50% !important;
+    }
+    
+    .ihub-rounded-md-pill {
+      border-radius: 50rem !important;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .ihub-border-lg {
+      border: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-lg-0 {
+      border: 0 !important;
+    }
+    
+    .ihub-border-top-lg {
+      border-top: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-top-lg-0 {
+      border-top: 0 !important;
+    }
+    
+    .ihub-border-end-lg {
+      border-right: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-end-lg-0 {
+      border-right: 0 !important;
+    }
+    
+    .ihub-border-bottom-lg {
+      border-bottom: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-bottom-lg-0 {
+      border-bottom: 0 !important;
+    }
+    
+    .ihub-border-start-lg {
+      border-left: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-start-lg-0 {
+      border-left: 0 !important;
+    }
+    
+    .ihub-rounded-lg {
+      border-radius: 4px !important;
+    }
+    
+    .ihub-rounded-lg-0 {
+      border-radius: 0 !important;
+    }
+    
+    .ihub-rounded-lg-circle {
+      border-radius: 50% !important;
+    }
+    
+    .ihub-rounded-lg-pill {
+      border-radius: 50rem !important;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .ihub-border-xl {
+      border: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-xl-0 {
+      border: 0 !important;
+    }
+    
+    .ihub-border-top-xl {
+      border-top: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-top-xl-0 {
+      border-top: 0 !important;
+    }
+    
+    .ihub-border-end-xl {
+      border-right: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-end-xl-0 {
+      border-right: 0 !important;
+    }
+    
+    .ihub-border-bottom-xl {
+      border-bottom: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-bottom-xl-0 {
+      border-bottom: 0 !important;
+    }
+    
+    .ihub-border-start-xl {
+      border-left: var(--borderDefault) !important;
+    }
+    
+    .ihub-border-start-xl-0 {
+      border-left: 0 !important;
+    }
+    
+    .ihub-rounded-xl {
+      border-radius: 4px !important;
+    }
+    
+    .ihub-rounded-xl-0 {
+      border-radius: 0 !important;
+    }
+    
+    .ihub-rounded-xl-circle {
+      border-radius: 50% !important;
+    }
+    
+    .ihub-rounded-xl-pill {
+      border-radius: 50rem !important;
+    }
+  }
+  
+  /* Special border patterns */
+  .ihub-border-dashed-bottom {
+    border-bottom: 1px dashed rgba(44, 51, 58, 0.2) !important;
+  }
+  
+  .ihub-border-gradient {
+    border-image: var(--Main-Gradient) 1 !important;
+  }
+  
+  /* Card borders with shadows */
+  .ihub-card-border {
+    border: var(--borderDefault) !important;
+    border-radius: 5px !important;
+    box-shadow: var(--lightShadow) !important;
+  }
+  
+  .ihub-card-border-hover:hover {
+    box-shadow: var(--shadow) !important;
+    transition: box-shadow 0.3s ease !important;
+  }
+  
+  /* Focus state borders */
+  .ihub-focus-border:focus {
+    border-color: var(--DarkCyan) !important;
+    outline: none !important;
+  }
+  
+  /* Active state borders */
+  .ihub-active-border.active {
+    border-color: var(--DarkCyan) !important;
+    border-left-width: 3px !important;
+  }
+  
+  /* Error state borders */
+  .ihub-error-border {
+    border-color: var(--Danger) !important;
+  }
+  
+  /* Custom border examples */
+  .ihub-border-left-accent {
+    border-left: 3px solid var(--DarkCyan) !important;
+  }
+  
+  .ihub-border-bottom-thick {
+    border-bottom: 3px solid var(--Gunmetal) !important;
+  }
+  
+  .ihub-border-top-accent {
+    border-top: 3px solid var(--TurkishRose) !important;
+  }
+  
+  /* Table borders */
+  .ihub-table-bordered {
+    border: var(--borderDefault) !important;
+  }
+  
+  .ihub-table-bordered th,
+  .ihub-table-bordered td {
+    border: var(--borderDefault) !important;
+  }
+  
+  .ihub-table-borderless th,
+  .ihub-table-borderless td {
+    border: 0 !important;
+  }
