@@ -5,7 +5,7 @@ export interface ChartDataPointType {
   [key: string]: any;
 }
 
-export type ChartType = 'line' | 'bar' | 'pie' | 'area';
+export type ChartType = "line" | "bar" | "pie" | "area" | "barStackedBySign";
 
 export interface ChartPropsType {
   /** The type of chart to render */

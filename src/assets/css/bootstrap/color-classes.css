@@ -209,122 +209,382 @@
   background-color: var(--OpacityBackground);
 }
 
+/* Dark Mode Specific Classes */
+.ihub-dark-mode {
+  /* Set default text color for dark mode */
+  color: var(--White);
+  /* Set default background for dark mode */
+  background-color: var(--Gunmetal);
+}
+
 /* Dark Mode Text Override Classes */
-.DarkMode .ihub-text-dark-emphasis {
+.ihub-dark-mode .ihub-text-dark-emphasis {
   color: var(--White);
 }
-.DarkMode .ihub-text-dark-medium {
+.ihub-dark-mode .ihub-text-dark-medium {
   color: rgba(255, 255, 255, 0.8);
 }
-.DarkMode .ihub-text-dark-muted {
+.ihub-dark-mode .ihub-text-dark-muted {
   color: rgba(255, 255, 255, 0.6);
 }
-.DarkMode .ihub-text-dark-disabled {
+.ihub-dark-mode .ihub-text-dark-disabled {
   color: rgba(255, 255, 255, 0.4);
 }
 
 /* Dark Mode Background Override Classes */
-.DarkMode .ihub-bg-dark-elevated {
+.ihub-dark-mode .ihub-bg-dark-elevated {
   background-color: #3a424a;
 } /* Lighter than Gunmetal */
-.DarkMode .ihub-bg-dark-surface {
+.ihub-dark-mode .ihub-bg-dark-surface {
   background-color: var(--Gunmetal);
 }
-.DarkMode .ihub-bg-dark-overlay {
+.ihub-dark-mode .ihub-bg-dark-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* Border utilities for dark mode */
-.DarkMode .ihub-border-dark {
+.ihub-dark-mode .ihub-border-dark {
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
-.DarkMode .ihub-border-dark-subtle {
+.ihub-dark-mode .ihub-border-dark-subtle {
   border-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Shadow utilities for dark mode */
-.DarkMode .ihub-shadow-dark-sm {
+.ihub-dark-mode .ihub-shadow-dark-sm {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-.DarkMode .ihub-shadow-dark-md {
+.ihub-dark-mode .ihub-shadow-dark-md {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-.DarkMode .ihub-shadow-dark-lg {
+.ihub-dark-mode .ihub-shadow-dark-lg {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 /* Hover state utilities for dark mode */
-.DarkMode .ihub-hover-dark:hover {
+.ihub-dark-mode .ihub-hover-dark:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
-.DarkMode .ihub-hover-dark-text:hover {
+.ihub-dark-mode .ihub-hover-dark-text:hover {
   color: var(--DarkCyan);
 }
 
 /* Focus state utilities for dark mode */
-.DarkMode .ihub-focus-dark:focus {
+.ihub-dark-mode .ihub-focus-dark:focus {
   outline-color: var(--DarkCyan);
 }
 
 /* Form element styling for dark mode */
-.DarkMode input,
-.DarkMode select,
-.DarkMode textarea {
+.ihub-dark-mode input,
+.ihub-dark-mode select,
+.ihub-dark-mode textarea {
   background-color: #3a424a;
   color: var(--White);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.DarkMode input::placeholder,
-.DarkMode textarea::placeholder {
+.ihub-dark-mode input::placeholder,
+.ihub-dark-mode textarea::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.DarkMode input:focus,
-.DarkMode select:focus,
-.DarkMode textarea:focus {
+.ihub-dark-mode input:focus,
+.ihub-dark-mode select:focus,
+.ihub-dark-mode textarea:focus {
   border-color: var(--DarkCyan);
 }
 
 /* Dark mode button styles */
-.DarkMode .ihub-important-btn,
-.DarkMode .ihub-ihub-important-btn {
+.ihub-dark-mode .ihub-important-btn,
+.ihub-dark-mode .ihub-ihub-important-btn {
   background-color: var(--DarkCyan);
   color: var(--White);
 }
 
-.DarkMode .ihub-outlined-btn {
+.ihub-dark-mode .ihub-outlined-btn {
   color: var(--DarkCyan);
   border: 1px solid var(--DarkCyan);
   background-color: transparent;
 }
 
-.DarkMode .ihub-outlined-btn:hover {
+.ihub-dark-mode .ihub-outlined-btn:hover {
   background-color: var(--DarkCyan);
   color: var(--White);
 }
 
-.DarkMode .ihub-default-btn {
+.ihub-dark-mode .ihub-default-btn {
   background-color: #3a424a;
   color: var(--White);
 }
 
-/* Add classes for status indicators in dark mode */
-.DarkMode .ihub-status-success {
+/* Status Color System - Light Mode */
+.ihub-status-success {
+  background-color: rgba(0, 197, 162, 0.1);
+  color: var(--CaribbeanGreen);
+  border-left: 3px solid var(--CaribbeanGreen);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.ihub-status-warning {
+  background-color: rgba(251, 235, 91, 0.1);
+  color: #d9b600; /* Darker shade of Corn for better contrast */
+  border-left: 3px solid var(--Corn);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.ihub-status-danger,
+.ihub-status-error {
+  background-color: rgba(234, 95, 94, 0.1);
+  color: var(--Danger);
+  border-left: 3px solid var(--Danger);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.ihub-status-info {
+  background-color: rgba(0, 131, 143, 0.1);
+  color: var(--DarkCyan);
+  border-left: 3px solid var(--DarkCyan);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.ihub-status-neutral {
+  background-color: rgba(44, 51, 58, 0.1);
+  color: var(--Gunmetal);
+  border-left: 3px solid var(--Gunmetal);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+/* Status Border Classes */
+.ihub-border-success {
+  border-color: var(--CaribbeanGreen) !important;
+}
+.ihub-border-warning {
+  border-color: var(--Corn) !important;
+}
+.ihub-border-danger,
+.ihub-border-error {
+  border-color: var(--Danger) !important;
+}
+.ihub-border-info {
+  border-color: var(--DarkCyan) !important;
+}
+.ihub-border-neutral {
+  border-color: var(--Gunmetal) !important;
+}
+
+/* Status Text-Only Classes */
+.ihub-text-success {
+  color: var(--CaribbeanGreen) !important;
+}
+.ihub-text-warning {
+  color: #d9b600 !important;
+} /* Darker shade for better contrast */
+.ihub-text-danger,
+.ihub-text-error {
+  color: var(--Danger) !important;
+}
+.ihub-text-info {
+  color: var(--DarkCyan) !important;
+}
+.ihub-text-neutral {
+  color: var(--Gunmetal) !important;
+}
+
+/* Status Background-Only Classes */
+.ihub-bg-success-subtle {
+  background-color: rgba(0, 197, 162, 0.1) !important;
+}
+.ihub-bg-warning-subtle {
+  background-color: rgba(251, 235, 91, 0.1) !important;
+}
+.ihub-bg-danger-subtle,
+.ihub-bg-error-subtle {
+  background-color: rgba(234, 95, 94, 0.1) !important;
+}
+.ihub-bg-info-subtle {
+  background-color: rgba(0, 131, 143, 0.1) !important;
+}
+.ihub-bg-neutral-subtle {
+  background-color: rgba(44, 51, 58, 0.1) !important;
+}
+
+/* Status Icon Classes */
+.ihub-icon-success {
+  color: var(--CaribbeanGreen);
+  margin-right: 8px;
+}
+.ihub-icon-warning {
+  color: #d9b600; /* Darker shade for better contrast */
+  margin-right: 8px;
+}
+.ihub-icon-danger,
+.ihub-icon-error {
+  color: var(--Danger);
+  margin-right: 8px;
+}
+.ihub-icon-info {
+  color: var(--DarkCyan);
+  margin-right: 8px;
+}
+.ihub-icon-neutral {
+  color: var(--Gunmetal);
+  margin-right: 8px;
+}
+
+/* Status Button Classes */
+.ihub-btn-success {
+  background-color: var(--CaribbeanGreen);
+  color: var(--White);
+  border: none;
+}
+.ihub-btn-success:hover {
+  background-color: #00a389; /* Darker shade for hover */
+}
+
+.ihub-btn-warning {
+  background-color: #d9b600; /* Darker shade for better contrast */
+  color: var(--White);
+  border: none;
+}
+.ihub-btn-warning:hover {
+  background-color: #b89e00; /* Darker shade for hover */
+}
+
+.ihub-btn-danger,
+.ihub-btn-error {
+  background-color: var(--Danger);
+  color: var(--White);
+  border: none;
+}
+.ihub-btn-danger:hover,
+.ihub-btn-error:hover {
+  background-color: #d15453; /* Darker shade for hover */
+}
+
+.ihub-btn-info {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+  border: none;
+}
+.ihub-btn-info:hover {
+  background-color: #006d77; /* Darker shade for hover */
+}
+
+.ihub-btn-neutral {
+  background-color: var(--Gunmetal);
+  color: var(--White);
+  border: none;
+}
+.ihub-btn-neutral:hover {
+  background-color: #212930; /* Darker shade for hover */
+}
+
+/* Outline Button Variants */
+.ihub-btn-outline-success {
+  background-color: transparent;
+  color: var(--CaribbeanGreen);
+  border: 1px solid var(--CaribbeanGreen);
+}
+.ihub-btn-outline-success:hover {
+  background-color: var(--CaribbeanGreen);
+  color: var(--White);
+}
+
+.ihub-btn-outline-warning {
+  background-color: transparent;
+  color: #d9b600;
+  border: 1px solid #d9b600;
+}
+.ihub-btn-outline-warning:hover {
+  background-color: #d9b600;
+  color: var(--White);
+}
+
+.ihub-btn-outline-danger,
+.ihub-btn-outline-error {
+  background-color: transparent;
+  color: var(--Danger);
+  border: 1px solid var(--Danger);
+}
+.ihub-btn-outline-danger:hover,
+.ihub-btn-outline-error:hover {
+  background-color: var(--Danger);
+  color: var(--White);
+}
+
+.ihub-btn-outline-info {
+  background-color: transparent;
+  color: var(--DarkCyan);
+  border: 1px solid var(--DarkCyan);
+}
+.ihub-btn-outline-info:hover {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+}
+
+.ihub-btn-outline-neutral {
+  background-color: transparent;
+  color: var(--Gunmetal);
+  border: 1px solid var(--Gunmetal);
+}
+.ihub-btn-outline-neutral:hover {
+  background-color: var(--Gunmetal);
+  color: var(--White);
+}
+
+/* Status indicators in dark mode */
+.ihub-dark-mode .ihub-status-success {
   background-color: rgba(0, 197, 162, 0.2);
   color: var(--CaribbeanGreen);
+  border-left: 3px solid var(--CaribbeanGreen);
 }
-.DarkMode .ihub-status-warning {
+
+.ihub-dark-mode .ihub-status-warning {
   background-color: rgba(251, 235, 91, 0.2);
   color: var(--Corn);
+  border-left: 3px solid var(--Corn);
 }
-.DarkMode .ihub-status-danger {
+
+.ihub-dark-mode .ihub-status-danger,
+.ihub-dark-mode .ihub-status-error {
   background-color: rgba(234, 95, 94, 0.2);
   color: var(--Danger);
+  border-left: 3px solid var(--Danger);
 }
-.DarkMode .ihub-status-info {
+
+.ihub-dark-mode .ihub-status-info {
   background-color: rgba(0, 131, 143, 0.2);
   color: var(--DarkCyan);
+  border-left: 3px solid var(--DarkCyan);
+}
+
+.ihub-dark-mode .ihub-status-neutral {
+  background-color: rgba(180, 180, 180, 0.15);
+  color: #e0e0e0;
+  border-left: 3px solid #e0e0e0;
+}
+
+/* Dark mode text colors for status */
+.ihub-dark-mode .ihub-text-success {
+  color: var(--CaribbeanGreen) !important;
+}
+.ihub-dark-mode .ihub-text-warning {
+  color: var(--Corn) !important;
+}
+.ihub-dark-mode .ihub-text-danger,
+.ihub-dark-mode .ihub-text-error {
+  color: var(--Danger) !important;
+}
+.ihub-dark-mode .ihub-text-info {
+  color: var(--DarkCyan) !important;
+}
+.ihub-dark-mode .ihub-text-neutral {
+  color: #e0e0e0 !important;
 }
 
 /* Media queries for responsive color adjustments */
@@ -341,7 +601,7 @@
 
   /* Apply all the dark-mode overrides automatically */
   :root.ihub-auto-dark-mode body {
-    /* This inherits all the styles from .DarkMode */
+    /* This inherits all the styles from .ihub-dark-mode */
     color: var(--White);
     background-color: var(--Gunmetal);
   }
