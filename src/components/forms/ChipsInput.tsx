@@ -50,6 +50,32 @@ interface ChipsInputProps {
 
 /**
  * A flexible input component that converts text entries into chips/tags
+ * @example
+ * ```tsx
+ * <ChipsInput
+ *  label="Skills"
+ *  name="skills"
+ *  value={skills}
+ *  onChange={setSkills}
+ * />
+ * 
+ * @prop {string} label - The label for the input
+ * @prop {string} name - The name for the input
+ * @prop {string[]} value - The current value of the input
+ * @prop {function} onChange - The function to call when the input changes
+ * @prop {string} placeholder - The placeholder text for the input
+ * @prop {string} separator - The character to trigger chip creation (default: ",")
+ * @prop {number} maxChips - The maximum number of chips allowed
+ * @prop {boolean} allowDuplicates - Whether duplicate values are allowed
+ * @prop {boolean} disabled - Whether the input is disabled
+ * @prop {boolean} validateEmail - Whether to validate email addresses
+ * @prop {string} errorMessage - The error message to display
+ * @prop {string} className - The class name for the container
+ * @prop {string} chipClassName - The class name for the chips
+ * @prop {string} inputClassName - The class name for the input
+ * @prop {string} size - The size of the input
+ * @prop {string} ariaLabel - The aria label for the input
+ * @prop {boolean} required - Whether the input is required
  */
 const ChipsInput: React.FC<ChipsInputProps> = ({
   label,

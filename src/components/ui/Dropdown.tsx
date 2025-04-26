@@ -12,6 +12,38 @@ import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDown
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { DropdownOptionType, DropdownPropsType } from "@/types";
 
+/**
+ * A dropdown component that allows users to select one or multiple options
+ * @example
+ * ```tsx
+ * <Dropdown
+ *  options={options}
+ *  selectedValue={selectedValue}
+ *  onChange={handleChange}
+ *  placeholder="Select an option"
+ *  className="ihub-dropdown"
+ *  isMulti={true}
+ *  isSearchable={true}
+ *  noOptionsMessage="No options available"
+ *  isDisabled={false}
+ *  maxHeight={250}
+ *  renderOption={renderOption}
+ * />
+ *
+ * @prop {DropdownOptionType[]} options - The options to display in the dropdown
+ * @prop {string | string[]} selectedValue - The value(s) currently selected in the dropdown
+ * @prop {function} onChange - The function to call when the selected value changes
+ * @prop {string} placeholder - The placeholder text for the dropdown
+ * @prop {string} className - The class name for the dropdown
+ * @prop {boolean} isMulti - Whether the dropdown allows multiple selections
+ * @prop {boolean} isSearchable - Whether the dropdown allows searching
+ * @prop {string} noOptionsMessage - The message to display when there are no options
+ * @prop {boolean} isDisabled - Whether the dropdown is disabled
+ * @prop {number} maxHeight - The maximum height of the dropdown menu
+ * @prop {function} renderOption - The function to render the option label
+ */
+
+
 const Dropdown: React.FC<DropdownPropsType> = ({
   options,
   selectedValue,

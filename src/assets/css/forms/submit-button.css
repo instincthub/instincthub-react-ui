@@ -44,6 +44,29 @@
   transform: translateY(1px);
 }
 
+.ihub-submit-btn.icon-btn.ihub-anime-button-chevron:hover:not(:disabled) {
+  padding-right: 20px;
+  scale: 1.05;
+}
+
+.ihub-submit-btn.icon-btn.ihub-anime-button-chevron:hover svg {
+  transform: translateX(0px);
+}
+
+.ihub-submit-btn.icon-btn {
+  background-color: var(--OpacityBackground);
+  border-radius: 5px;
+  color: var(--Gunmetal);
+  border: none;
+  min-width: auto;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.ihub-submit-btn.icon-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
 .ihub-submit-btn.outlined-btn {
   background-color: transparent;
   color: var(--DarkCyan);

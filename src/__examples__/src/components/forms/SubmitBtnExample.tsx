@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import React, { useState, FormEvent } from "react";
 import { SubmitButton } from "../../../../index";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
 const SubmitBtnExample: React.FC = () => {
   const [status, setStatus] = useState<number | undefined>(undefined);
@@ -43,6 +44,11 @@ const SubmitBtnExample: React.FC = () => {
     <form onSubmit={handleSubmit}>
       <input type="text" placeholder="Your feedback" className="ihub-input" />
       <SubmitButton label="Add Feedback" status={status} />
+      <SubmitButton
+        status={status}
+        variant="icon"
+        label={<CalendarMonthOutlinedIcon />}
+      />
 
       {message && (
         <div

@@ -18,7 +18,13 @@ interface SubmitButtonProps {
   /** Button name attribute */
   name?: string;
   /** Button style variant */
-  variant?: "important" | "outlined" | "primary" | "danger" | "default";
+  variant?:
+    | "important"
+    | "outlined"
+    | "primary"
+    | "danger"
+    | "default"
+    | "icon";
   /** Disable the button */
   disabled?: boolean;
   /** Button onClick handler */
@@ -43,11 +49,11 @@ interface SubmitButtonProps {
  * <SubmitButton label="Submit" status={0} />
  * ```
  * Props interface for the SubmitButtonProps interface
- * @property {string} label - Button label text
+ * @property {string | ReactNode} label - Button label text
  * @property {number} [status=1] - Loading state: 0 = loading, 1 = ready, 2 = success, 3 = error
  * @property {string} [type="submit"] - Button type attribute
  * @property {string} [name] - Button name attribute
- * @property {string} [variant="important"] - Button style variant
+ * @property {string} [variant="important | outlined | primary | danger | default | icon"] - Button style variant
  * @property {boolean} [disabled=false] - Disable the button
  * @property {(event: React.MouseEvent<HTMLButtonElement>) => void} [onClick] - Button onClick handler
  * @property {number} [autoResetTimeout=30000] - Auto-reset timer (in ms) for loading state (0 to disable)
@@ -134,7 +140,9 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
             </svg>
           )}
           {label}
-          <ChevronRightIcon fill="#fff" id="animate" width="16" height="16" />
+          {variant !== "icon" && (
+            <ChevronRightIcon fill="#fff" id="animate" width="16" height="16" />
+          )}
         </button>
       </div>
     );
