@@ -632,14 +632,14 @@ const SideNavbar = ({
         >
           {position === "left" ? (
             getIsExpanded() ? (
-              <ChevronLeftIcon fontSize="small" />
+              <ChevronLeftIcon />
             ) : (
-              <ChevronRightIcon fontSize="small" />
+              <ChevronRightIcon className="ihub-ml-2" />
             )
           ) : getIsExpanded() ? (
-            <ChevronRightIcon fontSize="small" />
+            <ChevronRightIcon />
           ) : (
-            <ChevronLeftIcon fontSize="small" />
+            <ChevronLeftIcon className="ihub-mr-2" />
           )}
         </button>
 

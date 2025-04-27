@@ -2,6 +2,7 @@
 
 export * from "./auth/actions";
 export * from "./auth/dbRequestst";
+export * from "./roles";
 
 // JSON exports
 export * from "./json/accounts";
@@ -30,3 +31,10 @@ export * from "./charts";
 // Modals
 export * from "./modals/modals";
 export * from "./modals/openConfirmDelete";
+
+
+// Logo
+export const instinctHubLogoUrl = "/assets/logo/instincthub-logo-color.png";
+export const instinctHubLogoUrlWhite = "/assets/logo/instincthub-logo-white.png";
+export const instinctHubLogoUrlBlack = "/assets/logo/instincthub-logo-black.png";
+export const instinctHubThumbnailLogo = "/assets/logo/instincthub-logo-thumbnail.png";
