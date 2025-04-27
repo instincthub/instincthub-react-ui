@@ -312,6 +312,9 @@ export interface DropdownOptionType {
 
 // Props interface for the Dropdown component
 export interface DropdownPropsType {
+  label?: string;
+  name?: string;
+  required?: boolean;
   options: DropdownOptionType[];
   selectedValue?: string | number | (string | number)[];
   onChange: (value: string | number | (string | number)[]) => void;

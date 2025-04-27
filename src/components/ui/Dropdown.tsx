@@ -17,6 +17,7 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  * @example
  * ```tsx
  * <Dropdown
+ *  label="Dropdown"
  *  options={options}
  *  selectedValue={selectedValue}
  *  onChange={handleChange}
@@ -30,6 +31,9 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  *  renderOption={renderOption}
  * />
  *
+ * @prop {string} label - The label text for the dropdown
+ * @prop {string} name - The name attribute for the dropdown
+ * @prop {boolean} required - Whether the dropdown is required
  * @prop {DropdownOptionType[]} options - The options to display in the dropdown
  * @prop {string | string[]} selectedValue - The value(s) currently selected in the dropdown
  * @prop {function} onChange - The function to call when the selected value changes
@@ -43,8 +47,10 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  * @prop {function} renderOption - The function to render the option label
  */
 
-
 const Dropdown: React.FC<DropdownPropsType> = ({
+  label,
+  name,
+  required,
   options,
   selectedValue,
   onChange,
@@ -173,7 +179,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
   return (
     <div
-      className={`ihub-dropdown-field ${className} ${
+      className={`ihub-wrapper ihub-dropdown-field ${className} ${
         isDisabled ? "ihub-dropdown-disabled" : ""
       } ${isOpen ? "active" : ""}`}
       ref={dropdownRef}
@@ -221,6 +227,21 @@ const Dropdown: React.FC<DropdownPropsType> = ({
             className={isOpen ? "ihub-dropdown-chevron-up" : ""}
           />
         </div>
+        {label && (
+          <label htmlFor={name} className="ihub-chips-label ihub-text-label">
+            {label}
+            {required && <span className="ihub-required">*</span>}
+          </label>
+        )}
+        {name ? (
+          <input
+            name={name}
+            className="ihub-ghost"
+            value={`${selectedValue}`}
+          />
+        ) : (
+          ""
+        )}
       </div>
 
       {/* Dropdown menu */}

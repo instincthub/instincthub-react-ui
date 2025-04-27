@@ -127,6 +127,9 @@ const DropdownExamples = () => {
           </h2>
           <div className="max-w-md">
             <Dropdown
+              label="Custom Option Rendering"
+              name="custom-option-rendering"
+              required
               options={languages}
               selectedValue={selectedLanguage}
               onChange={setSelectedLanguage}
