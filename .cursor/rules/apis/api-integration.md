@@ -262,7 +262,7 @@ try {
     <IHubTableServer
     token={process.env.NEXT_PUBLIC_TOKEN}
     columns={columns}
-    endpointPath={"sis/${handle}/admins/program-course-list/"}
+    endpointPath={`sis/${handle}/admins/program-course-list/`}
     initialParams={{
         sort: "course.title",
         direction: "asc",
