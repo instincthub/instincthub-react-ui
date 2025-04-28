@@ -40,14 +40,14 @@ export default async function ResponsiveNavbarPage({
 ```
 
 
-### 1. Token-based Authentication
+### 2. Token-based Authentication
 ```typescript
 // Example with token in headers
 const options = reqOptions("GET", null, userToken);
 const response = await fetch(apiUrl, options);
 ```
 
-### 2. API Key Authentication
+### 3. API Key Authentication
 ```typescript
 // Example with API keys in headers
 const options = {
@@ -61,7 +61,7 @@ const options = {
 };
 ```
 
-### 3. Session-based Authentication
+### 4. Session-based Authentication
 Used in combination with NextAuth.js, extracting token from session:
 ```typescript
 const token = session?.user?.name?.token;
