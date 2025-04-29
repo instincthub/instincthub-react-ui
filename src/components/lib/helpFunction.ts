@@ -631,12 +631,12 @@ export function getNestedValue(row: any, accessor: string): any {
 
 /**
  * Creates request options for fetch API.
- * @param method HTTP method
- * @param data Request body
- * @param token Auth token
- * @param content_type Content type
- * @param channel Channel ID
- * @param auth_sk Use auth secret
+ * @param method HTTP method (GET, POST, PUT, DELETE)
+ * @param data Request body (BodyInit | FormData | null)
+ * @param token Auth token string or null
+ * @param content_type Content type (json, form-data, null, false)
+ * @param channel Channel ID string or null
+ * @param auth_sk Use auth secret boolean (true, false)
  * @returns Request options object
  */
 export const reqOptions = (
