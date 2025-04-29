@@ -4,50 +4,23 @@
 
 This documentation provides a comprehensive guide for making requests to the InstinctHub API. The API follows RESTful conventions and requires proper authentication to access resources.
 
+Thanks for pointing that out! Let’s clarify and make this actionable for your finance pages.
+
+---
+
 ## Authentication Methods
 
 The API supports multiple authentication mechanisms:
 
-### 1. Get User Token
-Import Session from page.tsx, then pass it as props to the component where it is needed. See example. 
-```tsx
-import { SearchParamsType } from "../../../../../../types";
-import ResponsiveNavbarExample from "../../../../components/navbars/ResponsiveNavbarExample";
-import { auth } from "../../../api/auth/[...nextauth]/auth";
-import CodebaseLink from "../../../../components/ui/CodebaseLink";
-export default async function ResponsiveNavbarPage({
-  params,
-  searchParams,
-}: SearchParamsType) {
-  const _params = await params;
-  const _searchParams = await searchParams;
-  const session = await auth();
-  const token = session?.user?.name?.token;
 
-  return (
-    <section className="ihub-container ihub-mt-10">
-      <div className="ihub-course-page">
-        <ResponsiveNavbarExample
-          params={_params}
-          searchParams={_searchParams}
-          session={session}
-          token={token}
-        />
-    </section>
-  );
-}
-
-```
-
-
-### 2. Token-based Authentication
+### 1. Token-based Authentication
 ```typescript
 // Example with token in headers
 const options = reqOptions("GET", null, userToken);
 const response = await fetch(apiUrl, options);
 ```
 
-### 3. API Key Authentication
+### 2. API Key Authentication
 ```typescript
 // Example with API keys in headers
 const options = {
@@ -61,7 +34,7 @@ const options = {
 };
 ```
 
-### 4. Session-based Authentication
+### 3. Session-based Authentication
 Used in combination with NextAuth.js, extracting token from session:
 ```typescript
 const token = session?.user?.name?.token;
