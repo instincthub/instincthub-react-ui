@@ -31,7 +31,7 @@ const OpenAdmissionObjects = ({handle, token}) => {
     * @param api API endpoint
     * @param reqOptions Request options
     * @param isFunctionComponent Is functional component
-    * @param setLoading (optional) Loading state setter (boolean)
+    * @param setIsLoading (optional) IsLoading state setter (boolean)
     * @param setStatus (optional) Status setter (number | null)
     * @param setError (optional) Error setter (any)
     * @param flag (optional) Handle status errors (boolean)
