@@ -621,11 +621,15 @@ export const handleError = (
  */
 export function getNestedValue(row: any, accessor: string): any {
   try {
-    return accessor.split('.').reduce((obj, key) => 
-      obj && obj[key] !== undefined ? obj[key] : '', row);
+    return accessor
+      .split(".")
+      .reduce(
+        (obj, key) => (obj && obj[key] !== undefined ? obj[key] : ""),
+        row
+      );
   } catch (error) {
     console.warn(`Error accessing ${accessor}:`, error);
-    return '';
+    return "";
   }
 }
 
@@ -738,9 +742,10 @@ export const fetchData = async (
  * @param api API endpoint
  * @param reqOptions Request options
  * @param isFunctionComponent Is functional component
- * @param setStatus Status setter
- * @param setError Error setter
- * @param flag Handle status errors
+ * @param setLoading (optional) Loading state setter (boolean)
+ * @param setStatus (optional) Status setter (number | null)
+ * @param setError (optional) Error setter (any)
+ * @param flag (optional) Handle status errors (boolean)
  * @returns Promise with result or error
  */
 
@@ -751,8 +756,9 @@ export const fetchAPI = async <T>(
   api: string,
   reqOptions: RequestOptions,
   isFunctionComponent: boolean = false,
-  setStatus?: (status: number | null) => void,
-  setError?: (error: any) => void,
+  setLoading?: (((loading: boolean) => void) | null) | null,
+  setStatus?: ((status: number | null) => void) | null,
+  setError?: ((error: any) => void) | null,
   flag: boolean = false
 ): Promise<T | Error> => {
   try {
@@ -796,6 +802,8 @@ export const fetchAPI = async <T>(
     if (IN_DEV_MODE)
       console.log("Request Options:", reqOptions, "Error:", error);
     return error as Error;
+  } finally {
+    if (setLoading) setLoading(false);
   }
 };
 

@@ -26,17 +26,17 @@ const OpenAdmissionObjects = ({handle, token}) => {
     const apis = `${API_HOST_URL}admissions/${handle}/admin-open-admission-list-create/`;
     
   /**
-   * Using fetchAPI helper
-   * Fetches data from an API with error handling.
-   * @param session Callback or state setter
-   * @param api API endpoint
-   * @param reqOptions Request options
-   * @param isFunctionComponent Is functional component
-   * @param setStatus Status setter
-   * @param setError Error setter
-   * @param flag Handle status errors
-   * @returns Promise with result or error
-   */
+    * Using fetchAPI helper
+    * @param session Callback or state setter
+    * @param api API endpoint
+    * @param reqOptions Request options
+    * @param isFunctionComponent Is functional component
+    * @param setLoading (optional) Loading state setter (boolean)
+    * @param setStatus (optional) Status setter (number | null)
+    * @param setError (optional) Error setter (any)
+    * @param flag (optional) Handle status errors (boolean)
+    * @returns Promise with result or error
+  */
     fetchAPI(setData, apis, requestOptions, true)
   }, [handle])
 
