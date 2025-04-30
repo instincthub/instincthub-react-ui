@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import MultiPurposeModal from "./MultiPurposeModal";
+import SubmitButton from "../forms/SubmitButton";
+import { openToast } from "../lib";
+import InputText from "../forms/InputText";
 
 /**
  * Example component demonstrating various ways to use the MultiPurposeModal
@@ -10,6 +13,9 @@ const ModalExamples = () => {
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
   const [isFullModalOpen, setIsFullModalOpen] = useState<boolean>(false);
+  const [isFormModalEventOpen, setIsFormModalEventOpen] =
+    useState<boolean>(false);
+  const [status, setStatus] = useState<number>(1);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -30,6 +36,12 @@ const ModalExamples = () => {
   const handleSubmit = () => {
     console.log("Form submitted with data:", formData);
     setIsFormModalOpen(false);
+  };
+
+  const handleSubmit2 = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form event:", e);
+    openToast("Check console for form data");
   };
 
   return (
@@ -54,6 +66,14 @@ const ModalExamples = () => {
           onClick={() => setIsFormModalOpen(true)}
         >
           Open Form Modal
+        </button>
+
+        {/* Form Modal Example */}
+        <button
+          className="ihub-outlined-btn"
+          onClick={() => setIsFormModalEventOpen(true)}
+        >
+          Open Form Modal Event
         </button>
 
         {/* Custom Modal Example */}
@@ -115,39 +135,73 @@ const ModalExamples = () => {
           </div>
         }
       >
-        <div className="ihub-wrapper">
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="ihub-input"
-            required
-          />
-          <label
-            className={`ihub-text-label ${formData.name ? "ihub-value" : ""}`}
-          >
-            Full Name
-          </label>
-        </div>
+        <InputText
+          label="Full Name"
+          id="name"
+          name="name"
+          type="text"
+          value={formData.name}
+          onChange={handleInputChange}
+          className="ihub-input"
+          required
+        />
 
-        <div className="ihub-wrapper ihub-mt-4">
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="ihub-input"
-            required
-          />
-          <label
-            className={`ihub-text-label ${formData.email ? "ihub-value" : ""}`}
-          >
-            Email Address
-          </label>
-        </div>
+        <InputText
+          label="Email Address"
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="ihub-input"
+          required
+        />
+      </MultiPurposeModal>
+
+      {/* This allow you get form event: handleSubmit(e) */}
+      {/* handleSubmit={()=>{}} must be used */}
+      {/* The footerContent button must be a button type="submit" */}
+      {/* Form Modal */}
+      <MultiPurposeModal
+        title="Form Modal with event"
+        isOpen={isFormModalEventOpen}
+        onClose={() => setIsFormModalEventOpen(false)}
+        size="medium"
+        showFooter={true}
+        handleSubmit={handleSubmit2}
+        footerContent={
+          <div className="ihub-buttons">
+            <button
+              className="ihub-outlined-btn"
+              onClick={() => setIsFormModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <SubmitButton label="Submit" type="submit" status={status} />
+          </div>
+        }
+      >
+        <InputText
+          label="Full Name"
+          id="name"
+          name="name"
+          type="text"
+          value={formData.name}
+          onChange={handleInputChange}
+          className="ihub-input"
+          required
+        />
+
+        <InputText
+          label="Email Address"
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="ihub-input"
+          required
+        />
       </MultiPurposeModal>
 
       {/* Custom Modal */}

@@ -14,6 +14,7 @@ interface MultiPurposeModalProps {
   closeOnOverlayClick?: boolean;
   className?: string;
   disableScroll?: boolean;
+  handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 /**
@@ -34,6 +35,7 @@ interface MultiPurposeModalProps {
  *   closeOnOverlayClick={true}
  *   className="ihub-modal-class"
  *   disableScroll={true}
+ *   handleSubmit={handleSubmit}
  * >
  *   <div>Some Content</div>
  * </MultiPurposeModal>
@@ -51,6 +53,7 @@ interface MultiPurposeModalProps {
  * @param closeOnOverlayClick Whether clicking the overlay closes the modal
  * @param className Additional class names to apply to the modal
  * @param disableScroll Whether to disable body scrolling when modal is open
+ * @param handleSubmit Function to call when the modal is submitted
  */
 const MultiPurposeModal: React.FC<MultiPurposeModalProps> = ({
   isOpen,
@@ -64,6 +67,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = ({
   closeOnOverlayClick = true,
   className = "",
   disableScroll = true,
+  handleSubmit,
 }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -119,48 +123,53 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = ({
       aria-modal="true"
       aria-labelledby={title ? "ihub-modal-title" : undefined}
     >
-      <div className={`ihub-modal-content ${sizeClass} ${className}`}>
-        {(title || showCloseButton) && (
-          <div className="ihub-modal-header">
-            {title && (
-              <h2 id="ihub-modal-title" className="ihub-modal-title">
-                {title}
-              </h2>
-            )}
-            {showCloseButton && (
-              <button
-                type="button"
-                className="ihub-close-it"
-                onClick={onClose}
-                aria-label="Close modal"
-              >
-                <CloseOutlinedIcon />
-              </button>
-            )}
-          </div>
-        )}
-
-        <div className="ihub-modal-body ihub-txt-modal">{children}</div>
-
-        {showFooter && (
-          <div className="ihub-modal-footer">
-            {footerContent || (
-              <div className="ihub-buttons">
+      <form onSubmit={handleSubmit}>
+        <div className={`ihub-modal-content ${sizeClass} ${className}`}>
+          {(title || showCloseButton) && (
+            <div className="ihub-modal-header">
+              {title && (
+                <h2 id="ihub-modal-title" className="ihub-modal-title">
+                  {title}
+                </h2>
+              )}
+              {showCloseButton && (
                 <button
-                  className="ihub-outlined-btn"
-                  onClick={onClose}
                   type="button"
+                  className="ihub-close-it"
+                  onClick={onClose}
+                  aria-label="Close modal"
                 >
-                  Cancel
+                  <CloseOutlinedIcon />
                 </button>
-                <button className="ihub-important-btn" type="button">
-                  Confirm
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+              )}
+            </div>
+          )}
+
+          <div className="ihub-modal-body ihub-txt-modal">{children}</div>
+
+          {showFooter && (
+            <div className="ihub-modal-footer">
+              {footerContent || (
+                <div className="ihub-buttons">
+                  <button
+                    className="ihub-outlined-btn"
+                    onClick={onClose}
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="ihub-important-btn"
+                    type={handleSubmit ? "submit" : "button"}
+                  >
+                    {handleSubmit ? "Confirm" : "Close"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </form>
     </div>
   );
 };

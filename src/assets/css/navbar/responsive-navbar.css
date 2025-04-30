@@ -32,6 +32,7 @@
 .ihub-navbar-logo {
   display: flex;
   align-items: center;
+  max-width: 170px;
 }
 
 .ihub-logo-image {
