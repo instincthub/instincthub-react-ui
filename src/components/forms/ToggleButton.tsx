@@ -94,6 +94,7 @@ const ToggleButton = ({
           onChange={handleToggle}
           disabled={disabled}
           aria-label={ariaLabel || "Toggle"}
+          value={isActive ? "true" : "false"}
         />
         <div
           className={`ihub-toggle-track ${
