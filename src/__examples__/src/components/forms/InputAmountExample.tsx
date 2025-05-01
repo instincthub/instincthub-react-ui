@@ -38,6 +38,7 @@ const InputAmountExample: React.FC = () => {
         <div className="ihub-py-3">
           <InputAmount
             label="Course Price"
+            name="course_price"
             value={amount}
             onChange={(name, value) => console.log(name, value)}
             required

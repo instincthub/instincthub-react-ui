@@ -5,9 +5,9 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 interface InputAmountProps {
   id?: string;
   name?: string;
-  label: string;
-  value: string | number;
-  onChange: (value: number | string, name?: string) => void;
+  label?: string;
+  value?: string | number;
+  onChange?: (value: number | string, name?: string) => void;
   disabled?: boolean;
   readOnly?: boolean;
   placeholder?: string;
@@ -69,6 +69,7 @@ const InputAmount: React.FC<InputAmountProps> = ({
 }) => {
   const [focused, setFocused] = useState(false);
   const [displayValue, setDisplayValue] = useState<string>("");
+  const [numberValue, setNumberValue] = useState<number>(0);
 
   // Format a number as comma-separated string
   const formatNumberWithCommas = (value: string | number): string => {
@@ -163,10 +164,15 @@ const InputAmount: React.FC<InputAmountProps> = ({
       formattedValue = formatNumberWithCommas(numericString);
     }
 
+    // Update the display value: 6,000
     setDisplayValue(formattedValue);
+    // Store the numeric value: 6000 (not 6,000).
+    setNumberValue(numericValue);
 
     // Pass the numeric value to the parent
-    onChange(numericValue, name);
+    if (onChange) {
+      onChange(numericValue, name);
+    }
   };
 
   const handleFocus = () => {
@@ -183,13 +189,15 @@ const InputAmount: React.FC<InputAmountProps> = ({
       setDisplayValue(formatted);
 
       // Ensure the parent component has the correct numeric value
-      onChange(numericValue, name);
+      if (onChange) {
+        onChange(numericValue, name);
+      }
     }
   };
 
   // If plainDisplay is true, render a simple paragraph with formatted value
   if (plainDisplay) {
-    const formattedValue = formatNumberWithCommas(value);
+    const formattedValue = formatNumberWithCommas(value || 0);
     return (
       <p className={`ihub-amount-plain ${className || ""}`}>
         {currencySymbol}
@@ -206,6 +214,7 @@ const InputAmount: React.FC<InputAmountProps> = ({
 
   return (
     <div className={wrapperClassName}>
+      <input type="hidden" name={name} value={numberValue} />
       <div className="ihub-amount-input-container">
         <span
           className={`ihub-currency-symbol ${
@@ -216,7 +225,6 @@ const InputAmount: React.FC<InputAmountProps> = ({
         </span>
         <input
           id={id || name}
-          name={name}
           type="text"
           value={displayValue}
           onChange={handleChange}
