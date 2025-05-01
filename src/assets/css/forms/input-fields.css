@@ -2289,3 +2289,35 @@
 .ihub-chip {
   animation: chipFadeIn 0.2s ease-in-out;
 }
+
+/* Amount Input Styles */
+.ihub-amount-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.ihub-currency-symbol {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 15px;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal);
+  z-index: 1;
+}
+
+.ihub-amount-input {
+  padding-left: 30px !important; /* Room for currency symbol */
+}
+
+.ihub-required {
+  color: var(--Danger);
+  margin-left: 4px;
+}
+
+.ihub-error-message {
+  color: var(--Danger);
+  font-size: 12px;
+  margin-top: 5px;
+  font-family: var(--Nunito);
+}

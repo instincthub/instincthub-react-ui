@@ -2,6 +2,8 @@
 import React, { useState, useEffect, ReactNode } from "react";
 
 interface ToggleButtonProps {
+  /** Name of the toggle */
+  name?: string;
   /** Initial state of the toggle */
   initialState?: boolean;
   /** Callback function when toggle state changes */
@@ -27,6 +29,7 @@ interface ToggleButtonProps {
 }
 
 const ToggleButton = ({
+  name,
   initialState = false,
   onChange,
   className = "",
@@ -83,6 +86,7 @@ const ToggleButton = ({
         }`}
       >
         <input
+          name={name}
           type="checkbox"
           id={uniqueId}
           className={`ihub-toggle-input ihub-ghost`}

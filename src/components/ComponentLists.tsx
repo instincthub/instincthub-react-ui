@@ -287,7 +287,14 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/radio-btn/RadioGroup.tsx",
     },
+    {
+      name: "InputAmount",
+      description: "InputAmount is used to enter amount on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/InputAmount.tsx",
+    },
 
+    
     // Auth
     {
       name: "IsUsernameEmailTaken",

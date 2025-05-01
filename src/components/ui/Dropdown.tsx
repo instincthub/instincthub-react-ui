@@ -237,7 +237,8 @@ const Dropdown: React.FC<DropdownPropsType> = ({
           <input
             name={name}
             className="ihub-ghost"
-            defaultValue={`${selectedValue}`}
+            value={`${selectedValue}`}
+            onChange={() => {}}
           />
         ) : (
           ""

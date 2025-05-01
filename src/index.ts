@@ -55,6 +55,7 @@ export { default as DateInputPicker } from "./components/forms/DateInputPicker";
 export { default as ChipsInput } from "./components/forms/ChipsInput";
 export { default as RadioButton } from "./components/forms/radio-btn/RadioButton";
 export { default as RadioGroup } from "./components/forms/radio-btn/RadioGroup";
+export { default as InputAmount } from "./components/forms/InputAmount";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
