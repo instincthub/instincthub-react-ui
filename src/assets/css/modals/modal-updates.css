@@ -50,15 +50,15 @@
 
 /* Size variations */
 .ihub-modal-small {
-  max-width: 400px;
+  width: 400px;
 }
 
 .ihub-modal-medium {
-  max-width: 600px;
+  width: 600px;
 }
 
 .ihub-modal-large {
-  max-width: 900px;
+  width: 900px;
 }
 
 .ihub-modal-full {
