@@ -52,7 +52,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
   name,
   required,
   options,
-  selectedValue,
+  selectedValue: externalSelectedValue,
   onChange,
   placeholder = "Select...",
   className = "",
@@ -65,8 +65,16 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [internalSelectedValue, setInternalSelectedValue] = useState<
+    string | number | (string | number)[] | undefined
+  >(externalSelectedValue);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync internal state with external prop
+  useEffect(() => {
+    setInternalSelectedValue(externalSelectedValue);
+  }, [externalSelectedValue]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -115,17 +123,26 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
     if (isMulti) {
       // For multi-select
-      const currentValues = Array.isArray(selectedValue) ? selectedValue : [];
+      const currentValues = Array.isArray(internalSelectedValue)
+        ? internalSelectedValue
+        : [];
       const valueExists = currentValues.includes(option.value);
 
       if (valueExists) {
-        onChange(currentValues.filter((value) => value !== option.value));
+        const newValues = currentValues.filter(
+          (value) => value !== option.value
+        );
+        setInternalSelectedValue(newValues);
+        onChange?.(newValues);
       } else {
-        onChange([...currentValues, option.value]);
+        const newValues = [...currentValues, option.value];
+        setInternalSelectedValue(newValues);
+        onChange?.(newValues);
       }
     } else {
       // For single-select
-      onChange(option.value);
+      setInternalSelectedValue(option.value);
+      onChange?.(option.value);
       setIsOpen(false);
     }
   };
@@ -133,8 +150,10 @@ const Dropdown: React.FC<DropdownPropsType> = ({
   // Remove a selected item (for multi-select)
   const removeItem = (value: string | number, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (Array.isArray(selectedValue)) {
-      onChange(selectedValue.filter((item) => item !== value));
+    if (Array.isArray(internalSelectedValue)) {
+      const newValues = internalSelectedValue.filter((item) => item !== value);
+      setInternalSelectedValue(newValues);
+      onChange?.(newValues);
     }
   };
 
@@ -166,13 +185,15 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
   // Find selected option(s) for display
   const getSelectedOptions = () => {
-    if (!selectedValue) return [];
+    if (!internalSelectedValue) return [];
 
-    if (Array.isArray(selectedValue)) {
-      return options.filter((option) => selectedValue.includes(option.value));
+    if (Array.isArray(internalSelectedValue)) {
+      return options.filter((option) =>
+        internalSelectedValue.includes(option.value)
+      );
     }
 
-    return options.filter((option) => option.value === selectedValue);
+    return options.filter((option) => option.value === internalSelectedValue);
   };
 
   const selectedOptions = getSelectedOptions();
@@ -236,8 +257,8 @@ const Dropdown: React.FC<DropdownPropsType> = ({
         {name ? (
           <input
             name={name}
-            className="ihub-ghost"
-            value={`${selectedValue}`}
+            type="hidden"
+            value={`${internalSelectedValue}`}
             onChange={() => {}}
           />
         ) : (
@@ -271,9 +292,9 @@ const Dropdown: React.FC<DropdownPropsType> = ({
           <div className="ihub-dropdown-options">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => {
-                const isSelected = Array.isArray(selectedValue)
-                  ? selectedValue.includes(option.value)
-                  : selectedValue === option.value;
+                const isSelected = Array.isArray(internalSelectedValue)
+                  ? internalSelectedValue.includes(option.value)
+                  : internalSelectedValue === option.value;
 
                 return (
                   <div

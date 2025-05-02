@@ -83,10 +83,10 @@ const DropdownExamples = () => {
 
       <div className="space-y-6">
         <div>
-          <h2 className="text-lg font-semibold mb-2 text-gray-700">
-            Basic Dropdown
-          </h2>
+          <h2 className="ihub-fs-lg ihub-mb-0">Basic Dropdown</h2>
+          <Dropdown options={countries} placeholder="Select a country" />
 
+          <h2 className="ihub-fs-lg ihub-mb-0">Basic Dropdown with State</h2>
           <Dropdown
             options={countries}
             selectedValue={selectedCountry}
@@ -100,9 +100,7 @@ const DropdownExamples = () => {
               : "None"}
           </p>
 
-          <h2 className="text-lg font-semibold mb-2 text-gray-700">
-            Multi-Select with Search
-          </h2>
+          <h2 className="ihub-fs-lg ihub-mb-0">Multi-Select with Search</h2>
 
           <Dropdown
             options={countries}
@@ -122,9 +120,7 @@ const DropdownExamples = () => {
               : "None"}
           </p>
 
-          <h2 className="text-lg font-semibold mb-2 text-gray-700">
-            Custom Option Rendering
-          </h2>
+          <h2 className="ihub-fs-lg ihub-mb-0">Custom Option Rendering</h2>
           <div className="max-w-md">
             <Dropdown
               label="Custom Option Rendering"

@@ -317,7 +317,7 @@ export interface DropdownPropsType {
   required?: boolean;
   options: DropdownOptionType[];
   selectedValue?: string | number | (string | number)[];
-  onChange: (value: string | number | (string | number)[]) => void;
+  onChange?: (value: string | number | (string | number)[]) => void;
   placeholder?: string;
   className?: string;
   isMulti?: boolean;
