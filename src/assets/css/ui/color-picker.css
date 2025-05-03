@@ -56,17 +56,8 @@
   border: 1px solid var(--ihub-border-color);
   border-radius: var(--ihub-border-radius);
   box-shadow: var(--ihub-shadow);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
   transition: all var(--ihub-transition);
   min-width: 280px;
-}
-
-.ihub-color-picker-panel.ihub-is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
 }
 
 .ihub-color-preview-large {

@@ -251,75 +251,82 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         </button>
       ) : null}
 
-      <div
-        className={`ihub-color-picker-panel ${isOpen ? "ihub-is-open" : ""}`}
-        role="dialog"
-        aria-label="Color picker"
-        onKeyDown={handleKeyDown}
-      >
+      {isOpen && (
         <div
-          className="ihub-color-preview-large"
-          style={{ backgroundColor: selectedColor }}
-        />
+          className={`ihub-color-picker-panel`}
+          role="dialog"
+          aria-label="Color picker"
+          onKeyDown={handleKeyDown}
+        >
+          <div
+            className="ihub-color-preview-large"
+            style={{ backgroundColor: selectedColor }}
+          />
 
-        <div className="ihub-color-formats">
-          <div className="ihub-format-item">
-            <span>HEX:</span>
-            <input
-              id={id}
-              ref={inputRef}
-              type="text"
-              value={colorInput}
-              onChange={handleInputChange}
-              className={`ihub-color-input ${inputError ? "ihub-error" : ""}`}
-              placeholder="#000000"
-              aria-label="Hex color value"
-            />
+          <div className="ihub-color-formats">
+            <div className="ihub-format-item">
+              <span>HEX:</span>
+              <input
+                id={id}
+                ref={inputRef}
+                type="text"
+                value={colorInput}
+                onChange={handleInputChange}
+                className={`ihub-color-input ${inputError ? "ihub-error" : ""}`}
+                placeholder="#000000"
+                aria-label="Hex color value"
+              />
+            </div>
+            <div className="ihub-format-item">
+              <span>RGB:</span>
+              <span className="ihub-format-value">
+                {getRgbString(selectedColor)}
+              </span>
+            </div>
+            <div className="ihub-format-item">
+              <span>HSL:</span>
+              <span className="ihub-format-value">
+                {getHslString(selectedColor)}
+              </span>
+            </div>
           </div>
-          <div className="ihub-format-item">
-            <span>RGB:</span>
-            <span className="ihub-format-value">
-              {getRgbString(selectedColor)}
-            </span>
-          </div>
-          <div className="ihub-format-item">
-            <span>HSL:</span>
-            <span className="ihub-format-value">
-              {getHslString(selectedColor)}
-            </span>
-          </div>
-        </div>
 
-        {supportsEyeDropper && (
-          <button
-            type="button"
-            className="ihub-eyedropper-btn"
-            onClick={handleEyeDropper}
-            aria-label="Pick color from screen"
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M20.71 5.63l-2.34-2.34a1 1 0 00-1.41 0l-3.12 3.12-3.2-3.2a1 1 0 00-1.41 0L7.88 4.58a1 1 0 000 1.41l3.13 3.13L3 17.25V21h3.75l8.01-8.01 3.13 3.13a1 1 0 001.41 0l1.38-1.38a1 1 0 000-1.41l-3.2-3.2 3.23-3.23a1 1 0 000-1.27z" />
-            </svg>
-            Pick Color
-          </button>
-        )}
-
-        <div className="ihub-color-grid">
-          {getCustomColors().map((color, index) => (
+          {supportsEyeDropper && (
             <button
-              key={color}
               type="button"
-              className={`ihub-color-swatch ${
-                selectedColor === color ? "ihub-selected" : ""
-              }`}
-              style={{ backgroundColor: color }}
-              onClick={() => handleColorSelect(color)}
-              aria-label={`Select color ${color}`}
-              tabIndex={isOpen ? 0 : -1}
-            />
-          ))}
+              className="ihub-eyedropper-btn"
+              onClick={handleEyeDropper}
+              aria-label="Pick color from screen"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="currentColor"
+              >
+                <path d="M20.71 5.63l-2.34-2.34a1 1 0 00-1.41 0l-3.12 3.12-3.2-3.2a1 1 0 00-1.41 0L7.88 4.58a1 1 0 000 1.41l3.13 3.13L3 17.25V21h3.75l8.01-8.01 3.13 3.13a1 1 0 001.41 0l1.38-1.38a1 1 0 000-1.41l-3.2-3.2 3.23-3.23a1 1 0 000-1.27z" />
+              </svg>
+              Pick Color
+            </button>
+          )}
+
+          <div className="ihub-color-grid">
+            {getCustomColors().map((color, index) => (
+              <button
+                key={color}
+                type="button"
+                className={`ihub-color-swatch ${
+                  selectedColor === color ? "ihub-selected" : ""
+                }`}
+                style={{ backgroundColor: color }}
+                onClick={() => handleColorSelect(color)}
+                aria-label={`Select color ${color}`}
+                tabIndex={isOpen ? 0 : -1}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
