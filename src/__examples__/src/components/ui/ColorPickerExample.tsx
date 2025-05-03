@@ -26,6 +26,8 @@ const ColorPickerExample: React.FC = () => {
       <div className="space-y-4">
         <h2 className="ihub-fs-lg">Basic Color Picker</h2>
         <ColorPicker
+          id="basic-color-picker"
+          label="Basic Color Picker"
           defaultColor="#000000"
           onChange={(color) => console.log("Basic color changed:", color)}
         />
@@ -46,19 +48,21 @@ const ColorPickerExample: React.FC = () => {
         <h2 className="ihub-fs-lg">Form Integration</h2>
         <form className="space-y-4">
           <div>
-            <label className="block mb-2">Primary Color</label>
             <ColorPicker
+              label="Primary Color"
               name="primary_color"
               defaultColor={primaryColor}
               onChange={handlePrimaryColorChange}
+              className="ihub-mb-3"
             />
           </div>
           <div>
-            <label className="block mb-2">Secondary Color</label>
             <ColorPicker
+              label="Secondary Color"
               name="secondary_color"
               defaultColor={secondaryColor}
               onChange={handleSecondaryColorChange}
+              className="ihub-mb-3"
             />
           </div>
           <button

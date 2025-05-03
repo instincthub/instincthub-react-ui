@@ -98,6 +98,8 @@ const isDarkColor = (color: string): boolean => {
 };
 
 interface ColorPickerProps {
+  id?: string;
+  label?: string;
   defaultColor?: string;
   name?: string;
   className?: string;
@@ -107,6 +109,8 @@ interface ColorPickerProps {
 }
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
+  id,
+  label,
   defaultColor = "#000000",
   name,
   className = "",
@@ -211,7 +215,16 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
   return (
     <div ref={pickerRef} className={`ihub-color-picker ${className}`}>
-      {name && <input type="hidden" name={name} value={selectedColor} />}
+      {label && (
+        <label
+          htmlFor={id}
+          className="ihub-fs-sm ihub-mb-1 ihub-d-inline-block"
+        >
+          {label}
+        </label>
+      )}
+
+      {name && <input type="hidden" name={name} defaultValue={selectedColor} />}
 
       {showButton ? (
         <button
@@ -253,6 +266,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           <div className="ihub-format-item">
             <span>HEX:</span>
             <input
+              id={id}
               ref={inputRef}
               type="text"
               value={colorInput}
