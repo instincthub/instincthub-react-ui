@@ -65,6 +65,15 @@ const ColorPickerExample: React.FC = () => {
               className="ihub-mb-3"
             />
           </div>
+          <div>
+            <ColorPicker
+              label="Hide Preview, Formats, and EyeDropper"
+              className="ihub-mb-3"
+              hidePreview={true}
+              hideFormats={true}
+              hideEyeDropper={true}
+            />
+          </div>
           <button
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded"

@@ -106,7 +106,37 @@ interface ColorPickerProps {
   showButton?: boolean;
   onChange?: (color: string) => void;
   CUSTOM_COLORS?: string[] | null;
+  hidePreview?: boolean;
+  hideFormats?: boolean;
+  hideEyeDropper?: boolean;
 }
+
+/**
+ * ColorPicker component
+ * @example
+ * ```tsx
+ * <ColorPicker
+ *  id="color-picker"
+ *  label="Color Picker"
+ *  defaultColor="#000000"
+ *  name="color-picker"
+ *  className="color-picker"
+ *  showButton={true}
+ *  onChange={(color) => console.log(color)}
+ * />
+ * ```
+ * @param id {string} - The id of the color picker
+ * @param label {string} - The label of the color picker
+ * @param defaultColor {string} - The default color of the color picker
+ * @param name {string} - The name of the color picker
+ * @param className {string} - The class name of the color picker
+ * @param showButton {boolean} - Whether to show the button of the color picker
+ * @param onChange {function} - The onChange event of the color picker
+ * @param CUSTOM_COLORS {string[]} - The custom colors of the color picker
+ * @param hidePreview {boolean} - Whether to hide the preview of the color picker
+ * @param hideFormats {boolean} - Whether to hide the formats of the color picker
+ * @param hideEyeDropper {boolean} - Whether to hide the eye dropper of the color picker
+ */
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
   id,
@@ -117,6 +147,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   showButton = true,
   onChange,
   CUSTOM_COLORS,
+  hidePreview = false,
+  hideFormats = false,
+  hideEyeDropper = false,
 }) => {
   const [isOpen, setIsOpen] = useState(!showButton);
   const [selectedColor, setSelectedColor] = useState(defaultColor);
@@ -258,40 +291,46 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           aria-label="Color picker"
           onKeyDown={handleKeyDown}
         >
-          <div
-            className="ihub-color-preview-large"
-            style={{ backgroundColor: selectedColor }}
-          />
+          {!hidePreview && (
+            <div
+              className="ihub-color-preview-large"
+              style={{ backgroundColor: selectedColor }}
+            />
+          )}
 
-          <div className="ihub-color-formats">
-            <div className="ihub-format-item">
-              <span>HEX:</span>
-              <input
-                id={id}
-                ref={inputRef}
-                type="text"
-                value={colorInput}
-                onChange={handleInputChange}
-                className={`ihub-color-input ${inputError ? "ihub-error" : ""}`}
-                placeholder="#000000"
-                aria-label="Hex color value"
-              />
+          {!hideFormats && (
+            <div className="ihub-color-formats">
+              <div className="ihub-format-item">
+                <span>HEX:</span>
+                <input
+                  id={id}
+                  ref={inputRef}
+                  type="text"
+                  value={colorInput}
+                  onChange={handleInputChange}
+                  className={`ihub-color-input ${
+                    inputError ? "ihub-error" : ""
+                  }`}
+                  placeholder="#000000"
+                  aria-label="Hex color value"
+                />
+              </div>
+              <div className="ihub-format-item">
+                <span>RGB:</span>
+                <span className="ihub-format-value">
+                  {getRgbString(selectedColor)}
+                </span>
+              </div>
+              <div className="ihub-format-item">
+                <span>HSL:</span>
+                <span className="ihub-format-value">
+                  {getHslString(selectedColor)}
+                </span>
+              </div>
             </div>
-            <div className="ihub-format-item">
-              <span>RGB:</span>
-              <span className="ihub-format-value">
-                {getRgbString(selectedColor)}
-              </span>
-            </div>
-            <div className="ihub-format-item">
-              <span>HSL:</span>
-              <span className="ihub-format-value">
-                {getHslString(selectedColor)}
-              </span>
-            </div>
-          </div>
+          )}
 
-          {supportsEyeDropper && (
+          {!hideEyeDropper && supportsEyeDropper && (
             <button
               type="button"
               className="ihub-eyedropper-btn"
