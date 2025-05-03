@@ -81,6 +81,7 @@ export { default as Dialog } from "./components/ui/dialogs/Dialog";
 export { default as Badge } from "./components/ui/Badge";
 export { default as Action } from "./components/ui/Action";
 export { default as Dropdown } from "./components/ui/Dropdown";
+export { default as ColorPicker } from "./components/ui/ColorPicker";
 export * from "./components/ui/cards";
 export * from "./components/ui/charts";
 

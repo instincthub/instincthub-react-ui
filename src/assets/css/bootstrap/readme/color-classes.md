@@ -64,6 +64,7 @@ Text color utilities allow you to apply specific colors to text content.
 | `.ihub-text-Gunmetal` | Sets text color to Gunmetal (`#2c333a`) |
 | `.ihub-text-ViridianGreen` | Sets text color to ViridianGreen (`#009ba2`) |
 | `.ihub-text-White` | Sets text color to White (`#ffffff`) |
+| `.ihub-text-white` | Sets text color to white (`#ffffff`) in dark and light modes |
 | `.ihub-text-Danger` | Sets text color to Danger (`#ea5f5e`) |
 
 Additional text colors are available for all variables in the color system following the same naming pattern.

@@ -105,7 +105,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
     if (!searchTerm) return options;
 
     return options.filter((option) =>
-      option.label.toLowerCase().includes(searchTerm.toLowerCase())
+      option.label?.toLowerCase().includes(searchTerm?.toLowerCase())
     );
   }, [options, searchTerm]);
 

@@ -1,0 +1,193 @@
+.ihub-color-picker {
+  --ihub-border-radius: 8px;
+  --ihub-transition: 150ms ease;
+  --ihub-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --ihub-focus-color: #4169e1;
+  --ihub-error-color: #ff4444;
+  --ihub-text-color: #333;
+  --ihub-bg-color: #ffffff;
+  --ihub-border-color: #e0e0e0;
+
+  position: relative;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.ihub-color-picker-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--ihub-border-color);
+  border-radius: var(--ihub-border-radius);
+  background: var(--ihub-bg-color);
+  cursor: pointer;
+  transition: all var(--ihub-transition);
+}
+
+.ihub-color-picker-toggle:hover {
+  border-color: var(--ihub-focus-color);
+}
+
+.ihub-color-picker-toggle:focus {
+  outline: 2px solid var(--ihub-focus-color);
+  outline-offset: 2px;
+}
+
+.ihub-color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--ihub-border-color);
+}
+
+.ihub-color-value {
+  font-family: monospace;
+  color: var(--ihub-text-color);
+}
+
+.ihub-color-picker-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  margin-top: 8px;
+  padding: 16px;
+  background: var(--ihub-bg-color);
+  border: 1px solid var(--ihub-border-color);
+  border-radius: var(--ihub-border-radius);
+  box-shadow: var(--ihub-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--ihub-transition);
+  min-width: 280px;
+}
+
+.ihub-color-picker-panel.ihub-is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.ihub-color-preview-large {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--ihub-border-radius);
+  border: 1px solid var(--ihub-border-color);
+  margin-bottom: 16px;
+}
+
+.ihub-color-formats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ihub-format-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ihub-format-item span:first-child {
+  font-weight: 500;
+  min-width: 40px;
+  color: var(--ihub-text-color);
+}
+
+.ihub-color-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid var(--ihub-border-color);
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.ihub-color-input:focus {
+  outline: 2px solid var(--ihub-focus-color);
+  outline-offset: -1px;
+}
+
+.ihub-color-input.ihub-error {
+  border-color: var(--ihub-error-color);
+}
+
+.ihub-format-value {
+  font-family: monospace;
+  color: var(--ihub-text-color);
+}
+
+.ihub-eyedropper-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--ihub-border-color);
+  border-radius: 4px;
+  background: var(--ihub-bg-color);
+  cursor: pointer;
+  transition: all var(--ihub-transition);
+  color: var(--ihub-text-color);
+}
+
+.ihub-eyedropper-btn:hover {
+  background: #f5f5f5;
+}
+
+.ihub-eyedropper-btn:focus {
+  outline: 2px solid var(--ihub-focus-color);
+  outline-offset: -1px;
+}
+
+.ihub-color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.ihub-color-swatch {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform var(--ihub-transition);
+  position: relative;
+}
+
+.ihub-color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.ihub-color-swatch:focus {
+  outline: 2px solid var(--ihub-focus-color);
+  outline-offset: 2px;
+}
+
+.ihub-color-swatch.ihub-selected::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 480px) {
+  .ihub-color-picker-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(-10px);
+    width: 90%;
+  }
+
+  .ihub-color-picker-panel.ihub-is-open {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}

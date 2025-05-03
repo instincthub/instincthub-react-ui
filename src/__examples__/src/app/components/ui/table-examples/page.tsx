@@ -1,7 +1,7 @@
 import MainNavigation from "../../../../components/navbars/MainNavigation";
 import TableExamples from "../../../../components/ui/TableExamples";
 
-export default function Page() {
+export default function TableExamplesPage() {
   return (
     <>
       <MainNavigation />

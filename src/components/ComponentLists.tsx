@@ -294,7 +294,7 @@ const ComponentLists = () => {
       repo_path: "src/components/forms/InputAmount.tsx",
     },
 
-    
+
     // Auth
     {
       name: "IsUsernameEmailTaken",
@@ -479,6 +479,12 @@ const ComponentLists = () => {
       description: "A reusable Dropdown component",
       category: "UI",
       repo_path: "src/components/ui/Dropdown.tsx",
+    },
+    {
+      name: "ColorPicker",
+      description: "A reusable ColorPicker component",
+      category: "UI",
+      repo_path: "src/components/ui/ColorPicker.tsx",
     },
 
     // Theme
