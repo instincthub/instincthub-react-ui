@@ -6,11 +6,13 @@ interface Option {
   id: string | number;
   title: string;
   status?: boolean;
+  [key: string]: any;
 }
 
 interface CheckboxesFieldProps {
   name: string;
   label: string;
+  key_name?: string;
   options: Record<string, Option>;
   defaultValues?: boolean;
   required?: boolean;
@@ -26,6 +28,7 @@ interface CheckboxesFieldProps {
  * A reusable checkbox group component using controlled components pattern
  * @param name The field name
  * @param label The label for the checkbox group
+ * @param key_name The key name of the checkbox group (description, name key, etc)
  * @param options Object of checkbox options to display
  * @param defaultValues Whether to use status from options as default value
  * @param required Whether the field is required
@@ -39,6 +42,7 @@ interface CheckboxesFieldProps {
 const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   name,
   label,
+  key_name,
   options,
   defaultValues = false,
   required = false,
@@ -152,7 +156,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
       <div
         className={`ihub-checkbox-wrapper ${hasError ? "ihub-has-error" : ""}`}
         onBlur={handleBlur}
-        style={{ maxHeight: maxHeight}}
+        style={{ maxHeight: maxHeight }}
       >
         {optionsArray.map((option) => (
           <div className="ihub-checkbox-item" key={option.id}>
@@ -179,7 +183,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
                 </svg>
               </div>
               <span className={`ihub-checkbox-text ${fontSize}`}>
-                {option.title}
+                {key_name ? option[key_name as keyof Option] : option.title}
               </span>
             </label>
           </div>

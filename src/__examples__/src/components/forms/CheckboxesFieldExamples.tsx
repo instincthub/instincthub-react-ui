@@ -169,6 +169,16 @@ const CheckboxesFieldExample: React.FC = () => {
         error={submitted ? errors.categories : undefined}
         onChange={handleCategoriesChange}
       />
+      <CheckboxesField
+        name="categories"
+        key_name="id"
+        label="Course Categories with Key Name"
+        options={categoriesData}
+        defaultValues={true}
+        required={true}
+        error={submitted ? errors.categories : undefined}
+        onChange={handleCategoriesChange}
+      />
 
       <CheckboxesField
         name="permissions"

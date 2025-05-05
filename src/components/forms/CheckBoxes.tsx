@@ -7,6 +7,7 @@ interface Option {
   id: string | number;
   title: string;
   status?: boolean;
+  [key: string]: any;
 }
 
 // Define props interface
@@ -14,6 +15,7 @@ interface CheckBoxesProps {
   objects: Record<string, Option>;
   labels: string;
   names: string;
+  key_name?: string;
   defaultValues?: boolean;
 }
 
@@ -70,7 +72,7 @@ function CheckBoxes(props: CheckBoxesProps) {
                       <polyline points="4 11 8 15 16 6"></polyline>
                     </svg>
                   </div>
-                  <span>{option.title}</span>
+                  <span>{props.key_name ? option[props.key_name as keyof Option] : option.title}</span>
                 </label>
               </div>
             );
