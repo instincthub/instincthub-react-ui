@@ -18,6 +18,8 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  * ```tsx
  * <Dropdown
  *  label="Dropdown"
+ *  name="dropdown"
+ *  key_name="id"
  *  options={options}
  *  selectedValue={selectedValue}
  *  onChange={handleChange}
@@ -33,6 +35,7 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  *
  * @prop {string} label - The label text for the dropdown
  * @prop {string} name - The name attribute for the dropdown
+ * @prop {string} key_name - The key name of the dropdown (description, name key, etc)
  * @prop {boolean} required - Whether the dropdown is required
  * @prop {DropdownOptionType[]} options - The options to display in the dropdown
  * @prop {string | string[]} selectedValue - The value(s) currently selected in the dropdown
@@ -50,6 +53,7 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
 const Dropdown: React.FC<DropdownPropsType> = ({
   label,
   name,
+  key_name,
   required,
   options,
   selectedValue: externalSelectedValue,
@@ -105,7 +109,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
     if (!searchTerm) return options;
 
     return options.filter((option) =>
-      option.label?.toLowerCase().includes(searchTerm?.toLowerCase())
+      key_name ? option[key_name as keyof DropdownOptionType]?.toLowerCase().includes(searchTerm?.toLowerCase()) : option?.label?.toLowerCase().includes(searchTerm?.toLowerCase())
     );
   }, [options, searchTerm]);
 
@@ -224,12 +228,12 @@ const Dropdown: React.FC<DropdownPropsType> = ({
               <div className="ihub-dropdown-tags">
                 {selectedOptions.map((option) => (
                   <div key={option.value} className="ihub-dropdown-tag">
-                    {option.label}
+                    {key_name ? option[key_name as keyof DropdownOptionType] : option?.label}
                     <button
                       type="button"
                       className="ihub-dropdown-tag-remove"
                       onClick={(e) => removeItem(option.value, e)}
-                      aria-label={`Remove ${option.label}`}
+                      aria-label={`Remove ${key_name ? option[key_name as keyof DropdownOptionType] : option?.label}`}
                     >
                       <CloseOutlinedIcon />
                     </button>
@@ -237,7 +241,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
                 ))}
               </div>
             ) : (
-              selectedOptions[0].label
+              key_name ? selectedOptions[0][key_name as keyof DropdownOptionType] : selectedOptions[0].label
             )
           ) : (
             <span className="ihub-dropdown-placeholder">{placeholder}</span>
@@ -309,7 +313,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
                     aria-selected={isSelected}
                     aria-disabled={option.disabled}
                   >
-                    {renderOption ? renderOption(option) : option.label}
+                    {renderOption ? renderOption(option) : key_name ? option[key_name as keyof DropdownOptionType] : option?.label}
                   </div>
                 );
               })

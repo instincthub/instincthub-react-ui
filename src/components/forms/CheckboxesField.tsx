@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 interface Option {
   id: string | number;
-  title: string;
+  title?: string;
   status?: boolean;
   [key: string]: any;
 }
@@ -183,7 +183,7 @@ const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
                 </svg>
               </div>
               <span className={`ihub-checkbox-text ${fontSize}`}>
-                {key_name ? option[key_name as keyof Option] : option.title}
+                {key_name ? option[key_name as keyof Option] : option?.title}
               </span>
             </label>
           </div>

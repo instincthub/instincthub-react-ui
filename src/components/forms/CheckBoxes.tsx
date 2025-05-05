@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 // Define interface for the option object
 interface Option {
   id: string | number;
-  title: string;
+  title?: string;
   status?: boolean;
   [key: string]: any;
 }
@@ -72,7 +72,11 @@ function CheckBoxes(props: CheckBoxesProps) {
                       <polyline points="4 11 8 15 16 6"></polyline>
                     </svg>
                   </div>
-                  <span>{props.key_name ? option[props.key_name as keyof Option] : option.title}</span>
+                  <span>
+                    {props.key_name
+                      ? option[props.key_name as keyof Option]
+                      : option?.title}
+                  </span>
                 </label>
               </div>
             );

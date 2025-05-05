@@ -305,15 +305,17 @@ export interface LoginFormPropsType {
 
 // Option interface for dropdown items
 export interface DropdownOptionType {
-  label: string;
+  label?: string;
   value: string | number;
   disabled?: boolean;
+  [key: string]: any;
 }
 
 // Props interface for the Dropdown component
 export interface DropdownPropsType {
   label?: string;
   name?: string;
+  key_name?: string;
   required?: boolean;
   options: DropdownOptionType[];
   selectedValue?: string | number | (string | number)[];
