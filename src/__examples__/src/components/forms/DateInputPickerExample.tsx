@@ -45,6 +45,7 @@ const DateInputPickerExample: React.FC = () => {
           label="Select a date"
           value={simpleDate}
           onChange={(date) => setSimpleDate(date)}
+          name="simple_date"
           required
         />
         <p>Selected date: {simpleDate || "None"}</p>

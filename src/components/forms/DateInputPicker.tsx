@@ -355,8 +355,17 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
   };
 
   // Date selection from calendar
-  const selectDate = (day: number) => {
-    const newDate = new Date(currentYear, currentMonth, day);
+  const selectDate = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Get the day, month, and year from the data attributes
+    const day = e.currentTarget.getAttribute("data-day") as string;
+    const month = e.currentTarget.getAttribute("data-month") as string;
+    const year = e.currentTarget.getAttribute("data-year") as string;
+
+    const newDate = new Date(
+      parseInt(year),
+      parseInt(month),
+      parseInt(day) + 1 // Add 1 to day to match the date object
+    );
     const isoDate = newDate.toISOString().split("T")[0];
 
     setSelectedDate(newDate);
@@ -375,7 +384,7 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
       setInputValue(isoDate);
       if (onChange) onChange(isoDate);
     }
-
+    validateDate();
     setShowCalendar(false);
   };
 
@@ -513,6 +522,8 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
     // Date grid
     const dateGrid = [];
     let day = 1;
+    let month = currentMonth;
+    let year = currentYear;
 
     // Create rows for the calendar
     for (let i = 0; i < 6; i++) {
@@ -551,10 +562,13 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
               } ${isToday ? "ihub-today" : ""} ${
                 isDisabled ? "ihub-disabled" : ""
               }`}
-              onClick={() => !isDisabled && selectDate(day)}
               aria-selected={isSelected}
               role="gridcell"
               tabIndex={isSelected ? 0 : -1}
+              data-day={day}
+              data-month={month}
+              data-year={year}
+              onClick={selectDate}
             >
               {day}
             </div>
