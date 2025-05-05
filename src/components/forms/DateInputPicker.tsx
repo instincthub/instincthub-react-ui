@@ -759,6 +759,9 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
           </span>
         </div>
       )}
+
+      {/* Hidden input */}
+      {name && <input type="hidden" name={name} value={inputValue} />}
     </div>
   );
 };
