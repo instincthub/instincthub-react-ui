@@ -6,9 +6,12 @@
 }
 
 /* Cursor pointer styles */
-.ihub-cursor-pointer {
-  background-color: transparent !important;
+.ihub-cursor-pointer,
+.ihub-cursor-pointer-transparent {
   cursor: pointer;
+}
+.ihub-cursor-pointer-transparent {
+  background-color: transparent !important;
 }
 
 /* Cursor click animation */

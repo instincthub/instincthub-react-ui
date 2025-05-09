@@ -287,6 +287,7 @@ Available cursor types:
 | -------------------------- | --------------------------------- |
 | `.ihub-cursor-hidden`      | Hides the default cursor          |
 | `.ihub-cursor-pointer`     | Styles for pointer cursor         |
+| `.ihub-cursor-pointer-transparent`     | Styles for pointer cursor with transparent background        |
 | `.ihub-cursor-click`       | Styles for click animation        |
 | `.ihub-cursor-text-hover`  | Styles for text hover             |
 | `.ihub-cursor-link-hover`  | Styles for link hover             |
