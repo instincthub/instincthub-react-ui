@@ -85,8 +85,15 @@ const ToggleButton = ({
           disabled ? "ihub-toggle-disabled" : ""
         }`}
       >
+        {/* If name is provided, we need to set the default value of the input to the initial state */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            defaultValue={isActive ? "true" : "false"}
+          />
+        )}
         <input
-          name={name}
           type="checkbox"
           id={uniqueId}
           className={`ihub-toggle-input ihub-ghost`}
@@ -94,7 +101,6 @@ const ToggleButton = ({
           onChange={handleToggle}
           disabled={disabled}
           aria-label={ariaLabel || "Toggle"}
-          value={isActive ? "true" : "false"}
         />
         <div
           className={`ihub-toggle-track ${
