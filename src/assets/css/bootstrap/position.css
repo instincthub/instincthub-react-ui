@@ -1,0 +1,206 @@
+/* InstinctHub Position Utilities */
+
+/* Position values */
+.ihub-position-static { position: static !important; }
+.ihub-position-relative { position: relative !important; }
+.ihub-position-absolute { position: absolute !important; }
+.ihub-position-fixed { position: fixed !important; }
+.ihub-position-sticky { position: sticky !important; }
+
+/* Top, right, bottom, left positioning */
+.ihub-top-0 { top: 0 !important; }
+.ihub-top-50 { top: 50% !important; }
+.ihub-top-100 { top: 100% !important; }
+.ihub-right-0 { right: 0 !important; }
+.ihub-right-50 { right: 50% !important; }
+.ihub-right-100 { right: 100% !important; }
+.ihub-bottom-0 { bottom: 0 !important; }
+.ihub-bottom-50 { bottom: 50% !important; }
+.ihub-bottom-100 { bottom: 100% !important; }
+.ihub-left-0 { left: 0 !important; }
+.ihub-left-50 { left: 50% !important; }
+.ihub-left-100 { left: 100% !important; }
+
+/* Fixed values for positioning (1-10px) */
+.ihub-top-1 { top: 1px !important; }
+.ihub-top-2 { top: 2px !important; }
+.ihub-top-3 { top: 3px !important; }
+.ihub-top-4 { top: 4px !important; }
+.ihub-top-5 { top: 5px !important; }
+.ihub-top-6 { top: 6px !important; }
+.ihub-top-7 { top: 7px !important; }
+.ihub-top-8 { top: 8px !important; }
+.ihub-top-9 { top: 9px !important; }
+.ihub-top-10 { top: 10px !important; }
+
+.ihub-right-1 { right: 1px !important; }
+.ihub-right-2 { right: 2px !important; }
+.ihub-right-3 { right: 3px !important; }
+.ihub-right-4 { right: 4px !important; }
+.ihub-right-5 { right: 5px !important; }
+.ihub-right-6 { right: 6px !important; }
+.ihub-right-7 { right: 7px !important; }
+.ihub-right-8 { right: 8px !important; }
+.ihub-right-9 { right: 9px !important; }
+.ihub-right-10 { right: 10px !important; }
+
+.ihub-bottom-1 { bottom: 1px !important; }
+.ihub-bottom-2 { bottom: 2px !important; }
+.ihub-bottom-3 { bottom: 3px !important; }
+.ihub-bottom-4 { bottom: 4px !important; }
+.ihub-bottom-5 { bottom: 5px !important; }
+.ihub-bottom-6 { bottom: 6px !important; }
+.ihub-bottom-7 { bottom: 7px !important; }
+.ihub-bottom-8 { bottom: 8px !important; }
+.ihub-bottom-9 { bottom: 9px !important; }
+.ihub-bottom-10 { bottom: 10px !important; }
+
+.ihub-left-1 { left: 1px !important; }
+.ihub-left-2 { left: 2px !important; }
+.ihub-left-3 { left: 3px !important; }
+.ihub-left-4 { left: 4px !important; }
+.ihub-left-5 { left: 5px !important; }
+.ihub-left-6 { left: 6px !important; }
+.ihub-left-7 { left: 7px !important; }
+.ihub-left-8 { left: 8px !important; }
+.ihub-left-9 { left: 9px !important; }
+.ihub-left-10 { left: 10px !important; }
+
+/* Fixed larger values for positioning */
+.ihub-top-20 { top: 20px !important; }
+.ihub-top-30 { top: 30px !important; }
+.ihub-right-20 { right: 20px !important; }
+.ihub-right-30 { right: 30px !important; }
+.ihub-bottom-20 { bottom: 20px !important; }
+.ihub-bottom-30 { bottom: 30px !important; }
+.ihub-left-20 { left: 20px !important; }
+.ihub-left-30 { left: 30px !important; }
+
+/* Negative values for positioning */
+.ihub-top-n1 { top: -1px !important; }
+.ihub-top-n2 { top: -2px !important; }
+.ihub-top-n3 { top: -3px !important; }
+.ihub-top-n4 { top: -4px !important; }
+.ihub-top-n5 { top: -5px !important; }
+.ihub-top-n6 { top: -6px !important; }
+.ihub-top-n7 { top: -7px !important; }
+.ihub-top-n8 { top: -8px !important; }
+.ihub-top-n9 { top: -9px !important; }
+.ihub-top-n10 { top: -10px !important; }
+.ihub-top-n20 { top: -20px !important; }
+.ihub-top-n30 { top: -30px !important; }
+
+.ihub-right-n1 { right: -1px !important; }
+.ihub-right-n2 { right: -2px !important; }
+.ihub-right-n3 { right: -3px !important; }
+.ihub-right-n4 { right: -4px !important; }
+.ihub-right-n5 { right: -5px !important; }
+.ihub-right-n6 { right: -6px !important; }
+.ihub-right-n7 { right: -7px !important; }
+.ihub-right-n8 { right: -8px !important; }
+.ihub-right-n9 { right: -9px !important; }
+.ihub-right-n10 { right: -10px !important; }
+.ihub-right-n20 { right: -20px !important; }
+.ihub-right-n30 { right: -30px !important; }
+
+.ihub-bottom-n1 { bottom: -1px !important; }
+.ihub-bottom-n2 { bottom: -2px !important; }
+.ihub-bottom-n3 { bottom: -3px !important; }
+.ihub-bottom-n4 { bottom: -4px !important; }
+.ihub-bottom-n5 { bottom: -5px !important; }
+.ihub-bottom-n6 { bottom: -6px !important; }
+.ihub-bottom-n7 { bottom: -7px !important; }
+.ihub-bottom-n8 { bottom: -8px !important; }
+.ihub-bottom-n9 { bottom: -9px !important; }
+.ihub-bottom-n10 { bottom: -10px !important; }
+.ihub-bottom-n20 { bottom: -20px !important; }
+.ihub-bottom-n30 { bottom: -30px !important; }
+
+.ihub-left-n1 { left: -1px !important; }
+.ihub-left-n2 { left: -2px !important; }
+.ihub-left-n3 { left: -3px !important; }
+.ihub-left-n4 { left: -4px !important; }
+.ihub-left-n5 { left: -5px !important; }
+.ihub-left-n6 { left: -6px !important; }
+.ihub-left-n7 { left: -7px !important; }
+.ihub-left-n8 { left: -8px !important; }
+.ihub-left-n9 { left: -9px !important; }
+.ihub-left-n10 { left: -10px !important; }
+.ihub-left-n20 { left: -20px !important; }
+.ihub-left-n30 { left: -30px !important; }
+
+/* Z-index utilities - matching existing z-index variables in root.css */
+.ihub-z-base { z-index: var(--z-base) !important; }
+.ihub-z-navigation { z-index: var(--z-navigation) !important; }
+.ihub-z-overlay { z-index: var(--z-overlay) !important; }
+.ihub-z-popup { z-index: var(--z-popup) !important; }
+.ihub-z-critical { z-index: var(--z-critical) !important; }
+
+/* Additional z-index values */
+.ihub-z-0 { z-index: 0 !important; }
+.ihub-z-10 { z-index: 10 !important; }
+.ihub-z-20 { z-index: 20 !important; }
+.ihub-z-30 { z-index: 30 !important; }
+.ihub-z-40 { z-index: 40 !important; }
+.ihub-z-50 { z-index: 50 !important; }
+
+/* Transform utilities for positioning */
+.ihub-translate-middle { transform: translate(-50%, -50%) !important; }
+.ihub-translate-middle-x { transform: translateX(-50%) !important; }
+.ihub-translate-middle-y { transform: translateY(-50%) !important; }
+
+/* Fixed positioning utilities */
+.ihub-fixed-top {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: 0 !important;
+  z-index: var(--z-navigation) !important;
+}
+
+.ihub-fixed-bottom {
+  position: fixed !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  z-index: var(--z-navigation) !important;
+}
+
+.ihub-sticky-top {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: var(--z-navigation) !important;
+}
+
+/* Responsive position classes */
+@media (min-width: 576px) {
+  .ihub-position-sm-static { position: static !important; }
+  .ihub-position-sm-relative { position: relative !important; }
+  .ihub-position-sm-absolute { position: absolute !important; }
+  .ihub-position-sm-fixed { position: fixed !important; }
+  .ihub-position-sm-sticky { position: sticky !important; }
+}
+
+@media (min-width: 768px) {
+  .ihub-position-md-static { position: static !important; }
+  .ihub-position-md-relative { position: relative !important; }
+  .ihub-position-md-absolute { position: absolute !important; }
+  .ihub-position-md-fixed { position: fixed !important; }
+  .ihub-position-md-sticky { position: sticky !important; }
+}
+
+@media (min-width: 992px) {
+  .ihub-position-lg-static { position: static !important; }
+  .ihub-position-lg-relative { position: relative !important; }
+  .ihub-position-lg-absolute { position: absolute !important; }
+  .ihub-position-lg-fixed { position: fixed !important; }
+  .ihub-position-lg-sticky { position: sticky !important; }
+}
+
+@media (min-width: 1200px) {
+  .ihub-position-xl-static { position: static !important; }
+  .ihub-position-xl-relative { position: relative !important; }
+  .ihub-position-xl-absolute { position: absolute !important; }
+  .ihub-position-xl-fixed { position: fixed !important; }
+  .ihub-position-xl-sticky { position: sticky !important; }
+}
