@@ -3,26 +3,32 @@ import Link from "next/link";
 
 interface FromInstinctHubProps {
   showText?: boolean;
+  className?: string;
 }
 
 /**
  * Component to display the InstinctHub logo and text
  * @example
  * <FromInstinctHub showText={true} />
+ * <FromInstinctHub showText={true} className="ihub-mt-3" />
  * @param showText - Whether to show the text "Powerred By:"
+ * @param className - Additional CSS classes to apply to the component
  * @returns The InstinctHub logo and text
  */
 
-const FromInstinctHub = ({ showText = false }: FromInstinctHubProps) => {
+const FromInstinctHub = ({
+  showText = false,
+  className,
+}: FromInstinctHubProps) => {
   return (
-    <div className="ihub-text-center">
+    <div className={`ihub-text-center ${className}`}>
       <Link
         href={"https://instincthub.com"}
         target="_blank"
         rel="noopener noreferrer"
       >
         {showText && (
-          <span className="ihub-fs-sm ihub-mr-1 ihub-d-inline-block ihub-position-relative ihub-right-n7">
+          <span className="ihub-fs-sm ihub-mr-1 ihub-d-inline-block ihub-position-relative ihub-top-n9">
             Powerred By:
           </span>
         )}
@@ -36,12 +42,12 @@ const FromInstinctHub = ({ showText = false }: FromInstinctHubProps) => {
         >
           <path
             className="cls-2"
-            fill="var(#00838f)"
+            fill="#00838f"
             d="M3,10.41a5.12,5.12,0,0,1-.08-.87A4.34,4.34,0,0,1,7.27,5.2a4.89,4.89,0,0,1,.85.08L7.83,6.84a4.34,4.34,0,0,0-.53,0A2.75,2.75,0,0,0,4.55,9.54a3.53,3.53,0,0,0,0,.56Z"
           />
           <path
             className="cls-2"
-            fill="var(#00838f)"
+            fill="#00838f"
             d="M7.24,16.78a7.23,7.23,0,1,1,7.25-7.21A7.24,7.24,0,0,1,7.24,16.78Zm0-12.87A5.65,5.65,0,1,0,12.9,9.54,5.65,5.65,0,0,0,7.24,3.91Z"
           />
           <path
@@ -103,21 +109,21 @@ const FromInstinctHub = ({ showText = false }: FromInstinctHubProps) => {
               id="Path_695"
               data-name="Path 695"
               className="cls-2"
-              fill="var(#00838f)"
+              fill="#00838f"
               d="M134,4.05V22.42h-5.19V15.25h-7.09v7.17h-5.2V4.05h5.2v6.89h7.09V4.05Z"
             />
             <path
               id="Path_696"
               data-name="Path 696"
               className="cls-2"
-              fill="var(#00838f)"
+              fill="#00838f"
               d="M152.37,8.19V22.42h-4.76V20.9a5.6,5.6,0,0,1-4.22,1.76c-3.49,0-6-2-6-6.52v-8h5v7.14c0,2.22.86,3.08,2.35,3.08s2.68-1,2.68-3.35V8.19Z"
             />
             <path
               id="Path_697"
               data-name="Path 697"
               className="cls-2"
-              fill="var(#00838f)"
+              fill="#00838f"
               d="M171.5,15.27c0,4.55-3.14,7.39-7,7.39A5.09,5.09,0,0,1,160.33,21v1.41h-4.76V2.94h5V9.43a5.3,5.3,0,0,1,4-1.46c3.87,0,7,2.79,7,7.3m-5,0c0-2.16-1.33-3.35-3-3.35a3,3,0,0,0-3,3.35c0,2.19,1.33,3.41,3,3.41s3-1.22,3-3.41"
             />
           </g>
