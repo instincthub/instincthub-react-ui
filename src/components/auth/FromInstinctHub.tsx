@@ -29,7 +29,7 @@ const FromInstinctHub = ({
       >
         {showText && (
           <span className="ihub-fs-sm ihub-mr-1 ihub-d-inline-block ihub-position-relative ihub-top-n9">
-            Powerred By:
+            Powered by
           </span>
         )}
         <svg

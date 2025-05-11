@@ -8,6 +8,8 @@ import React, {
 } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
+// TODO: set props that remove default form element.
+
 interface MultiPurposeModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,6 +24,7 @@ interface MultiPurposeModalProps {
   className?: string;
   disableScroll?: boolean;
   handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  removeForm?: boolean;
 }
 
 /**
@@ -60,6 +63,7 @@ interface MultiPurposeModalProps {
  * @param className Additional class names to apply to the modal
  * @param disableScroll Whether to disable body scrolling when modal is open
  * @param handleSubmit Function to call when the modal is submitted
+ * @param removeForm Whether to remove the default form element
  */
 const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
   ({
@@ -76,6 +80,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     className = "",
     disableScroll = true,
     handleSubmit,
+    removeForm = false,
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -210,7 +215,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
         aria-modal="true"
         aria-labelledby={title ? "ihub-modal-title" : undefined}
       >
-        <form onSubmit={handleSubmit}>
+        {removeForm ? (
           <div className={fullClassName}>
             {headerContent}
 
@@ -224,7 +229,23 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
 
             {footerSection}
           </div>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className={fullClassName}>
+              {headerContent}
+
+              <div
+                className="ihub-modal-body ihub-txt-modal"
+                key={contentKey}
+                style={{ height: height }}
+              >
+                {children}
+              </div>
+
+              {footerSection}
+            </div>
+          </form>
+        )}
       </div>
     );
   },
@@ -253,7 +274,8 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       prevProps.closeOnOverlayClick !== nextProps.closeOnOverlayClick ||
       prevProps.className !== nextProps.className ||
       prevProps.disableScroll !== nextProps.disableScroll ||
-      prevProps.handleSubmit !== nextProps.handleSubmit
+      prevProps.handleSubmit !== nextProps.handleSubmit ||
+      prevProps.removeForm !== nextProps.removeForm
     ) {
       return false;
     }
