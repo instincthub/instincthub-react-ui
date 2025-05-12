@@ -12,8 +12,8 @@ import {
 import {
   PaystackConfigObjectType,
   PaystackConfigType,
-  PaymentMethodType,
   PaystackResponseType,
+  PaymentContextType,
 } from "@/types";
 
 /**
@@ -21,9 +21,8 @@ import {
  * @property {Event | null} [e] - The event object that triggered the payment
  * @property {Object} objects - Details about the item being purchased
  * @property {string} objects.title - Title of the item
- * @property {Object} [objects.object_type] - Type information for the item
- * @property {string} [objects.object_type.content_type] - Content type identifier
- * @property {string|number} [objects.object_id] - ID of the object being purchased
+ * @property {string | number | null} [objects.object_type] - Model ID of the object being purchased
+ * @property {string | number | null} [objects.object_id] - Object ID of the object being purchased
  * @property {PaystackConfigObjectType} configObj - Configuration for PayStack
  * @property {PaymentMethodType} [paymentMethod] - Saved payment method if available
  * @property {Function} setStatus - Function to update UI status during payment process
@@ -34,25 +33,6 @@ import {
  * @property {string} [defaultMsg] - Custom confirmation message
  * @property {number} [gatwayCharges] - Payment gateway charges percentage
  */
-export interface PaymentContext {
-  e?: Event | null;
-  objects: {
-    title: string;
-    object_type?: {
-      content_type: string;
-    };
-    object_id?: string | number;
-  };
-  configObj: PaystackConfigObjectType;
-  paymentMethod?: PaymentMethodType;
-  setStatus: (status?: number) => void;
-  handleDBAction: (data?: any) => void;
-  defaultConfirm?: boolean;
-  label: string;
-  coupon?: string;
-  defaultMsg?: string;
-  gatwayCharges?: number;
-}
 
 /**
  * Configures the Paystack payment data for processing
@@ -68,6 +48,7 @@ export const paystackDataConfig = (
   first_name: obj.first_name,
   last_name: obj.last_name,
   amount: obj.amount * 100, // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+  currency: obj.currency || "NGN",
   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY,
   key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
   callback_url: window.location.href,
@@ -136,7 +117,7 @@ export const payWithPaystack = (
         onClose: () => {
           openToast("Transaction was not completed, window closed.", 400);
           resolve({
-            status: "failed",
+            status: "canceled",
             canceled: true,
             reference: config.reference,
           });
@@ -162,14 +143,12 @@ export const payWithPaystack = (
  * @context This function orchestrates the entire payment flow from confirmation to processing
  */
 export async function handlePaymentSubmit(
-  contexts: PaymentContext
+  contexts: PaymentContextType
 ): Promise<void> {
   if (contexts.e) contexts.e.preventDefault();
 
   if (contexts.defaultConfirm) {
-    let msg = `By clicking okay, you are enrolling for ${
-      contexts.label
-    } with id ${contexts.objects.object_type?.content_type || ""}.`;
+    let msg = `By clicking okay, you are enrolling for ${contexts.label} with id ${contexts.objects.object_id}.`;
     const confirm = await openConfirmModal(contexts.defaultMsg || msg);
     if (!confirm) return;
   }
@@ -254,7 +233,7 @@ export async function handlePaymentSubmit(
     if (mewConfigObj.amount) {
       if (mewConfigObj.authorization_code && contexts.paymentMethod) {
         // Ask if user wants to use existing payment method
-        const msg = `Would you prefer we charge your existing ${contexts.paymentMethod.card_type} card that ends with ${contexts.paymentMethod.last4}?`;
+        const msg = `Would you prefer we charge your existing ${contexts.paymentMethod.authorization.card_type} card that ends with ${contexts.paymentMethod.last4}?`;
         const confirm = await openConfirmModal(msg, true);
 
         if (confirm) {

@@ -384,15 +384,20 @@ export interface DateInputPickerTimePropsType
   minuteStep?: number;
 }
 
-
 /* ==============================
- * Payments Types
+ * Paystack Payments Types
  * ============================== */
 
 // PayStack configuration interfaces
 export interface PaystackMetadataType {
-  channel_username?: string;
-  custom_fields?: Array<Record<string, any>>;
+  email: string;
+  owner?: string | number | null;
+  channel?: string | null;
+  content_type?: string | number | null;
+  object_id?: string | number | null;
+  duration?: string | number | null;
+  channel_username?: string | null;
+  custom_fields?: Array<Record<string, any>> | null;
   [key: string]: any;
 }
 
@@ -402,10 +407,11 @@ export interface PaystackConfigObjectType {
   first_name: string;
   last_name: string;
   amount: number;
+  currency?: string;
   user_id?: string | number;
   channel_id?: string | number;
-  content_type: string;
-  object_id: string | number;
+  content_type?: string | number;
+  object_id?: string | number;
   metadata?: PaystackMetadataType;
 }
 
@@ -415,6 +421,7 @@ export interface PaystackConfigType {
   email: string;
   first_name: string;
   last_name: string;
+  currency: string;
   amount: number;
   publicKey: string | undefined;
   key: string | undefined;
@@ -432,34 +439,42 @@ export interface PaystackResponseType {
 }
 
 export interface PaymentMethodType {
-  authorization: {
-    authorization_code: string;
-    email: string;
-  };
-  card_type: string;
-  last4: string;
-}
-
-export interface PaystackPaymentMethodType {
   id: string;
-  method: {
-    bin: string;
-    bank: string;
-    brand: string;
-    last4: string;
-    channel: string;
-    exp_year: string;
-    reusable: boolean;
+  authorization: {
+    email: string;
     card_type: string;
-    exp_month: string;
+    reusable: boolean;
     signature: string;
-    account_name: string | null;
-    country_code: string;
-    receiver_bank: string | null;
     authorization_code: string;
-    receiver_bank_account_number: string | null;
   };
   primary: boolean;
+  exp_year: string;
+  exp_month: string;
+  last4: string;
+  country_code: string;
+  gateway?: string;
+  last_action?: string;
   timestamp: string;
   owner: number;
+  user_payment?: string;
+}
+
+export interface PaymentObjectsType {
+  title: string;
+  object_type?: string | number | null;
+  object_id?: string | number | null;
+}
+
+export interface PaymentContextType {
+  e?: Event | null;
+  objects: PaymentObjectsType;
+  configObj: PaystackConfigObjectType;
+  paymentMethod?: PaymentMethodType;
+  setStatus: (status?: number) => void;
+  handleDBAction: (data?: any) => void;
+  defaultConfirm?: boolean;
+  label: string;
+  coupon?: string;
+  defaultMsg?: string;
+  gatwayCharges?: number;
 }

@@ -39,62 +39,76 @@ Add the PayStack script to your application's HTML:
 
 ## Interfaces
 
-### PaystackMetadata
+The types can be imported from `@instincthub/react-ui/types`
+
+```bash
+import { PaystackConfigObjectType, PaystackConfigType, SessionType } from "@instincthub/react-ui/types";
+```
+
+### PaystackMetadataType
 
 Contains additional information to be passed to PayStack.
 
 ```typescript
-interface PaystackMetadata {
+export interface PaystackMetadataType {
+  email: string;
+  owner?: string;
+  channel?: string;
+  content_type?: string | number;
+  object_id?: string | number;
+  duration?: string;
   channel_username?: string;
   custom_fields?: Array<Record<string, any>>;
   [key: string]: any;
 }
 ```
 
-### PaystackConfigObject
+### PaystackConfigObjectType
 
 Configuration for initializing a PayStack payment.
 
 ```typescript
-interface PaystackConfigObject {
+export interface PaystackConfigObjectType {
   authorization_code?: string;
   email: string;
   first_name: string;
   last_name: string;
   amount: number;
+  currency?: string;
   user_id?: string | number;
   channel_id?: string | number;
-  content_type: string;
-  object_id: string | number;
-  metadata?: PaystackMetadata;
+  content_type?: string | number;
+  object_id?: string | number;
+  metadata?: PaystackMetadataType;
 }
 ```
 
-### PaystackConfig
+### PaystackConfigType
 
 The complete configuration sent to PayStack.
 
 ```typescript
-interface PaystackConfig {
+export interface PaystackConfigType {
   authorization_code?: string;
   reference: string;
   email: string;
   first_name: string;
   last_name: string;
+  currency: string;
   amount: number;
   publicKey: string | undefined;
   key: string | undefined;
   callback_url: string;
-  metadata?: PaystackMetadata;
+  metadata?: PaystackMetadataType;
 }
 ```
 
-### PaystackResponse
+### PaystackResponseType
 
 Response received from PayStack after payment processing.
 
 ```typescript
-interface PaystackResponse {
+export interface PaystackResponseType {
   status: string;
   reference: string;
   message?: string;
@@ -104,27 +118,51 @@ interface PaystackResponse {
 }
 ```
 
-### PaymentMethod
+### PaymentMethodType
 
 Represents a saved payment method.
 
 ```typescript
-interface PaymentMethod {
+export interface PaymentMethodType {
+  id: string;
   authorization: {
-    authorization_code: string;
     email: string;
+    card_type: string;
+    reusable: boolean;
+    signature: string;
+    authorization_code: string;
   };
-  card_type: string;
+  primary: boolean;
+  exp_year: string;
+  exp_month: string;
   last4: string;
+  country_code: string;
+  gateway?: string;
+  last_action?: string;
+  timestamp: string;
+  owner: number;
+  user_payment?: string;
 }
 ```
 
-### PaymentContext
+### PaymentObjectsType
+
+The context for a payment submission.
+
+```tsx
+export interface PaymentObjectsType {
+  title: string;
+  object_type?: string | number | null;
+  object_id?: string | number | null;
+}
+```
+
+### PaymentContextType
 
 The context for a payment submission.
 
 ```typescript
-interface PaymentContext {
+interface PaymentContextType {
   e?: Event;
   objects: {
     title: string;
@@ -133,8 +171,8 @@ interface PaymentContext {
     };
     object_id?: string | number;
   };
-  configObj: PaystackConfigObject;
-  paymentMethod?: PaymentMethod;
+  configObj: PaystackConfigObjectType;
+  paymentMethod?: PaymentMethodType;
   setStatus: (status?: number) => void;
   handleDBAction: (data?: any) => void;
   defaultConfirm?: boolean;
@@ -155,6 +193,7 @@ Configures PayStack payment data for processing.
   - `obj: PaystackConfigObject` - Object containing payment details
 - **Returns**: `PaystackConfig` - Configured payment data
 - **Usage**:
+
   ```typescript
   const paymentData = {
     email: "customer@example.com",
@@ -164,10 +203,10 @@ Configures PayStack payment data for processing.
     content_type: "course",
     object_id: "123",
     metadata: {
-      channel_username: "channel1"
-    }
+      channel_username: "channel1",
+    },
   };
-  
+
   const config = paystackDataConfig(paymentData);
   ```
 
@@ -179,6 +218,7 @@ Charges a customer using an existing authorization.
   - `data: PaystackConfig` - Payment configuration data
 - **Returns**: `Promise<any>` - Promise with transaction data
 - **Usage**:
+
   ```typescript
   const config = paystackDataConfig({
     authorization_code: "AUTH_123456",
@@ -186,10 +226,10 @@ Charges a customer using an existing authorization.
     first_name: "John",
     last_name: "Doe",
     amount: 5000,
-    content_type: "course",
-    object_id: "123"
+    content_type: "1" // Model ID,
+    object_id: "123" // Object ID,
   });
-  
+
   const response = await chargeAuthorization(config);
   if (response.status === "success") {
     // Handle successful payment
@@ -204,16 +244,17 @@ Initiates payment with PayStack popup.
   - `config: PaystackConfig` - Payment configuration
 - **Returns**: `Promise<PaystackResponse>` - Promise with payment response
 - **Usage**:
+
   ```typescript
   const config = paystackDataConfig({
     email: "customer@example.com",
     first_name: "John",
     last_name: "Doe",
     amount: 5000,
-    content_type: "course",
-    object_id: "123"
+    content_type: "1" // Model ID,
+    object_id: "123" // Object ID,
   });
-  
+
   const paymentResponse = await payWithPaystack(config);
   if (paymentResponse.status === "success") {
     // Handle successful payment
@@ -230,13 +271,14 @@ Handles the complete payment submission process.
   - `contexts: PaymentContext` - Payment context information
 - **Returns**: `Promise<void>`
 - **Usage**:
+
   ```typescript
   const paymentContext = {
     objects: {
       title: "Advanced JavaScript Course",
       object_type: {
-        content_type: "course"
-      }
+        content_type: "course",
+      },
     },
     configObj: {
       email: "customer@example.com",
@@ -244,15 +286,15 @@ Handles the complete payment submission process.
       last_name: "Doe",
       amount: 5000,
       content_type: "course",
-      object_id: "123"
+      object_id: "123",
     },
     paymentMethod: {
       authorization: {
         authorization_code: "AUTH_123456",
-        email: "customer@example.com"
+        email: "customer@example.com",
       },
       card_type: "Visa",
-      last4: "4242"
+      last4: "4242",
     },
     setStatus: (status) => {
       // Update UI based on status
@@ -263,9 +305,9 @@ Handles the complete payment submission process.
     defaultConfirm: true,
     label: "Advanced JavaScript Course",
     coupon: "DISCOUNT10",
-    gatwayCharges: 2.5
+    gatwayCharges: 2.5,
   };
-  
+
   await handlePaymentSubmit(paymentContext);
   ```
 
@@ -281,9 +323,9 @@ const initPayment = async (e) => {
   const courseDetails = {
     title: "Advanced JavaScript Course",
     object_type: { content_type: "course" },
-    object_id: "123"
+    object_id: "123",
   };
-  
+
   const configObj = {
     email: userEmail, // User's email if available
     first_name: firstName,
@@ -292,10 +334,10 @@ const initPayment = async (e) => {
     content_type: "course",
     object_id: "123",
     metadata: {
-      channel_username: "channel1"
-    }
+      channel_username: "channel1",
+    },
   };
-  
+
   // Set up payment context
   const paymentContext = {
     e,
@@ -316,9 +358,9 @@ const initPayment = async (e) => {
     },
     label: courseDetails.title,
     defaultConfirm: true,
-    gatwayCharges: 2.5
+    gatwayCharges: 2.5,
   };
-  
+
   // Process payment
   await handlePaymentSubmit(paymentContext);
 };
@@ -335,7 +377,7 @@ const checkoutWithCoupon = async (couponCode) => {
     openToast("Invalid coupon format", 400);
     return;
   }
-  
+
   const paymentContext = {
     objects: courseDetails,
     configObj: {
@@ -343,18 +385,18 @@ const checkoutWithCoupon = async (couponCode) => {
       first_name: firstName,
       last_name: lastName,
       amount: 5000,
-      content_type: "course",
+      content_type: "1",
       object_id: "123",
       metadata: {
-        channel_username: "channel1"
-      }
+        channel_username: "channel1",
+      },
     },
     setStatus: (status) => {
       setIsProcessing(status === 0);
     },
     handleDBAction: (data) => {
       if (data && data.reference) {
-        if (data.reference.startsWith('COUPON__')) {
+        if (data.reference.startsWith("COUPON__")) {
           // Handle 100% discount coupon
           completeEnrollment(data.reference);
         } else {
@@ -364,9 +406,9 @@ const checkoutWithCoupon = async (couponCode) => {
       }
     },
     label: courseDetails.title,
-    coupon: couponCode
+    coupon: couponCode,
   };
-  
+
   await handlePaymentSubmit(paymentContext);
 };
 ```
@@ -379,27 +421,28 @@ import { handlePaymentSubmit } from "./payment-utils";
 const processSavedCardPayment = async () => {
   // Fetch the user's saved payment methods
   const savedPaymentMethods = await fetchUserPaymentMethods(userId);
-  
+
   if (savedPaymentMethods.length > 0) {
     const defaultPaymentMethod = savedPaymentMethods[0];
-    
+
     const paymentContext = {
       objects: productDetails,
       configObj: {
-        authorization_code: defaultPaymentMethod.authorization.authorization_code,
+        authorization_code:
+          defaultPaymentMethod.authorization.authorization_code,
         email: defaultPaymentMethod.authorization.email,
         first_name: user.firstName,
         last_name: user.lastName,
         amount: productPrice,
         content_type: "product",
-        object_id: productId
+        object_id: productId,
       },
       paymentMethod: defaultPaymentMethod,
       setStatus: updateLoadingState,
       handleDBAction: handleSuccessfulPurchase,
-      label: productDetails.title
+      label: productDetails.title,
     };
-    
+
     await handlePaymentSubmit(paymentContext);
   } else {
     // No saved payment methods, proceed with regular checkout
