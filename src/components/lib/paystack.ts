@@ -9,57 +9,12 @@ import {
   openConfirmModal,
   openToast,
 } from "./modals/modals";
-
-// PayStack configuration interfaces
-export interface PaystackMetadata {
-  channel_username?: string;
-  custom_fields?: Array<Record<string, any>>;
-  [key: string]: any;
-}
-
-export interface PaystackConfigObject {
-  authorization_code?: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  amount: number;
-  user_id?: string | number;
-  channel_id?: string | number;
-  content_type: string;
-  object_id: string | number;
-  metadata?: PaystackMetadata;
-}
-
-export interface PaystackConfig {
-  authorization_code?: string;
-  reference: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  amount: number;
-  publicKey: string | undefined;
-  key: string | undefined;
-  callback_url: string;
-  metadata?: PaystackMetadata;
-}
-
-export interface PaystackResponse {
-  status: string;
-  reference: string;
-  message?: string;
-  transaction?: string;
-  canceled?: boolean;
-  [key: string]: any;
-}
-
-export interface PaymentMethod {
-  authorization: {
-    authorization_code: string;
-    email: string;
-  };
-  card_type: string;
-  last4: string;
-}
+import {
+  PaystackConfigObjectType,
+  PaystackConfigType,
+  PaymentMethodType,
+  PaystackResponseType,
+} from "@/types";
 
 /**
  * Context for processing payments
@@ -69,8 +24,8 @@ export interface PaymentMethod {
  * @property {Object} [objects.object_type] - Type information for the item
  * @property {string} [objects.object_type.content_type] - Content type identifier
  * @property {string|number} [objects.object_id] - ID of the object being purchased
- * @property {PaystackConfigObject} configObj - Configuration for PayStack
- * @property {PaymentMethod} [paymentMethod] - Saved payment method if available
+ * @property {PaystackConfigObjectType} configObj - Configuration for PayStack
+ * @property {PaymentMethodType} [paymentMethod] - Saved payment method if available
  * @property {Function} setStatus - Function to update UI status during payment process
  * @property {Function} handleDBAction - Callback for processing successful payments
  * @property {boolean} [defaultConfirm] - Whether to show a confirmation dialog
@@ -88,8 +43,8 @@ export interface PaymentContext {
     };
     object_id?: string | number;
   };
-  configObj: PaystackConfigObject;
-  paymentMethod?: PaymentMethod;
+  configObj: PaystackConfigObjectType;
+  paymentMethod?: PaymentMethodType;
   setStatus: (status?: number) => void;
   handleDBAction: (data?: any) => void;
   defaultConfirm?: boolean;
@@ -105,8 +60,8 @@ export interface PaymentContext {
  * @returns PaystackConfig - Configured payment data
  */
 export const paystackDataConfig = (
-  obj: PaystackConfigObject
-): PaystackConfig => ({
+  obj: PaystackConfigObjectType
+): PaystackConfigType => ({
   authorization_code: obj.authorization_code,
   reference: new Date().getTime().toString(),
   email: obj.email,
@@ -125,7 +80,7 @@ export const paystackDataConfig = (
  * @returns Promise with transaction data
  */
 export const chargeAuthorization = async (
-  data: PaystackConfig
+  data: PaystackConfigType
 ): Promise<any> => {
   // This function tries to charge user with existing card
   const url = "https://api.paystack.co/transaction/charge_authorization";
@@ -162,8 +117,8 @@ export const chargeAuthorization = async (
  * @returns Promise with payment response
  */
 export const payWithPaystack = (
-  config: PaystackConfig
-): Promise<PaystackResponse> => {
+  config: PaystackConfigType
+): Promise<PaystackResponseType> => {
   return new Promise(async (resolve) => {
     try {
       // Ensure PaystackPop is available
@@ -173,7 +128,7 @@ export const payWithPaystack = (
 
       let handler = await window.PaystackPop.setup({
         ...config,
-        callback: (response: PaystackResponse) => {
+        callback: (response: PaystackResponseType) => {
           // This happens after the payment is completed successfully
           openToast("Payment complete! Reference: " + response.reference);
           resolve(response);
@@ -224,7 +179,7 @@ export async function handlePaymentSubmit(
 
     // Check if contexts.coupon is valid
     let discount: number | undefined;
-    let mewConfigObj: PaystackConfigObject;
+    let mewConfigObj: PaystackConfigObjectType;
 
     if (contexts.coupon) {
       const handle = contexts.configObj.metadata?.channel_username;

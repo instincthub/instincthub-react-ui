@@ -383,3 +383,83 @@ export interface DateInputPickerTimePropsType
   /** Time step in minutes (default: 1) */
   minuteStep?: number;
 }
+
+
+/* ==============================
+ * Payments Types
+ * ============================== */
+
+// PayStack configuration interfaces
+export interface PaystackMetadataType {
+  channel_username?: string;
+  custom_fields?: Array<Record<string, any>>;
+  [key: string]: any;
+}
+
+export interface PaystackConfigObjectType {
+  authorization_code?: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  amount: number;
+  user_id?: string | number;
+  channel_id?: string | number;
+  content_type: string;
+  object_id: string | number;
+  metadata?: PaystackMetadataType;
+}
+
+export interface PaystackConfigType {
+  authorization_code?: string;
+  reference: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  amount: number;
+  publicKey: string | undefined;
+  key: string | undefined;
+  callback_url: string;
+  metadata?: PaystackMetadataType;
+}
+
+export interface PaystackResponseType {
+  status: string;
+  reference: string;
+  message?: string;
+  transaction?: string;
+  canceled?: boolean;
+  [key: string]: any;
+}
+
+export interface PaymentMethodType {
+  authorization: {
+    authorization_code: string;
+    email: string;
+  };
+  card_type: string;
+  last4: string;
+}
+
+export interface PaystackPaymentMethodType {
+  id: string;
+  method: {
+    bin: string;
+    bank: string;
+    brand: string;
+    last4: string;
+    channel: string;
+    exp_year: string;
+    reusable: boolean;
+    card_type: string;
+    exp_month: string;
+    signature: string;
+    account_name: string | null;
+    country_code: string;
+    receiver_bank: string | null;
+    authorization_code: string;
+    receiver_bank_account_number: string | null;
+  };
+  primary: boolean;
+  timestamp: string;
+  owner: number;
+}
