@@ -14,6 +14,7 @@ export default {
   // input: ["src/index.ts", "src/styles.ts"], // js and css files
   input: [
     "src/index.ts",
+    "src/ssr.ts",
     "src/components/lib/index.ts",
     "src/components/lib/redux/index.ts",
     "src/components/cursors/index.ts",

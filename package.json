@@ -14,6 +14,11 @@
       "require": "./dist/src/index.js",
       "types": "./dist/src/types/index.d.ts"
     },
+    "./ssr": {
+      "import": "./dist/src/ssr.js",
+      "require": "./dist/src/ssr.js",
+      "types": "./dist/src/types/ssr.d.ts"
+    },
     "./types": {
       "import": "./dist/src/types/types/index.d.ts",
       "require": "./dist/src/types/types/index.d.ts",

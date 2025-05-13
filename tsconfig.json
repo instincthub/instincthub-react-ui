@@ -29,6 +29,9 @@
       "@instincthub/react-ui": [
         "/node_modules/@instincthub/react-ui/dist/src/index.js"
       ],
+      "@instincthub/react-ui/ssr": [
+        "/node_modules/@instincthub/react-ui/dist/src/ssr.js"
+      ],
       "@instincthub/react-ui/types": [
         "/node_modules/@instincthub/react-ui/dist/src/types/types/index.d.ts"
       ],
