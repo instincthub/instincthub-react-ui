@@ -271,19 +271,22 @@ const ComponentLists = () => {
     },
     {
       name: "ChipsInput",
-      description: "ChipsInput is used to enter multiple values on an input field.",
+      description:
+        "ChipsInput is used to enter multiple values on an input field.",
       category: "Form",
       repo_path: "src/components/forms/ChipsInput.tsx",
     },
     {
       name: "RadioButton",
-      description: "RadioButton is used to enter single value on an input field.",
+      description:
+        "RadioButton is used to enter single value on an input field.",
       category: "Form",
       repo_path: "src/components/forms/radio-btn/RadioButton.tsx",
     },
     {
       name: "RadioGroup",
-      description: "RadioGroup is used to select each from group value on an input field.",
+      description:
+        "RadioGroup is used to select each from group value on an input field.",
       category: "Form",
       repo_path: "src/components/forms/radio-btn/RadioGroup.tsx",
     },
@@ -293,7 +296,6 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputAmount.tsx",
     },
-
 
     // Auth
     {
@@ -579,6 +581,18 @@ const ComponentLists = () => {
       description: "Modal examples component",
       category: "Status",
       repo_path: "src/components/status/ModalExamples.tsx",
+    },
+    {
+      name: "NotFound",
+      description: "Not found component",
+      category: "Status",
+      repo_path: "src/components/status/NotFound.tsx",
+    },
+    {
+      name: "Unauthorized",
+      description: "Unauthorized component",
+      category: "Status",
+      repo_path: "src/components/status/Unauthorized.tsx",
     },
 
     // Tabs

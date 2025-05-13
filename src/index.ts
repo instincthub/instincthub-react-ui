@@ -103,6 +103,8 @@ export { default as DeleteConfirmationModal } from "./components/status/DeleteCo
 export { default as CopyToClipboard } from "./components/status/CopyToClipBoard";
 export { default as MultiPurposeModal } from "./components/status/MultiPurposeModal";
 export { default as ModalExamples } from "./components/status/ModalExamples";
+export { default as NotFound } from "./components/status/NotFound";
+export { default as Unauthorized } from "./components/status/Unauthorized";
 
 // Tabs
 export { default as Tabs } from "./components/tabs/Tabs";

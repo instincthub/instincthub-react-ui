@@ -61,24 +61,29 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export interface SessionUserNameType {
+  // Required fields
+  id: number | string;
+  email: string;
+  first_name: string;
+  last_name: string;
+
+  // Optional fields
+  uuid?: string;
+  username?: string;
+  full_name?: string;
+  picture?: string;
+  token?: string;
+  category?: string;
+  channels?: any; // Adjust based on structure
+  [key: string]: any;
+}
+
 /**
  * Session data user information
  */
 export interface SessionUserType {
-  name?: {
-    id?: number;
-    uuid?: string;
-    email?: string;
-    username?: string;
-    first_name?: string;
-    last_name?: string;
-    full_name?: string;
-    picture?: string;
-    token?: string;
-    category?: string;
-    channels?: any; // Adjust based on structure
-    [key: string]: any;
-  };
+  name?: SessionUserNameType;
   track?: boolean;
   profile_id?: string;
   verified?: boolean;
@@ -460,9 +465,11 @@ export interface PaymentMethodType {
 }
 
 export interface PaymentObjectsType {
-  title: string;
   object_type?: string | number | null;
   object_id?: string | number | null;
+  payment_structure?: any;
+  student_record?: any;
+  [key: string]: any;
 }
 
 export interface PaymentContextType {
@@ -470,11 +477,22 @@ export interface PaymentContextType {
   objects: PaymentObjectsType;
   configObj: PaystackConfigObjectType;
   paymentMethod?: PaymentMethodType;
-  setStatus: (status?: number) => void;
+  setStatus: (status: number) => void;
   handleDBAction: (data?: any) => void;
   defaultConfirm?: boolean;
   label: string;
   coupon?: string;
   defaultMsg?: string;
   gatwayCharges?: number;
+}
+
+export interface PaymentReferenceType {
+  reference: string;
+  trans?: string;
+  status: string;
+  message?: string;
+  transaction?: string;
+  trxref?: string;
+  redirecturl?: string;
+  [key: string]: any;
 }

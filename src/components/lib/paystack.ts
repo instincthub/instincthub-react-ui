@@ -192,7 +192,7 @@ export async function handlePaymentSubmit(
     if (discount) {
       if (discount === 100) {
         contexts.handleDBAction({ reference: `COUPON__${contexts.coupon}` });
-        contexts.setStatus();
+        contexts.setStatus(1);
         return;
       }
 
@@ -245,24 +245,21 @@ export async function handlePaymentSubmit(
         } else {
           // Request for user card details
           const payActivate = await payWithPaystack(dataset);
-          if (payActivate.status === "success") {
-            contexts.handleDBAction(payActivate);
-          }
+
+          contexts.handleDBAction(payActivate);
         }
       } else {
         // Request for user card details if payment method doesn't exist
         console.log("Pay with paystack: ");
         const payActivate = await payWithPaystack(dataset);
-        if (payActivate.status === "success") {
-          contexts.handleDBAction(payActivate);
-        }
+        contexts.handleDBAction(payActivate);
       }
     } else {
       // If cohort is free, don't request for payment
       contexts.handleDBAction();
     }
 
-    contexts.setStatus();
+    contexts.setStatus(1);
   };
 
   // Get user email input if doesn't exist

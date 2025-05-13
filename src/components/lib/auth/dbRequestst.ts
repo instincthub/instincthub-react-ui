@@ -27,7 +27,16 @@ const defaultParams: RequestParams = {
 
 /**
  * Fetches data from the API
+ * @example
+ * ```ts
+ * const data = await getData({ path: "/api/data", token: "your_token" });
+ * ```
  * @param params Request parameters
+ * @param params.path The path to the API endpoint (required) eg. "sis/${handle}/student/"
+ * @param params.token The token to use for the request (optional)
+ * @param params.method The method to use for the request (optional)
+ * @param params.type The type of the request (optional)
+ * @param params.channel The channel to use for the request (optional)
  * @returns Promise with the response data
  */
 export async function getData(params: Partial<RequestParams>): Promise<any> {

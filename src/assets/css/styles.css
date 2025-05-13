@@ -26,6 +26,7 @@
 
 /* Status Styles */
 @import url("./status/error-state.css");
+@import url("./status/not-found.css");
 
 /* UI Styles */
 @import url("./ui/ui-index.css");

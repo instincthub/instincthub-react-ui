@@ -154,6 +154,9 @@ export interface PaymentObjectsType {
   title: string;
   object_type?: string | number | null;
   object_id?: string | number | null;
+  payment_structure?: string | number | null;
+  student_record?: string | number | null;
+  [key: string]: any;
 }
 ```
 
