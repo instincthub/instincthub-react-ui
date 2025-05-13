@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 
 interface NotFoundProps {
   message?: string;
@@ -38,14 +37,14 @@ const NotFound: React.FC<NotFoundProps> = ({
           </p>
 
           <div className="ihub-flex ihub-justify-center ihub-gap-4">
-            <Link href={linkHref}>
+            <a href={linkHref}>
               <button className="ihub-important-btn">{linkText}</button>
-            </Link>
+            </a>
 
             {showHomeLink && linkHref !== "/" && (
-              <Link href="/">
+              <a href="/">
                 <button className="ihub-outlined-btn">Back to Home</button>
-              </Link>
+              </a>
             )}
           </div>
         </div>

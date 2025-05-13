@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import Link from "next/link";
 
 interface UnauthorizedProps {
   /**
@@ -55,9 +52,9 @@ const Unauthorized: React.FC<UnauthorizedProps> = ({
               ? "You are not logged in."
               : "You don't have permission to access this page."}
           </p>
-          <Link href={url} className="important-btn ihub-inline-block">
+          <a href={url} className="important-btn ihub-inline-block">
             {label}
-          </Link>
+          </a>
         </div>
       </div>
     </div>
