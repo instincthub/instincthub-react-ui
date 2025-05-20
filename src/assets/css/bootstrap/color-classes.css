@@ -4,7 +4,73 @@
  * Prefix: ihub-
  */
 
-/* Text Color Classes */
+ /* Background Color Utility Classes */
+.ihub-bg-dark-cyan { background-color: #00838f; }
+.ihub-bg-turkish-rose { background-color: #bc658d; }
+.ihub-bg-gunmetal { background-color: #2c333a; }
+.ihub-bg-viridian-green { background-color: #009ba2; }
+.ihub-bg-white { background-color: #fff; }
+.ihub-bg-danger { background-color: #ea5f5e; }
+.ihub-bg-fade-glass { background-color: #ffffffe6; }
+.ihub-bg-rhythm { background-color: #69779b; }
+.ihub-bg-caribbean-green { background-color: #00c5a2; }
+.ihub-bg-old-lavender { background-color: #756c83; }
+.ihub-bg-american-purple { background-color: #432160; }
+.ihub-bg-chinese-blue { background-color: #415b90; }
+.ihub-bg-dark-slate-gray { background-color: #314a52; }
+.ihub-bg-maximum-red-purple { background-color: #a03c78; }
+.ihub-bg-dark-lavender { background-color: #6f539b; }
+.ihub-bg-metallic-blue { background-color: #3c5186; }
+.ihub-bg-tiffany-blue { background-color: #0fabbc; }
+.ihub-bg-police-blue { background-color: #394a6d; }
+.ihub-bg-corn { background-color: #fbeb5b; }
+.ihub-bg-lime-green { background-color: #4be133; }
+.ihub-bg-old-rose { background-color: #394a6d; }
+.ihub-bg-magnolia { background-color: #f4f3fe; }
+.ihub-bg-chinese-silver { background-color: #ccc; }
+.ihub-bg-lavender-gray { background-color: #c5c0db; }
+.ihub-bg-blue { background-color: #1a3957; }
+.ihub-bg-light-white { background-color: #ececec; }
+.ihub-bg-deepgreen-cyanturquoise { background-color: #206d62; }
+.ihub-bg-gray { background-color: #f4f4f4; }
+.ihub-bg-overlay { background-color: #2c333a33; }
+.ihub-bg-opacity-background { background-color: #7d7c7c20; }
+
+/* Text Color Utility Classes */
+.ihub-text-dark-cyan { color: #00838f; }
+.ihub-text-turkish-rose { color: #bc658d; }
+.ihub-text-gunmetal { color: #2c333a; }
+.ihub-text-viridian-green { color: #009ba2; }
+.ihub-text-white { color: #fff; }
+.ihub-text-danger { color: #ea5f5e; }
+.ihub-text-fade-glass { color: #ffffffe6; }
+.ihub-text-rhythm { color: #69779b; }
+.ihub-text-caribbean-green { color: #00c5a2; }
+.ihub-text-old-lavender { color: #756c83; }
+.ihub-text-american-purple { color: #432160; }
+.ihub-text-chinese-blue { color: #415b90; }
+.ihub-text-dark-slate-gray { color: #314a52; }
+.ihub-text-maximum-red-purple { color: #a03c78; }
+.ihub-text-dark-lavender { color: #6f539b; }
+.ihub-text-metallic-blue { color: #3c5186; }
+.ihub-text-tiffany-blue { color: #0fabbc; }
+.ihub-text-police-blue { color: #394a6d; }
+.ihub-text-corn { color: #fbeb5b; }
+.ihub-text-lime-green { color: #4be133; }
+.ihub-text-old-rose { color: #394a6d; }
+.ihub-text-magnolia { color: #f4f3fe; }
+.ihub-text-chinese-silver { color: #ccc; }
+.ihub-text-lavender-gray { color: #c5c0db; }
+.ihub-text-blue { color: #1a3957; }
+.ihub-text-light-white { color: #ececec; }
+.ihub-text-deepgreen-cyanturquoise { color: #206d62; }
+.ihub-text-gray { color: #f4f4f4; }
+.ihub-text-overlay { color: #2c333a33; }
+.ihub-text-opacity-background { color: #7d7c7c20; }
+
+
+
+/* Text Color Variable Classes */
 .ihub-text-DarkCyan {
   color: var(--DarkCyan);
 }
@@ -76,7 +142,10 @@
   color: var(--LavenderGray);
 }
 
-/* Background Color Classes */
+/* Background Color Variable Classes */
+.ihub-bg-dark-cyan {
+  background-color: #00838f;
+}
 .ihub-bg-DarkCyan {
   background-color: var(--DarkCyan);
 }

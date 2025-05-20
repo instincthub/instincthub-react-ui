@@ -484,6 +484,7 @@ export interface PaymentContextType {
   coupon?: string;
   defaultMsg?: string;
   gatwayCharges?: number;
+  openConfirm?: boolean;
 }
 
 export interface PaymentReferenceType {

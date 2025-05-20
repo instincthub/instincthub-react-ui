@@ -79,9 +79,9 @@ export const chargeAuthorization = async (
     const res = await req.json();
 
     if (res.data?.status === "success") {
-      openToast("Payment was successful with reference: " + res.data.reference);
+      openToast(`Payment was successful with reference: ${res.data.reference}`);
     } else {
-      openToast("Payment failed with reference:", 400);
+      openToast(`Payment failed with reference: ${res.data.reference}`, 400);
     }
 
     return res.data;
@@ -117,8 +117,8 @@ export const payWithPaystack = (
         onClose: () => {
           openToast("Transaction was not completed, window closed.", 400);
           resolve({
-            status: "canceled",
-            canceled: true,
+            status: "cancelled",
+            cancelled: true,
             reference: config.reference,
           });
         },
@@ -129,7 +129,7 @@ export const payWithPaystack = (
       openToast("Payment could not be initiated", 400);
       resolve({
         status: "failed",
-        canceled: true,
+        cancelled: true,
         reference: config.reference,
         error,
       });
@@ -139,6 +139,43 @@ export const payWithPaystack = (
 
 /**
  * Handles the complete payment submission process
+ * @example
+ * ```ts
+ * handlePaymentSubmit({
+ *   openConfirm: true,
+ *   defaultConfirm: true,
+ *   defaultMsg: "Are you sure you want to enroll for this course?",
+ *   label: "Course Name",
+ *   objects: {
+ *     object_id: "123",
+ *     object_type: "course",
+ *   },
+ *   configObj: {
+ *     email: "user@example.com",
+ *     amount: 1000,
+ *     currency: "NGN",
+ *     authorization_code: "1234567890",
+ *     first_name: "John",
+ *     last_name: "Doe",
+ *     email: "user@example.com",
+ *   },
+ *   coupon: "1234567890",
+ *   gatwayCharges: 10,
+ *   paymentMethod: {
+ *     authorization: {
+ *       card_type: "MasterCard",
+ *       last4: "1234",
+ *     },
+ *   },
+ *   handleDBAction: (data: any) => {
+ *     console.log(data);
+ *   },
+ *   setStatus: (status: number) => {
+ *     console.log(status);
+ *   },
+ *   e: Event,
+ * });
+ * ```
  * @param contexts - Payment context information
  * @context This function orchestrates the entire payment flow from confirmation to processing
  */
@@ -147,7 +184,7 @@ export async function handlePaymentSubmit(
 ): Promise<void> {
   if (contexts.e) contexts.e.preventDefault();
 
-  if (contexts.defaultConfirm) {
+  if (contexts.openConfirm && contexts.defaultConfirm) {
     let msg = `By clicking okay, you are enrolling for ${contexts.label} with id ${contexts.objects.object_id}.`;
     const confirm = await openConfirmModal(contexts.defaultMsg || msg);
     if (!confirm) return;
@@ -239,9 +276,7 @@ export async function handlePaymentSubmit(
         if (confirm) {
           // Charge user with existing card
           const res = await chargeAuthorization(dataset);
-          if (res.status === "success") {
-            contexts.handleDBAction(res);
-          }
+          contexts.handleDBAction(res);
         } else {
           // Request for user card details
           const payActivate = await payWithPaystack(dataset);

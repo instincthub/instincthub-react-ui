@@ -54,7 +54,7 @@ export const openConfirmModal = (
           }</p>
           <div class="mt-4">
             <button type="button" class="danger-btn d-inline-block" onclick="window.handleCancel()">Cancel</button>
-            <button type="button" class="important-btn confirm-btn" onclick="window.handleConfirm()">Ok</button>
+            <button type="button" class="important-btn confirm-btn ihub-bg-dark-cyan" onclick="window.handleConfirm()">Ok</button>
           </div>
         </div>
       </section>

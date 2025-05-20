@@ -37,12 +37,12 @@ const NotFound: React.FC<NotFoundProps> = ({
           </p>
 
           <div className="ihub-flex ihub-justify-center ihub-gap-4">
-            <a href={linkHref}>
+            <a href={linkHref} className="ihub-m-auto">
               <button className="ihub-important-btn">{linkText}</button>
             </a>
 
             {showHomeLink && linkHref !== "/" && (
-              <a href="/">
+              <a href="/" className="ihub-m-auto">
                 <button className="ihub-outlined-btn">Back to Home</button>
               </a>
             )}
