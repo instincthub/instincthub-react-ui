@@ -642,6 +642,10 @@ export function getNestedValue(row: any, accessor: string): any {
  * @param channel Channel ID string or null
  * @param auth_sk Use auth secret boolean (true, false)
  * @returns Request options object
+ *
+ * Set environment
+ * NEXT_PUBLIC_INSTINCTHUB_SK_KEY="Your secret key name"
+ * NEXT_PUBLIC_INSTINCTHUB_AUTH_SECRET="Your seceret key"
  */
 export const reqOptions = (
   method: string,
@@ -651,9 +655,9 @@ export const reqOptions = (
   channel: string | null = null,
   auth_sk: boolean = false
 ): RequestOptions => {
+  const sk_header = process.env.NEXT_PUBLIC_INSTINCTHUB_SKH_KEY || "";
   const headers: Record<string, string> = {
-    "instincthub-sk-header":
-      process.env.NEXT_PUBLIC_INSTINCTHUB_SK_HEADER ?? "",
+    [sk_header]: process.env.NEXT_PUBLIC_INSTINCTHUB_SK_HEADER ?? "",
   };
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -662,8 +666,8 @@ export const reqOptions = (
   if (content_type === "form-data")
     headers["Content-Type"] = "multipart/form-data";
   if (auth_sk) {
-    headers["instincthub-auth-sk-header"] =
-      process.env.NEXT_PUBLIC_INSTINCTHUB_AUTH_SECRET ?? "";
+    const sk_key = process.env.NEXT_PUBLIC_INSTINCTHUB_SK_KEY || "";
+    headers[sk_key] = process.env.NEXT_PUBLIC_INSTINCTHUB_AUTH_SECRET ?? "";
   }
 
   const request: RequestOptions = { method, headers, redirect: "follow" };

@@ -47,7 +47,7 @@
       "@instincthub/react-ui/cursors": [
         "/node_modules/@instincthub/react-ui/dist/src/components/cursors/index.js"
       ],
-      "@instincthub/react-ui/asssets/*": [
+      "@instincthub/react-ui/assets/*": [
         "/node_modules/@instincthub/react-ui/dist/src/assets/*"
       ]
     },

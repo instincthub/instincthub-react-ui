@@ -1,7 +1,9 @@
+import _ from "lodash";
 import { extractSubDomain, reqOptions, API_HOST_URL } from "../helpFunction";
 
 // Define interfaces for parameters
 interface RequestParams {
+  host_url?: string;
   path: string;
   data?: any;
   token?: string | null;
@@ -17,6 +19,7 @@ interface DomainObjects {
 
 // Default parameters with proper types
 const defaultParams: RequestParams = {
+  host_url: API_HOST_URL,
   path: "",
   data: null,
   token: null,
@@ -32,6 +35,7 @@ const defaultParams: RequestParams = {
  * const data = await getData({ path: "/api/data", token: "your_token" });
  * ```
  * @param params Request parameters
+ * @param params.host_url The host url to use for the request (optional)
  * @param params.path The path to the API endpoint (required) eg. "sis/${handle}/student/"
  * @param params.token The token to use for the request (optional)
  * @param params.method The method to use for the request (optional)
@@ -44,7 +48,7 @@ export async function getData(params: Partial<RequestParams>): Promise<any> {
 
   try {
     // Get the initial course list belonging to a channel..
-    const endpoint = API_HOST_URL + _par.path;
+    const endpoint = _par.host_url + _par.path;
     const options = reqOptions(
       _par.method || "GET",
       _par.data,

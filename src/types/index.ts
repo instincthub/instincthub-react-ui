@@ -421,16 +421,16 @@ export interface PaystackConfigObjectType {
 }
 
 export interface PaystackConfigType {
-  authorization_code?: string;
-  reference: string;
   email: string;
   first_name: string;
   last_name: string;
   currency: string;
   amount: number;
-  publicKey: string | undefined;
-  key: string | undefined;
-  callback_url: string;
+  reference?: string;
+  authorization_code?: string;
+  publicKey?: string | undefined;
+  key?: string | undefined;
+  callback_url?: string;
   metadata?: PaystackMetadataType;
 }
 

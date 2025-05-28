@@ -16,19 +16,19 @@ To use the `@instincthub/react-ui` package, another project needs to install the
 `@instincthub/react-ui` has several peer dependencies that need to be installed separately:
 
 ```sh
-npm install @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
+npm install @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
 ```
 
 Or using yarn:
 
 ```sh
-yarn add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
+yarn add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
 ```
 
 Or using pnmpm:
 
 ```sh
-pnpm add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
+pnpm add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@^5.0.0-beta.25 primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
 ```
 
 ### Step 2: Install the Package

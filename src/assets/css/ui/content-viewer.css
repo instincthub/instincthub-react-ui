@@ -326,6 +326,7 @@
 .ihub-btn-primary:hover,
 .ihub-btn-important:hover {
   background-color: var(--DarkCyan);
+  color: var(--white);
   opacity: 0.8;
 }
 

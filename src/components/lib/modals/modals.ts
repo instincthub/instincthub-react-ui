@@ -1,4 +1,4 @@
-import { reqOptions } from "../helpFunction";
+import React from "react";
 
 // Type for status codes
 type StatusCode = 200 | 201 | 400 | 500 | number;
@@ -89,7 +89,7 @@ export const openConfirmModal = (
 
 // Open a toast notification
 export const openToast = (
-  message: string = "",
+  message?: React.ReactDOM | string,
   status: StatusCode = 200
 ): void => {
   const msg =

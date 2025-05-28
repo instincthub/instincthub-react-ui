@@ -120,7 +120,7 @@ export const payWithPaystack = (
             status: "cancelled",
             cancelled: true,
             reference: config.reference,
-          });
+          } as PaystackResponseType);
         },
       });
       handler.openIframe();
@@ -132,7 +132,7 @@ export const payWithPaystack = (
         cancelled: true,
         reference: config.reference,
         error,
-      });
+      } as PaystackResponseType);
     }
   });
 };
