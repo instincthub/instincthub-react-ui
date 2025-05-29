@@ -5,26 +5,33 @@ import { openToast } from "../lib/modals/modals";
 interface FileFieldProps {
   onChange?: (file: File) => void;
   defaultImageUrl?: string;
-  labels?: string;
-  names?: string;
-  requireds?: boolean;
-  dataNames?: string;
+  label?: string;
+  name?: string;
+  required?: boolean;
+  dataName?: string;
   maxLimit?: number;
+  id?: string;
+  className?: string;
+  acceptedTypes?: string;
+  helperText?: string;
 }
 
 const FileField: React.FC<FileFieldProps> = ({
   onChange,
   defaultImageUrl,
-  labels,
-  names,
-  requireds,
-  dataNames,
+  label,
+  name,
+  required,
+  dataName,
   maxLimit,
+  id,
+  className,
+  acceptedTypes = "image/*, .pdf, .doc, .docx, .txt",
+  helperText,
   ...props
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(defaultImageUrl || "");
-  const [inputName, setInputName] = useState<string | undefined>();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,11 +50,6 @@ const FileField: React.FC<FileFieldProps> = ({
     if (onChange) {
       onChange(file);
     }
-
-    // disable file name if on PUT if not updated
-    if (file) {
-      setInputName(names);
-    }
   };
 
   const isImage =
@@ -59,16 +61,17 @@ const FileField: React.FC<FileFieldProps> = ({
     <div className="ihub-file-input-wrapper">
       <div className="ihub-custom-uploader mt-3">
         <div>
-          <h4>{labels}</h4>
+          <h4>{label}</h4>
           <input
             type="file"
-            id="upload"
-            name={inputName}
+            id={id}
+            accept={acceptedTypes}
+            name={name}
             ref={fileInputRef}
-            required={requireds}
+            required={required}
             onChange={handleFileChange}
-            data-name={dataNames}
-            className="ihub-file-input"
+            data-name={dataName}
+            className={`ihub-file-input ${className || ""}`}
           />
         </div>
       </div>
