@@ -34,6 +34,11 @@
       "require": "./dist/src/components/lib/index.js",
       "types": "./dist/src/types/components/lib/index.d.ts"
     },
+    "./lib/*": {
+      "import": "./dist/src/components/lib/*",
+      "require": "./dist/src/components/lib/*",
+      "types": "./dist/src/types/components/lib/*"
+    },
     "./redux": {
       "import": "./dist/src/components/lib/redux/index.js",
       "require": "./dist/src/components/lib/redux/index.js",

@@ -488,6 +488,18 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/ColorPicker.tsx",
     },
+    {
+      name: "Pagination",
+      description: "A reusable Pagination component",
+      category: "UI",
+      repo_path: "src/components/ui/pagination/Pagination.tsx",
+    },
+    {
+      name: "PaginationDemo",
+      description: "A demo for the Pagination component",
+      category: "UI",
+      repo_path: "src/components/ui/pagination/PaginationDemo.tsx",
+    },
 
     // Theme
     {

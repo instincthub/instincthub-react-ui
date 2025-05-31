@@ -1,5 +1,6 @@
 "use client";
-import { ComponentLists } from "../../../index";
+
+import { ComponentLists } from "../../../components/ui";
 
 export default function ComponentListing() {
   return (

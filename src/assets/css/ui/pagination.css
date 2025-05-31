@@ -1,0 +1,281 @@
+/* ============================================
+   PAGINATION COMPONENT STYLES
+   Add to input-fields.css
+   ============================================ */
+
+/* Main pagination container */
+.ihub-pagination {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px 0;
+  font-family: var(--Nunito);
+}
+
+/* Pagination info section */
+.ihub-pagination-info {
+  display: flex;
+  align-items: center;
+}
+
+.ihub-pagination-text {
+  font-size: 14px;
+  color: var(--Gunmetal);
+  font-weight: 500;
+}
+
+/* Main controls container */
+.ihub-pagination-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Items per page selector */
+.ihub-pagination-per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ihub-pagination-label {
+  font-size: 14px;
+  color: var(--Gunmetal);
+  font-weight: 500;
+  margin: 0;
+}
+
+.ihub-pagination-select {
+  padding: 6px 12px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-size: 14px;
+  color: var(--Gunmetal);
+  background-color: var(--White);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ihub-pagination-select:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.1);
+}
+
+.ihub-pagination-select:hover {
+  border-color: var(--DarkCyan);
+}
+
+/* Navigation controls */
+.ihub-pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Page numbers container */
+.ihub-pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 8px;
+}
+
+/* Base button styles */
+.ihub-pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: var(--Nunito);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--Gunmetal);
+  text-decoration: none;
+  user-select: none;
+}
+
+.ihub-pagination-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.1);
+}
+
+/* Button variants */
+.ihub-pagination-btn--primary {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+  border-color: var(--DarkCyan);
+}
+
+.ihub-pagination-btn--primary:hover:not(:disabled) {
+  background-color: var(--ViridianGreen);
+  border-color: var(--ViridianGreen);
+}
+
+.ihub-pagination-btn--secondary {
+  background-color: var(--White);
+  border-color: var(--borderDefault);
+  color: var(--Gunmetal);
+}
+
+.ihub-pagination-btn--secondary:hover:not(:disabled) {
+  background-color: var(--Gray);
+  border-color: var(--DarkCyan);
+  color: var(--DarkCyan);
+}
+
+.ihub-pagination-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--Gunmetal);
+}
+
+.ihub-pagination-btn--ghost:hover:not(:disabled) {
+  background-color: var(--Gray);
+  color: var(--DarkCyan);
+}
+
+/* Active state */
+.ihub-pagination-btn--active {
+  background-color: var(--DarkCyan);
+  color: var(--White);
+  border-color: var(--DarkCyan);
+}
+
+/* Disabled state */
+.ihub-pagination-btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Ellipsis */
+.ihub-pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  color: var(--Gunmetal);
+  font-size: 14px;
+  font-weight: 500;
+  user-select: none;
+}
+
+/* First and last page buttons */
+.ihub-pagination-first,
+.ihub-pagination-last {
+  min-width: 36px;
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .ihub-pagination {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ihub-pagination-controls {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .ihub-pagination-info {
+    order: 1;
+  }
+
+  .ihub-pagination-controls {
+    order: 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .ihub-pagination-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ihub-pagination-pages {
+    margin: 0 4px;
+  }
+
+  .ihub-pagination-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .ihub-pagination-ellipsis {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ihub-pagination-first,
+  .ihub-pagination-last {
+    display: none;
+  }
+
+  .ihub-pagination-pages {
+    max-width: 200px;
+    overflow: hidden;
+  }
+}
+
+/* Loading state (optional) */
+.ihub-pagination--loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Compact variant */
+.ihub-pagination--compact .ihub-pagination-btn {
+  min-width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+.ihub-pagination--compact .ihub-pagination-ellipsis {
+  min-width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+/* Dark theme support (if needed) */
+.ihub-pagination[data-theme="dark"] {
+  color: var(--White);
+}
+
+.ihub-pagination[data-theme="dark"] .ihub-pagination-text {
+  color: var(--White);
+}
+
+.ihub-pagination[data-theme="dark"] .ihub-pagination-btn--secondary {
+  background-color: var(--Gunmetal);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--White);
+}
+
+.ihub-pagination[data-theme="dark"]
+  .ihub-pagination-btn--secondary:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--DarkCyan);
+}
+
+.ihub-pagination[data-theme="dark"] .ihub-pagination-select {
+  background-color: var(--Gunmetal);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--White);
+}

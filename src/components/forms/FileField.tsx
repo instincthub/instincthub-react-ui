@@ -61,7 +61,7 @@ const FileField: React.FC<FileFieldProps> = ({
     <div className="ihub-file-input-wrapper">
       <div className="ihub-custom-uploader mt-3">
         <div>
-          <h4>{label}</h4>
+          <h4 className="ihub-fs-md">{label}</h4>
           <input
             type="file"
             id={id}

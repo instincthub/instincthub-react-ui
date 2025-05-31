@@ -1,18 +1,17 @@
 "use client";
 
 import React from "react";
-import {
-  SessionExpiresLogout,
-  SessionProviders,
-  DarkModeProvider,
-  SessionHandleProvider,
-  ReactTimeTracker,
-  ChangeStyleVariable,
-} from "../../index";
 import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { reduxStore } from "../lib/redux";
 import { CursorProvider } from "../cursors";
+import {
+  ChangeStyleVariable,
+  DarkModeProvider,
+  SessionExpiresLogout,
+  SessionProviders,
+} from "../theme";
+import { ReactTimeTracker, SessionHandleProvider } from "../status";
 
 interface ReactClientProviders {
   children: ReactNode;
@@ -34,8 +33,8 @@ interface ReactClientProviders {
  * @param {boolean} props.allowTimeTracker - Whether to allow the time tracker.
  * @param {boolean} props.allowChangeStyleVariable - Whether to allow the change style variable.
  * @param {string} props.primaryColor - The primary color to use.
- * 
- * @note 
+ *
+ * @note
  * - Next-auth SessionProvider
  * - ReduxProvider
  * - CursorProvider

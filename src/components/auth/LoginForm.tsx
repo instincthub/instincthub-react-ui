@@ -19,8 +19,6 @@ import OrDivider from "../ui/OrDivider";
 import FromInstinctHub from "./FromInstinctHub";
 import SubmitButton from "../forms/SubmitButton";
 
-
-
 // Define response type from API
 interface LoginResponse {
   status: number;
@@ -52,6 +50,8 @@ interface LoginResponse {
  * @property {string} endpointPath - The endpoint path for the LoginForm component
  * @property {string} verificationPath - The verification path for the LoginForm component
  * @property {string} redirectPath - The redirect path for the LoginForm component
+ * @property {boolean} hideResetPassword - Whether to hide the reset password option
+ * @property {boolean} hideSignup - Whether to hide the signup option
  * @property {string} type - The type for the LoginForm component | sis, skills, lms, crm, ecommerce, inventory, hr.
  *
  * @returns {React.ReactElement} The LoginForm component
@@ -62,6 +62,8 @@ const LoginForm = ({
   endpointPath,
   verificationPath,
   redirectPath,
+  hideResetPassword = false,
+  hideSignup = false,
   type,
 }: LoginFormPropsType) => {
   const router = useRouter();
@@ -164,6 +166,8 @@ const LoginForm = ({
       router.push(callbackUrl); // Take user to callbackUrl
     } else if (cookiesCallbackUrl) {
       router.push(cookiesCallbackUrl); // Take user to callbackUrl
+    } else if (redirectPath) {
+      router.push(redirectPath);
     } else if (user && type === "skills") {
       router.push("/library"); // Take user to library.
     } else if (user && type === "lms") {
@@ -229,14 +233,23 @@ const LoginForm = ({
       {message && <p className="err">{message}</p>}
       <div className="action ihub-mt-4 ihub-mb-5">
         <SubmitButton label="Login" type="submit" status={status} />
-        <OrDivider labels="or sign with" />
-        <p className="ihub-text-center">
-          Can’t remember password?{" "}
-          <a href="/auth/reset-password">Reset Password</a>
-        </p>
-        <p className="ihub-text-center">
-          New user? <a href="/auth/signup">Create an account.</a>
-        </p>
+        {!hideResetPassword || !hideSignup ? (
+          <OrDivider labels="or sign with" />
+        ) : (
+          ""
+        )}
+
+        {!hideResetPassword && (
+          <p className="ihub-text-center">
+            Can’t remember password?{" "}
+            <a href="/auth/reset-password">Reset Password</a>
+          </p>
+        )}
+        {!hideSignup && (
+          <p className="ihub-text-center">
+            New user? <a href="/auth/signup">Create an account.</a>
+          </p>
+        )}
       </div>
       <FromInstinctHub />
     </form>

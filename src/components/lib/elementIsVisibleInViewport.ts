@@ -10,7 +10,7 @@ const elementIsVisibleInViewport = (
 ): boolean => {
   const { top, left, bottom, right } = el.getBoundingClientRect();
   const { innerHeight, innerWidth } = window;
-  
+
   return partiallyVisible
     ? ((top > 0 && top < innerHeight) ||
         (bottom > 0 && bottom < innerHeight)) &&

@@ -297,6 +297,8 @@ export interface LoginFormPropsType {
   endpointPath?: string;
   verificationPath?: string;
   redirectPath?: string;
+  hideResetPassword?: boolean;
+  hideSignup?: boolean;
   type?:
     | string
     | "sis"
@@ -496,4 +498,39 @@ export interface PaymentReferenceType {
   trxref?: string;
   redirecturl?: string;
   [key: string]: any;
+}
+
+// Pagination
+
+// TypeScript Interfaces
+export interface PaginationData {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: any[];
+}
+
+export interface PaginationPropsType {
+  /** Current offset value from URL params */
+  offset: string | number;
+  /** Pagination data from API response */
+  data: PaginationData;
+  /** Number of items per page */
+  limit: number;
+  /** API endpoint path */
+  urlPath: string;
+  /** Function to update data state */
+  setData: React.Dispatch<React.SetStateAction<any>>;
+  /** Authentication token */
+  token?: string | null;
+  /** Current tab filter value */
+  tabsValues?: string;
+  /** Current search query */
+  searchValues?: string;
+  /** Maximum number of page buttons to show */
+  rangeLimit?: number;
+  /** Additional CSS classes */
+  className?: string;
+  /** Whether to show first/last buttons */
+  showFirstLast?: boolean;
 }
