@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { reqOptions, fetchAPI } from "../../lib";
 import { PaginationPropsType } from "@/types";
+import { useSearchParams } from "next/navigation";
+
+
 
 /**
  * Extracts offset value from URL search params
@@ -25,7 +28,6 @@ const getOffsetFromUrl = (url: string | null): string | null => {
  * Handles pagination, search, and filtering with automatic API calls
  */
 const Pagination: React.FC<PaginationPropsType> = ({
-  offset,
   data,
   limit,
   urlPath,
@@ -37,9 +39,12 @@ const Pagination: React.FC<PaginationPropsType> = ({
   className = "",
   showFirstLast = true,
 }) => {
+  const searchParams = useSearchParams();
+  const offset = searchParams.get("offset") || "0";
+  const search = searchParams.get("search") || "";
   const [pages, setPages] = useState<number[]>([]);
   const [offsetFrom, setOffsetFrom] = useState<number>(0);
-  const [offsetTo, setOffsetTo] = useState<number>(5);
+  const [offsetTo, setOffsetTo] = useState<number>(rangeLimit || 5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Convert offset to page number
@@ -47,8 +52,8 @@ const Pagination: React.FC<PaginationPropsType> = ({
   const currentPageIndex = Math.floor(currentOffset / limit);
 
   // Extract next and previous offsets from API response
-  const nextOffset = getOffsetFromUrl(data.next);
-  const previousOffset = getOffsetFromUrl(data.previous);
+  const nextOffset = getOffsetFromUrl(data?.next || "");
+  const previousOffset = getOffsetFromUrl(data?.previous || "");
 
   /**
    * Fetches data from API with current parameters
@@ -61,19 +66,22 @@ const Pagination: React.FC<PaginationPropsType> = ({
       const requestOptions = reqOptions("GET", null, token);
       const offsetParam =
         searchOffset !== undefined ? `&offset=${searchOffset}` : "";
-      const searchParam = searchValues
-        ? `&search=${encodeURIComponent(searchValues)}`
-        : "";
+      const searchParam =
+        searchValues || search
+          ? `&search=${encodeURIComponent(searchValues || search)}`
+          : "";
       const tabParam = tabsValues
         ? `&cat=${encodeURIComponent(tabsValues)}`
         : "";
 
       const url = `${urlPath}?limit=${limit}${offsetParam}${searchParam}${tabParam}`;
+      console.log("searchOffset: ", searchOffset, url);
 
       await fetchAPI(setData, url, requestOptions, true);
     } catch (error) {
       console.error("Pagination fetch error:", error);
     } finally {
+      updatePageRange();
       setIsLoading(false);
     }
   };
@@ -82,7 +90,13 @@ const Pagination: React.FC<PaginationPropsType> = ({
    * Updates the visible page range based on current page
    */
   const updatePageRange = (): void => {
-    if (currentPageIndex >= rangeLimit) {
+    console.log(
+      "updatePageRange called with currentPageIndex:",
+      currentPageIndex,
+      rangeLimit
+    );
+
+    if (currentPageIndex + 1 >= rangeLimit) {
       setOffsetFrom(currentPageIndex - 2);
       setOffsetTo(currentPageIndex + 3);
     } else {
@@ -93,24 +107,37 @@ const Pagination: React.FC<PaginationPropsType> = ({
 
   // Effect for handling pagination, search, and tab changes
   useEffect(() => {
-    const shouldFetchData = currentOffset > 0 || tabsValues || searchValues;
+    const shouldFetchData =
+      currentOffset > 0 || tabsValues || searchValues || search;
 
     if (shouldFetchData) {
       fetchData(currentOffset);
-      updatePageRange();
     } else {
       // Initial load without offset
       fetchData();
     }
 
     // Generate pages array when count changes
-    if (data.count) {
+    if (data?.count) {
       const totalPages = Math.ceil(data.count / limit);
       setPages(Array.from({ length: totalPages }, (_, i) => i));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset, data.count, tabsValues, searchValues, limit]);
+  }, [offset, data?.count, tabsValues, limit]);
+
+  useEffect(() => {
+    // When searchValues or search changes, reset offset to 0
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      params.set("offset", "0");
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${params.toString()}`
+      );
+    }
+  }, [searchValues, search]);
 
   // Don't render if no pages or loading initial data
   if (!pages.length && !isLoading) {
@@ -157,14 +184,14 @@ const Pagination: React.FC<PaginationPropsType> = ({
 
           <li
             className={`ihub-pagination-item ${
-              isFirstPage || !data.previous ? "ihub-pagination-disabled" : ""
+              isFirstPage || !data?.previous ? "ihub-pagination-disabled" : ""
             }`}
           >
             <Link
               href={`?offset=${previousOffset || 0}`}
               className="ihub-pagination-link ihub-pagination-previous"
               aria-label="Go to previous page"
-              tabIndex={isFirstPage || !data.previous ? -1 : 0}
+              tabIndex={isFirstPage || !data?.previous ? -1 : 0}
             >
               <svg
                 width="8"
@@ -213,19 +240,19 @@ const Pagination: React.FC<PaginationPropsType> = ({
         {/* Next and Last Navigation */}
         <div
           className={`ihub-pagination-nav-group ${
-            !data.next ? "ihub-pagination-disabled" : ""
+            !data?.next ? "ihub-pagination-disabled" : ""
           }`}
         >
           <li
             className={`ihub-pagination-item ${
-              isLastPage || !data.next ? "ihub-pagination-disabled" : ""
+              isLastPage || !data?.next ? "ihub-pagination-disabled" : ""
             }`}
           >
             <Link
               href={`?offset=${nextOffset || currentOffset}`}
               className="ihub-pagination-link ihub-pagination-next"
               aria-label="Go to next page"
-              tabIndex={isLastPage || !data.next ? -1 : 0}
+              tabIndex={isLastPage || !data?.next ? -1 : 0}
             >
               <svg
                 width="8"
@@ -265,8 +292,9 @@ const Pagination: React.FC<PaginationPropsType> = ({
       {/* Pagination Info */}
       <div className="ihub-pagination-info">
         <span className="ihub-pagination-summary">
-          Showing {Math.min(currentOffset + 1, data.count)} to{" "}
-          {Math.min(currentOffset + limit, data.count)} of {data.count} results
+          Showing {Math.min(currentOffset + 1, data?.count || 0)} to{" "}
+          {Math.min(currentOffset + limit, data?.count || 0)} of{" "}
+          {data?.count || 0} results
         </span>
       </div>
     </div>
