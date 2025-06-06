@@ -6,7 +6,7 @@ import { FilterObjectsType } from "src/types";
 import ContentViewer from "../ui/viewer/ContentViewer";
 
 interface FilterObjectsProps {
-  options: FilterObjectsType[];
+  options: FilterObjectsType[] | [];
   defaultValue?: FilterObjectsType | string | number;
   name: string;
   label?: string;

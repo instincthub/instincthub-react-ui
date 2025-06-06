@@ -5,10 +5,9 @@ import React, {
   ReactNode,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-
-// TODO: set props that remove default form element.
 
 interface MultiPurposeModalProps {
   isOpen: boolean;
@@ -25,6 +24,17 @@ interface MultiPurposeModalProps {
   disableScroll?: boolean;
   handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   removeForm?: boolean;
+  /**
+   * Controls whether the modal should force re-render when children change
+   * @default true
+   * Set to false when using forms or components that manage their own state
+   */
+  enableContentRefresh?: boolean;
+  /**
+   * Preserves scroll position when content refreshes (only works when enableContentRefresh is true)
+   * @default true
+   */
+  preserveScrollPosition?: boolean;
 }
 
 /**
@@ -33,20 +43,24 @@ interface MultiPurposeModalProps {
  * @component
  * @example
  * ```tsx
+ * // For forms - disable content refresh to prevent scroll jumping
  * <MultiPurposeModal
  *   isOpen={isOpen}
  *   onClose={onClose}
- *   title="Some Title"
- *   size="medium"
- *   showFooter={true}
- *   footerContent={<div>Some Footer Content</div>}
- *   showCloseButton={true}
- *   closeOnOverlayClick={true}
- *   className="ihub-modal-class"
- *   disableScroll={true}
- *   handleSubmit={handleSubmit}
+ *   title="User Form"
+ *   enableContentRefresh={false}
  * >
- *   <div>Some Content</div>
+ *   <UserForm />
+ * </MultiPurposeModal>
+ *
+ * // For dynamic content - enable content refresh (default behavior)
+ * <MultiPurposeModal
+ *   isOpen={isOpen}
+ *   onClose={onClose}
+ *   title="Dynamic Content"
+ *   enableContentRefresh={true}
+ * >
+ *   {dynamicContent}
  * </MultiPurposeModal>
  * ```
  *
@@ -64,6 +78,8 @@ interface MultiPurposeModalProps {
  * @param disableScroll Whether to disable body scrolling when modal is open
  * @param handleSubmit Function to call when the modal is submitted
  * @param removeForm Whether to remove the default form element
+ * @param enableContentRefresh Whether to force re-render when children change (default: true)
+ * @param preserveScrollPosition Whether to maintain scroll position during refreshes (default: true)
  */
 const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
   ({
@@ -81,17 +97,39 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     disableScroll = true,
     handleSubmit,
     removeForm = false,
+    enableContentRefresh = true,
+    preserveScrollPosition = true,
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
-
-    // Track content updates with a key
     const [contentKey, setContentKey] = useState<number>(0);
+    const modalBodyRef = useRef<HTMLDivElement>(null);
 
-    // Force re-render when children change
+    // Conditional re-render logic based on enableContentRefresh prop
     useEffect(() => {
-      // Increment the key to force a re-render of the content
+      if (!enableContentRefresh) {
+        // Skip the forced re-render when disabled
+        return;
+      }
+
+      let scrollTop = 0;
+
+      // Store current scroll position if we want to preserve it
+      if (preserveScrollPosition && modalBodyRef.current) {
+        scrollTop = modalBodyRef.current.scrollTop;
+      }
+
+      // Force re-render when children change
       setContentKey((prevKey) => prevKey + 1);
-    }, [children]);
+
+      // Restore scroll position after the re-render
+      if (preserveScrollPosition && scrollTop > 0) {
+        setTimeout(() => {
+          if (modalBodyRef.current) {
+            modalBodyRef.current.scrollTop = scrollTop;
+          }
+        }, 0);
+      }
+    }, [children, enableContentRefresh, preserveScrollPosition]);
 
     // Handle modal visibility with animation
     useEffect(() => {
@@ -207,6 +245,14 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       return null;
     }
 
+    // Conditionally apply the contentKey only when refresh is enabled
+    const modalBodyProps = {
+      ref: modalBodyRef,
+      className: "ihub-modal-body ihub-txt-modal",
+      style: { height: height },
+      ...(enableContentRefresh && { key: contentKey }),
+    };
+
     return (
       <div
         className={modalStateClass}
@@ -218,30 +264,14 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
         {removeForm ? (
           <div className={fullClassName}>
             {headerContent}
-
-            <div
-              className="ihub-modal-body ihub-txt-modal"
-              key={contentKey}
-              style={{ height: height }}
-            >
-              {children}
-            </div>
-
+            <div {...modalBodyProps}>{children}</div>
             {footerSection}
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className={fullClassName}>
               {headerContent}
-
-              <div
-                className="ihub-modal-body ihub-txt-modal"
-                key={contentKey}
-                style={{ height: height }}
-              >
-                {children}
-              </div>
-
+              <div {...modalBodyProps}>{children}</div>
               {footerSection}
             </div>
           </form>
@@ -257,8 +287,19 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     // Always re-render if isOpen state changes
     if (prevProps.isOpen !== nextProps.isOpen) return false;
 
-    // Always re-render if children change
-    if (prevProps.children !== nextProps.children) return false;
+    // Handle children changes based on enableContentRefresh setting
+    if (nextProps.enableContentRefresh) {
+      // When refresh is enabled, always re-render on children change
+      if (prevProps.children !== nextProps.children) return false;
+    } else {
+      // When refresh is disabled, only re-render if it's a completely different component type
+      if (
+        prevProps.children !== nextProps.children &&
+        typeof prevProps.children !== typeof nextProps.children
+      ) {
+        return false;
+      }
+    }
 
     // Always re-render if footerContent changes
     if (prevProps.footerContent !== nextProps.footerContent) return false;
@@ -266,7 +307,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     // Always re-render if title changes
     if (prevProps.title !== nextProps.title) return false;
 
-    // For other props, we can be more selective
+    // Check for other important prop changes
     if (
       prevProps.size !== nextProps.size ||
       prevProps.showFooter !== nextProps.showFooter ||
@@ -275,7 +316,9 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       prevProps.className !== nextProps.className ||
       prevProps.disableScroll !== nextProps.disableScroll ||
       prevProps.handleSubmit !== nextProps.handleSubmit ||
-      prevProps.removeForm !== nextProps.removeForm
+      prevProps.removeForm !== nextProps.removeForm ||
+      prevProps.enableContentRefresh !== nextProps.enableContentRefresh ||
+      prevProps.preserveScrollPosition !== nextProps.preserveScrollPosition
     ) {
       return false;
     }

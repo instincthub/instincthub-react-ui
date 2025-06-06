@@ -12,12 +12,36 @@ interface Option {
 
 // Define props interface
 interface CheckBoxesProps {
-  objects: Record<string, Option>;
-  labels: string;
-  names: string;
+  objects: Record<string, Option> | Option[];
+  label: string;
+  name: string;
   key_name?: string;
-  defaultValues?: boolean;
+  defaultIDs?: string[] | number[];
 }
+
+/**
+ * CheckBoxes component
+ * @example
+ * ```tsx
+ * <CheckBoxes
+ *   objects={[
+ *     { id: 1, title: "Option 1" },
+ *     { id: 2, title: "Option 2" },
+ *     { id: 3, title: "Option 3" },
+ *   ]}
+ *   label="Select Label"
+ *   name="selectName"
+ *   key_name="id"
+ *   defaultIDs={[1, 2]}
+ * />
+ * @param {CheckBoxesProps} props - The component props
+ * @param {Record<string, Option> | Option[]} props.objects - The objects to display in the checkboxes
+ * @param {string} props.label - The label for the checkboxes
+ * @param {string} props.name - The name of the checkboxes
+ * @param {string} props.key_name - The key name of the checkboxes (description, name key, etc)
+ * @param {string[]} props.defaultIDs - The default IDs of the checkboxes
+ */ 
+
 
 function CheckBoxes(props: CheckBoxesProps) {
   const [objects, setObjects] = useState<Option[]>([]);
@@ -28,9 +52,13 @@ function CheckBoxes(props: CheckBoxesProps) {
    */
   useEffect(() => {
     // Objects to array
-    let obj: Option[] = [];
-    for (const i in props.objects) obj.push(props.objects[i]);
-    setObjects(obj);
+    if (!Array.isArray(props.objects)) {
+      let obj: Option[] = [];
+      for (const i in props.objects) obj.push(props.objects[i]);
+      setObjects(obj);
+    } else {
+      setObjects(props.objects || []);
+    }
   }, [props.objects]);
 
   if (objects) {
@@ -41,7 +69,7 @@ function CheckBoxes(props: CheckBoxesProps) {
           margin: "30px 0px",
         }}
       >
-        <h3 style={{ fontSize: "1em", marginBottom: "0px" }}>{props.labels}</h3>
+        <h3 style={{ fontSize: "1em", marginBottom: "0px" }}>{props.label}</h3>
         <div
           className="checkbox_wrapper"
           style={{
@@ -57,13 +85,17 @@ function CheckBoxes(props: CheckBoxesProps) {
               <div className="cntr" key={option.id}>
                 <label htmlFor={`id_${option.id}`} className="label-cbx">
                   <input
-                    name={props.names}
+                    name={props.name}
                     id={`id_${option.id}`}
                     type="checkbox"
                     className="invisible"
                     data-id={option.id}
                     defaultValue={String(option.id)}
-                    defaultChecked={props.defaultValues ? option.status : false}
+                    defaultChecked={
+                      props.defaultIDs
+                        ? !!props.defaultIDs.find((id) => id === option.id)
+                        : false
+                    }
                     hidden
                   />
                   <div className="checkbox">

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // Define the props interface for the FilterArray component
 interface FilterArrayProps {
-  options: string[];
+  options: string[] | [];
   defaultValue?: string;
   notUpperCase?: boolean;
   name: string;
@@ -51,10 +51,10 @@ const FilterArray: React.FC<FilterArrayProps> = ({
   setArrayProps,
   arrayProps,
   dataName,
-  notes
+  notes,
 }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [selected, setSelected] = useState<string>(defaultValue);
+  const [selected, setSelected] = useState<string>();
 
   const handleOptionClick = (option: string): void => {
     setSelected(option);
@@ -66,7 +66,7 @@ const FilterArray: React.FC<FilterArrayProps> = ({
 
   useEffect(() => {
     setSelected(defaultValue);
-  }, [defaultValue]);
+  }, []);
 
   return (
     <div>

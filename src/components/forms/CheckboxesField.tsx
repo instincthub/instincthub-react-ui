@@ -13,7 +13,7 @@ interface CheckboxesFieldProps {
   name: string;
   label: string;
   key_name?: string;
-  options: Record<string, Option>;
+  options: Record<string, Option> | Option[];
   defaultValues?: boolean;
   required?: boolean;
   disabled?: boolean;
@@ -26,6 +26,26 @@ interface CheckboxesFieldProps {
 
 /**
  * A reusable checkbox group component using controlled components pattern
+ * @example
+ * ```tsx
+ * <CheckboxesField
+ *   name="selectName"
+ *   label="Select Label"
+ *   key_name="id"
+ *   options={[
+ *     { id: 1, title: "Option 1" },
+ *     { id: 2, title: "Option 2" },
+ *     { id: 3, title: "Option 3" },
+ *   ]}
+ *   defaultValues={1}
+ *   required={true}
+ *   error="Error message"
+ *   onChange={setValue}
+ *   onBlur={handleBlur}
+ *   fontSize="ihub-fs-sm"
+ * />
+ * ```
+ *
  * @param name The field name
  * @param label The label for the checkbox group
  * @param key_name The key name of the checkbox group (description, name key, etc)
@@ -38,6 +58,9 @@ interface CheckboxesFieldProps {
  * @param onChange Callback when values change
  * @param onBlur Callback when the field loses focus
  * @param fontSize Font size of the checkbox text
+ *
+ * @helper
+ * const categoriesObject = convertArrayToObject(categories);
  */
 const CheckboxesField: React.FC<CheckboxesFieldProps> = ({
   name,

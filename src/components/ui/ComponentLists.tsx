@@ -296,6 +296,18 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputAmount.tsx",
     },
+    {
+      name: "CheckBoxes",
+      description: "CheckBoxes is used to enter multiple values on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/CheckBoxes.tsx",
+    },
+    {
+      name: "CheckBoxesField",
+      description: "CheckBoxesField is used to enter multiple values on an input field.",
+      category: "Form",
+      repo_path: "src/components/forms/CheckboxesField.tsx",
+    },
 
     // Auth
     {
@@ -328,6 +340,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/LoginForm.tsx",
     },
+    
 
     // Navbar
     {
@@ -499,6 +512,18 @@ const ComponentLists = () => {
       description: "A demo for the Pagination component",
       category: "UI",
       repo_path: "src/components/ui/pagination/PaginationDemo.tsx",
+    },
+    {
+      name: "CreateButton",
+      description: "A reusable CreateButton component",
+      category: "UI",
+      repo_path: "src/components/ui/create-button/CreateButton.tsx",
+    },
+    {
+      name: "CreateButtonExample",
+      description: "An example of the CreateButton component",
+      category: "UI",
+      repo_path: "src/components/ui/create-button/CreateButtonExample.tsx",
     },
 
     // Theme

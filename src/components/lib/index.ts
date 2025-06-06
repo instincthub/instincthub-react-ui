@@ -16,6 +16,7 @@ export { default as elementIsVisibleInViewport } from "./elementIsVisibleInViewp
 export { default as handleFormErrors } from "./formError";
 export { default as fileToBase64 } from "./fileToBase64";
 export { default as getPriceObjects } from "./getPriceObjects";
+export {default as convertArrayToObject} from "./convertArrayToObject";
 export * from "./format";
 export * from "./helpFunction";
 export * from "./loadScript";

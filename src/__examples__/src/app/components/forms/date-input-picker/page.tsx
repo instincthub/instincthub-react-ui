@@ -1,4 +1,3 @@
-import CheckboxesFieldExample from "../../../../components/forms/CheckboxesFieldExamples";
 import DateInputPickerExample from "../../../../components/forms/DateInputPickerExample";
 import DateInputPickerTimeExample from "../../../../components/forms/DateInputPickerTimeExample";
 import MainNavigation from "../../../../components/navbars/MainNavigation";

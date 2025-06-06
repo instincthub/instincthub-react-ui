@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, FormEvent, useEffect } from "react";
-import { CheckboxesField } from "../../../../index";
+import { CheckBoxesField } from "../../../../index";
 
 // Example categories data
 const categoriesData = {
@@ -31,7 +31,7 @@ interface FormErrors {
   permissions?: string;
 }
 
-const CheckboxesFieldExample: React.FC = () => {
+const CheckBoxesFieldExample: React.FC = () => {
   // Form state
   const [formData, setFormData] = useState<FormData>({
     categories: {},
@@ -160,7 +160,7 @@ const CheckboxesFieldExample: React.FC = () => {
     <form onSubmit={handleSubmit} className="ihub-example-form">
       <h2 className="ihub-form-title">Course Settings</h2>
 
-      <CheckboxesField
+      <CheckBoxesField
         name="categories"
         label="Course Categories"
         options={categoriesData}
@@ -169,7 +169,7 @@ const CheckboxesFieldExample: React.FC = () => {
         error={submitted ? errors.categories : undefined}
         onChange={handleCategoriesChange}
       />
-      <CheckboxesField
+      <CheckBoxesField
         name="categories"
         key_name="id"
         label="Course Categories with Key Name"
@@ -180,7 +180,7 @@ const CheckboxesFieldExample: React.FC = () => {
         onChange={handleCategoriesChange}
       />
 
-      <CheckboxesField
+      <CheckBoxesField
         name="permissions"
         label="User Permissions"
         options={permissionsData}
@@ -204,4 +204,4 @@ const CheckboxesFieldExample: React.FC = () => {
   );
 };
 
-export default CheckboxesFieldExample;
+export default CheckBoxesFieldExample;

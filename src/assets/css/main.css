@@ -1755,17 +1755,17 @@ RADIO ENDS
     top: -7px;
   }
 
-  .content h2 {
+  .user-content h2 {
     margin-bottom: 1rem;
   }
 
-  .content a {
+  .user-content a {
     color: #cc3852;
     margin-right: 10px;
     font-weight: 500;
     transition: 0.3s ease-in;
   }
-  .content a:hover {
+  .user-content a:hover {
     opacity: 0.7;
     font-weight: 600;
   }
