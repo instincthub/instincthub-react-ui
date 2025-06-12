@@ -42,6 +42,7 @@ export interface NavLinkItem extends NavItemBase {
   isExternal?: boolean;
   /** Access control - function to determine if user has access */
   hasAccess?: () => boolean;
+  children?: NavItemType[];
 }
 
 /**

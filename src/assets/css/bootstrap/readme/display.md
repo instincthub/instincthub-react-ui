@@ -171,6 +171,26 @@ Special display helpers that match existing patterns in InstinctHub's designs:
   display: flex;
   justify-content: space-between;
 }
+.ihub-flex-around {
+  display: flex;
+  justify-content: space-around;
+}
+.ihub-flex-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+.ihub-flex-center {
+  display: flex;
+  justify-content: center;
+}
+.ihub-flex-start {
+  display: flex;
+  justify-content: flex-start;
+}
+.ihub-flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
 ```
 
 ## Usage Examples

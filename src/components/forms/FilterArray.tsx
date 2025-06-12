@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 // Define the props interface for the FilterArray component
 interface FilterArrayProps {
@@ -17,6 +18,7 @@ interface FilterArrayProps {
   arrayProps?: any[];
   dataName?: string;
   notes?: string | null;
+  error?: string;
 }
 
 /**
@@ -26,7 +28,7 @@ interface FilterArrayProps {
  * <FilterArray
  *   options={["Option 1", "Option 2", "Option 3"]}
  *   names="selectName"
- *   labels="Select Label"
+ *   label="Select Label"
  * />
  * @param {FilterArrayProps} props - The component props
  * @param {string[]} props.options - The options to display in the dropdown
@@ -35,6 +37,15 @@ interface FilterArrayProps {
  * @param {string} props.name - The name of the dropdown
  * @param {string} props.label - The label of the dropdown
  * @param {string} props.notes - The notes of the dropdown
+ * @param {(value: string) => void} props.setValue - The callback function to set the selected value
+ * @param {(name: string | null, value: string) => void} props.setNameValue - The callback function to set the name and value
+ * @param {any[]} props.arrayProps - The array of props to set
+ * @param {string} props.dataName - The name of the data
+ * @param {string} props.defaultWidth - The default width of the dropdown
+ * @param {boolean} props.required - Whether the dropdown is required
+ * @param {boolean} props.err - Whether the dropdown has an error
+ * @param {(arrayProps: any[], option: string) => void} props.setArrayProps - The callback function to set the array props
+ * @param {string} props.error - The error message to display
  * @returns {React.ReactElement} The FilterArray component
  */
 const FilterArray: React.FC<FilterArrayProps> = ({
@@ -52,6 +63,7 @@ const FilterArray: React.FC<FilterArrayProps> = ({
   arrayProps,
   dataName,
   notes,
+  error,
 }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>();
@@ -91,7 +103,7 @@ const FilterArray: React.FC<FilterArrayProps> = ({
             <p>{selected || "..."}</p>
           </div>
           {label && <label className="ihub-select__label">{label}</label>}
-          <span className="material-symbols-outlined">expand_more</span>
+          <ExpandMoreIcon />
         </div>
         {isActive && (
           <div className="ihub-select__content">
@@ -108,6 +120,7 @@ const FilterArray: React.FC<FilterArrayProps> = ({
         )}
       </div>
       {notes && <p className="ihub-input-notes">{notes}</p>}
+      {error && <span className="ihub-error-text">{error}</span>}
     </div>
   );
 };

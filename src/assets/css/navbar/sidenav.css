@@ -306,6 +306,14 @@
   color: var(--DarkCyan, #00838f);
   font-weight: 600;
 }
+.ihub-sidenav-child-active {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+.ihub-sidenav-child-active a,
+.ihub-sidenav-child-active span {
+  color: var(--DarkCyan, #00838f);
+}
 
 .ihub-sidenav-active::before {
   content: "";

@@ -23,6 +23,7 @@ interface FilterObjectsProps {
   setObjects?: (option: FilterObjectsType) => void;
   status?: number;
   upperCases?: boolean;
+  error?: string;
 }
 
 /**
@@ -55,9 +56,16 @@ interface FilterObjectsProps {
  * @property {string} label - Label for the dropdown
  * @property {(option: FilterObjectsType) => void} setValue - Callback for setting selected values
  * @property {(option: FilterObjectsType) => void} setObjects - Callback for setting objects
+ * @property {string}: defaultWidth - Default width of the dropdown
+ * @property {boolean} required - Whether the dropdown is required
+ * @property {boolean} err - Whether the dropdown has an error
+ * @property {(arrayProps: any[], option: FilterObjectsType) => void} setArrayProps - Callback for setting array props
  * @property {any[]} arrayProps - Array of objects to set
  * @property {string} dataName - Name of the data
  * @property {string} setCookies - Cookie name to set
+ * @property {boolean} upperCases - Whether to convert the selected value to uppercase
+ * @property {number} status - Status of the field
+ * @property {string} error - Error message to display
  */
 
 const FilterObjects = (props: FilterObjectsProps) => {
@@ -168,6 +176,7 @@ const FilterObjects = (props: FilterObjectsProps) => {
         )}
       </div>
       {props.note && <p className="ihub-input-notes">{props.note}</p>}
+      {props.error && <span className="ihub-error-text">{props.error}</span>}
     </>
   );
 };

@@ -404,7 +404,11 @@ const SideNavbar = ({
       <Link
         href={item.href}
         className={`ihub-sidenav-item ihub-sidenav-link ${indentClass} ${
-          isActive ? "ihub-sidenav-active" : ""
+          item.isActive && level === 0
+            ? "ihub-sidenav-active"
+            : item.isActive
+            ? "ihub-sidenav-child-active"
+            : ""
         } ${item.isDisabled ? "ihub-sidenav-disabled" : ""} ${
           item.className || ""
         }`}
@@ -451,9 +455,9 @@ const SideNavbar = ({
         }`}
       >
         <div
-          className={`ihub-sidenav-item ihub-sidenav-group-header ${indentClass} ${
-            item.isDisabled ? "ihub-sidenav-disabled" : ""
-          }`}
+          className={`ihub-sidenav-item ihub-sidenav-group-header ${
+            item.isActive ? "ihub-sidenav-active" : ""
+          } ${indentClass} ${item.isDisabled ? "ihub-sidenav-disabled" : ""}`}
           onClick={() => !item.isDisabled && toggleGroup(item.id)}
           data-tooltip={
             !getIsExpanded() && tooltip?.enabled ? item.title : undefined

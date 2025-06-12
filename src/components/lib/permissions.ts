@@ -1,4 +1,4 @@
-import { NextApiRequest } from 'next';
+import { NextApiRequest } from "next";
 
 interface Session {
   user: {
@@ -28,7 +28,7 @@ export const headerUsernamePermission = async (
   ) {
     return false;
   }
-  
+
   return true;
 };
 
@@ -45,6 +45,24 @@ export const headerKeyPermission = async (
   if (customHeader !== process.env.NEXT_PUBLIC_X_INSTINCTHUB_NEXT_HEADER) {
     return false;
   }
-  
+
   return true;
+};
+
+/**
+ * Finds a permission in an array of permissions
+ * @example
+ * ```ts
+ * findPermissions(REGISTRAR_PERMISSION, instructorType)
+ * ```
+ * @param permission - Array of permissions
+ * @param option - Permission to find
+ * @returns string | undefined - Permission if found, undefined if not found
+ */
+export const findPermissions = (
+  permission: string[],
+  option: string
+): string | undefined => {
+  // Get array of permissions and user option and check if exist.
+  return permission.find((i) => (i = option));
 };

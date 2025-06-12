@@ -3,6 +3,7 @@
 A customizable dropdown select component for React applications with TypeScript support.
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [Interfaces](#interfaces)
 - [Components](#components)
@@ -27,17 +28,17 @@ Include the component and associated CSS in your project.
 - **Description**: Props for the FilterArray component.
 - **Properties**:
   - `options: string[]` - Array of options to display in the dropdown.
-  - `defaultValues?: string` - Initial selected value (default: "").
+  - `defaultValue?: string` - Initial selected value (default: "").
   - `notUpperCases?: boolean` - If true, maintains case of the selected value (default: false).
-  - `names: string` - Name attribute for the hidden input.
-  - `labels?: string` - Label text to display.
-  - `setSelectedValue?: (value: string) => void` - Callback for when a value is selected.
+  - `name: string` - Name attribute for the hidden input.
+  - `label?: string` - Label text to display.
+  - `setValue?: (value: string) => void` - Callback for when a value is selected.
   - `defaultWidth?: string` - Width of the dropdown (default: "300px").
-  - `requireds?: boolean` - Whether the field is required.
+  - `required?: boolean` - Whether the field is required.
   - `errs?: boolean` - Whether to display error styling.
   - `setArrayProps?: (arrayProps: any[], option: string) => void` - Callback for handling array-based props.
   - `arrayProps?: any[]` - Array of props to pass to the setArrayProps callback.
-  - `dataNames?: string` - Data attribute name (default: same as names).
+  - `dataName?: string` - Data attribute name (default: same as name).
 
 ## Components
 
@@ -52,20 +53,20 @@ Include the component and associated CSS in your project.
 ### Basic Usage
 
 ```typescript
-import React, { useState } from 'react';
-import FilterArray from './FilterArray';
+import React, { useState } from "react";
+import { FilterArray } from "@instincthub/react-ui";
 
 const Example = () => {
-  const [selectedSubject, setSelectedSubject] = useState('');
-  
+  const [selectedSubject, setSelectedSubject] = useState("");
+
   return (
-    <FilterArray 
-      names="subject"
-      labels="Subject"
-      options={['Math', 'Science', 'English', 'History']}
-      defaultValues={selectedSubject}
-      setSelectedValue={setSelectedSubject}
-      requireds={true}
+    <FilterArray
+      name="subject"
+      label="Subject"
+      options={["Math", "Science", "English", "History"]}
+      defaultValue={selectedSubject}
+      setValue={setSelectedSubject}
+      required={true}
     />
   );
 };
@@ -74,52 +75,52 @@ const Example = () => {
 ### Using with Array Properties (Form Arrays)
 
 ```typescript
-import React, { useState } from 'react';
-import FilterArray from './FilterArray';
+import React, { useState } from "react";
+import { FilterArray } from "@instincthub/react-ui";
 
 const Example = () => {
   const [objectsList, setObjectsList] = useState([
-    { 
-      id: 1, 
+    {
+      id: 1,
       subjects: [
-        { subject: 'Math', grade: 'A' },
-        { subject: 'Science', grade: 'B' }
-      ] 
-    }
+        { subject: "Math", grade: "A" },
+        { subject: "Science", grade: "B" },
+      ],
+    },
   ]);
-  
+
   const [formError, setFormError] = useState<string[]>([]);
-  
+
   // Function to handle changes in a specific subject/grade
   const handleSubjectChange = (propsArray: any[], value: string) => {
     const [recordIndex, subIndex, name] = propsArray;
-    
+
     const updatedSubjects = [...objectsList];
     const subject = updatedSubjects[recordIndex].subjects[subIndex];
     const newSubject = { ...subject, [name]: value };
-    
+
     updatedSubjects[recordIndex].subjects[subIndex] = newSubject;
     setObjectsList(updatedSubjects);
   };
-  
+
   return (
-    <form 
-      onSubmit={(e) => e.preventDefault()} 
+    <form
+      onSubmit={(e) => e.preventDefault()}
       onInvalid={(e) => handleInvalid(e, formError, setFormError)}
     >
       {objectsList[0].subjects.map((sub, subIndex) => (
-        <FilterArray 
+        <FilterArray
           key={subIndex}
-          names={`subject`}
-          labels={`Subject ${subIndex+1}`}
-          options={['Math', 'Science', 'English', 'History']}
-          defaultValues={sub.subject}
+          name={`subject`}
+          label={`Subject ${subIndex + 1}`}
+          options={["Math", "Science", "English", "History"]}
+          defaultValue={sub.subject}
           defaultWidth="220px"
-          requireds={true}
-          errs={formError.includes("subject")}
-          arrayProps={[0, subIndex, 'subject']}
+          required={true}
+          err={formError.includes("subject")}
+          arrayProps={[0, subIndex, "subject"]}
           setArrayProps={handleSubjectChange}
-          dataNames="subject"
+          dataName="subject"
         />
       ))}
       <button type="submit">Submit</button>
@@ -130,20 +131,20 @@ const Example = () => {
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| options | string[] | - | Array of options to display in the dropdown |
-| defaultValues | string | "" | Initial selected value |
-| notUpperCases | boolean | false | If true, maintains case of the selected value |
-| names | string | - | Name attribute for the hidden input |
-| labels | string | undefined | Label text to display |
-| setSelectedValue | (value: string) => void | undefined | Callback for when a value is selected |
-| defaultWidth | string | "300px" | Width of the dropdown |
-| requireds | boolean | undefined | Whether the field is required |
-| errs | boolean | undefined | Whether to display error styling |
-| setArrayProps | (arrayProps: any[], option: string) => void | undefined | Callback for handling array-based props |
-| arrayProps | any[] | undefined | Array of props to pass to the setArrayProps callback |
-| dataNames | string | names | Data attribute name |
+| Prop          | Type                                        | Default   | Description                                          |
+| ------------- | ------------------------------------------- | --------- | ---------------------------------------------------- |
+| options       | string[]                                    | -         | Array of options to display in the dropdown          |
+| defaultValue  | string                                      | ""        | Initial selected value                               |
+| notUpperCases | boolean                                     | false     | If true, maintains case of the selected value        |
+| name          | string                                      | -         | Name attribute for the hidden input                  |
+| label         | string                                      | undefined | Label text to display                                |
+| setValue      | (value: string) => void                     | undefined | Callback for when a value is selected                |
+| defaultWidth  | string                                      | "300px"   | Width of the dropdown                                |
+| required      | boolean                                     | undefined | Whether the field is required                        |
+| errs          | boolean                                     | undefined | Whether to display error styling                     |
+| setArrayProps | (arrayProps: any[], option: string) => void | undefined | Callback for handling array-based props              |
+| arrayProps    | any[]                                       | undefined | Array of props to pass to the setArrayProps callback |
+| dataName      | string                                      | name      | Data attribute name                                  |
 
 ## CSS Classes
 
@@ -160,18 +161,19 @@ The component uses the following CSS classes:
 ## Notes for Implementation
 
 1. **Form Validation**:
-   - Use the `requireds` prop to make the field required
+
+   - Use the `required` prop to make the field required
    - Use the `errs` prop to display error styling
    - Add `onInvalid` to your form to handle invalid submissions
 
 2. **Working with Arrays of Objects**:
+
    - Use the `arrayProps` and `setArrayProps` props to handle changes in arrays of objects
    - The `setArrayProps` callback provides both the array props and the selected value
 
 3. **Customization**:
    - Use the `defaultWidth` prop to set the width of the dropdown
    - Use the `notUpperCases` prop to maintain case of the selected value
-
 
 ## Type Improvement Recommendations
 
