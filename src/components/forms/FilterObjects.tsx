@@ -38,7 +38,7 @@ interface FilterObjectsProps {
  *     { id: 2, title: "Option 2" },
  *     { id: 3, title: "Option 3" },
  *   ]}
- *   defaultValues={1}
+ *   defaultValue={1}
  *   name="filterObjects"
  *   label="Filter Objects"
  *   setValue={setValue}
@@ -51,7 +51,7 @@ interface FilterObjectsProps {
  * ```
  * Props interface for the FilterObjects component
  * @property {FilterObjectsType[]} options - Array of objects to filter
- * @property {string} defaultValues - Default value for the dropdown
+ * @property {string} defaultValue - Default value for the dropdown
  * @property {string} name - Name of the input field
  * @property {string} label - Label for the dropdown
  * @property {(option: FilterObjectsType) => void} setValue - Callback for setting selected values
