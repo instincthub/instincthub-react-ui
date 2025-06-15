@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { PaginationData } from "@/types";
-import { API_HOST_URL } from "@/components/lib";
 import Pagination from "./Pagination";
+import { API_HOST_URL } from "../../lib";
 
 // Demo Component
 const PaginationDemo: React.FC = () => {

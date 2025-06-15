@@ -14,7 +14,7 @@ interface SearchObjectsFromDBProps<
   token: string;
   handle: string;
   setSelected: React.Dispatch<React.SetStateAction<T[]>>;
-  value?: T[];
+  options?: T[];
   appLabel?: string;
   modelName?: string;
   filterChannel?: boolean;
@@ -43,12 +43,12 @@ interface SearchObjectsFromDBProps<
  * @param {string} props.token - The token for the API request
  * @param {string} props.handle - The handle for the API request
  * @param {Function} props.setSelected - The function to set the handle object
- * @param {T[]} props.value - The prevent defaults for the API request
  * @param {string} props.appLabel - The app label for the API request
  * @param {string} props.modelName - The model name for the API request
  * @param {boolean} props.filterChannel - The filter channel for the API request
- * @param {number} props.limit_query - The limit for the API request
+ * @param {number} props.limit_query - 0 means unlimited, 1 means only one result
  * @param {number} props.limit_select - The limit user can select (0 means unlimited)
+ * @param {T[]} props.options - The options for the API request
  * @param {keyof T | "name_plus_username"} props.key_name - The key_name to display search results (option[key_name])
  * @param {string} props.placeholder - The placeholder for the API request
  * @param {string} props.searchUrl - The search url for the API request
@@ -68,6 +68,7 @@ function SearchObjectsFromDB<
   filterChannel = false,
   limit_query = 5,
   limit_select = 0,
+  options,
   key_name = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
@@ -85,6 +86,10 @@ function SearchObjectsFromDB<
       setData(selected as SearchObjectItemType[]);
     }
   }, [selected]);
+
+  useEffect(() => {
+    setData(options || []);
+  }, [options]);
 
   /**
    * Handles search functionality by fetching data from API
@@ -116,13 +121,13 @@ function SearchObjectsFromDB<
       }
 
       const newData = await response.json();
-      setData(newData.results || []);
+      setData([...(newData.results || []), ...(options || [])]);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
       console.error("Error fetching search results:", errorMessage);
       setError(errorMessage);
-      setData([]);
+      setData([...(options || [])]);
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +161,7 @@ function SearchObjectsFromDB<
    */
   const handleCancelSearch = useCallback((): void => {
     setInput("");
-    setData([]);
+    setData([...(options || [])]);
     setError(null);
   }, []);
 
@@ -178,6 +183,7 @@ function SearchObjectsFromDB<
 
   const handleSelect = useCallback(
     (option: T, deleteOption: boolean = false): void => {
+      if (!option || !option.id) return;
       const existingOption = selected.find((item) => item.id === option.id);
 
       if (deleteOption) {
@@ -234,8 +240,8 @@ function SearchObjectsFromDB<
           {data?.map((option, index) => (
             <li
               className="ihub-search-result-item ihub-valid"
-              key={`${option.id || option.username || index}`}
-              onClick={() => handleSelect(option as T)}
+              key={`${option?.id || option?.username || index}`}
+              onClick={() => option && handleSelect(option as T)}
             >
               {isItemSelected(option as T) && (
                 <CheckIcon
@@ -247,11 +253,11 @@ function SearchObjectsFromDB<
                   }}
                 />
               )}
-              {option[key_name] || option.title}
+              {option?.[key_name] || option?.title || ""}
               {isItemSelected(option as T) ? (
                 <CloseOutlinedIcon
                   className="ihub-delete-icon ihub-ml-auto"
-                  onClick={() => handleSelect(option as T, true)}
+                  onClick={() => option && handleSelect(option as T, true)}
                 />
               ) : (
                 ""
@@ -264,6 +270,21 @@ function SearchObjectsFromDB<
           ) : (
             ""
           )}
+        </ul>
+        <ul className="ihub-selected-options ihub-mt-2 ihub-">
+          <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">Selected Options:</h4>
+          {selected.map((item) => (
+            <li
+              className="ihub-fs-sm ihub-border-bottom ihub-pb-2 ihub-flex ihub-items-center"
+              key={item?.id}
+            >
+              {item[key_name] || item.title}
+              <CloseOutlinedIcon
+                className="ihub-delete-icon ihub-ml-auto"
+                onClick={() => handleSelect(item as T, true)}
+              />
+            </li>
+          ))}
         </ul>
 
         {err && <p className="ihub-error">This field is required</p>}

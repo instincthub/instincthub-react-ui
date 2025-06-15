@@ -24,6 +24,7 @@ export * from "./oauth_json";
 export * from "./paystack";
 export * from "./permissions";
 export * from "./utils";
+export * from "./queryParameters";
 
 // Charts
 export * from "./charts";

@@ -3,6 +3,7 @@ import { API_HOST_URL, reqOptions } from "../lib/helpFunction";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { urlQueryHelper } from "../lib";
 
 interface SearchFieldDBProps {
   /** The API endpoint path to search */
@@ -12,7 +13,7 @@ interface SearchFieldDBProps {
   /** Function to set next page URL */
   setNext: React.Dispatch<React.SetStateAction<string | null>>;
   /** Function to set previous page URL */
-  setPrevious: React.Dispatch<React.SetStateAction<string | null>>;
+  setPrevious?: React.Dispatch<React.SetStateAction<string | null>>;
   /** Auth token for API requests */
   token?: string | null;
   /** Search parameters from URL */
@@ -66,11 +67,14 @@ const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
 
   const handleUpdateQueryParam = (values: string | undefined): void => {
     // Update the search params onChange
-    const { query } = router as any;
-    const newQuery = { ...query, search: values };
-    router.replace({
-      query: newQuery,
-    } as any);
+
+    const newUrl = urlQueryHelper({
+      key: "search",
+      value: values,
+      action: "add",
+    });
+
+    router.replace(newUrl);
   };
 
   const handleSearchKey = async (
@@ -103,7 +107,7 @@ const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
         const newData = await response.json();
         props.setData(newData.results);
         props.setNext(newData.next);
-        props.setPrevious(newData.previous);
+        props.setPrevious?.(newData.previous);
       }
       setStatus(response.status);
     } catch (error) {
@@ -113,8 +117,12 @@ const SearchFieldDB: React.FC<SearchFieldDBProps> = (props) => {
   };
 
   const handleCloseSearch = (): void => {
-    setSearchValue("");
-    handleUpdateQueryParam("");
+    const newUrl = urlQueryHelper({
+      key: "search",
+      value: "",
+      action: "remove",
+    });
+    router.replace(newUrl);
   };
 
   useEffect(() => {

@@ -534,3 +534,9 @@ export interface PaginationPropsType {
   /** Whether to show first/last buttons */
   showFirstLast?: boolean;
 }
+
+export interface QueryContextType {
+  key: string;
+  value?: string | number | boolean | null;
+  action: "add" | "update" | "remove" | "toggle" | "clear";
+}

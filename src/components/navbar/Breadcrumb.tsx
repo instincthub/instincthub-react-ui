@@ -26,6 +26,15 @@ interface BreadcrumbProps {
 /**
  * Modern breadcrumb component for InstinctHub NextJS application
  * Automatically generates breadcrumb from current path
+ * @example
+ * ```tsx
+ * <Breadcrumb homeLabel="Home" pathMapping={{ "/courses": "Courses" }} excludePaths={["/courses/1"]} />
+ * ```
+ * @param {string} props.homeLabel - The label for the home page
+ * @param {Record<string, string>} props.pathMapping - The mapping of path segments to display names
+ * @param {string[]} props.excludePaths - The paths to exclude from the breadcrumb
+ * @param {string} props.className - The class name for the breadcrumb container
+ *
  */
 const Breadcrumb = ({
   homeLabel = "Home",

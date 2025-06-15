@@ -9,6 +9,14 @@ export default function SearchObjectsFromDBExample() {
     { id: 2, title: "Skill 2" },
   ];
   const [value, setValue] = useState<object[]>(defaultValues);
+
+  const defaultOptions = [
+    { id: 1, title: "Skill 1" },
+    { id: 2, title: "Skill 2" },
+    { id: 3, title: "Skill 3" },
+    { id: 4, title: "Skill 4" },
+  ];
+
   return (
     <section className="ihub-container">
       <h2 className="ihub-text-2xl ihub-font-bold">SearchObjectsFromDB</h2>
@@ -19,6 +27,7 @@ export default function SearchObjectsFromDBExample() {
         setSelected={setValue}
         selected={value}
         key_name="display_name"
+        options={defaultOptions}
       />
 
       <Link
