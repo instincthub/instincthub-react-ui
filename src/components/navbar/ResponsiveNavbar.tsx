@@ -8,6 +8,32 @@ import { NavbarPropsType } from "../../types";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
+/**
+* @example
+* ```tsx
+* <ResponsiveNavbar
+*  session={session}
+*  logoSrc="https://example.com/logo.png"
+*  logoAlt="Company Logo"
+*  navLinks={navLinks}
+*  userAreaLinks={userAreaLinks}
+*  theme="LightMode"
+*  containerClass="ihub-container"
+*  topBanner={<div>Top Banner</div>}
+* />
+* ```
+* @param {SessionType} session - The session object
+* @param {string} logoSrc - The source of the logo
+* @param {string} logoAlt - The alt text of the logo
+* @param {NavLinkType[]} navLinks - The navigation links
+* @param {UserAreaLinkType[]} userAreaLinks - The user area links
+* @param {string} theme - The theme of the navbar
+* @param {string} containerClass - The class of the container
+* @param {React.ReactNode | JSX.Element | null} topBanner - The top banner
+* @param {React.ReactNode | JSX.Element | null} bottomBanner - The bottom banner
+* @param {boolean} hideTopBanner - Whether to hide the top banner
+* @param {boolean} hideBottomBanner - Whether to hide the bottom banner
+* */
 const ResponsiveNavbar = ({
   session,
   logoSrc,
@@ -16,6 +42,10 @@ const ResponsiveNavbar = ({
   userAreaLinks = [],
   theme: initialTheme = "LightMode",
   containerClass = "ihub-container",
+  topBanner,
+  bottomBanner,
+  hideTopBanner = false,
+  hideBottomBanner = false,
 }: NavbarPropsType) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -135,6 +165,9 @@ const ResponsiveNavbar = ({
         theme === "DarkMode" ? "ihub-navbar-dark" : ""
       }`}
     >
+      {topBanner && !hideTopBanner && (
+        <div className="ihub-navbar-top-banner">{topBanner}</div>
+      )}
       <div className={containerClass}>
         <nav className="ihub-navbar-container">
           {/* Logo */}
@@ -417,6 +450,9 @@ const ResponsiveNavbar = ({
           </div>
         </nav>
       </div>
+      {bottomBanner && !hideBottomBanner && (
+        <div className="ihub-navbar-bottom-banner">{bottomBanner}</div>
+      )}
     </header>
   );
 };

@@ -242,7 +242,6 @@ li {
 @media (min-width: 1024px) {
   p,
   div,
-  span,
   i,
   li {
     font-size: 1.1rem;

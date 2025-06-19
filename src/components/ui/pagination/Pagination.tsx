@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { reqOptions, fetchAPI } from "../../lib";
 import { PaginationPropsType } from "@/types";
 import { useSearchParams } from "next/navigation";
-
-
 
 /**
  * Extracts offset value from URL search params
@@ -46,6 +44,7 @@ const Pagination: React.FC<PaginationPropsType> = ({
   const [offsetFrom, setOffsetFrom] = useState<number>(0);
   const [offsetTo, setOffsetTo] = useState<number>(rangeLimit || 5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isFirstRender = useRef(true);
 
   // Convert offset to page number
   const currentOffset = Number(offset);
@@ -75,7 +74,7 @@ const Pagination: React.FC<PaginationPropsType> = ({
         : "";
 
       const url = `${urlPath}?limit=${limit}${offsetParam}${searchParam}${tabParam}`;
-      console.log("searchOffset: ", searchOffset, url);
+      // console.log("searchOffset: ", searchOffset, url);
 
       await fetchAPI(setData, url, requestOptions, true);
     } catch (error) {
@@ -127,7 +126,11 @@ const Pagination: React.FC<PaginationPropsType> = ({
   }, [offset, data?.count, tabsValues, limit]);
 
   useEffect(() => {
-    // When searchValues or search changes, reset offset to 0
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // Skip on first render
+    }
+    // Only reset offset when searchValues or search changes after initial mount
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       params.set("offset", "0");

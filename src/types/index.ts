@@ -106,8 +106,8 @@ export type SearchParamsType = {
 };
 
 export interface SearchParamsPageProps {
-  params: SearchParamsType;
-  searchParams: SearchParamsType;
+  params: Promise<SearchParamsType>;
+  searchParams: Promise<SearchParamsType>;
 }
 
 /**
@@ -288,6 +288,10 @@ export interface NavbarPropsType {
   userAreaLinks?: UserAreaLinkType[];
   theme?: "LightMode" | "DarkMode";
   containerClass?: string;
+  topBanner?: React.ReactNode | JSX.Element | null;
+  hideTopBanner?: boolean;
+  bottomBanner?: React.ReactNode | JSX.Element | null;
+  hideBottomBanner?: boolean;
 }
 
 // Define props interface
