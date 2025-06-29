@@ -28,3 +28,5 @@ export const selectCourseModules = (state: ReduxState) =>
 	state.courseModules.value;
 export const selectCourseOverview = (state: ReduxState) =>
 	state.courseOverview.value;
+export const selectSelectedCourses = (state: ReduxState) =>
+	state.selectedCourses.value;

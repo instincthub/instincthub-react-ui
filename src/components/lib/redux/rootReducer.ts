@@ -22,6 +22,14 @@ import {
   IPAdress,
   objectSlice,
   arraySlice,
+  feedbackToggle,
+  settingsToggle,
+  userLocation,
+  searchValue,
+  currentPromo,
+  courseNextStep,
+  selectedCourses,
+  screenSize,
 } from "./slices";
 import { channelCallbackUrl } from "./slices/authSlice";
 import { courseDetails } from "./slices/courseSlice/courseDetails";
@@ -45,19 +53,30 @@ export const reducer = {
   // navigation
   appToggle: appToggle.reducer,
   toggleCreateCourse: toggleCreateCourse.reducer,
-  statusMessageState: statusMessageState.reducer,
   courseOverview: courseOverview.reducer,
   confirmDelete: confirmDelete.reducer,
   IPAdress: IPAdress.reducer,
-
+  settingsToggle: settingsToggle.reducer,
+  userLocation: userLocation.reducer,
+  searchValue: searchValue.reducer,
+  currentPromo: currentPromo.reducer,
+  courseNextStep: courseNextStep.reducer,
+  selectedCourses: selectedCourses.reducer,
   courseModules: courseModules.reducer,
   activeChannel: activeChannel.reducer,
-
+  
   // cohorts
   toggleCreateCohort: toggleCreateCohort.reducer,
-
+  
   // Channel
   channelDetails: channelDetails.reducer,
   instructorChannelList: instructorChannelList.reducer,
   channelHandle: channelHandle.reducer,
+  
+  // Message
+  feedbackToggle: feedbackToggle.reducer,
+  statusMessageState: statusMessageState.reducer,
+
+  // utilsSlice
+  screenSize: screenSize.reducer,
 };

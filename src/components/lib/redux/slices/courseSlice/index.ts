@@ -8,4 +8,5 @@ export * from "./videoTimestamp";
 export * from "./videoTimestampObject";
 export * from "./courseModules";
 export * from "./courseOverview";
+export * from "./selectedCourses";
 export * from "./selectors";

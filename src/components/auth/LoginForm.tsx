@@ -53,6 +53,7 @@ interface LoginResponse {
  * @property {boolean} hideResetPassword - Whether to hide the reset password option
  * @property {boolean} hideSignup - Whether to hide the signup option
  * @property {string} type - The type for the LoginForm component | sis, skills, lms, crm, ecommerce, inventory, hr.
+ * @property {string} channelUsername - The channel username for the LoginForm component
  *
  * @returns {React.ReactElement} The LoginForm component
  */
@@ -65,6 +66,7 @@ const LoginForm = ({
   hideResetPassword = false,
   hideSignup = false,
   type,
+  channelUsername = "skills",
 }: LoginFormPropsType) => {
   const router = useRouter();
   const { error, callbackUrl } = searchParams;
@@ -89,7 +91,7 @@ const LoginForm = ({
       username: formData.get("username") as string,
       password: formData.get("password") as string,
       provider: "credentials",
-      channel: "skills",
+      channel: channelUsername,
     };
 
     const options = reqOptions("POST", JSON.stringify(obj), null, "json");
@@ -240,18 +242,18 @@ const LoginForm = ({
         )}
 
         {!hideResetPassword && (
-          <p className="ihub-text-center">
+          <p className="ihub-text-center ihub-fs-14">
             Can’t remember password?{" "}
             <a href="/auth/reset-password">Reset Password</a>
           </p>
         )}
         {!hideSignup && (
-          <p className="ihub-text-center">
+          <p className="ihub-text-center ihub-fs-14">
             New user? <a href="/auth/signup">Create an account.</a>
           </p>
         )}
       </div>
-      <FromInstinctHub />
+      <FromInstinctHub showText={true} />
     </form>
   );
 };

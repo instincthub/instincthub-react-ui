@@ -303,6 +303,7 @@ export interface LoginFormPropsType {
   redirectPath?: string;
   hideResetPassword?: boolean;
   hideSignup?: boolean;
+  channelUsername?: string;
   type?:
     | string
     | "sis"

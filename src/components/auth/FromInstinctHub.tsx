@@ -21,7 +21,7 @@ const FromInstinctHub = ({
   className,
 }: FromInstinctHubProps) => {
   return (
-    <div className={`ihub-text-center ${className}`}>
+    <div className={`ihub-text-center ihub-mb-5 ${className}`}>
       <Link
         href={"https://instincthub.com"}
         target="_blank"
@@ -33,6 +33,7 @@ const FromInstinctHub = ({
           </span>
         )}
         <svg
+          className="ihub-m-auto"
           id="dy_svg_white"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"

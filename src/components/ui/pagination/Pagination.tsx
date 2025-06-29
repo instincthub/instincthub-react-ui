@@ -215,7 +215,7 @@ const Pagination: React.FC<PaginationPropsType> = ({
 
         {/* Page Numbers */}
         <div className="ihub-pagination-pages">
-          {visiblePages.map((pageIndex) => {
+          {(visiblePages || []).map((pageIndex) => {
             const isActive = currentPageIndex === pageIndex;
             const pageNumber = pageIndex + 1;
 
