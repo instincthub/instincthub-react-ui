@@ -30,8 +30,8 @@ import {
   courseNextStep,
   selectedCourses,
   screenSize,
+  channelCallbackUrl,
 } from "./slices";
-import { channelCallbackUrl } from "./slices/authSlice";
 import { courseDetails } from "./slices/courseSlice/courseDetails";
 
 export const reducer = {
@@ -64,15 +64,15 @@ export const reducer = {
   selectedCourses: selectedCourses.reducer,
   courseModules: courseModules.reducer,
   activeChannel: activeChannel.reducer,
-  
+
   // cohorts
   toggleCreateCohort: toggleCreateCohort.reducer,
-  
+
   // Channel
   channelDetails: channelDetails.reducer,
   instructorChannelList: instructorChannelList.reducer,
   channelHandle: channelHandle.reducer,
-  
+
   // Message
   feedbackToggle: feedbackToggle.reducer,
   statusMessageState: statusMessageState.reducer,
