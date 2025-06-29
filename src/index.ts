@@ -51,7 +51,7 @@ export { default as InputTextarea } from "./components/forms/InputTextarea";
 export { default as SearchObjectsFromDB } from "./components/forms/SearchObjectsFromDB";
 export { default as ToggleButton } from "./components/forms/ToggleButton";
 export { default as CheckBoxesField } from "./components/forms/CheckboxesField";
-export {default as CheckBoxes} from "./components/forms/CheckBoxes";
+export { default as CheckBoxes } from "./components/forms/CheckBoxes";
 export { default as DateInputPicker } from "./components/forms/DateInputPicker";
 export { default as ChipsInput } from "./components/forms/ChipsInput";
 export { default as RadioButton } from "./components/forms/radio-btn/RadioButton";
@@ -87,7 +87,7 @@ export { default as Dropdown } from "./components/ui/Dropdown";
 export { default as ColorPicker } from "./components/ui/ColorPicker";
 export { default as Pagination } from "./components/ui/pagination/Pagination";
 export { default as PaginationDemo } from "./components/ui/pagination/PaginationDemo";
-export {default as CreateButton} from "./components/ui/create-button/CreateButton";
+export { default as CreateButton } from "./components/ui/create-button/CreateButton";
 export { default as CreateButtonExample } from "./components/ui/create-button/CreateButtonExample";
 export * from "./components/ui/cards";
 export * from "./components/ui/charts";
@@ -117,3 +117,6 @@ export { default as Unauthorized } from "./components/status/Unauthorized";
 export { default as Tabs } from "./components/tabs/Tabs";
 export { default as VerticalTabs } from "./components/tabs/VerticalTabs";
 export { default as TabContent } from "./components/tabs/TabContent";
+
+// Redux exports
+export * from "./components/lib/redux";
