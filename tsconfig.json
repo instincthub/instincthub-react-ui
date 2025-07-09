@@ -21,35 +21,10 @@
     "emitDeclarationOnly": true,
     "baseUrl": ".",
     "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@instincthub/react-ui/dist/types"
+      "./node_modules/@types"
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@instincthub/react-ui": [
-        "/node_modules/@instincthub/react-ui/dist/src/index.js"
-      ],
-      "@instincthub/react-ui/ssr": [
-        "/node_modules/@instincthub/react-ui/dist/src/ssr.js"
-      ],
-      "@instincthub/react-ui/types": [
-        "/node_modules/@instincthub/react-ui/dist/src/types/types/index.d.ts"
-      ],
-      "@instincthub/react-ui/types/*": [
-        "/node_modules/@instincthub/react-ui/dist/src/types/types/*"
-      ],
-      "@instincthub/react-ui/lib": [
-        "/node_modules/@instincthub/react-ui/dist/src/components/lib/index.js"
-      ],
-      "@instincthub/react-ui/redux": [
-        "/node_modules/@instincthub/react-ui/dist/src/components/lib/redux/index.js"
-      ],
-      "@instincthub/react-ui/cursors": [
-        "/node_modules/@instincthub/react-ui/dist/src/components/cursors/index.js"
-      ],
-      "@instincthub/react-ui/assets/*": [
-        "/node_modules/@instincthub/react-ui/dist/src/assets/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "noEmit": true,
     "incremental": true,
