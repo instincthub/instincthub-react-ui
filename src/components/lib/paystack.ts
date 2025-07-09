@@ -117,7 +117,7 @@ export const payWithPaystack = (
         onClose: () => {
           openToast("Transaction was not completed, window closed.", 400);
           resolve({
-            status: "cancelled",
+            status: "canceled",
             cancelled: true,
             reference: config.reference,
           } as PaystackResponseType);

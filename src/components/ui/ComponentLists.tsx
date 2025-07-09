@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState, useMemo } from "react";
 
 interface ComponentInfo {
   name: string;
@@ -8,6 +9,8 @@ interface ComponentInfo {
 }
 
 const ComponentLists = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const components: ComponentInfo[] = [
     // Forms
     {
@@ -298,13 +301,15 @@ const ComponentLists = () => {
     },
     {
       name: "CheckBoxes",
-      description: "CheckBoxes is used to enter multiple values on an input field.",
+      description:
+        "CheckBoxes is used to enter multiple values on an input field.",
       category: "Form",
       repo_path: "src/components/forms/CheckBoxes.tsx",
     },
     {
       name: "CheckBoxesField",
-      description: "CheckBoxesField is used to enter multiple values on an input field.",
+      description:
+        "CheckBoxesField is used to enter multiple values on an input field.",
       category: "Form",
       repo_path: "src/components/forms/CheckboxesField.tsx",
     },
@@ -340,7 +345,12 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/LoginForm.tsx",
     },
-    
+    {
+      name: "SignUpForm",
+      description: "Sign up form component",
+      category: "Auth",
+      repo_path: "src/__examples__/src/components/forms/SignUpFormExample.tsx",
+    },
 
     // Navbar
     {
@@ -651,16 +661,41 @@ const ComponentLists = () => {
       category: "Tabs",
       repo_path: "src/components/tabs/TabContent.tsx",
     },
+
+    // Library
+    {
+      name: "Paystack",
+      description: "Paystack payment integration component",
+      category: "Library",
+      repo_path: "src/components/lib/readme/paystack.md",
+    },
   ];
 
-  // Group components by category
-  const groupedComponents = components.reduce((acc, component) => {
-    if (!acc[component.category]) {
-      acc[component.category] = [];
+  // Filter components based on search term
+  const filteredComponents = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return components;
     }
-    acc[component.category].push(component);
-    return acc;
-  }, {} as Record<string, ComponentInfo[]>);
+
+    const searchLower = searchTerm.toLowerCase();
+    return components.filter(
+      (component) =>
+        component.name.toLowerCase().includes(searchLower) ||
+        component.description.toLowerCase().includes(searchLower) ||
+        component.category.toLowerCase().includes(searchLower)
+    );
+  }, [components, searchTerm]);
+
+  // Group filtered components by category
+  const groupedComponents = useMemo(() => {
+    return filteredComponents.reduce((acc, component) => {
+      if (!acc[component.category]) {
+        acc[component.category] = [];
+      }
+      acc[component.category].push(component);
+      return acc;
+    }, {} as Record<string, ComponentInfo[]>);
+  }, [filteredComponents]);
 
   const baseRepoUrl =
     "https://github.com/instincthub/instincthub-react-ui/blob/main/";
@@ -674,6 +709,24 @@ const ComponentLists = () => {
         A comprehensive list of all available components in the InstinctHub
         React UI library.
       </p>
+
+      {/* Search Field */}
+      <div className="ihub-search-container">
+        <input
+          type="text"
+          placeholder="Search components by name, description, or category..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="ihub-search-input"
+        />
+        {searchTerm && (
+          <div className="ihub-search-results-info">
+            Found {filteredComponents.length} component
+            {filteredComponents.length !== 1 ? "s" : ""}
+            {searchTerm && ` matching "${searchTerm}"`}
+          </div>
+        )}
+      </div>
 
       {Object.entries(groupedComponents).map(
         ([category, categoryComponents]) => (
@@ -707,6 +760,18 @@ const ComponentLists = () => {
             </div>
           </div>
         )
+      )}
+
+      {Object.keys(groupedComponents).length === 0 && searchTerm && (
+        <div className="ihub-no-results">
+          <p>No components found matching "{searchTerm}"</p>
+          <button
+            onClick={() => setSearchTerm("")}
+            className="ihub-clear-search-btn"
+          >
+            Clear Search
+          </button>
+        </div>
       )}
     </div>
   );

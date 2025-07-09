@@ -33,8 +33,26 @@ NEXT_PUBLIC_PAYSTACK_SECRET_KEY=your_paystack_secret_key
 
 Add the PayStack script to your application's HTML:
 
-```html
-<script src="https://js.paystack.co/v1/inline.js"></script>
+```ts
+// Loading a payment gateway script
+const loadPaymentGateway = () => {
+  const script = loadScript("https://js.paystack.co/v1/inline.js");
+
+  if (script) {
+    script.onload = () => {
+      // Initialize payment gateway
+      const paystack = window.PaystackPop.setup({
+        key: "your-public-key",
+        email: "customer@email.com",
+        amount: 10000,
+      });
+
+      paystack.openIframe();
+    };
+  } else {
+    console.error("Could not load payment script");
+  }
+};
 ```
 
 ## Interfaces
