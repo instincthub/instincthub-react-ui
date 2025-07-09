@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { openToast } from "../lib/modals/modals";
 import Error500 from "../status/Error500";
-import { SessionUserType } from "src/types";
+import { SessionUserType } from "@/types";
 
 interface SessionHandleProviderProps {
   children: ReactNode;
@@ -40,7 +40,14 @@ export default function SessionHandleProvider({
   const params_handle = params.channel;
 
   const { data: session, update: sessionUpdate } = useSession();
-  const user = session?.user as SessionUserType | undefined;
+
+  // Type guard to check if user.name is an object with the expected structure
+  const isSessionUserType = (user: any): user is SessionUserType => {
+    return user?.name && typeof user.name === "object" && "token" in user.name;
+  };
+
+  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const user = sessionUser;
 
   // Use useMemo for derived values
   const session_handle = useMemo(
@@ -76,10 +83,10 @@ export default function SessionHandleProvider({
 
       const res = await req.json();
 
-      if (res?.active?.id) {
+      if (res?.active?.id && user?.name) {
         sessionUpdate({
           info: {
-            ...user?.name,
+            ...(user?.name as object),
             channels: res,
           },
         });

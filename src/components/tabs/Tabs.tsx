@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
-import { TabItemType } from "src/types";
+import { TabItemType } from "@/types";
 
 interface TabsProps {
   items: TabItemType[];

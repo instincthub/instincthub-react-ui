@@ -1,6 +1,6 @@
 /* Core */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { courseFilterSubjectSliceState } from "src/types/redux";
+import { courseFilterSubjectSliceState } from "@/types/redux";
 
 const initialState: courseFilterSubjectSliceState = {
   value: [],
@@ -31,4 +31,3 @@ export const courseFilterSubject = createSlice({
     },
   },
 });
-

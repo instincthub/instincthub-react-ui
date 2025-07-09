@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { API_HOST_URL, IN_DEV_MODE, reqOptions } from "../lib/helpFunction";
-import { SessionUserType } from "src/types";
+import { SessionUserType } from "@/types";
 import { useParams } from "next/navigation";
 import {
   useDispatch,

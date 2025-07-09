@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { instructorChannelListSliceState } from "src/types/redux";
+import { instructorChannelListSliceState } from "@/types/redux";
 
 const initialState: instructorChannelListSliceState = {
   value: [],

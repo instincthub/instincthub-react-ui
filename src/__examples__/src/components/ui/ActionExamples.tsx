@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
-import { Action } from "../../../../index";
+import { Action } from "../../../../components/ui";
+
 
 const ActionExamples = () => {
   const [count, setCount] = useState(0);

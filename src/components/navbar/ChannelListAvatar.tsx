@@ -76,7 +76,14 @@ export default function ChannelListAvatar({
   const params = useParams<{ channel: string }>();
   const channel = params.channel || "";
   const { data: session, update: sessionUpdate } = useSession();
-  const user = session?.user as SessionUserType | undefined;
+
+  // Type guard to check if user.name is an object with the expected structure
+  const isSessionUserType = (user: any): user is SessionUserType => {
+    return user?.name && typeof user.name === "object" && "token" in user.name;
+  };
+
+  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const user = sessionUser;
 
   const token = user?.name?.token;
   const channels = user?.name?.channels;

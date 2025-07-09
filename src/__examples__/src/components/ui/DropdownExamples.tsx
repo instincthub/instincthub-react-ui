@@ -105,7 +105,9 @@ const DropdownExamples = () => {
           <Dropdown
             options={countries}
             selectedValue={selectedCountries}
-            onChange={setSelectedCountries}
+            onChange={(value: string | number | (string | number)[]) =>
+              setSelectedCountries(value as (string | number)[])
+            }
             placeholder="Select countries"
             isMulti
             isSearchable

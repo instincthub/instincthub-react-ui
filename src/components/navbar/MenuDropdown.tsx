@@ -19,7 +19,14 @@ type MenuOption = "option1" | "option2" | null;
  */
 function MenuDropdown(): JSX.Element {
   const { data: session } = useSession();
-  const user = session?.user as SessionUserType | undefined;
+
+  // Type guard to check if user.name is an object with the expected structure
+  const isSessionUserType = (user: any): user is SessionUserType => {
+    return user?.name && typeof user.name === "object" && "token" in user.name;
+  };
+
+  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const user = sessionUser;
   const [selectedOption, setSelectedOption] = useState<MenuOption>(null);
   const [previousOption, setPreviousOption] = useState<MenuOption>(null);
   const [theme, setTheme] = useState<ThemeOption>(() => {

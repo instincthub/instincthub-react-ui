@@ -61,7 +61,7 @@ interface ActionProps {
  * A versatile Action component that can be rendered as a button or link
  * with various styles, sizes, icon options, and dropdown functionality
  */
-const Action = ({
+const Action: React.FC<ActionProps> = ({
   label,
   onClick,
   href,
@@ -78,7 +78,7 @@ const Action = ({
   dropdown = false,
   dropdownItems = [],
   dropdownPosition = "right",
-}: ActionProps) => {
+}) => {
   // State to manage dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -226,7 +226,7 @@ const Action = ({
     );
 
   // Wrapper to contain both the action and dropdown
-  const renderWithDropdown = (actionElement: React.ReactNode) => {
+  const renderWithDropdown = (actionElement: React.ReactElement) => {
     if (!dropdown) return actionElement;
 
     return (
@@ -237,9 +237,9 @@ const Action = ({
     );
   };
 
-  // If it's a link (with href prop) and not a dropdown
-  if (href && !disabled && !dropdown) {
-    return renderWithDropdown(
+  // Render the appropriate element
+  const actionElement =
+    href && !disabled && !dropdown ? (
       <Link
         href={href}
         className={baseClasses}
@@ -248,20 +248,18 @@ const Action = ({
       >
         {content}
       </Link>
+    ) : (
+      <button
+        type={type}
+        className={baseClasses}
+        onClick={dropdown ? toggleDropdown : onClick}
+        disabled={disabled}
+      >
+        {content}
+      </button>
     );
-  }
 
-  // Otherwise render as button
-  return renderWithDropdown(
-    <button
-      type={type}
-      className={baseClasses}
-      onClick={dropdown ? toggleDropdown : onClick}
-      disabled={disabled}
-    >
-      {content}
-    </button>
-  );
+  return renderWithDropdown(actionElement);
 };
 
 export default Action;

@@ -1,6 +1,6 @@
 /* Core */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { videoTimestampObjectSliceState } from "src/types/redux";
+import { videoTimestampObjectSliceState } from "@/types/redux";
 
 const initialState: videoTimestampObjectSliceState = {
   value: {},

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import CopyToClipboard from "./CopyToClipBoard";
@@ -9,7 +9,7 @@ import {
   useDispatch,
   useSelector,
 } from "../lib/redux";
-import { SessionUserType } from "src/types";
+import { SessionUserType } from "@/types";
 
 /**
  * Custom hook for handling item deletion logic
@@ -31,7 +31,14 @@ const useDeleteItem = (
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [error, setError] = useState<string | null>(null);
-  const user = session?.user as SessionUserType;
+
+  // Type guard to check if user.name is an object with the expected structure
+  const isSessionUserType = (user: any): user is SessionUserType => {
+    return user?.name && typeof user.name === "object" && "token" in user.name;
+  };
+
+  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const user = sessionUser;
 
   const deleteItem = useCallback(async () => {
     if (!url) return;
@@ -39,7 +46,7 @@ const useDeleteItem = (
     setStatus("loading");
     setError(null);
 
-    const token = user.name?.token as string | undefined;
+    const token = user?.name?.token as string | undefined;
     const requestOptions = reqOptions("DELETE", null, token);
 
     try {

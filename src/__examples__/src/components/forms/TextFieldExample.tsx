@@ -27,11 +27,11 @@ const TextFieldExample: React.FC = () => {
         <div key={index}>
           <h3>School {index + 1}</h3>
           <TextField
-            names={`school_name_${index}`}
-            types="text"
-            labels="High School Name *"
-            requireds={true}
-            defaultValues={option.school_name}
+            name={`school_name_${index}`}
+            type="text"
+            label="High School Name *"
+            required={true}
+            defaultValue={option.school_name}
             arrayProps={[index, "school_name"]}
             setArrayProps={handleChange}
           />

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { setCookie } from "../lib/helpFunction";
-import { FilterObjectsType } from "src/types";
+import { FilterObjectsType } from "@/types";
 import ContentViewer from "../ui/viewer/ContentViewer";
 
 interface FilterObjectsProps {

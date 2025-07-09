@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CourseModule, CourseModulesSliceState } from "src/types/redux";
+import { CourseModule, CourseModulesSliceState } from "@/types/redux";
 
 const initialState: CourseModulesSliceState = {
   value: [],

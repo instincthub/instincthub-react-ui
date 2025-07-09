@@ -20,6 +20,7 @@ export default function RootLayout({
     <CursorProviders>
       <html lang="en">
         <head>
+          <link rel="icon" href="/instincthub-thumbnail.png" />
           <link
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
             rel="stylesheet"

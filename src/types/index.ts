@@ -105,6 +105,11 @@ export type SearchParamsType = {
   [key: string]: string;
 };
 
+export interface SearchParamsPageType {
+  params: SearchParamsType;
+  searchParams: SearchParamsType;
+}
+
 export interface SearchParamsPageProps {
   params: Promise<SearchParamsType>;
   searchParams: Promise<SearchParamsType>;

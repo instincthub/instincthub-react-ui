@@ -1,7 +1,6 @@
 /* Core */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Answer, CourseFilterSubjectSliceState, Question } from "src/types/redux";
-
+import { Answer, CourseFilterSubjectSliceState, Question } from "@/types/redux";
 
 const initialState: CourseFilterSubjectSliceState = {
   value: [],

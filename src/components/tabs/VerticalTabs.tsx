@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, ReactNode } from "react";
-import { VerticalTabItemType } from "src/types";
+import { VerticalTabItemType } from "@/types";
 
 interface VerticalTabsProps {
   items: VerticalTabItemType[];

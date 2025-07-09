@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Tabs } from "../../../../index";
+import { TabItemType } from "@/types";
 
 const TabsExample: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -61,7 +62,7 @@ const TabsExample: React.FC = () => {
       <Tabs 
         items={tabItems} 
         defaultActiveTab={activeTab}
-        onChange={handleTabChange}
+        onChange={(tabId: TabItemType) => handleTabChange(tabId.id)}
       />
       
       <h2 className="ihub-mt-8">Bordered Tabs</h2>

@@ -313,6 +313,24 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/CheckboxesField.tsx",
     },
+    {
+      name: "CountryInput",
+      description: "Searchable country selector input field",
+      category: "Form",
+      repo_path: "src/components/forms/CountryInput.tsx",
+    },
+    {
+      name: "CountryStateInput",
+      description: "Searchable state/province selector based on selected country",
+      category: "Form",
+      repo_path: "src/components/forms/CountryStateInput.tsx",
+    },
+    {
+      name: "InputSearchDropdown",
+      description: "Generic searchable dropdown component for organizations",
+      category: "Form",
+      repo_path: "src/components/forms/InputSearchDropdown.tsx",
+    },
 
     // Auth
     {
@@ -351,6 +369,42 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/__examples__/src/components/forms/SignUpFormExample.tsx",
     },
+    {
+      name: "ReactClientProviders",
+      description: "Comprehensive wrapper providing all essential React providers",
+      category: "Auth",
+      repo_path: "src/components/auth/ReactClientProviders.tsx",
+    },
+    {
+      name: "ClientOnly",
+      description: "Wrapper component that only renders children on client side",
+      category: "Auth",
+      repo_path: "src/components/auth/ClientOnly.tsx",
+    },
+    {
+      name: "useClientSide",
+      description: "Hook for safely handling client-side initialization",
+      category: "Auth",
+      repo_path: "src/components/auth/useClientSide.ts",
+    },
+    {
+      name: "useFormattedDate",
+      description: "Hook for consistent date formatting between server and client",
+      category: "Auth",
+      repo_path: "src/components/auth/useFormattedDate.ts",
+    },
+    {
+      name: "useStableRandom",
+      description: "Hook for generating stable random values",
+      category: "Auth",
+      repo_path: "src/components/auth/useStableRandom.ts",
+    },
+    {
+      name: "useExternalData",
+      description: "Hook for safely handling external data to prevent hydration mismatches",
+      category: "Auth",
+      repo_path: "src/components/auth/useExternalData.ts",
+    },
 
     // Navbar
     {
@@ -382,6 +436,12 @@ const ComponentLists = () => {
       description: "Side navbar component",
       category: "Navbar",
       repo_path: "src/components/navbar/SideNavbar.tsx",
+    },
+    {
+      name: "SideNavbarContext",
+      description: "Context provider for side navigation state management",
+      category: "Navbar",
+      repo_path: "src/components/navbar/SideNavbarContext.tsx",
     },
 
     // UI
@@ -535,6 +595,30 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/create-button/CreateButtonExample.tsx",
     },
+    {
+      name: "MenuBar",
+      description: "Toolbar component for the TipTap rich text editor",
+      category: "UI",
+      repo_path: "src/components/ui/editor/MenuBar.tsx",
+    },
+    {
+      name: "InstinctHubChart",
+      description: "Versatile chart component supporting multiple chart types",
+      category: "UI",
+      repo_path: "src/components/ui/charts/InstinctHubChart.tsx",
+    },
+    {
+      name: "InstinctHubChartDashboard",
+      description: "Dashboard component showcasing multiple charts",
+      category: "UI",
+      repo_path: "src/components/ui/charts/InstinctHubChartDashboard.tsx",
+    },
+    {
+      name: "ChartConfigurator",
+      description: "Interactive chart configuration interface",
+      category: "UI",
+      repo_path: "src/components/ui/charts/ChartConfigurator.tsx",
+    },
 
     // Theme
     {
@@ -650,7 +734,7 @@ const ComponentLists = () => {
       repo_path: "src/components/tabs/Tabs.tsx",
     },
     {
-      name: "VeriticalTabs",
+      name: "VerticalTabs",
       description: "Vertical tab navigation component",
       category: "Tabs",
       repo_path: "src/components/tabs/VerticalTabs.tsx",
@@ -660,6 +744,38 @@ const ComponentLists = () => {
       description: "Tab content display component",
       category: "Tabs",
       repo_path: "src/components/tabs/TabContent.tsx",
+    },
+
+    // Cursors
+    {
+      name: "Cursor",
+      description: "Custom cursor component with trailing effects and animations",
+      category: "Cursors",
+      repo_path: "src/components/cursors/Cursor.tsx",
+    },
+    {
+      name: "MagneticButton",
+      description: "Button component with magnetic cursor attraction effect",
+      category: "Cursors",
+      repo_path: "src/components/cursors/MagneticButton.tsx",
+    },
+    {
+      name: "CursorContext",
+      description: "Context provider for cursor state management across the application",
+      category: "Cursors",
+      repo_path: "src/components/cursors/CursorContext.tsx",
+    },
+    {
+      name: "useCursorInteraction",
+      description: "Hook for adding interactive cursor effects to elements",
+      category: "Cursors",
+      repo_path: "src/components/cursors/useCursorInteraction.tsx",
+    },
+    {
+      name: "CursorControlDemo",
+      description: "Comprehensive demo component for the cursor system",
+      category: "Cursors",
+      repo_path: "src/components/cursors/CursorControlDemo.tsx",
     },
 
     // Library

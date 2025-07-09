@@ -74,12 +74,19 @@ const LoginForm = ({
   const [status, setStatus] = useState<number>(1);
 
   const { data: session } = useSession();
-  const user = session?.user as SessionUserType;
-  const handle = user?.name?.channels?.active?.channel?.username;
-  const token = user?.name?.token;
-  const uuid = user?.name?.uuid;
-  const email = user?.name?.email;
-  const verifyEmail = user?.name?.verified;
+  const user = session?.user;
+
+  // Type guard to check if user.name is an object with the expected structure
+  const isSessionUserType = (user: any): user is SessionUserType => {
+    return user?.name && typeof user.name === "object" && "token" in user.name;
+  };
+
+  const sessionUser = isSessionUserType(user) ? user : null;
+  const handle = sessionUser?.name?.channels?.active?.channel?.username;
+  const token = sessionUser?.name?.token;
+  const uuid = sessionUser?.name?.uuid;
+  const email = sessionUser?.name?.email;
+  const verifyEmail = sessionUser?.name?.verified;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

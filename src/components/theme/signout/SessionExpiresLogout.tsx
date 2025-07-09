@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../../lib/auth/dbRequestst";
 import SignOutSession from "./SignOutSession";
-import { SessionType } from "src/types";
+import { SessionType } from "@/types";
 
 interface SessionExpiresLogoutProps {
   children: React.ReactNode;

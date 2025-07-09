@@ -1,11 +1,11 @@
-import { SearchParamsType } from "../../../../../../types";
+import { SearchParamsPageProps } from "../../../../../../types";
 import ResponsiveNavbarExample from "../../../../components/navbars/ResponsiveNavbarExample";
 import { auth } from "../../../api/auth/[...nextauth]/auth";
 import CodebaseLink from "../../../../components/ui/CodebaseLink";
 export default async function ResponsiveNavbarPage({
   params,
   searchParams,
-}: SearchParamsType) {
+}: SearchParamsPageProps) {
   const _params = await params;
   const _searchParams = await searchParams;
   const session = await auth();

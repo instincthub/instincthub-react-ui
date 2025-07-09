@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { LoginForm } from "../../../../index";
-import { SearchParamsPageProps } from "../../../../types";
+import { SearchParamsPageType } from "../../../../types";
 import Link from "next/link";
 
-const LoginExample: React.FC<SearchParamsPageProps> = ({
+const LoginExample: React.FC<SearchParamsPageType> = ({
   params,
   searchParams,
 }) => {

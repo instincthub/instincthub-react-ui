@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Badge, Action, IHubTableServer } from "../../../../index";
-import { DataResponseType } from "../../../../types";
+import { DataResponseType, TableColumnType } from "../../../../types";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -227,7 +227,7 @@ export default function ProgramCoursesPage() {
       <h2>Valid Endpoint</h2>
       <IHubTableServer
         token={process.env.NEXT_PUBLIC_TOKEN}
-        columns={columns}
+        columns={columns as TableColumnType<DataResponseType>[]}
         endpointPath={"sis/hust/admins/program-course-list/"}
         initialParams={{
           sort: "course.title",
@@ -253,7 +253,7 @@ export default function ProgramCoursesPage() {
 
       <h2>Dummy Data</h2>
       <IHubTableServer
-        columns={columns2}
+        columns={columns2 as TableColumnType<DataResponseType>[]}
         defaultData={mockData} // For demo, in production use endpoint
         // endpointPath="finance/payments" // Use in production
         // token={process.env.NEXT_PUBLIC_TOKEN} // Use in production

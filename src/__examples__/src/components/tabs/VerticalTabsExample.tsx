@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import VerticalTabs from "@/components/ui/VerticalTabs";
+
 
 // Import icons (assuming you're using a library like Lucide or similar)
 import { 
@@ -12,6 +12,8 @@ import {
   Settings, 
   HelpCircle 
 } from "lucide-react";
+import VerticalTabs from "../../../../components/tabs/VerticalTabs";
+import { VerticalTabItemType } from "@/types";
 
 const VerticalTabsExample: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -170,7 +172,7 @@ const VerticalTabsExample: React.FC = () => {
       <VerticalTabs 
         items={tabItems} 
         defaultActiveTab={activeTab}
-        onChange={handleTabChange}
+        onChange={(tabId: VerticalTabItemType) => handleTabChange(tabId.id as string)}
         className="ihub-border ihub-rounded-lg ihub-p-6 ihub-bg-white ihub-shadow-sm"
       />
     </div>

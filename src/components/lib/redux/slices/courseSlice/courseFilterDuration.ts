@@ -1,6 +1,6 @@
 /* Core */
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { courseFilterDurationSliceState } from "src/types/redux";
+import { courseFilterDurationSliceState } from "@/types/redux";
 
 const initialState: courseFilterDurationSliceState = {
   value: [],
@@ -31,4 +31,3 @@ export const courseFilterDuration = createSlice({
     },
   },
 });
-

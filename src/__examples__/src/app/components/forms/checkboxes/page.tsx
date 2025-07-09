@@ -1,4 +1,4 @@
-import CheckBoxesFieldExample from "../../../../components/forms/CheckboxesFieldExamples";
+import CheckBoxesFieldExample from "../../../../components/forms/CheckBoxesFieldExamples";
 import MainNavigation from "../../../../components/navbars/MainNavigation";
 import CodebaseLink from "../../../../components/ui/CodebaseLink";
 export default function CheckboxesPage() {
