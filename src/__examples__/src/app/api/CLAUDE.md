@@ -93,12 +93,48 @@ The package supports multiple import paths:
 
 ## MCP Server Integration
 
-The API endpoints are designed to work with MCP clients:
+The API endpoints are designed to work with MCP clients in multiple ways:
 
+### Remote MCP Integration (Recommended)
+The preferred method is using Claude.ai's Remote MCP feature:
+- **Integration URL**: `https://ui.instincthub.com/api/mcp`
+- **Integration Name**: `InstinctHub React UI`
+- **Setup**: Add through Claude.ai Settings → Integrations → Add integration
+- **Benefits**: No local setup, always up-to-date, seamless integration
+
+### Local MCP Server Options
+For users who prefer local MCP servers:
+- **Standalone MCP Server**: Wraps the API endpoints with MCP protocol
+- **Direct API Usage**: Direct HTTP calls to the deployed endpoints
+- **Custom MCP Server**: Build your own wrapper around the API
+
+### Core MCP Capabilities
 1. **Component Search**: Natural language queries converted to structured searches
 2. **Documentation**: Rich documentation with examples and props information
 3. **Code Generation**: Context-aware code generation with multiple patterns
 4. **Integration Help**: Step-by-step guides for installation, setup, and troubleshooting
+
+### Remote MCP Best Practices
+When using the Remote MCP integration with Claude.ai:
+
+#### Optimal Query Patterns:
+- **Specific Component Search**: "Find form input components with validation"
+- **Category-Based Discovery**: "Show me all authentication components"
+- **Use Case Descriptions**: "I need components for a user dashboard"
+- **Code Generation Requests**: "Generate a login form using InstinctHub components"
+
+#### Integration Benefits:
+- **Zero Configuration**: No local MCP server setup required
+- **Always Current**: Automatic access to latest component updates
+- **Performance**: Direct API access without local proxy
+- **Reliability**: Hosted on production infrastructure
+- **Maintenance-Free**: No need to manage local dependencies
+
+#### Common Usage Scenarios:
+1. **Component Discovery**: "What components are available for data visualization?"
+2. **Implementation Guidance**: "How do I implement authentication with your components?"
+3. **Code Generation**: "Create a complete user profile form"
+4. **Integration Support**: "Help me integrate these components with Next.js"
 
 ## Error Handling Patterns
 
