@@ -1,11 +1,36 @@
-# Installation Guide for @instincthub/react-ui
+# InstinctHub React UI
 
-## Prerequisites
+A comprehensive React component library with 125+ components for building modern web applications.
 
-Before installing `@instincthub/react-ui`, ensure you have the following installed on your system:
+## 🚀 Quick Start
+
+### Prerequisites
 
 - **Node.js** (Recommended version: >= 16.x)
 - **npm** (Comes with Node.js) or **yarn**
+
+## 🤖 AI-Powered Component Discovery
+
+**NEW**: InstinctHub React UI now includes AI-powered component discovery through Model Context Protocol (MCP) integration!
+
+### 🌐 For Claude.ai Users (Web)
+1. Go to [Claude.ai](https://claude.ai) → Settings → Integrations
+2. Add integration: `InstinctHub React UI`
+3. URL: `https://ui.instincthub.com/api/mcp`
+4. Start asking: *"Find form components"*, *"Generate a login form"*, *"Help me integrate components"*
+
+### 💻 For Claude Code CLI Users
+The project includes a local MCP server for full CLI integration:
+```bash
+# MCP tools are automatically available:
+# - mcp__search_components
+# - mcp__get_component_docs  
+# - mcp__recommend_components
+# - mcp__generate_code
+# - mcp__integration_help
+```
+
+**[→ Full MCP Integration Guide](./src/__examples__/src/app/api/README.md)**
 
 ## Installation
 

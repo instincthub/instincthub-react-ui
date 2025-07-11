@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "instincthub-react-ui": {
+      "command": "node",
+      "args": ["/mnt/c/Users/instincthub/code_projects/npm/instincthub-react-ui/mcp-server/dist/index.js"],
+      "env": {
+        "API_BASE_URL": "https://ui.instincthub.com"
+      }
+    }
+  }
+}

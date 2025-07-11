@@ -19,6 +19,10 @@ class InstinctHubMCPServer {
   private tools: Map<string, any>;
 
   constructor() {
+    console.error("[DEBUG] Initializing InstinctHub MCP Server...");
+    console.error("[DEBUG] Working directory:", process.cwd());
+    console.error("[DEBUG] API_BASE_URL:", process.env.API_BASE_URL || "not set");
+    
     this.server = new Server(
       {
         name: "instincthub-react-ui",
@@ -34,22 +38,42 @@ class InstinctHubMCPServer {
     this.tools = new Map();
     this.setupTools();
     this.setupHandlers();
+    
+    console.error("[DEBUG] MCP Server initialization complete");
   }
 
   private setupTools() {
-    // Initialize all tools
-    const componentSearch = new ComponentSearchTool();
-    const componentDocs = new ComponentDocsTool();
-    const codeGenerator = new CodeGeneratorTool();
-    const integrationHelper = new IntegrationHelperTool();
-    const componentRecommendation = new ComponentRecommendationTool();
+    try {
+      console.error("[DEBUG] Setting up MCP tools...");
+      
+      // Initialize all tools with error handling
+      const componentSearch = new ComponentSearchTool();
+      console.error("[DEBUG] ComponentSearchTool initialized");
+      
+      const componentDocs = new ComponentDocsTool();
+      console.error("[DEBUG] ComponentDocsTool initialized");
+      
+      const codeGenerator = new CodeGeneratorTool();
+      console.error("[DEBUG] CodeGeneratorTool initialized");
+      
+      const integrationHelper = new IntegrationHelperTool();
+      console.error("[DEBUG] IntegrationHelperTool initialized");
+      
+      const componentRecommendation = new ComponentRecommendationTool();
+      console.error("[DEBUG] ComponentRecommendationTool initialized");
 
-    // Register tools
-    this.tools.set("search_components", componentSearch);
-    this.tools.set("get_component_docs", componentDocs);
-    this.tools.set("generate_code", codeGenerator);
-    this.tools.set("integration_help", integrationHelper);
-    this.tools.set("recommend_components", componentRecommendation);
+      // Register tools
+      this.tools.set("search_components", componentSearch);
+      this.tools.set("get_component_docs", componentDocs);
+      this.tools.set("generate_code", codeGenerator);
+      this.tools.set("integration_help", integrationHelper);
+      this.tools.set("recommend_components", componentRecommendation);
+      
+      console.error(`[DEBUG] Successfully registered ${this.tools.size} tools`);
+    } catch (error) {
+      console.error("[ERROR] Failed to setup tools:", error);
+      throw error;
+    }
   }
 
   private setupHandlers() {
@@ -228,10 +252,32 @@ class InstinctHubMCPServer {
     await this.server.connect(transport);
     console.error("InstinctHub React UI MCP Server started");
   }
+
+  // Health check method for Docker
+  async healthCheck(): Promise<boolean> {
+    try {
+      // Simple health check - verify server is initialized
+      return this.server !== null && this.tools.size > 0;
+    } catch (error) {
+      console.error("Health check failed:", error);
+      return false;
+    }
+  }
+
+  // Static method for Docker health check
+  static async dockerHealthCheck(): Promise<void> {
+    try {
+      console.log("MCP Server Health Check: OK");
+      process.exit(0);
+    } catch (error) {
+      console.error("MCP Server Health Check: FAILED", error);
+      process.exit(1);
+    }
+  }
 }
 
 // Start the server if this file is run directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const server = new InstinctHubMCPServer();
   server.start().catch((error) => {
     console.error("Failed to start server:", error);

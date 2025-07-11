@@ -1,10 +1,24 @@
 # InstinctHub React UI - MCP Server API
 
-This directory contains the Model Context Protocol (MCP) server implementation for InstinctHub React UI, providing AI-powered component discovery, documentation, and code generation capabilities.
+This directory contains a complete Model Context Protocol (MCP) server implementation for InstinctHub React UI, providing AI-powered component discovery, documentation, and code generation capabilities.
 
-## Overview
+## 🎯 MCP Server Overview
 
-The MCP server exposes 5 main endpoints that enable intelligent interaction with the InstinctHub React UI component library:
+We provide **TWO MCP server implementations** to support different AI tools and workflows:
+
+### 🌐 **Remote MCP Server** (for Claude.ai Web)
+- **URL**: `https://ui.instincthub.com/api/mcp`
+- **For**: Claude.ai web interface Remote MCP integration
+- **Transport**: JSON-RPC over HTTP
+- **Setup**: Add URL directly in Claude.ai settings
+
+### 💻 **Local MCP Server** (for Claude Code CLI)
+- **Path**: `./mcp-server/dist/index.js`
+- **For**: Claude Code CLI and other local MCP clients
+- **Transport**: stdio (Standard Input/Output)
+- **Setup**: Configured via `.claude_code_config.json`
+
+Both servers expose the same 5 powerful tools for intelligent component interaction:
 
 - **Component Search** - Find components by name, description, or functionality
 - **Component Documentation** - Get detailed docs, examples, and usage guides
@@ -299,17 +313,15 @@ Currently, the API endpoints are public and don't require authentication. In pro
 - Component data is pre-indexed for fast retrieval
 - Fuzzy matching algorithms are optimized for performance
 
-## MCP Client Integration
+## 🔧 MCP Client Integration
 
-The MCP server is implemented as Next.js API routes in this examples app. You can integrate it with MCP clients like Claude Desktop using several methods below.
+Choose the integration method that best fits your workflow:
 
-### Option 1: Remote MCP Integration (Recommended)
+## 🌐 Remote MCP Integration (Claude.ai Web)
 
-**Claude.ai users can connect directly to the deployed MCP server without any local setup!**
+**For Claude.ai web users - the easiest way to get started!**
 
-This is the easiest way to access the InstinctHub React UI MCP server. Simply add it as a Remote MCP integration in Claude.ai:
-
-#### Setup Steps:
+### Setup Steps:
 1. **Navigate to Claude.ai Settings**
    - Go to [Claude.ai](https://claude.ai) and sign in
    - Click on your profile → Settings → Integrations
@@ -328,24 +340,13 @@ This is the easiest way to access the InstinctHub React UI MCP server. Simply ad
      - "Generate a login form with validation"
      - "Help me integrate a button component"
 
-#### Benefits:
-- ✅ No local MCP server setup required
+### Benefits:
+- ✅ No local setup required
 - ✅ Always up-to-date with latest components
-- ✅ Seamless integration with Claude.ai
+- ✅ Seamless web integration
 - ✅ Access to all 125+ components instantly
-- ✅ AI-powered component recommendations
-- ✅ Automatic code generation
 
-#### Available Capabilities:
-- **Component Search**: "Find components for user authentication"
-- **Documentation**: "Show me docs for SubmitButton"
-- **AI Recommendations**: "I need components for a dashboard"
-- **Code Generation**: "Generate a complete login form"
-- **Integration Help**: "How do I set up the component library?"
-
-#### Example Usage in Claude.ai:
-Once connected, you can use natural language queries like:
-
+### Example Usage:
 ```
 Claude, I need to build a user registration form. Can you help me find the right components and generate the code?
 ```
@@ -354,48 +355,83 @@ Claude, I need to build a user registration form. Can you help me find the right
 Show me all the authentication components available in InstinctHub React UI and their documentation.
 ```
 
-```
-Generate a TypeScript React component for a data table with pagination using InstinctHub components.
-```
+### Troubleshooting:
+- **Connection Issues**: Ensure `https://ui.instincthub.com/api/mcp` is accessible
+- **Integration Not Found**: Verify the URL is exactly `https://ui.instincthub.com/api/mcp`
+- **No Tools Showing**: Check Vercel deployment status and API endpoints
 
-#### Troubleshooting Remote MCP:
-- **Connection Issues**: Ensure `https://ui.instincthub.com/api/mcp` is accessible from your network
-- **Integration Not Found**: Verify the integration URL is exactly `https://ui.instincthub.com/api/mcp`
-- **API Errors**: Check that the deployed app is running and MCP endpoint is responsive
-- **Authentication Problems**: Remote MCP doesn't require authentication for this integration
-- **Tool Execution Failures**: Check that underlying API endpoints are functioning properly
+## 💻 Local MCP Integration (Claude Code CLI)
 
-### Option 2: Use the standalone MCP server (if available)
+**For Claude Code CLI users - full local development integration!**
 
-If you have a standalone MCP server that calls these API endpoints:
+### Prerequisites:
+- Node.js 18+ installed
+- Claude Code CLI properly configured
 
-```json
-{
-  "mcpServers": {
-    "instincthub-react-ui": {
-      "command": "node",
-      "args": ["./mcp-server/dist/index.js"],
-      "env": {
-        "API_BASE_URL": "https://ui.instincthub.com"
-      }
-    }
-  }
-}
-```
+### Setup Steps:
+
+1. **Verify MCP Server Files**
+   ```bash
+   # Check if MCP server exists and is built
+   ls -la ./mcp-server/dist/
+   
+   # If not built, build it:
+   cd mcp-server && npm install && npm run build
+   ```
+
+2. **Configuration File**
+   The project includes `.claude_code_config.json`:
+   ```json
+   {
+     "mcpServers": {
+       "instincthub-react-ui": {
+         "command": "node",
+         "args": ["./mcp-server/dist/index.js"],
+         "env": {
+           "API_BASE_URL": "https://ui.instincthub.com"
+         }
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Code CLI**
+   ```bash
+   # Restart to pick up new MCP server configuration
+   # The MCP tools should now be available
+   ```
+
+### Available MCP Tools:
+- `mcp__search_components` - Search for React components
+- `mcp__get_component_docs` - Get component documentation  
+- `mcp__recommend_components` - AI-powered recommendations
+- `mcp__generate_code` - Generate code examples
+- `mcp__integration_help` - Integration help and troubleshooting
+
+### Benefits:
+- ✅ Full CLI integration
+- ✅ Works offline (with remote API calls)
+- ✅ Integrated with your development workflow
+- ✅ Direct access from code editor
+
+### Troubleshooting:
+- **MCP Server Not Found**: Ensure `./mcp-server/dist/index.js` exists and is built
+- **Tools Not Available**: Restart Claude Code CLI to pick up configuration
+- **API Connection Issues**: Check `API_BASE_URL` environment variable
+- **Build Errors**: Run `cd mcp-server && npm install && npm run build`
+
+## 🔄 Alternative Integration Options
 
 ### Option 3: Direct API Usage
-
-Since the MCP server is implemented as Next.js API routes, you can also directly call the API endpoints:
-
+Call the API endpoints directly:
 - **Search**: `GET https://ui.instincthub.com/api/components/search`
 - **Docs**: `GET https://ui.instincthub.com/api/components/docs`
 - **Recommend**: `GET https://ui.instincthub.com/api/components/recommend`
 - **Generate**: `GET https://ui.instincthub.com/api/generate`
 - **Help**: `GET https://ui.instincthub.com/api/help`
 
-### Option 4: Create a Custom MCP Server
-
-You can create a custom MCP server that wraps these API endpoints. The server should make HTTP requests to the endpoints above and format the responses according to MCP protocol.
+### Option 4: Custom MCP Server
+Create your own MCP server wrapper around these endpoints for other MCP clients.
 
 ## MCP Server Implementation
 

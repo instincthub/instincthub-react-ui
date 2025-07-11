@@ -2,20 +2,36 @@
 import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 
 interface DateInputProps {
-  labels: string;
+  label: string;
   names: string;
   name?: string;
   maxAge?: number;
   minAge?: number;
-  defaultValues?: string;
-  requireds?: boolean;
+  defaultValue?: string;
+  required?: boolean;
   controls?: boolean;
   inputEvent?: (name: string, value: string) => void;
-}
+} 
 
 /*
-    <DateInput labels="Year Founded" names='founded' maxAge={17} minAge={10} />
+* @example
+* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} />
+* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} defaultValue="2024-01-01" />
+* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} required={true} />
+* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} inputEvent={(name, value) => console.log(name, value)} />
+* 
+* @props
+* @label: string
+* @name: string
+* @maxAge: number
+* @minAge: number
+* @defaultValue: string
+* @required: boolean
+* @controls: boolean
+* @inputEvent: (name: string, value: string) => void
+* 
 */
+
 
 const DateInput: React.FC<DateInputProps> = (props) => {
   const [errMsg, setErrMsg] = useState<string>("");
@@ -24,7 +40,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
   const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
   const [defaultDateObjects, setDefaultDateObjects] = useState<Date | false>(
-    props.defaultValues ? new Date(props.defaultValues) : false
+    props.defaultValue ? new Date(props.defaultValue) : false
   );
 
   const dayRef = useRef<HTMLInputElement>(null);
@@ -109,7 +125,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
   return (
     <div className={props.name}>
       <div className="field">
-        <h5 className="mt-3">{props.labels}</h5>
+        <h5 className="ihub-mt-3 ihub-mb-1">{props.label}</h5>
         <input type="text" hidden defaultValue={date} name={props.names} />
         <div
           className={`ihub-date-input-container ${errMsg ? "date-err" : ""}`}
@@ -121,7 +137,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             onChange={handleDayChange}
             placeholder="DD"
             maxLength={2}
-            required={props.requireds}
+            required={props.required}
             className="ihub-date-input"
           />
           <input
@@ -131,7 +147,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             onChange={handleMonthChange}
             placeholder="MM"
             maxLength={2}
-            required={props.requireds}
+            required={props.required}
             className="ihub-date-input"
           />
           <input
@@ -141,7 +157,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             onChange={handleYearChange}
             placeholder="YYYY"
             maxLength={4}
-            required={props.requireds}
+            required={props.required}
             className="ihub-date-input ihub-date-year"
           />
         </div>

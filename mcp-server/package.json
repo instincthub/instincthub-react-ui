@@ -1,14 +1,25 @@
 {
-  "name": "instincthub-react-ui-mcp-server",
-  "version": "1.0.0",
-  "description": "MCP server for InstinctHub React UI component recommendations",
+  "name": "@instincthub/react-ui-mcp-server",
+  "version": "1.0.1",
+  "description": "MCP server for InstinctHub React UI component recommendations and code generation",
   "main": "dist/index.js",
+  "bin": {
+    "instincthub-mcp": "./dist/index.js"
+  },
   "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "generate-components": "node dist/scripts/generate-components.js"
+    "generate-components": "node dist/scripts/generate-components.js",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"No tests specified\"",
+    "docker:build": "docker build -t instincthub-mcp-server .",
+    "docker:run": "docker run -it --rm -e API_BASE_URL=https://ui.instincthub.com instincthub-mcp-server",
+    "docker:dev": "docker-compose -f ../docker-compose.yml up mcp-server-dev --build",
+    "docker:prod": "docker-compose -f ../docker-compose.yml up mcp-server --build -d",
+    "docker:stop": "docker-compose -f ../docker-compose.yml down",
+    "docker:logs": "docker-compose -f ../docker-compose.yml logs -f mcp-server"
   },
   "keywords": [
     "mcp",
@@ -16,7 +27,28 @@
     "instincthub",
     "react-ui",
     "components",
-    "typescript"
+    "typescript",
+    "claude",
+    "ai",
+    "code-generation",
+    "component-library"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instincthub/instincthub-react-ui.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/instincthub/instincthub-react-ui/issues"
+  },
+  "homepage": "https://github.com/instincthub/instincthub-react-ui#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "CLAUDE.md"
   ],
   "author": "InstinctHub",
   "license": "MIT",

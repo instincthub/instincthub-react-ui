@@ -1,0 +1,49 @@
+services:
+  mcp-server:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    container_name: instincthub-mcp-server
+    environment:
+      - NODE_ENV=production
+      - API_BASE_URL=https://ui.instincthub.com
+    ports:
+      - "3010:3000"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - mcp-network
+    volumes:
+      # Mount data directory for persistence
+      - ./mcp-server/src/data:/app/dist/data:ro
+    labels:
+      - "com.instincthub.service=mcp-server"
+      - "com.instincthub.description=InstinctHub React UI MCP Server"
+
+  # Development service with hot reload
+  mcp-server-dev:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+      target: builder
+    container_name: instincthub-mcp-server-dev
+    environment:
+      - NODE_ENV=development
+      - API_BASE_URL=https://ui.instincthub.com
+    ports:
+      - "3011:3000"
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./mcp-server/src:/app/src:ro
+      - ./mcp-server/dist:/app/dist
+    command: ["npm", "run", "dev"]
+    networks:
+      - mcp-network
+    profiles:
+      - development
+
+networks:
+  mcp-network:
+    driver: bridge

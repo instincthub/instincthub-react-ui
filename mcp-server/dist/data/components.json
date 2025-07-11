@@ -1,0 +1,1326 @@
+[
+  {
+    "name": "ActionDropdown",
+    "description": "Dropdown component for actions",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ActionDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "AnimatedBox",
+    "description": "Animated container component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/AnimatedBox.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "PasswordField",
+    "description": "Secure password input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PasswordField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "DateInput",
+    "description": "Date selection input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DateInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "DateTimeInput",
+    "description": "Date and time selection input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DateTimeInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "DropFile",
+    "description": "File drag and drop component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DropFile.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "EmailList",
+    "description": "Email list display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/EmailList.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "FilterArray",
+    "description": "Array filtering component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterArray.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "FilterBy",
+    "description": "Filtering component with criteria",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterBy.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "FilterObjects",
+    "description": "Object filtering component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterObjects.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "FormError",
+    "description": "Form error display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FormError.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "HandleError",
+    "description": "Error handling component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/HandleError.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "Logout",
+    "description": "Logout functionality component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Logout.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "MessageDisplay",
+    "description": "Message display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/MessageDisplay.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "MultipleEmail",
+    "description": "Multiple email input component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/MultipleEmail.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "PageLoading",
+    "description": "Page loading indicator component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PageLoading.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "PhoneNumberInput",
+    "description": "Phone number input with formatting",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PhoneNumberInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "RadioField",
+    "description": "Radio button input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/RadioField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "RadioSimple",
+    "description": "Simplified radio button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/RadioSimple.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "ReactTimeAgo",
+    "description": "Time ago display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ReactTimeAgo.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "ReadTermsAndCondition",
+    "description": "Terms and conditions acceptance component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ReadTermsAndCondition.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "SearchField",
+    "description": "Search input field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SearchField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "SearchFieldDB",
+    "description": "Database search field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SearchFieldDB.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "StepProgressBar",
+    "description": "Step progress indicator component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/StepProgressBar.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "SubmitButton",
+    "description": "Form submission button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SubmitButton.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "Tables",
+    "description": "Table display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Tables.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "table",
+      "data"
+    ]
+  },
+  {
+    "name": "TextArea",
+    "description": "Multi-line text input component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TextArea.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "TextField",
+    "description": "Text input field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TextField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "Tooltip",
+    "description": "Tooltip display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Tooltip.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "UnsplashRandomImage",
+    "description": "Random image from Unsplash component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/UnsplashRandomImage.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "DownloadAsExcel",
+    "description": "Excel download functionality component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DownloadAsExcel.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "THeadSortBtn",
+    "description": "Table header sort button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/THeadSortBtn.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "THeadSortList",
+    "description": "Table header sort list component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/THeadSortList.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "TBodyNoData",
+    "description": "Table body empty state component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TBodyNoData.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "FileUploader",
+    "description": "File upload component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/uploads/FileUploader.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "IhubFileUploader",
+    "description": "InstinctHub file upload component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/uploads/IhubFileUploader.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "ActionCallbackDropdown",
+    "description": "Action callback dropdown component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ActionCallbackDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ]
+  },
+  {
+    "name": "InputNumber",
+    "description": "InputNumber component for numerical input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputNumber.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "InputText",
+    "description": "InputText component for text input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputText.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "InputTextarea",
+    "description": "InputTextarea component for text input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputTextarea.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "SearchObjectsFromDB",
+    "description": "SearchObjectsFromDB component for searching objects from database",
+    "category": "Form",
+    "repo_path": "src/components/forms/SearchObjectsFromDB.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ]
+  },
+  {
+    "name": "ToggleButton",
+    "description": "ToggleButton component for changing state.",
+    "category": "Form",
+    "repo_path": "src/components/forms/ToggleButton.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "DateInputPicker",
+    "description": "DateInputPicker component for picking date and time.",
+    "category": "Form",
+    "repo_path": "src/components/forms/DateInputPicker.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "ChipsInput",
+    "description": "ChipsInput is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/ChipsInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "RadioButton",
+    "description": "RadioButton is used to enter single value on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/radio-btn/RadioButton.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "RadioGroup",
+    "description": "RadioGroup is used to select each from group value on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/radio-btn/RadioGroup.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ]
+  },
+  {
+    "name": "InputAmount",
+    "description": "InputAmount is used to enter amount on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputAmount.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "CheckBoxes",
+    "description": "CheckBoxes is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/CheckBoxes.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ]
+  },
+  {
+    "name": "CheckBoxesField",
+    "description": "CheckBoxesField is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/CheckboxesField.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "CountryInput",
+    "description": "Searchable country selector input field",
+    "category": "Form",
+    "repo_path": "src/components/forms/CountryInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "CountryStateInput",
+    "description": "Searchable state/province selector based on selected country",
+    "category": "Form",
+    "repo_path": "src/components/forms/CountryStateInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "InputSearchDropdown",
+    "description": "Generic searchable dropdown component for organizations",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputSearchDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ]
+  },
+  {
+    "name": "IsUsernameEmailTaken",
+    "description": "Username/email availability checker",
+    "category": "Auth",
+    "repo_path": "src/components/auth/IsUsernameEmailTaken.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "ClientDetector",
+    "description": "Client device detection component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ClientDetector.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "PasswordsMatch",
+    "description": "Password matching validation component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/PasswordsMatch.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "FromInstinctHub",
+    "description": "From InstinctHub component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/FromInstinctHub.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "LoginForm",
+    "description": "Login form component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/LoginForm.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "SignUpForm",
+    "description": "Sign up form component",
+    "category": "Auth",
+    "repo_path": "src/__examples__/src/components/forms/SignUpFormExample.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "ReactClientProviders",
+    "description": "Comprehensive wrapper providing all essential React providers",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ReactClientProviders.tsx",
+    "type": "context",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "ClientOnly",
+    "description": "Wrapper component that only renders children on client side",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ClientOnly.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "useClientSide",
+    "description": "Hook for safely handling client-side initialization",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useClientSide.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "useFormattedDate",
+    "description": "Hook for consistent date formatting between server and client",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useFormattedDate.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "useStableRandom",
+    "description": "Hook for generating stable random values",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useStableRandom.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "useExternalData",
+    "description": "Hook for safely handling external data to prevent hydration mismatches",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useExternalData.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "name": "ChannelListAvatar",
+    "description": "Channel list avatar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/ChannelListAvatar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ]
+  },
+  {
+    "name": "MenuDropdown",
+    "description": "Menu dropdown component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/MenuDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ]
+  },
+  {
+    "name": "Breadcrumb",
+    "description": "Breadcrumb component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/Breadcrumb.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ]
+  },
+  {
+    "name": "ResponsiveNavbar",
+    "description": "Responsive navbar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/ResponsiveNavbar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ]
+  },
+  {
+    "name": "SideNavbar",
+    "description": "Side navbar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/SideNavbar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ]
+  },
+  {
+    "name": "SideNavbarContext",
+    "description": "Context provider for side navigation state management",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/SideNavbarContext.tsx",
+    "type": "context",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ]
+  },
+  {
+    "name": "CustomTextEditor",
+    "description": "Custom text editor component",
+    "category": "UI",
+    "repo_path": "src/components/ui/editor/CustomTextEditor.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "ContentViewer",
+    "description": "Content viewer component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/ContentViewer.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "ContentViewOrEdit",
+    "description": "Content view or edit component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/ContentViewOrEdit.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "CodeDisplay",
+    "description": "Code display component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/CodeDisplay.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "IHubTable",
+    "description": "InstinctHub table component",
+    "category": "UI",
+    "repo_path": "src/components/ui/tables/IHubTable.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "table",
+      "data"
+    ]
+  },
+  {
+    "name": "IHubTableServer",
+    "description": "InstinctHub server table component",
+    "category": "UI",
+    "repo_path": "src/components/ui/tables/IHubTableServer.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "table",
+      "data"
+    ]
+  },
+  {
+    "name": "OrDivider",
+    "description": "Or divider component",
+    "category": "UI",
+    "repo_path": "src/components/ui/OrDivider.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "Card",
+    "description": "Card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/Card.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "CardList",
+    "description": "Card list component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/CardList.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "CardGrid",
+    "description": "Card grid component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/CardGrid.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "HorizontalCard",
+    "description": "Horizontal card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/HorizontalCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "FeatureCard",
+    "description": "Feature card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/FeatureCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "MediaCard",
+    "description": "Media card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/MediaCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "PricingCard",
+    "description": "Pricing card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/PricingCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "ProfileCard",
+    "description": "Profile card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/ProfileCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "RandomGradientImage",
+    "description": "Random gradient image component",
+    "category": "UI",
+    "repo_path": "src/components/ui/images/RandomGradientImage.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "Dialog",
+    "description": "A reusable dialog component",
+    "category": "UI",
+    "repo_path": "src/components/ui/dialogs/Dialog.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "modal",
+      "overlay"
+    ]
+  },
+  {
+    "name": "Badge",
+    "description": "A reusable Badge component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Badge.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "Action",
+    "description": "A reusable Action component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Action.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "Dropdown",
+    "description": "A reusable Dropdown component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Dropdown.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "ColorPicker",
+    "description": "A reusable ColorPicker component",
+    "category": "UI",
+    "repo_path": "src/components/ui/ColorPicker.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "Pagination",
+    "description": "A reusable Pagination component",
+    "category": "UI",
+    "repo_path": "src/components/ui/pagination/Pagination.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "PaginationDemo",
+    "description": "A demo for the Pagination component",
+    "category": "UI",
+    "repo_path": "src/components/ui/pagination/PaginationDemo.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "CreateButton",
+    "description": "A reusable CreateButton component",
+    "category": "UI",
+    "repo_path": "src/components/ui/create-button/CreateButton.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "CreateButtonExample",
+    "description": "An example of the CreateButton component",
+    "category": "UI",
+    "repo_path": "src/components/ui/create-button/CreateButtonExample.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "MenuBar",
+    "description": "Toolbar component for the TipTap rich text editor",
+    "category": "UI",
+    "repo_path": "src/components/ui/editor/MenuBar.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ]
+  },
+  {
+    "name": "InstinctHubChart",
+    "description": "Versatile chart component supporting multiple chart types",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/InstinctHubChart.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ]
+  },
+  {
+    "name": "InstinctHubChartDashboard",
+    "description": "Dashboard component showcasing multiple charts",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/InstinctHubChartDashboard.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ]
+  },
+  {
+    "name": "ChartConfigurator",
+    "description": "Interactive chart configuration interface",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/ChartConfigurator.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ]
+  },
+  {
+    "name": "ChangeStyleVariable",
+    "description": "Style variable changer component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/ChangeStyleVariable.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "DarkModeProvider",
+    "description": "Dark mode provider component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/DarkModeProvider.tsx",
+    "type": "context",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "LoadingAnimate",
+    "description": "Loading animation component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/LoadingAnimate.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "SessionProviders",
+    "description": "Session providers component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/SessionProviders.tsx",
+    "type": "context",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "SessionExpiresLogout",
+    "description": "Session expiration logout component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/signout/SessionExpiresLogout.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "SignOutSession",
+    "description": "Sign out session component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/signout/SignOutSession.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ]
+  },
+  {
+    "name": "TimeTracker",
+    "description": "Time tracking component",
+    "category": "Status",
+    "repo_path": "src/components/status/ReactTimeTracker.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "SessionHandleProvider",
+    "description": "Session handling provider component",
+    "category": "Status",
+    "repo_path": "src/components/status/SessionHandleProvider.tsx",
+    "type": "context",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "Error500",
+    "description": "500 error display component",
+    "category": "Status",
+    "repo_path": "src/components/status/Error500.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "ErrorState",
+    "description": "Error state display component",
+    "category": "Status",
+    "repo_path": "src/components/status/ErrorState.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "ReactTimeTracker",
+    "description": "React time tracking component",
+    "category": "Status",
+    "repo_path": "src/components/status/ReactTimeTracker.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "DeleteConfirmationModal",
+    "description": "Delete confirmation modal component",
+    "category": "Status",
+    "repo_path": "src/components/status/DeleteConfirmationModal.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ]
+  },
+  {
+    "name": "CopyToClipboard",
+    "description": "Copy to clipboard functionality component",
+    "category": "Status",
+    "repo_path": "src/components/status/CopyToClipBoard.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "MultiPurposeModal",
+    "description": "Multi-purpose modal component",
+    "category": "Status",
+    "repo_path": "src/components/status/MultiPurposeModal.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ]
+  },
+  {
+    "name": "ModalExamples",
+    "description": "Modal examples component",
+    "category": "Status",
+    "repo_path": "src/components/status/ModalExamples.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ]
+  },
+  {
+    "name": "NotFound",
+    "description": "Not found component",
+    "category": "Status",
+    "repo_path": "src/components/status/NotFound.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "Unauthorized",
+    "description": "Unauthorized component",
+    "category": "Status",
+    "repo_path": "src/components/status/Unauthorized.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "name": "Tabs",
+    "description": "Tab navigation component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/Tabs.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ]
+  },
+  {
+    "name": "VerticalTabs",
+    "description": "Vertical tab navigation component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/VerticalTabs.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ]
+  },
+  {
+    "name": "TabContent",
+    "description": "Tab content display component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/TabContent.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ]
+  },
+  {
+    "name": "Cursor",
+    "description": "Custom cursor component with trailing effects and animations",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/Cursor.tsx",
+    "type": "component",
+    "tags": [
+      "cursors"
+    ]
+  },
+  {
+    "name": "MagneticButton",
+    "description": "Button component with magnetic cursor attraction effect",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/MagneticButton.tsx",
+    "type": "component",
+    "tags": [
+      "cursors",
+      "button",
+      "action"
+    ]
+  },
+  {
+    "name": "CursorContext",
+    "description": "Context provider for cursor state management across the application",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/CursorContext.tsx",
+    "type": "context",
+    "tags": [
+      "cursors"
+    ]
+  },
+  {
+    "name": "useCursorInteraction",
+    "description": "Hook for adding interactive cursor effects to elements",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/useCursorInteraction.tsx",
+    "type": "hook",
+    "tags": [
+      "cursors"
+    ]
+  },
+  {
+    "name": "CursorControlDemo",
+    "description": "Comprehensive demo component for the cursor system",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/CursorControlDemo.tsx",
+    "type": "component",
+    "tags": [
+      "cursors"
+    ]
+  },
+  {
+    "name": "Paystack",
+    "description": "Paystack payment integration component",
+    "category": "Library",
+    "repo_path": "src/components/lib/readme/paystack.md",
+    "type": "component",
+    "tags": [
+      "library"
+    ]
+  }
+]
