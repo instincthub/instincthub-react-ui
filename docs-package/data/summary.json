@@ -1,0 +1,62 @@
+{
+  "totalComponents": 125,
+  "categories": [
+    {
+      "name": "Auth",
+      "count": 12,
+      "description": "Authentication, authorization, and user session management components"
+    },
+    {
+      "name": "Cursors",
+      "count": 5,
+      "description": "Custom cursor effects, animations, and interactive cursor components"
+    },
+    {
+      "name": "Form",
+      "count": 15,
+      "description": "Form components"
+    },
+    {
+      "name": "Forms",
+      "count": 37,
+      "description": "Form inputs, validation, and interactive form components for building user interfaces"
+    },
+    {
+      "name": "Library",
+      "count": 1,
+      "description": "Utility components, helpers, and third-party library integrations"
+    },
+    {
+      "name": "Navbar",
+      "count": 6,
+      "description": "Navigation, menus, breadcrumbs, and header components for site navigation"
+    },
+    {
+      "name": "Status",
+      "count": 11,
+      "description": "Status indicators, error states, loading states, and user feedback components"
+    },
+    {
+      "name": "Tabs",
+      "count": 3,
+      "description": "Tab navigation and tabbed interface components for organizing content"
+    },
+    {
+      "name": "Theme",
+      "count": 6,
+      "description": "Theme providers, dark mode toggles, and styling utility components"
+    },
+    {
+      "name": "UI",
+      "count": 29,
+      "description": "General UI components including cards, buttons, modals, tables, and layout elements"
+    }
+  ],
+  "componentTypes": {
+    "component": 114,
+    "hook": 5,
+    "context": 6,
+    "utility": 0
+  },
+  "generatedAt": "2025-07-11T01:23:16.692Z"
+}

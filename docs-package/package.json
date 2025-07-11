@@ -1,0 +1,47 @@
+{
+  "name": "@instincthub/react-ui-docs",
+  "version": "1.0.0",
+  "description": "Offline documentation and component data for InstinctHub React UI",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "docs/**/*",
+    "data/**/*",
+    "styles/**/*",
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "search.js",
+    "search.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "instincthub",
+    "react-ui",
+    "documentation",
+    "components",
+    "offline",
+    "docs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instincthub/instincthub-react-ui.git",
+    "directory": "docs-package"
+  },
+  "bugs": {
+    "url": "https://github.com/instincthub/instincthub-react-ui/issues"
+  },
+  "homepage": "https://github.com/instincthub/instincthub-react-ui#readme",
+  "author": "InstinctHub",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "fs-extra": "^11.0.0"
+  }
+}
