@@ -229,6 +229,100 @@ const DateTimePickerExample: React.FC = () => {
             <strong>Pre-filled:</strong> {formatDateTime("2024-12-25T15:30:00")}
           </div>
         </div>
+
+        {/* Separate Fields */}
+        <div className="ihub-example-card">
+          <h3>Separate Input Fields</h3>
+          <p>Multiple input fields for easier mobile input</p>
+          <DateTimePicker
+            label="Separate Fields"
+            value={basicDateTime}
+            onChange={(value) => setBasicDateTime(value)}
+            useSeparateFields={true}
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(basicDateTime)}
+          </div>
+        </div>
+
+        {/* Separate Fields with 12-hour */}
+        <div className="ihub-example-card">
+          <h3>Separate Fields (12-hour)</h3>
+          <p>Multiple input fields with 12-hour format</p>
+          <DateTimePicker
+            label="Separate Fields 12h"
+            value={twelveHourDateTime}
+            onChange={(value) => setTwelveHourDateTime(value)}
+            useSeparateFields={true}
+            use12Hour={true}
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(twelveHourDateTime)}
+          </div>
+        </div>
+
+        {/* Date Only Mode */}
+        <div className="ihub-example-card">
+          <h3>Date Only Mode</h3>
+          <p>Pick only the date (no time selection)</p>
+          <DateTimePicker
+            label="Select Date"
+            value={basicDateTime}
+            onChange={(value) => setBasicDateTime(value)}
+            mode="date"
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(basicDateTime)}
+          </div>
+        </div>
+
+        {/* Time Only Mode */}
+        <div className="ihub-example-card">
+          <h3>Time Only Mode</h3>
+          <p>Pick only the time (no date selection)</p>
+          <DateTimePicker
+            label="Select Time"
+            value={basicDateTime}
+            onChange={(value) => setBasicDateTime(value)}
+            mode="time"
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(basicDateTime)}
+          </div>
+        </div>
+
+        {/* Date Only with Separate Fields */}
+        <div className="ihub-example-card">
+          <h3>Date Only (Separate Fields)</h3>
+          <p>Date picker with separate input fields</p>
+          <DateTimePicker
+            label="Date Fields"
+            value={basicDateTime}
+            onChange={(value) => setBasicDateTime(value)}
+            mode="date"
+            useSeparateFields={true}
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(basicDateTime)}
+          </div>
+        </div>
+
+        {/* Time Only with Separate Fields */}
+        <div className="ihub-example-card">
+          <h3>Time Only (Separate Fields)</h3>
+          <p>Time picker with separate input fields</p>
+          <DateTimePicker
+            label="Time Fields"
+            value={basicDateTime}
+            onChange={(value) => setBasicDateTime(value)}
+            mode="time"
+            useSeparateFields={true}
+            use12Hour={true}
+          />
+          <div className="ihub-example-output">
+            <strong>Selected:</strong> {formatDateTime(basicDateTime)}
+          </div>
+        </div>
       </div>
 
       <div className="ihub-code-examples">
@@ -272,6 +366,38 @@ const [dateTime, setDateTime] = useState('');
   disabledDates={['2024-01-15', '2024-01-16']}
   disabledTimes={['12:00', '12:30', '13:00']}
   includeSeconds={true}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Date Only Mode</h3>
+          <pre><code>{`<DateTimePicker
+  label="Select Date"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  mode="date"
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Time Only Mode</h3>
+          <pre><code>{`<DateTimePicker
+  label="Select Time"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  mode="time"
+  use12Hour={true}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Separate Fields</h3>
+          <pre><code>{`<DateTimePicker
+  label="Date and Time"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  useSeparateFields={true}
+  mode="datetime"
 />`}</code></pre>
         </div>
       </div>
@@ -396,6 +522,18 @@ const [dateTime, setDateTime] = useState('');
                 <td>string</td>
                 <td>-</td>
                 <td>Error message to display</td>
+              </tr>
+              <tr>
+                <td>mode</td>
+                <td>"datetime" | "date" | "time"</td>
+                <td>"datetime"</td>
+                <td>Input mode - datetime, date only, or time only</td>
+              </tr>
+              <tr>
+                <td>useSeparateFields</td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Use separate input fields instead of single input</td>
               </tr>
             </tbody>
           </table>

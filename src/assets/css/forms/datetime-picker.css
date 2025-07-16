@@ -751,43 +751,76 @@
   width: 50px;
 }
 
-.ihub-datetime-ampm {
+/* AM/PM Toggle Button */
+.ihub-datetime-ampm-toggle {
   width: 60px;
-  cursor: pointer;
   height: 40px;
+  border: 1px solid var(--LightGray, #dee2e6);
+  border-radius: 4px;
+  background: var(--White, #ffffff);
+  color: var(--Gunmetal, #2c333a);
+  font-size: 1rem;
+  font-family: var(--Nunito);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 12px;
-  padding-right: 24px;
+  position: relative;
+  user-select: none;
 }
 
-.ihub-datetime-ampm:focus {
+.ihub-datetime-ampm-toggle:hover:not(:disabled) {
+  background: var(--Magnolia, #f4f3fe);
+  border-color: var(--DarkCyan, #00838f);
+  color: var(--DarkCyan, #00838f);
+}
+
+.ihub-datetime-ampm-toggle:focus {
   outline: none;
   border-color: var(--DarkCyan, #00838f);
   box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
 }
 
-/* Custom dropdown arrow styling */
-.ihub-datetime-ampm option {
-  background: var(--White, #ffffff);
-  color: var(--Gunmetal, #2c333a);
-  padding: 8px 12px;
-}
-
-.ihub-datetime-ampm option:checked {
+.ihub-datetime-ampm-toggle:active {
   background: var(--DarkCyan, #00838f);
   color: var(--White, #ffffff);
+  transform: translateY(1px);
 }
 
-.ihub-datetime-ampm option:hover {
-  background: var(--Magnolia, #f4f3fe);
+.ihub-datetime-ampm-toggle:disabled {
+  background: var(--Gray, #f4f4f4);
+  color: var(--Rhythm, #69779b);
+  cursor: not-allowed;
+  border-color: var(--LightGray, #dee2e6);
+}
+
+.ihub-datetime-ampm-toggle:disabled:hover {
+  background: var(--Gray, #f4f4f4);
+  color: var(--Rhythm, #69779b);
+  border-color: var(--LightGray, #dee2e6);
+}
+
+/* Add subtle animation for toggle effect */
+.ihub-datetime-ampm-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--DarkCyan, #00838f);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.ihub-datetime-ampm-toggle:active::before {
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
 }
 
 /* Separators in separate fields */
@@ -835,9 +868,10 @@
     width: 60px;
   }
 
-  .ihub-datetime-ampm {
+  .ihub-datetime-ampm-toggle {
     width: 70px;
     height: 44px;
+    font-size: 1.1rem;
   }
 }
 
@@ -867,24 +901,37 @@
     color: var(--DarkText, #e2e8f0);
   }
 
-  .ihub-datetime-ampm {
+  .ihub-datetime-ampm-toggle {
     background: var(--DarkBackground, #2d3748);
     border-color: var(--DarkBorder, #4a5568);
     color: var(--DarkText, #e2e8f0);
-    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23e2e8f0" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
   }
 
-  .ihub-datetime-ampm option {
-    background: var(--DarkBackground, #2d3748);
-    color: var(--DarkText, #e2e8f0);
+  .ihub-datetime-ampm-toggle:hover:not(:disabled) {
+    background: var(--DarkSecondary, #4a5568);
+    border-color: var(--DarkCyan, #00838f);
+    color: var(--DarkCyan, #00838f);
   }
 
-  .ihub-datetime-ampm option:checked {
+  .ihub-datetime-ampm-toggle:focus {
+    border-color: var(--DarkCyan, #00838f);
+    box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+  }
+
+  .ihub-datetime-ampm-toggle:active {
     background: var(--DarkCyan, #00838f);
     color: var(--White, #ffffff);
   }
 
-  .ihub-datetime-ampm option:hover {
+  .ihub-datetime-ampm-toggle:disabled {
     background: var(--DarkSecondary, #4a5568);
+    color: var(--DarkTextDisabled, #a0aec0);
+    border-color: var(--DarkBorder, #4a5568);
+  }
+
+  .ihub-datetime-ampm-toggle:disabled:hover {
+    background: var(--DarkSecondary, #4a5568);
+    color: var(--DarkTextDisabled, #a0aec0);
+    border-color: var(--DarkBorder, #4a5568);
   }
 }

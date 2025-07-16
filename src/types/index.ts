@@ -659,4 +659,8 @@ export interface DateTimePickerPropsType {
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   /** Blur event handler */
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  /** Whether to use separate input fields instead of single input */
+  useSeparateFields?: boolean;
+  /** Input mode: datetime (default), date only, or time only */
+  mode?: "datetime" | "date" | "time";
 }

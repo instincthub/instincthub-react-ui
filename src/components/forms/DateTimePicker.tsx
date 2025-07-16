@@ -939,16 +939,15 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
               )}
               
               {use12Hour && (
-                <select
-                  className="ihub-datetime-field ihub-datetime-ampm"
-                  value={separateFields.ampm}
-                  onChange={(e) => handleSeparateFieldChange("ampm", e.target.value as "AM" | "PM")}
+                <button
+                  type="button"
+                  className="ihub-datetime-field ihub-datetime-ampm-toggle"
+                  onClick={() => handleSeparateFieldChange("ampm", separateFields.ampm === "AM" ? "PM" : "AM")}
                   disabled={disabled}
-                  aria-label="AM/PM"
+                  aria-label={`Toggle AM/PM, currently ${separateFields.ampm}`}
                 >
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
-                </select>
+                  {separateFields.ampm}
+                </button>
               )}
             </div>
             )}
