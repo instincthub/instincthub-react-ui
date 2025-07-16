@@ -25,11 +25,9 @@ import {
   getDaysInMonth,
   startOfMonth,
   getDay,
-  addDays,
   setHours,
   setMinutes,
   setSeconds,
-  isWithinInterval,
   isSameDay,
 } from "date-fns";
 
@@ -108,6 +106,8 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   autoFocus = false,
   onFocus,
   onBlur,
+  useSeparateFields = false,
+  mode = "datetime",
 }) => {
   // Parse initial value
   const parseInitialValue = (val: string): Date | null => {
@@ -127,6 +127,18 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<"calendar" | "time">("calendar");
   const [error, setError] = useState<string | null>(errorMessage || null);
+  const [cursorPosition, setCursorPosition] = useState<number>(0);
+  
+  // Separate fields states
+  const [separateFields, setSeparateFields] = useState({
+    year: "",
+    month: "",
+    day: "",
+    hour: "",
+    minute: "",
+    second: "",
+    ampm: "AM" as "AM" | "PM"
+  });
   
   // Calendar states
   const [currentMonth, setCurrentMonth] = useState<Date>(
@@ -150,6 +162,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   // Refs
   const pickerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const separateFieldsRef = useRef<HTMLDivElement>(null);
 
   // Update time states when selected date changes
   useEffect(() => {
@@ -177,11 +190,24 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
+        !pickerRef.current.contains(event.target as Node)
       ) {
-        setShowPicker(false);
+        // For separate fields mode, check the separate fields container
+        if (useSeparateFields && separateFieldsRef.current) {
+          if (!separateFieldsRef.current.contains(event.target as Node)) {
+            setShowPicker(false);
+          }
+        }
+        // For single input mode, check the input element
+        else if (!useSeparateFields && inputRef.current) {
+          if (!inputRef.current.contains(event.target as Node)) {
+            setShowPicker(false);
+          }
+        }
+        // If neither ref is available, close the picker
+        else {
+          setShowPicker(false);
+        }
       }
     };
 
@@ -189,20 +215,29 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [useSeparateFields]);
 
-  // Format display value
+  // Format display value based on mode
   const formatDisplayValue = (date?: Date): string => {
     const dateToFormat = date || selectedDate;
     if (!dateToFormat) return "";
     
     try {
-      const dateStr = format(dateToFormat, dateFormat);
-      const timeStr = includeSeconds
-        ? format(dateToFormat, timeFormat)
-        : format(dateToFormat, timeFormat.replace(":ss", ""));
-      
-      return `${dateStr} ${timeStr}`;
+      if (mode === "date") {
+        return format(dateToFormat, dateFormat);
+      } else if (mode === "time") {
+        return includeSeconds
+          ? format(dateToFormat, timeFormat)
+          : format(dateToFormat, timeFormat.replace(":ss", ""));
+      } else {
+        // datetime mode
+        const dateStr = format(dateToFormat, dateFormat);
+        const timeStr = includeSeconds
+          ? format(dateToFormat, timeFormat)
+          : format(dateToFormat, timeFormat.replace(":ss", ""));
+        
+        return `${dateStr} ${timeStr}`;
+      }
     } catch {
       return "";
     }
@@ -404,6 +439,128 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     return options;
   };
 
+  // Create format mask for visual guidance based on mode
+  const createFormatMask = (inputStr: string): string => {
+    let fullFormat = "";
+    
+    if (mode === "date") {
+      fullFormat = dateFormat;
+    } else if (mode === "time") {
+      fullFormat = includeSeconds
+        ? timeFormat
+        : timeFormat.replace(":ss", "");
+    } else {
+      // datetime mode
+      fullFormat = includeSeconds
+        ? `${dateFormat} ${timeFormat}`
+        : `${dateFormat} ${timeFormat.replace(":ss", "")}`;
+    }
+    
+    // Replace format tokens with placeholders
+    let mask = fullFormat
+      .replace(/yyyy/g, "____")
+      .replace(/yy/g, "__")
+      .replace(/MM/g, "__")
+      .replace(/dd/g, "__")
+      .replace(/HH/g, "__")
+      .replace(/hh/g, "__")
+      .replace(/mm/g, "__")
+      .replace(/ss/g, "__")
+      .replace(/a/g, "__");
+    
+    // Fill in what user has typed
+    let result = "";
+    let inputIndex = 0;
+    
+    for (let i = 0; i < mask.length && inputIndex < inputStr.length; i++) {
+      const maskChar = mask[i];
+      const inputChar = inputStr[inputIndex];
+      
+      if (maskChar === "_") {
+        // If user typed a separator, skip it and use the mask separator
+        if (inputChar && /[^\d]/.test(inputChar) && i + 1 < mask.length && /[^_]/.test(mask[i + 1])) {
+          result += mask[i + 1];
+          inputIndex++;
+          i++;
+        } else if (inputChar && /\d/.test(inputChar)) {
+          result += inputChar;
+          inputIndex++;
+        } else {
+          result += "_";
+        }
+      } else {
+        // Separator character
+        result += maskChar;
+        // Skip separator if user typed it
+        if (inputChar === maskChar) {
+          inputIndex++;
+        }
+      }
+    }
+    
+    // Add remaining mask
+    if (result.length < mask.length) {
+      result += mask.slice(result.length);
+    }
+    
+    return result;
+  };
+  
+  // Auto-format input with separators
+  const autoFormatInput = (input: string): { formatted: string; cursorPos: number } => {
+    const fullFormat = includeSeconds
+      ? `${dateFormat} ${timeFormat}`
+      : `${dateFormat} ${timeFormat.replace(":ss", "")}`;
+    
+    // Remove all non-digit characters for processing
+    const digitsOnly = input.replace(/\D/g, "");
+    
+    // Define format pattern
+    const patterns = {
+      "yyyy-MM-dd HH:mm:ss": [4, 2, 2, 2, 2, 2],
+      "yyyy-MM-dd HH:mm": [4, 2, 2, 2, 2],
+      "MM/dd/yyyy HH:mm": [2, 2, 4, 2, 2],
+      "MM/dd/yyyy hh:mm a": [2, 2, 4, 2, 2],
+      "dd/MM/yyyy HH:mm": [2, 2, 4, 2, 2],
+      "dd/MM/yyyy hh:mm a": [2, 2, 4, 2, 2],
+    };
+    
+    // Find matching pattern
+    let pattern = patterns[fullFormat as keyof typeof patterns];
+    if (!pattern) {
+      // Default pattern
+      pattern = [4, 2, 2, 2, 2];
+    }
+    
+    // Get separators from format
+    const separators = fullFormat.replace(/[yMdHhms]/g, "").split("").filter(char => char.trim());
+    
+    let formatted = "";
+    let digitIndex = 0;
+    let separatorIndex = 0;
+    
+    for (let i = 0; i < pattern.length; i++) {
+      const segmentLength = pattern[i];
+      const segment = digitsOnly.slice(digitIndex, digitIndex + segmentLength);
+      
+      if (segment) {
+        formatted += segment;
+        digitIndex += segmentLength;
+        
+        // Add separator if not last segment and we have more digits
+        if (i < pattern.length - 1 && digitIndex < digitsOnly.length && separatorIndex < separators.length) {
+          formatted += separators[separatorIndex];
+        }
+        separatorIndex++;
+      }
+    }
+    
+    return {
+      formatted,
+      cursorPos: formatted.length
+    };
+  };
+  
   // Parse input with multiple format attempts
   const parseInput = (input: string): Date | null => {
     if (!input.trim()) return null;
@@ -461,12 +618,26 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     return null;
   };
 
-  // Handle input change
+  // Handle input change with auto-formatting
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newInputValue = e.target.value;
-    setInputValue(newInputValue);
+    const target = e.target as HTMLInputElement;
+    const rawValue = target.value;
+    const selectionStart = target.selectionStart || 0;
     
-    if (!newInputValue.trim()) {
+    // Auto-format the input
+    const { formatted, cursorPos } = autoFormatInput(rawValue);
+    
+    setInputValue(formatted);
+    setCursorPosition(cursorPos);
+    
+    // Update cursor position after state update
+    setTimeout(() => {
+      if (target && target.setSelectionRange) {
+        target.setSelectionRange(cursorPos, cursorPos);
+      }
+    }, 0);
+    
+    if (!formatted.trim()) {
       setSelectedDate(null);
       onChange?.("");
       setError(null);
@@ -474,7 +645,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     }
 
     // Try to parse the input (but don't show errors while typing)
-    const parsed = parseInput(newInputValue);
+    const parsed = parseInput(formatted);
     if (parsed) {
       setSelectedDate(parsed);
       onChange?.(parsed.toISOString());
@@ -519,6 +690,21 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     setError(null);
   };
 
+  // Generate progressive placeholder based on mode
+  const getProgressivePlaceholder = (): string => {
+    if (!isInputFocused) {
+      if (mode === "date") {
+        return placeholder || dateFormat;
+      } else if (mode === "time") {
+        return placeholder || timeFormat;
+      } else {
+        return placeholder || `${dateFormat} ${timeFormat}`;
+      }
+    }
+    
+    return createFormatMask(inputValue);
+  };
+  
   // Focus handlers
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     setIsInputFocused(true);
@@ -552,6 +738,75 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     validateDateTime();
     onBlur?.(e);
   };
+  
+  // Handle separate field changes
+  const handleSeparateFieldChange = (field: keyof typeof separateFields, value: string) => {
+    const newFields = { ...separateFields, [field]: value };
+    setSeparateFields(newFields);
+    
+    // Try to construct date from separate fields
+    const { year, month, day, hour, minute, second, ampm } = newFields;
+    
+    if (year && month && day && hour && minute) {
+      try {
+        let hours = parseInt(hour);
+        if (use12Hour) {
+          if (ampm === "PM" && hours !== 12) hours += 12;
+          if (ampm === "AM" && hours === 12) hours = 0;
+        }
+        
+        const date = new Date(
+          parseInt(year),
+          parseInt(month) - 1,
+          parseInt(day),
+          hours,
+          parseInt(minute),
+          includeSeconds ? parseInt(second || "0") : 0
+        );
+        
+        if (isValid(date)) {
+          setSelectedDate(date);
+          onChange?.(date.toISOString());
+          setError(null);
+        }
+      } catch {
+        // Invalid date construction
+      }
+    }
+  };
+  
+  // Auto-advance to next field
+  const handleSeparateFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: keyof typeof separateFields, maxLength: number, nextFieldId?: string) => {
+    const target = e.target as HTMLInputElement;
+    const value = target.value;
+    
+    // Auto-advance when field is full
+    if (value.length >= maxLength && nextFieldId && /\d/.test(e.key)) {
+      e.preventDefault();
+      const nextField = document.getElementById(nextFieldId) as HTMLInputElement;
+      if (nextField) {
+        nextField.focus();
+        nextField.select();
+      }
+    }
+  };
+  
+  // Initialize separate fields from selected date
+  useEffect(() => {
+    if (selectedDate && useSeparateFields) {
+      setSeparateFields({
+        year: selectedDate.getFullYear().toString(),
+        month: (selectedDate.getMonth() + 1).toString().padStart(2, "0"),
+        day: selectedDate.getDate().toString().padStart(2, "0"),
+        hour: use12Hour 
+          ? (selectedDate.getHours() % 12 || 12).toString().padStart(2, "0")
+          : selectedDate.getHours().toString().padStart(2, "0"),
+        minute: selectedDate.getMinutes().toString().padStart(2, "0"),
+        second: selectedDate.getSeconds().toString().padStart(2, "0"),
+        ampm: selectedDate.getHours() >= 12 ? "PM" : "AM"
+      });
+    }
+  }, [selectedDate, useSeparateFields, use12Hour]);
 
   return (
     <div className={`ihub-datetime-picker-wrapper ${className}`}>
@@ -564,63 +819,236 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
           {required && <span className="ihub-required">*</span>}
         </label>
 
-        <div className="ihub-datetime-input-container">
-          <input
-            ref={inputRef}
-            type="text"
-            className="ihub-datetime-input"
-            value={isInputFocused ? inputValue : formatDisplayValue()}
-            onChange={handleInputChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            placeholder={placeholder || `${dateFormat} ${timeFormat}`}
-            disabled={disabled}
-            required={required}
-            name={name}
-            id={id}
-            aria-label={ariaLabel || label}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${id}-error` : undefined}
-            autoFocus={autoFocus}
-          />
-
-          <div className="ihub-datetime-icons">
-            {showCalendarIcon && (
-              <button
-                type="button"
-                className="ihub-datetime-icon-btn"
-                onClick={() => {
-                  if (!disabled) {
-                    setShowPicker(true);
-                    setActiveView("calendar");
+        {useSeparateFields ? (
+          /* Separate input fields */
+          <div ref={separateFieldsRef} className="ihub-datetime-separate-fields">
+            {/* Date fields - show for date and datetime modes */}
+            {(mode === "date" || mode === "datetime") && (
+              <div className="ihub-datetime-date-fields">
+              <input
+                type="text"
+                className="ihub-datetime-field ihub-datetime-year"
+                value={separateFields.year}
+                onChange={(e) => handleSeparateFieldChange("year", e.target.value.replace(/\D/g, "").slice(0, 4))}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "year", 4, `${id}-month`)}
+                placeholder="YYYY"
+                maxLength={4}
+                disabled={disabled}
+                id={`${id}-year`}
+                aria-label="Year"
+              />
+              <span className="ihub-datetime-separator">/</span>
+              <input
+                type="text"
+                className="ihub-datetime-field ihub-datetime-month"
+                value={separateFields.month}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  if (parseInt(val) <= 12 || val === "") {
+                    handleSeparateFieldChange("month", val);
                   }
                 }}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "month", 2, `${id}-day`)}
+                placeholder="MM"
+                maxLength={2}
                 disabled={disabled}
-                aria-label="Open calendar"
-              >
-                <CalendarMonthOutlinedIcon />
-              </button>
-            )}
-
-            {showTimeIcon && (
-              <button
-                type="button"
-                className="ihub-datetime-icon-btn"
-                onClick={() => {
-                  if (!disabled) {
-                    setShowPicker(true);
-                    setActiveView("time");
+                id={`${id}-month`}
+                aria-label="Month"
+              />
+              <span className="ihub-datetime-separator">/</span>
+              <input
+                type="text"
+                className="ihub-datetime-field ihub-datetime-day"
+                value={separateFields.day}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  if (parseInt(val) <= 31 || val === "") {
+                    handleSeparateFieldChange("day", val);
                   }
                 }}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "day", 2, `${id}-hour`)}
+                placeholder="DD"
+                maxLength={2}
                 disabled={disabled}
-                aria-label="Open time picker"
-              >
-                <AccessTimeIcon />
-              </button>
+                id={`${id}-day`}
+                aria-label="Day"
+              />
+            </div>
             )}
+            
+            {/* Time fields - show for time and datetime modes */}
+            {(mode === "time" || mode === "datetime") && (
+              <div className="ihub-datetime-time-fields">
+              <input
+                type="text"
+                className="ihub-datetime-field ihub-datetime-hour"
+                value={separateFields.hour}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  const maxHour = use12Hour ? 12 : 23;
+                  if (parseInt(val) <= maxHour || val === "") {
+                    handleSeparateFieldChange("hour", val);
+                  }
+                }}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "hour", 2, `${id}-minute`)}
+                placeholder={use12Hour ? "HH" : "HH"}
+                maxLength={2}
+                disabled={disabled}
+                id={`${id}-hour`}
+                aria-label="Hour"
+              />
+              <span className="ihub-datetime-separator">:</span>
+              <input
+                type="text"
+                className="ihub-datetime-field ihub-datetime-minute"
+                value={separateFields.minute}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  if (parseInt(val) < 60 || val === "") {
+                    handleSeparateFieldChange("minute", val);
+                  }
+                }}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "minute", 2, includeSeconds ? `${id}-second` : undefined)}
+                placeholder="MM"
+                maxLength={2}
+                disabled={disabled}
+                id={`${id}-minute`}
+                aria-label="Minute"
+              />
+              
+              {includeSeconds && (
+                <>
+                  <span className="ihub-datetime-separator">:</span>
+                  <input
+                    type="text"
+                    className="ihub-datetime-field ihub-datetime-second"
+                    value={separateFields.second}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                      if (parseInt(val) < 60 || val === "") {
+                        handleSeparateFieldChange("second", val);
+                      }
+                    }}
+                    placeholder="SS"
+                    maxLength={2}
+                    disabled={disabled}
+                    id={`${id}-second`}
+                    aria-label="Second"
+                  />
+                </>
+              )}
+              
+              {use12Hour && (
+                <select
+                  className="ihub-datetime-field ihub-datetime-ampm"
+                  value={separateFields.ampm}
+                  onChange={(e) => handleSeparateFieldChange("ampm", e.target.value as "AM" | "PM")}
+                  disabled={disabled}
+                  aria-label="AM/PM"
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              )}
+            </div>
+            )}
+            
+            <div className="ihub-datetime-icons">
+              {showCalendarIcon && (mode === "date" || mode === "datetime") && (
+                <button
+                  type="button"
+                  className="ihub-datetime-icon-btn"
+                  onClick={() => {
+                    if (!disabled) {
+                      setShowPicker(true);
+                      setActiveView("calendar");
+                    }
+                  }}
+                  disabled={disabled}
+                  aria-label="Open calendar"
+                >
+                  <CalendarMonthOutlinedIcon />
+                </button>
+              )}
+
+              {showTimeIcon && (mode === "time" || mode === "datetime") && (
+                <button
+                  type="button"
+                  className="ihub-datetime-icon-btn"
+                  onClick={() => {
+                    if (!disabled) {
+                      setShowPicker(true);
+                      setActiveView("time");
+                    }
+                  }}
+                  disabled={disabled}
+                  aria-label="Open time picker"
+                >
+                  <AccessTimeIcon />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Single input field */
+          <div className="ihub-datetime-input-container">
+            <input
+              ref={inputRef}
+              type="text"
+              className="ihub-datetime-input"
+              value={isInputFocused ? inputValue : formatDisplayValue()}
+              onChange={handleInputChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              placeholder={getProgressivePlaceholder()}
+              disabled={disabled}
+              required={required}
+              name={name}
+              id={id}
+              aria-label={ariaLabel || label}
+              aria-invalid={!!error}
+              aria-describedby={error ? `${id}-error` : undefined}
+              autoFocus={autoFocus}
+            />
+
+            <div className="ihub-datetime-icons">
+              {showCalendarIcon && (mode === "date" || mode === "datetime") && (
+                <button
+                  type="button"
+                  className="ihub-datetime-icon-btn"
+                  onClick={() => {
+                    if (!disabled) {
+                      setShowPicker(true);
+                      setActiveView("calendar");
+                    }
+                  }}
+                  disabled={disabled}
+                  aria-label="Open calendar"
+                >
+                  <CalendarMonthOutlinedIcon />
+                </button>
+              )}
+
+              {showTimeIcon && (mode === "time" || mode === "datetime") && (
+                <button
+                  type="button"
+                  className="ihub-datetime-icon-btn"
+                  onClick={() => {
+                    if (!disabled) {
+                      setShowPicker(true);
+                      setActiveView("time");
+                    }
+                  }}
+                  disabled={disabled}
+                  aria-label="Open time picker"
+                >
+                  <AccessTimeIcon />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Error message */}
         {error && (

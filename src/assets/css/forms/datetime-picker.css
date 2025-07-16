@@ -692,3 +692,199 @@
     transition: none;
   }
 }
+
+/* Separate fields styling */
+.ihub-datetime-separate-fields {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ihub-datetime-date-fields,
+.ihub-datetime-time-fields {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ihub-datetime-field {
+  border: 1px solid var(--LightGray, #dee2e6);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-family: var(--Nunito);
+  color: var(--Gunmetal, #2c333a);
+  background: var(--White, #ffffff);
+  transition: all 0.2s ease;
+  text-align: center;
+  min-width: 0;
+}
+
+.ihub-datetime-field:focus {
+  outline: none;
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
+
+.ihub-datetime-field:disabled {
+  background: var(--Gray, #f4f4f4);
+  color: var(--Rhythm, #69779b);
+  cursor: not-allowed;
+}
+
+.ihub-datetime-field::placeholder {
+  color: var(--Rhythm, #69779b);
+  font-size: 0.875rem;
+}
+
+/* Specific field widths */
+.ihub-datetime-year {
+  width: 70px;
+}
+
+.ihub-datetime-month,
+.ihub-datetime-day,
+.ihub-datetime-hour,
+.ihub-datetime-minute,
+.ihub-datetime-second {
+  width: 50px;
+}
+
+.ihub-datetime-ampm {
+  width: 60px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+}
+
+.ihub-datetime-ampm:focus {
+  outline: none;
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
+
+/* Custom dropdown arrow styling */
+.ihub-datetime-ampm option {
+  background: var(--White, #ffffff);
+  color: var(--Gunmetal, #2c333a);
+  padding: 8px 12px;
+}
+
+.ihub-datetime-ampm option:checked {
+  background: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+}
+
+.ihub-datetime-ampm option:hover {
+  background: var(--Magnolia, #f4f3fe);
+}
+
+/* Separators in separate fields */
+.ihub-datetime-separate-fields .ihub-datetime-separator {
+  font-size: 1rem;
+  color: var(--Gunmetal, #2c333a);
+  font-weight: 500;
+  user-select: none;
+  margin: 0 2px;
+}
+
+/* Enhanced placeholder styling for guided input */
+.ihub-datetime-input:focus::placeholder {
+  color: #b8b8b8;
+  opacity: 0.7;
+}
+
+/* Responsive separate fields */
+@media (max-width: 768px) {
+  .ihub-datetime-separate-fields {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .ihub-datetime-date-fields,
+  .ihub-datetime-time-fields {
+    justify-content: center;
+  }
+
+  .ihub-datetime-field {
+    padding: 10px 12px;
+    font-size: 1.1rem;
+  }
+
+  .ihub-datetime-year {
+    width: 80px;
+  }
+
+  .ihub-datetime-month,
+  .ihub-datetime-day,
+  .ihub-datetime-hour,
+  .ihub-datetime-minute,
+  .ihub-datetime-second {
+    width: 60px;
+  }
+
+  .ihub-datetime-ampm {
+    width: 70px;
+    height: 44px;
+  }
+}
+
+/* Dark mode support for separate fields */
+@media (prefers-color-scheme: dark) {
+  .ihub-datetime-field {
+    background: var(--DarkBackground, #2d3748);
+    border-color: var(--DarkBorder, #4a5568);
+    color: var(--DarkText, #e2e8f0);
+  }
+
+  .ihub-datetime-field:focus {
+    border-color: var(--DarkCyan, #00838f);
+    box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+  }
+
+  .ihub-datetime-field:disabled {
+    background: var(--DarkSecondary, #4a5568);
+    color: var(--DarkTextDisabled, #a0aec0);
+  }
+
+  .ihub-datetime-field::placeholder {
+    color: var(--DarkTextSecondary, #a0aec0);
+  }
+
+  .ihub-datetime-separate-fields .ihub-datetime-separator {
+    color: var(--DarkText, #e2e8f0);
+  }
+
+  .ihub-datetime-ampm {
+    background: var(--DarkBackground, #2d3748);
+    border-color: var(--DarkBorder, #4a5568);
+    color: var(--DarkText, #e2e8f0);
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23e2e8f0" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+  }
+
+  .ihub-datetime-ampm option {
+    background: var(--DarkBackground, #2d3748);
+    color: var(--DarkText, #e2e8f0);
+  }
+
+  .ihub-datetime-ampm option:checked {
+    background: var(--DarkCyan, #00838f);
+    color: var(--White, #ffffff);
+  }
+
+  .ihub-datetime-ampm option:hover {
+    background: var(--DarkSecondary, #4a5568);
+  }
+}
