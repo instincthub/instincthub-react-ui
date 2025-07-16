@@ -596,3 +596,67 @@ export interface TimePickerPropsType {
   /** Accessibility label for screen readers */
   ariaLabel?: string;
 }
+
+/**
+ * Props for the DateTimePicker component
+ */
+export interface DateTimePickerPropsType {
+  /** Input label */
+  label: string;
+  /** Current datetime value in ISO format (YYYY-MM-DDTHH:mm:ss) */
+  value?: string;
+  /** Handler called when datetime changes */
+  onChange?: (dateTime: string) => void;
+  /** Whether the datetime input is required */
+  required?: boolean;
+  /** Minimum allowed date in ISO format */
+  minDate?: string;
+  /** Maximum allowed date in ISO format */
+  maxDate?: string;
+  /** Minimum allowed time in HH:mm format */
+  minTime?: string;
+  /** Maximum allowed time in HH:mm format */
+  maxTime?: string;
+  /** Array of disabled dates in ISO format */
+  disabledDates?: string[];
+  /** Array of disabled times in HH:mm format */
+  disabledTimes?: string[];
+  /** Whether to use 12-hour format (default: false) */
+  use12Hour?: boolean;
+  /** Whether to include seconds in time selection */
+  includeSeconds?: boolean;
+  /** Time step in minutes for time selection (default: 30) */
+  timeStep?: number;
+  /** Date display format (default: "yyyy-MM-dd") */
+  dateFormat?: string;
+  /** Time display format (default: "HH:mm") */
+  timeFormat?: string;
+  /** Locale for date formatting (default: "en-US") */
+  locale?: string;
+  /** Placeholder text for the input */
+  placeholder?: string;
+  /** Custom error message to display */
+  errorMessage?: string;
+  /** Additional CSS classes to apply */
+  className?: string;
+  /** Name attribute for form submission */
+  name?: string;
+  /** Unique identifier for the input */
+  id?: string;
+  /** Whether the input is disabled */
+  disabled?: boolean;
+  /** Whether to show the calendar icon */
+  showCalendarIcon?: boolean;
+  /** Whether to show the time icon */
+  showTimeIcon?: boolean;
+  /** Whether to show quick action buttons */
+  showQuickActions?: boolean;
+  /** Accessibility label for screen readers */
+  ariaLabel?: string;
+  /** Whether to focus the input on mount */
+  autoFocus?: boolean;
+  /** Focus event handler */
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  /** Blur event handler */
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+}

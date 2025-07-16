@@ -68,6 +68,87 @@
     "examples": []
   },
   {
+    "name": "DateTimePicker",
+    "description": "Modern date and time picker with calendar popup",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DateTimePicker.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form",
+      "picker",
+      "calendar",
+      "datetime"
+    ],
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": true,
+        "description": "Label text for the input field"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "description": "Current datetime value in ISO format"
+      },
+      {
+        "name": "onChange",
+        "type": "function",
+        "required": false,
+        "description": "Callback function called when datetime changes"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether the field is required"
+      },
+      {
+        "name": "use12Hour",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether to use 12-hour format"
+      },
+      {
+        "name": "includeSeconds",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether to include seconds in time selection"
+      },
+      {
+        "name": "timeStep",
+        "type": "number",
+        "required": false,
+        "description": "Time step in minutes"
+      },
+      {
+        "name": "minDate",
+        "type": "string",
+        "required": false,
+        "description": "Minimum allowed date"
+      },
+      {
+        "name": "maxDate",
+        "type": "string",
+        "required": false,
+        "description": "Maximum allowed date"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether the input is disabled"
+      }
+    ],
+    "examples": [
+      "import { DateTimePicker } from '@instincthub/react-ui';\n\nconst [dateTime, setDateTime] = useState('');\n\n<DateTimePicker\n  label=\"Select Date and Time\"\n  value={dateTime}\n  onChange={(value) => setDateTime(value)}\n/>",
+      "import { DateTimePicker } from '@instincthub/react-ui';\n\n<DateTimePicker\n  label=\"Meeting Time\"\n  value={dateTime}\n  onChange={(value) => setDateTime(value)}\n  use12Hour={true}\n  required\n  minDate=\"2024-01-01\"\n  maxDate=\"2024-12-31\"\n  timeStep={15}\n/>"
+    ]
+  },
+  {
     "name": "DropFile",
     "description": "File drag and drop component",
     "category": "Forms",

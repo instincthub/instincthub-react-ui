@@ -7,7 +7,7 @@
 }
 
 .ihub-time-wrapper.ihub-is_invalid .ihub-time-input-container {
-  border-color: var(--Red, #dc3545);
+  border-color: var(--Danger, #ea5f5e);
 }
 
 /* Time input container */
@@ -16,24 +16,25 @@
   align-items: center;
   border: var(--borderDefault);
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 10px 15px;
   background: var(--White, #ffffff);
   cursor: pointer;
   transition: border-color 0.3s ease;
   position: relative;
+  font-family: var(--Nunito);
 }
 
 .ihub-time-input-container:hover {
-  border-color: var(--Blue, #007bff);
+  border-color: var(--DarkCyan, #00838f);
 }
 
 .ihub-time-input-container:focus-within {
-  border-color: var(--Blue, #007bff);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
 }
 
 .ihub-time-input-container.time-err {
-  border-color: var(--Red, #dc3545);
+  border-color: var(--Danger, #ea5f5e);
 }
 
 /* Individual time input fields */
@@ -92,17 +93,17 @@
 }
 
 .ihub-ampm-btn:hover {
-  background: var(--LightBlue, #e3f2fd);
+  background: var(--Magnolia, #f4f3fe);
 }
 
 .ihub-ampm-btn.active {
-  background: var(--Blue, #007bff);
+  background: var(--DarkCyan, #00838f);
   color: var(--White, #ffffff);
 }
 
 .ihub-ampm-btn:disabled {
-  background: var(--LightGray, #f8f9fa);
-  color: var(--Gray, #6c757d);
+  background: var(--Gray, #f4f4f4);
+  color: var(--Rhythm, #69779b);
   cursor: not-allowed;
 }
 
@@ -117,13 +118,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--Gray, #6c757d);
+  color: var(--Rhythm, #69779b);
   transition: all 0.2s ease;
 }
 
 .ihub-time-picker-toggle:hover {
-  background: var(--LightGray, #f8f9fa);
-  color: var(--Blue, #007bff);
+  background: var(--Magnolia, #f4f3fe);
+  color: var(--DarkCyan, #00838f);
 }
 
 .ihub-time-picker-toggle:disabled {
@@ -136,7 +137,6 @@
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
   background: var(--White, #ffffff);
   border: 1px solid var(--LightGray, #dee2e6);
   border-radius: 4px;
@@ -144,17 +144,19 @@
   z-index: 1000;
   margin-top: 4px;
   max-height: 300px;
+  max-width: 200px;
+  min-width: 150px;
   overflow: hidden;
 }
 
 /* Time picker header */
 .ihub-time-picker-header {
   padding: 12px 16px;
-  background: var(--LightGray, #f8f9fa);
+  background: var(--Magnolia, #f4f3fe);
   border-bottom: 1px solid var(--LightGray, #dee2e6);
   font-weight: 600;
   font-family: var(--Nunito);
-  color: var(--Gunmetal);
+  color: var(--Gunmetal, #2c333a);
   font-size: 0.875rem;
 }
 
@@ -171,16 +173,16 @@
   cursor: pointer;
   font-family: var(--Nunito);
   font-size: 0.875rem;
-  color: var(--Gunmetal);
+  color: var(--Gunmetal, #2c333a);
   transition: background-color 0.2s ease;
 }
 
 .ihub-time-option:hover {
-  background: var(--LightBlue, #e3f2fd);
+  background: var(--Magnolia, #f4f3fe);
 }
 
 .ihub-time-option.selected {
-  background: var(--Blue, #007bff);
+  background: var(--DarkCyan, #00838f);
   color: var(--White, #ffffff);
 }
 
@@ -202,12 +204,13 @@
   font-family: var(--Nunito);
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--Gunmetal);
+  color: var(--Gunmetal, #2c333a);
 }
 
 .ihub-time-action-btn:hover {
-  background: var(--LightGray, #f8f9fa);
-  border-color: var(--Gray, #6c757d);
+  background: var(--Magnolia, #f4f3fe);
+  border-color: var(--DarkCyan, #00838f);
+  color: var(--DarkCyan, #00838f);
 }
 
 /* Quick action links */
@@ -220,7 +223,7 @@
 
 .ihub-set-now,
 .ihub-clear-time {
-  color: var(--Blue, #007bff);
+  color: var(--Gunmetal, #2c333a);
   cursor: pointer;
   font-family: var(--Nunito);
   transition: color 0.2s ease;
@@ -229,7 +232,7 @@
 
 .ihub-set-now:hover,
 .ihub-clear-time:hover {
-  color: var(--DarkBlue, #0056b3);
+  color: var(--TiffanyBlue, #0fabbc);
   text-decoration: underline;
 }
 
@@ -240,7 +243,7 @@
 
 /* Error message */
 .ihub-error-message {
-  color: var(--Red, #dc3545);
+  color: var(--Danger, #ea5f5e);
   font-size: 0.75rem;
   font-family: var(--Nunito);
   margin-top: 4px;
@@ -255,7 +258,7 @@
   transition: all 0.3s ease;
   pointer-events: none;
   font-size: 1rem;
-  color: var(--Gunmetal);
+  color: var(--Gunmetal, #2c333a);
   font-family: var(--Nunito);
   background: var(--White, #ffffff);
   padding: 0 4px;
@@ -265,17 +268,15 @@
 .ihub-time-wrapper .ihub-time-input-container:focus-within + .ihub-text-label,
 .ihub-time-wrapper.ihub-value .ihub-text-label {
   top: -10px;
-  font-size: 0.75rem;
-  color: var(--Blue, #007bff);
 }
 
 .ihub-time-wrapper.ihub-is_invalid .ihub-text-label {
-  color: var(--Red, #dc3545);
+  color: var(--Danger, #ea5f5e);
 }
 
 /* Required asterisk */
 .ihub-required {
-  color: var(--Red, #dc3545);
+  color: var(--Danger, #ea5f5e);
   margin-left: 2px;
 }
 
@@ -290,12 +291,12 @@
     max-width: 300px;
     max-height: 80vh;
   }
-  
+
   .ihub-time-input {
     width: 35px;
     font-size: 0.875rem;
   }
-  
+
   .ihub-time-hours {
     width: 40px;
   }
@@ -307,34 +308,34 @@
     background: var(--DarkBackground, #2d3748);
     border-color: var(--DarkBorder, #4a5568);
   }
-  
+
   .ihub-time-picker-container {
     background: var(--DarkBackground, #2d3748);
     border-color: var(--DarkBorder, #4a5568);
   }
-  
+
   .ihub-time-picker-header {
     background: var(--DarkSecondary, #4a5568);
     color: var(--DarkText, #e2e8f0);
   }
-  
+
   .ihub-time-option {
     color: var(--DarkText, #e2e8f0);
   }
-  
+
   .ihub-time-option:hover {
     background: var(--DarkHover, #4a5568);
   }
-  
+
   .ihub-text-label {
     color: var(--DarkText, #e2e8f0);
     background: var(--DarkBackground, #2d3748);
   }
-  
+
   .ihub-time-input {
     color: var(--DarkText, #e2e8f0);
   }
-  
+
   .ihub-time-separator {
     color: var(--DarkText, #e2e8f0);
   }
@@ -342,17 +343,17 @@
 
 /* Focus indicators for accessibility */
 .ihub-time-input:focus {
-  outline: 2px solid var(--Blue, #007bff);
+  outline: 2px solid var(--DarkCyan, #00838f);
   outline-offset: 1px;
 }
 
 .ihub-ampm-btn:focus {
-  outline: 2px solid var(--Blue, #007bff);
+  outline: 2px solid var(--DarkCyan, #00838f);
   outline-offset: 1px;
 }
 
 .ihub-time-picker-toggle:focus {
-  outline: 2px solid var(--Blue, #007bff);
+  outline: 2px solid var(--DarkCyan, #00838f);
   outline-offset: 1px;
 }
 

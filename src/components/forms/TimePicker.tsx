@@ -385,11 +385,11 @@ const TimePicker: React.FC<TimePickerPropsType> = ({
   return (
     <div className="ihub-wrapper">
       <div
-        className={`ihub-time-wrapper ${className} ${
+        className={`ihub-time-wrapper ihub-value ${className} ${
           error ? "ihub-is_invalid" : ""
         }`}
       >
-        <label className="ihub-text-label" htmlFor={id || name}>
+        <label className="ihub-text-label ihub-fs-sm ihub-text-gunmetal" htmlFor={id || name}>
           {label}
           {required && <span className="ihub-required">*</span>}
         </label>

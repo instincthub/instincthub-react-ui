@@ -87,6 +87,11 @@ interface InputTextProps {
    * The id of the input
    */
   id?: string;
+
+  /**
+   * Whether to activate the floating label
+   */
+  activeLabel?: boolean;
 }
 
 /**
@@ -112,6 +117,7 @@ interface InputTextProps {
  * @prop {string} helperText - Helper text or notes to display below the input
  * @prop {string} note - Note text to display below the input
  * @prop {string} id - The id of the input
+ * @prop {boolean} activeLabel - Whether to activate the floating label
  */
 const InputText: React.FC<InputTextProps> = ({
   label,
@@ -131,15 +137,21 @@ const InputText: React.FC<InputTextProps> = ({
   helperText,
   note,
   id,
+  activeLabel = false,
 }) => {
   const [inputValue, setInputValue] = useState<string>();
-  const [hasValue, setHasValue] = useState<boolean>();
+  const [hasValue, setHasValue] = useState<boolean>(activeLabel);
 
   useEffect(() => {
+    if (activeLabel) {
+      setHasValue(true);
+    } else {
+      setHasValue(!!value);
+    }
+
     if (value !== inputValue) {
       setInputValue(value);
     }
-    setHasValue(!!value);
   }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

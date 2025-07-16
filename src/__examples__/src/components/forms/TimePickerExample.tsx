@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { TimePicker } from "../../../../index";
+import TimePicker from "@/components/forms/TimePicker";
+import { CodeDisplay } from "@/components/ui";
 
 const TimePickerExample: React.FC = () => {
   const [simpleTime, setSimpleTime] = useState<string>("");
@@ -12,16 +13,21 @@ const TimePickerExample: React.FC = () => {
 
   // Disabled times for the example (lunch break and break times)
   const disabledTimes = [
-    "12:00", "12:15", "12:30", "12:45", "13:00", // Lunch break
-    "15:00", "15:15", // Afternoon break
+    "12:00",
+    "12:15",
+    "12:30",
+    "12:45",
+    "13:00", // Lunch break
+    "15:00",
+    "15:15", // Afternoon break
   ];
 
   return (
     <div className="ihub-container">
-      <h2>Time Picker Examples</h2>
+      <h2 className="ihub-fs-lg">Time Picker Examples</h2>
 
       <div className="ihub-example-section">
-        <h3>Simple Time Input (24-hour format)</h3>
+        <h3 className="ihub-fs-md">Simple Time Input (24-hour format)</h3>
         <TimePicker
           label="Select a time"
           value={simpleTime}
@@ -36,7 +42,7 @@ const TimePickerExample: React.FC = () => {
       </div>
 
       <div className="ihub-example-section">
-        <h3>12-Hour Format with AM/PM</h3>
+        <h3 className="ihub-fs-md">12-Hour Format with AM/PM</h3>
         <TimePicker
           label="Appointment time"
           value={time12Hour}
@@ -51,7 +57,7 @@ const TimePickerExample: React.FC = () => {
       </div>
 
       <div className="ihub-example-section">
-        <h3>Time with Seconds</h3>
+        <h3 className="ihub-fs-md">Time with Seconds</h3>
         <TimePicker
           label="Precise time"
           value={timeWithSeconds}
@@ -66,7 +72,7 @@ const TimePickerExample: React.FC = () => {
       </div>
 
       <div className="ihub-example-section">
-        <h3>Time with Range Restrictions</h3>
+        <h3 className="ihub-fs-md">Time with Range Restrictions</h3>
         <TimePicker
           label="Business hours"
           value={timeWithRange}
@@ -81,12 +87,17 @@ const TimePickerExample: React.FC = () => {
           Selected Time: <strong>{timeWithRange || "None"}</strong>
         </p>
         <p className="ihub-example-note">
-          <small>Restricted to 9 AM - 5 PM, with lunch break (12:00-13:00) and afternoon break (15:00-15:15) disabled</small>
+          <small>
+            Restricted to 9 AM - 5 PM, with lunch break (12:00-13:00) and
+            afternoon break (15:00-15:15) disabled
+          </small>
         </p>
       </div>
 
       <div className="ihub-example-section">
-        <h3>Time with Custom Step (15-minute intervals)</h3>
+        <h3 className="ihub-fs-md">
+          Time with Custom Step (15-minute intervals)
+        </h3>
         <TimePicker
           label="Meeting time"
           value={timeWithStep}
@@ -106,7 +117,7 @@ const TimePickerExample: React.FC = () => {
       </div>
 
       <div className="ihub-example-section">
-        <h3>Disabled Time Picker</h3>
+        <h3 className="ihub-fs-md">Disabled Time Picker</h3>
         <TimePicker
           label="Disabled time picker"
           value="14:30"
@@ -117,7 +128,7 @@ const TimePickerExample: React.FC = () => {
       </div>
 
       <div className="ihub-example-section">
-        <h3>Time Picker without Dropdown</h3>
+        <h3 className="ihub-fs-md">Time Picker without Dropdown</h3>
         <TimePicker
           label="Manual time entry"
           value=""
@@ -129,10 +140,11 @@ const TimePickerExample: React.FC = () => {
         />
       </div>
 
-      <div className="ihub-code-example">
-        <h3>Usage Examples</h3>
-        <pre>
-{`// Basic usage
+      <div className="ihub-mt-10">
+        <h3 className="ihub-fs-md">Usage Examples</h3>
+        <CodeDisplay
+          language="tsx"
+          code={`// Basic usage
 <TimePicker
   label="Select time"
   value={time}
@@ -159,7 +171,7 @@ const TimePickerExample: React.FC = () => {
   step={15}
   disabledTimes={["12:00", "12:15", "12:30"]}
 />`}
-        </pre>
+        />
       </div>
     </div>
   );

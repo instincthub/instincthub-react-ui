@@ -44,6 +44,12 @@ const ComponentLists = () => {
       repo_path: "src/components/forms/DateTimeInput.tsx",
     },
     {
+      name: "DateTimePicker",
+      description: "Modern date and time picker with calendar popup",
+      category: "Forms",
+      repo_path: "src/components/forms/DateTimePicker.tsx",
+    },
+    {
       name: "DropFile",
       description: "File drag and drop component",
       category: "Forms",
