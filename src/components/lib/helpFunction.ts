@@ -655,9 +655,41 @@ export const reqOptions = (
   channel: string | null = null,
   auth_sk: boolean = false
 ): RequestOptions => {
-  const sk_header = process.env.NEXT_PUBLIC_INSTINCTHUB_SKH_KEY || "";
+  // InstinctHub SK (for authentication)
+  const ihub_skn = process.env.NEXT_PUBLIC_INSTINCTHUB_SKH_KEY || "";
+  const ihub_skv = process.env.NEXT_PUBLIC_INSTINCTHUB_SK_HEADER || "";
+  const ihubKey =
+    ihub_skn && ihub_skv
+      ? {
+          [ihub_skn]: ihub_skv,
+        }
+      : {};
+
+  // Leadboard SK (for tracking)
+  const lead_skn = process.env.NEXT_PUBLIC_LEADBOARD_SK_NAME || "";
+  const lead_skv = process.env.NEXT_PUBLIC_LEADBOARD_SK_VALUE || "";
+  const leadKey =
+    lead_skn && lead_skv
+      ? {
+          [lead_skn]: lead_skv,
+        }
+      : {};
+
+  // InstinctHub SK (for authentication)
+  const sk_key = process.env.NEXT_PUBLIC_INSTINCTHUB_SK_KEY || "";
+  const sk_value = process.env.NEXT_PUBLIC_INSTINCTHUB_AUTH_SECRET ?? "";
+  const authKey =
+    sk_key && sk_value && auth_sk
+      ? {
+          [sk_key]: sk_value,
+        }
+      : {};
+
+  // Combine all SKs
   const headers: Record<string, string> = {
-    [sk_header]: process.env.NEXT_PUBLIC_INSTINCTHUB_SK_HEADER ?? "",
+    ...leadKey,
+    ...ihubKey,
+    ...authKey,
   };
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -665,10 +697,6 @@ export const reqOptions = (
   if (content_type === "json") headers["Content-Type"] = "application/json";
   if (content_type === "form-data")
     headers["Content-Type"] = "multipart/form-data";
-  if (auth_sk) {
-    const sk_key = process.env.NEXT_PUBLIC_INSTINCTHUB_SK_KEY || "";
-    headers[sk_key] = process.env.NEXT_PUBLIC_INSTINCTHUB_AUTH_SECRET ?? "";
-  }
 
   const request: RequestOptions = { method, headers, redirect: "follow" };
   if (data) request["body"] = data;

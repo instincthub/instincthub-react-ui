@@ -6,7 +6,7 @@ import Link from "next/link";
  */
 export interface ActionDropdownItem {
   /** Text label to display for the dropdown item */
-  label: string;
+  label: string | React.ReactNode;
   /** Click handler function */
   onClick?: () => void;
   /** Link destination if the dropdown item is a link */
@@ -24,7 +24,7 @@ export interface ActionDropdownItem {
  */
 interface ActionProps {
   /** Text label to display in the action element */
-  label: string;
+  label: string | React.ReactNode;
   /** Click handler function */
   onClick?: () => void;
   /** Link destination if the action is a link */
@@ -58,8 +58,19 @@ interface ActionProps {
 }
 
 /**
+ * Action component
  * A versatile Action component that can be rendered as a button or link
  * with various styles, sizes, icon options, and dropdown functionality
+ * @example
+ * <Action
+ *  label="Click Me"
+ * onClick={() => alert('Action clicked!')}
+ * variant="primary"
+ * size="medium"
+ * fullWidth={false}
+ * disabled={false}
+ * iconBefore={<Icon />}
+ * />
  */
 const Action: React.FC<ActionProps> = ({
   label,

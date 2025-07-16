@@ -118,9 +118,9 @@ const SignUpFormExample: React.FC<SignUpFormExampleProps> = () => {
         />
         <TextField name="mobile" type="tel" label="Phone *" required={true} />
         <DateInput
-          labels="Date of birth"
-          names="date_of_birth"
-          requireds={true}
+          label="Date of birth"
+          name="date_of_birth"
+          required={true}
           controls={false}
         />
 

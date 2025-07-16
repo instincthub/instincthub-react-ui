@@ -33,23 +33,31 @@ export default function SessionExpiresLogout({
   const [validationState, setValidationState] =
     useState<ValidationState>("loading");
 
+  const user = session?.user?.name;
+  const token = user?.token || session?.accessToken;
+
   useEffect(() => {
     let isMounted = true;
 
     async function validateSession() {
       // No session case
+      // Skip further validation if disabled
+      if (disableValidation) {
+        if (isMounted) setValidationState("valid");
+        return;
+      }
+
       if (!session) {
         if (isMounted) setValidationState("invalid");
         return;
       }
 
       try {
-        const user = session?.user?.name;
         const sessionExpiry = new Date(session?.expires);
 
         // Check session expiration
-        if (sessionExpiry < new Date() || !user?.uuid) {
-          console.warn("Session expired or invalid user UUID");
+        if (sessionExpiry < new Date() || !token) {
+          console.warn("Session expired or token is missing");
           if (isMounted) {
             setValidationState("invalid");
             if (onSessionInvalid) onSessionInvalid();
@@ -57,16 +65,10 @@ export default function SessionExpiresLogout({
           return;
         }
 
-        // Skip further validation if disabled
-        if (disableValidation) {
-          if (isMounted) setValidationState("valid");
-          return;
-        }
-
         // Validate token with API
         const funcParams = {
-          path: `auth/skills/validate-user-token/?access_token=${user?.token}&user_uuid=${user?.uuid}`,
-          token: user?.token,
+          path: `auth/skills/validate-user-token/?access_token=${token}&user_uuid=${user?.uuid}`,
+          token: token,
           auth_sk: true,
         };
 

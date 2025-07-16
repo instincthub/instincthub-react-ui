@@ -232,7 +232,6 @@ export function IHubTableServer<T extends object>({
         const options = reqOptions("GET", null, token);
         const url = `${API_HOST_URL}${endpointPath}?${apiParams.toString()}`;
 
-        console.log("url: ", url, token);
         // Make API request
         const response = await fetch(url, options);
         const result = await response.json();

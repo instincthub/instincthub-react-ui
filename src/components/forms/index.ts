@@ -45,6 +45,7 @@ export { default as PhoneNumberInput } from "./PhoneNumberInput";
 export { default as RadioField } from "./RadioField";
 export { default as RadioSimple } from "./RadioSimple";
 export { default as ReactTimeAgo } from "./ReactTimeAgo";
+export { default as TimePicker } from "./TimePicker";
 // Upload components
 export { default as FileUploader } from "./uploads/FileUploader";
 export { default as IhubFileUploader } from "./uploads/IhubFileUploader";

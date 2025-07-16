@@ -83,7 +83,7 @@ export interface SessionUserNameType {
  * Session data user information
  */
 export interface SessionUserType {
-  name?: SessionUserNameType;
+  name?: any;
   track?: boolean;
   profile_id?: string;
   verified?: boolean;
@@ -98,6 +98,8 @@ export interface SessionUserType {
 export interface SessionType {
   expires: string;
   user?: SessionUserType;
+  accessToken?: string;
+  refreshToken?: string;
   [key: string]: any;
 }
 
@@ -549,4 +551,48 @@ export interface QueryContextType {
   key: string;
   value?: string | number | boolean | null;
   action: "add" | "update" | "remove" | "toggle" | "clear";
+}
+
+/**
+ * Props for the TimePicker component
+ */
+export interface TimePickerPropsType {
+  /** Input label */
+  label: string;
+  /** Current time value in HH:MM format or HH:MM:SS format */
+  value?: string;
+  /** Handler called when time changes */
+  onChange?: (time: string) => void;
+  /** Whether the time input is required */
+  required?: boolean;
+  /** Whether to use 12-hour format (default: false for 24-hour) */
+  use12Hour?: boolean;
+  /** Whether to include seconds in time selection */
+  includeSeconds?: boolean;
+  /** Time step in minutes (default: 1) */
+  step?: number;
+  /** Minimum allowed time in HH:MM format */
+  minTime?: string;
+  /** Maximum allowed time in HH:MM format */
+  maxTime?: string;
+  /** Array of disabled times in HH:MM format */
+  disabledTimes?: string[];
+  /** Error message to display */
+  errorMessage?: string;
+  /** Additional class name */
+  className?: string;
+  /** Name attribute for the input field */
+  name?: string;
+  /** ID attribute for the input field */
+  id?: string;
+  /** Placeholder text */
+  placeholder?: string;
+  /** Whether the input is disabled */
+  disabled?: boolean;
+  /** Whether to show the time picker dropdown */
+  showTimePicker?: boolean;
+  /** Whether to show quick time selection buttons */
+  showQuickActions?: boolean;
+  /** Accessibility label for screen readers */
+  ariaLabel?: string;
 }

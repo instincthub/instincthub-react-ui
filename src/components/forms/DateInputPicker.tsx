@@ -12,7 +12,39 @@ import React, {
 } from "react";
 
 /**
- * A reusable date input component with calendar picker
+ * A comprehensive date input component with built-in calendar picker, date validation, and optional time selection.
+ * Supports keyboard navigation, accessibility features, date range restrictions, and disabled dates.
+ * Can be used for both date-only and datetime input scenarios.
+ * @example
+ * ```tsx
+ * <DateInputPicker
+ *   label="Select Date"
+ *   value={selectedDate}
+ *   onChange={handleDateChange}
+ *   required={true}
+ *   minDate="2024-01-01"
+ *   maxDate="2024-12-31"
+ * />
+ * ```
+ * @prop {string} label - The label text for the input field
+ * @prop {string} value - The current date value in ISO format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)
+ * @prop {function} onChange - Callback function called when date changes, receives the new date string
+ * @prop {boolean} required - Whether the field is required for form validation
+ * @prop {string} minDate - Minimum allowed date in ISO format
+ * @prop {string} maxDate - Maximum allowed date in ISO format
+ * @prop {string[]} disabledDates - Array of disabled dates in ISO format
+ * @prop {string} errorMessage - Custom error message to display
+ * @prop {string} className - Additional CSS classes to apply
+ * @prop {string} displayFormat - Date display format (default: "YYYY-MM-DD")
+ * @prop {string} locale - Locale for date formatting (default: "en-US")
+ * @prop {boolean} includeTime - Whether to include time selection
+ * @prop {string} name - Name attribute for form submission
+ * @prop {string} id - Unique identifier for the input
+ * @prop {string} placeholder - Placeholder text for the input
+ * @prop {boolean} disabled - Whether the input is disabled
+ * @prop {boolean} showCalendarPicker - Whether to show the calendar picker icon
+ * @prop {boolean} showQuickActions - Whether to show Today/Clear quick action buttons
+ * @prop {string} ariaLabel - Accessibility label for screen readers
  */
 const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
   label,

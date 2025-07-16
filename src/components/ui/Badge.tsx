@@ -18,7 +18,7 @@ export interface BadgeProps {
 
   /**
    * The visual style variant of the badge
-   * @default 'default'
+   * @default 'default | default primary | success | warning | danger | info'
    */
   variant?: BadgeVariant;
 
@@ -125,3 +125,59 @@ const Badge: React.FC<BadgeProps> = ({
 };
 
 export default Badge;
+
+/**
+ * @example
+ * // Basic usage
+ * <Badge>New</Badge>
+ *
+ * @example
+ * // Different variants
+ * <Badge variant="primary">Primary</Badge>
+ * <Badge variant="success">Success</Badge>
+ * <Badge variant="warning">Warning</Badge>
+ * <Badge variant="danger">Danger</Badge>
+ * <Badge variant="info">Info</Badge>
+ *
+ * @example
+ * // Different sizes
+ * <Badge size="small">Small</Badge>
+ * <Badge size="medium">Medium</Badge>
+ * <Badge size="large">Large</Badge>
+ *
+ * @example
+ * // Different shapes
+ * <Badge shape="rounded">Rounded</Badge>
+ * <Badge shape="pill">Pill</Badge>
+ * <Badge shape="square">Square</Badge>
+ *
+ * @example
+ * // Outlined style
+ * <Badge variant="primary" outlined>Outlined</Badge>
+ *
+ * @example
+ * // Count badges
+ * <Badge count={5} variant="danger" />
+ * <Badge count={150} maxCount={99} variant="primary" />
+ *
+ * @example
+ * // Dot badge (status indicator)
+ * <Badge dot variant="success" />
+ *
+ * @example
+ * // Clickable badge
+ * <Badge
+ *   variant="primary"
+ *   onClick={(e) => console.log('Badge clicked')}
+ * >
+ *   Clickable
+ * </Badge>
+ *
+ * @example
+ * // Usage recommendations:
+ * // 1. For status indicators: use 'dot' prop with appropriate variant
+ * // 2. For notification counts: use 'count' prop with 'danger' or 'primary' variant
+ * // 3. For labels/tags: use text content with 'pill' shape
+ * // 4. For action badges: add onClick handler and use 'primary' variant
+ * // 5. For subtle indicators: use 'outlined' prop with muted variants
+ */

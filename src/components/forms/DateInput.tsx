@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 
 interface DateInputProps {
   label: string;
-  names: string;
   name?: string;
   maxAge?: number;
   minAge?: number;
@@ -54,8 +53,8 @@ const DateInput: React.FC<DateInputProps> = (props) => {
   useEffect(() => {
     const strDate = `${year}-${month}-${day}`;
     setDate(strDate);
-    if (props.inputEvent) props.inputEvent(props.names, strDate);
-  }, [year, month, day, props.names, props.inputEvent]);
+    if (props.inputEvent && props.name) props.inputEvent(props.name, strDate);
+  }, [year, month, day, props.name, props.inputEvent]);
 
   const handleDayChange = (event: ChangeEvent<HTMLInputElement>) => {
     // Remove any non-numeric characters
@@ -126,7 +125,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
     <div className={props.name}>
       <div className="field">
         <h5 className="ihub-mt-3 ihub-mb-1">{props.label}</h5>
-        <input type="text" hidden defaultValue={date} name={props.names} />
+        <input type="text" hidden defaultValue={date} name={props.name} />
         <div
           className={`ihub-date-input-container ${errMsg ? "date-err" : ""}`}
         >

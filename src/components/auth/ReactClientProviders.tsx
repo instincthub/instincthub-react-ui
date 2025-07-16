@@ -19,6 +19,7 @@ interface ReactClientProviders {
   allowTimeTracker?: boolean;
   allowChangeStyleVariable?: boolean;
   primaryColor?: string;
+  disableValidation?: boolean;
 }
 
 /**
@@ -50,13 +51,14 @@ export default function ReactClientProviders({
   allowTimeTracker = false,
   allowChangeStyleVariable = false,
   primaryColor = "#007bff",
+  disableValidation = false,
 }: ReactClientProviders) {
   const handle = session?.user?.name?.channels?.active?.channel?.username;
   return (
     <SessionProviders>
       <Provider store={reduxStore}>
         <CursorProvider enabled={true}>
-          <SessionExpiresLogout session={session}>
+          <SessionExpiresLogout session={session} disableValidation={disableValidation}>
             <DarkModeProvider>
               <SessionHandleProvider>
                 {allowTimeTracker && (

@@ -1,0 +1,28 @@
+{
+  "name": "@instincthub/react-ui-docs-generator",
+  "version": "1.0.0",
+  "description": "Static documentation generator for InstinctHub React UI components",
+  "main": "dist/generate-docs.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "generate": "npm run build && node dist/generate-docs.js",
+    "export-enhanced": "npm run build && node dist/export-enhanced-data.js",
+    "generate-all": "npm run generate && npm run export-enhanced",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist static-docs"
+  },
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "documentation",
+    "react",
+    "components",
+    "instincthub",
+    "static-docs"
+  ],
+  "author": "InstinctHub",
+  "license": "MIT"
+}

@@ -1,0 +1,1697 @@
+[
+  {
+    "name": "ActionDropdown",
+    "description": "Dropdown component for actions",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ActionDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "AnimatedBox",
+    "description": "Animated container component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/AnimatedBox.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": [
+      "import { AnimatedBox } from \"../../../../index\";\r\n\r\nconst AnimatedBoxExample: React.FC = () => {\r\n  return <AnimatedBox />;\r\n};\r\n\r\nexport default AnimatedBoxExample;\r\n"
+    ]
+  },
+  {
+    "name": "PasswordField",
+    "description": "Secure password input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PasswordField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DateInput",
+    "description": "Date selection input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DateInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DateTimeInput",
+    "description": "Date and time selection input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DateTimeInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DropFile",
+    "description": "File drag and drop component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DropFile.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "EmailList",
+    "description": "Email list display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/EmailList.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FilterArray",
+    "description": "Array filtering component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterArray.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FilterBy",
+    "description": "Filtering component with criteria",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterBy.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FilterObjects",
+    "description": "Object filtering component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FilterObjects.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FormError",
+    "description": "Form error display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/FormError.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "HandleError",
+    "description": "Error handling component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/HandleError.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Logout",
+    "description": "Logout functionality component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Logout.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MessageDisplay",
+    "description": "Message display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/MessageDisplay.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MultipleEmail",
+    "description": "Multiple email input component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/MultipleEmail.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "PageLoading",
+    "description": "Page loading indicator component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PageLoading.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "PhoneNumberInput",
+    "description": "Phone number input with formatting",
+    "category": "Forms",
+    "repo_path": "src/components/forms/PhoneNumberInput.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "RadioField",
+    "description": "Radio button input field",
+    "category": "Forms",
+    "repo_path": "src/components/forms/RadioField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "RadioSimple",
+    "description": "Simplified radio button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/RadioSimple.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ReactTimeAgo",
+    "description": "Time ago display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ReactTimeAgo.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ReadTermsAndCondition",
+    "description": "Terms and conditions acceptance component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ReadTermsAndCondition.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SearchField",
+    "description": "Search input field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SearchField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SearchFieldDB",
+    "description": "Database search field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SearchFieldDB.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "StepProgressBar",
+    "description": "Step progress indicator component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/StepProgressBar.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SubmitButton",
+    "description": "Form submission button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/SubmitButton.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Tables",
+    "description": "Table display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Tables.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "table",
+      "data"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "TextArea",
+    "description": "Multi-line text input component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TextArea.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "TextField",
+    "description": "Text input field component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TextField.tsx",
+    "type": "component",
+    "tags": [
+      "forms",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": [
+      "// Example usage of the TextField component\r\n\r\nimport React, { useState } from \"react\";\r\nimport { TextField } from \"../../../../index\";\r\n\r\nconst TextFieldExample: React.FC = () => {\r\n  const [objectsList, setObjectsList] = useState([\r\n    { school_name: \"Harvard University\" },\r\n    { school_name: \"Stanford University\" },\r\n  ]);\r\n\r\n  // Handle change for array props\r\n  const handleChange = (propsArray: [number, string], value: string) => {\r\n    // Updated record object key based on passed index and name.\r\n    const [recordIndex, name] = propsArray;\r\n    const updatedList = objectsList.map((item, i) =>\r\n      i === recordIndex ? { ...item, [name]: value } : item\r\n    );\r\n    setObjectsList(updatedList);\r\n  };\r\n\r\n  return (\r\n    <div>\r\n      <h2>Text Fields</h2>\r\n\r\n      {objectsList.map((option, index) => (\r\n        <div key={index}>\r\n          <h3>School {index + 1}</h3>\r\n          <TextField\r\n            name={`school_name_${index}`}\r\n            type=\"text\"\r\n            label=\"High School Name *\"\r\n            required={true}\r\n            defaultValue={option.school_name}\r\n            arrayProps={[index, \"school_name\"]}\r\n            setArrayProps={handleChange}\r\n          />\r\n        </div>\r\n      ))}\r\n\r\n      <pre>{JSON.stringify(objectsList, null, 2)}</pre>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default TextFieldExample;\r\n"
+    ]
+  },
+  {
+    "name": "Tooltip",
+    "description": "Tooltip display component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/Tooltip.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "UnsplashRandomImage",
+    "description": "Random image from Unsplash component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/UnsplashRandomImage.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DownloadAsExcel",
+    "description": "Excel download functionality component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/DownloadAsExcel.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "THeadSortBtn",
+    "description": "Table header sort button component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/THeadSortBtn.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "THeadSortList",
+    "description": "Table header sort list component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/THeadSortList.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "TBodyNoData",
+    "description": "Table body empty state component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/TBodyNoData.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FileUploader",
+    "description": "File upload component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/uploads/FileUploader.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "IhubFileUploader",
+    "description": "InstinctHub file upload component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/uploads/IhubFileUploader.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ActionCallbackDropdown",
+    "description": "Action callback dropdown component",
+    "category": "Forms",
+    "repo_path": "src/components/forms/ActionCallbackDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "forms"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InputNumber",
+    "description": "InputNumber component for numerical input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputNumber.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InputText",
+    "description": "InputText component for text input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputText.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InputTextarea",
+    "description": "InputTextarea component for text input",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputTextarea.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SearchObjectsFromDB",
+    "description": "SearchObjectsFromDB component for searching objects from database",
+    "category": "Form",
+    "repo_path": "src/components/forms/SearchObjectsFromDB.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ToggleButton",
+    "description": "ToggleButton component for changing state.",
+    "category": "Form",
+    "repo_path": "src/components/forms/ToggleButton.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DateInputPicker",
+    "description": "DateInputPicker component for picking date and time.",
+    "category": "Form",
+    "repo_path": "src/components/forms/DateInputPicker.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "TimePicker",
+    "description": "TimePicker component for selecting time with 12/24-hour format support.",
+    "category": "Form",
+    "repo_path": "src/components/forms/TimePicker.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "time",
+      "picker"
+    ],
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": true,
+        "description": "The label text for the input field"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "default": "\"\"",
+        "description": "Current time value in HH:MM or HH:MM:SS format"
+      },
+      {
+        "name": "onChange",
+        "type": "(time: string) => void",
+        "required": false,
+        "description": "Callback function called when time changes"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Whether the field is required for form validation"
+      },
+      {
+        "name": "use12Hour",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Whether to use 12-hour format with AM/PM"
+      },
+      {
+        "name": "includeSeconds",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Whether to include seconds in time selection"
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "default": "1",
+        "description": "Time step in minutes for quick selection"
+      },
+      {
+        "name": "minTime",
+        "type": "string",
+        "required": false,
+        "description": "Minimum allowed time in HH:MM format"
+      },
+      {
+        "name": "maxTime",
+        "type": "string",
+        "required": false,
+        "description": "Maximum allowed time in HH:MM format"
+      },
+      {
+        "name": "disabledTimes",
+        "type": "string[]",
+        "required": false,
+        "default": "[]",
+        "description": "Array of disabled times in HH:MM format"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Whether the input is disabled"
+      },
+      {
+        "name": "showTimePicker",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Whether to show the time picker dropdown icon"
+      },
+      {
+        "name": "showQuickActions",
+        "type": "boolean",
+        "required": false,
+        "default": "true",
+        "description": "Whether to show Now/Clear quick action buttons"
+      }
+    ],
+    "examples": [
+      "// Basic usage\n<TimePicker\n  label=\"Select time\"\n  value={time}\n  onChange={setTime}\n  required\n/>",
+      "// 12-hour format with seconds\n<TimePicker\n  label=\"Appointment time\"\n  value={time}\n  onChange={setTime}\n  use12Hour={true}\n  includeSeconds={true}\n/>",
+      "// Business hours with restrictions\n<TimePicker\n  label=\"Business hours\"\n  value={time}\n  onChange={setTime}\n  minTime=\"09:00\"\n  maxTime=\"17:00\"\n  step={15}\n  disabledTimes={[\"12:00\", \"12:15\", \"12:30\"]}\n/>"
+    ]
+  },
+  {
+    "name": "ChipsInput",
+    "description": "ChipsInput is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/ChipsInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "RadioButton",
+    "description": "RadioButton is used to enter single value on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/radio-btn/RadioButton.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "RadioGroup",
+    "description": "RadioGroup is used to select each from group value on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/radio-btn/RadioGroup.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InputAmount",
+    "description": "InputAmount is used to enter amount on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputAmount.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CheckBoxes",
+    "description": "CheckBoxes is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/CheckBoxes.tsx",
+    "type": "component",
+    "tags": [
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CheckBoxesField",
+    "description": "CheckBoxesField is used to enter multiple values on an input field.",
+    "category": "Form",
+    "repo_path": "src/components/forms/CheckboxesField.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CountryInput",
+    "description": "Searchable country selector input field",
+    "category": "Form",
+    "repo_path": "src/components/forms/CountryInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CountryStateInput",
+    "description": "Searchable state/province selector based on selected country",
+    "category": "Form",
+    "repo_path": "src/components/forms/CountryStateInput.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InputSearchDropdown",
+    "description": "Generic searchable dropdown component for organizations",
+    "category": "Form",
+    "repo_path": "src/components/forms/InputSearchDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "form"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "IsUsernameEmailTaken",
+    "description": "Username/email availability checker",
+    "category": "Auth",
+    "repo_path": "src/components/auth/IsUsernameEmailTaken.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ClientDetector",
+    "description": "Client device detection component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ClientDetector.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "PasswordsMatch",
+    "description": "Password matching validation component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/PasswordsMatch.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FromInstinctHub",
+    "description": "From InstinctHub component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/FromInstinctHub.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "LoginForm",
+    "description": "Login form component",
+    "category": "Auth",
+    "repo_path": "src/components/auth/LoginForm.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SignUpForm",
+    "description": "Sign up form component",
+    "category": "Auth",
+    "repo_path": "src/__examples__/src/components/forms/SignUpFormExample.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ReactClientProviders",
+    "description": "Comprehensive wrapper providing all essential React providers",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ReactClientProviders.tsx",
+    "type": "context",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ClientOnly",
+    "description": "Wrapper component that only renders children on client side",
+    "category": "Auth",
+    "repo_path": "src/components/auth/ClientOnly.tsx",
+    "type": "component",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "useClientSide",
+    "description": "Hook for safely handling client-side initialization",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useClientSide.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "useFormattedDate",
+    "description": "Hook for consistent date formatting between server and client",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useFormattedDate.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "useStableRandom",
+    "description": "Hook for generating stable random values",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useStableRandom.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "useExternalData",
+    "description": "Hook for safely handling external data to prevent hydration mismatches",
+    "category": "Auth",
+    "repo_path": "src/components/auth/useExternalData.ts",
+    "type": "hook",
+    "tags": [
+      "auth"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ChannelListAvatar",
+    "description": "Channel list avatar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/ChannelListAvatar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MenuDropdown",
+    "description": "Menu dropdown component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/MenuDropdown.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Breadcrumb",
+    "description": "Breadcrumb component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/Breadcrumb.tsx",
+    "type": "component",
+    "tags": [
+      "navbar"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ResponsiveNavbar",
+    "description": "Responsive navbar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/ResponsiveNavbar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SideNavbar",
+    "description": "Side navbar component",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/SideNavbar.tsx",
+    "type": "component",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SideNavbarContext",
+    "description": "Context provider for side navigation state management",
+    "category": "Navbar",
+    "repo_path": "src/components/navbar/SideNavbarContext.tsx",
+    "type": "context",
+    "tags": [
+      "navbar",
+      "navigation",
+      "menu"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CustomTextEditor",
+    "description": "Custom text editor component",
+    "category": "UI",
+    "repo_path": "src/components/ui/editor/CustomTextEditor.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ContentViewer",
+    "description": "Content viewer component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/ContentViewer.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ContentViewOrEdit",
+    "description": "Content view or edit component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/ContentViewOrEdit.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": [
+      "\"use client\";\r\nimport { ContentViewer, ContentViewOrEdit } from \"../../../../index\";\r\nimport { useState } from \"react\";\r\n\r\nconsole.log(ContentViewer);\r\n\r\nexport default function ContentViewOrEditSample() {\r\n  const [content, setContent] = useState<string>(\r\n    \"<h2>Getting Started with InstinctHub</h2><p>Welcome to your course content! This editor allows you to create rich, interactive content for your students.</p><ul><li>Format text using the toolbar above</li><li>Add images, tables, and code samples</li><li>Create interactive task lists</li></ul><p>Click the edit button to make changes, then preview to see how your content will appear to students.</p>\"\r\n  );\r\n  const [isEditing, setIsEditing] = useState(false);\r\n\r\n  const toggleEditMode = () => {\r\n    setIsEditing(!isEditing);\r\n  };\r\n  return (\r\n    <div>\r\n      <ContentViewer\r\n        content={content}\r\n        title=\"Course Module: Introduction\"\r\n        onContentChange={toggleEditMode}\r\n        showToolbar={true}\r\n      />\r\n\r\n      <ContentViewOrEdit\r\n        setContent={setContent}\r\n        content={content}\r\n        title=\"Course Module: Introduction\"\r\n        showToolbar={true}\r\n        placeholder=\"Write your course content here...\"\r\n        charLimit={10000}\r\n        lastUpdated=\"2023-05-01 12:00:00\"\r\n        showEditBtn={true}\r\n        showPreviewBtn={true}\r\n      />\r\n    </div>\r\n  );\r\n}\r\n"
+    ]
+  },
+  {
+    "name": "CodeDisplay",
+    "description": "Code display component",
+    "category": "UI",
+    "repo_path": "src/components/ui/viewer/CodeDisplay.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "IHubTable",
+    "description": "InstinctHub table component",
+    "category": "UI",
+    "repo_path": "src/components/ui/tables/IHubTable.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "table",
+      "data"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "IHubTableServer",
+    "description": "InstinctHub server table component",
+    "category": "UI",
+    "repo_path": "src/components/ui/tables/IHubTableServer.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "table",
+      "data"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "OrDivider",
+    "description": "Or divider component",
+    "category": "UI",
+    "repo_path": "src/components/ui/OrDivider.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Card",
+    "description": "Card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/Card.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CardList",
+    "description": "Card list component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/CardList.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CardGrid",
+    "description": "Card grid component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/CardGrid.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "HorizontalCard",
+    "description": "Horizontal card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/HorizontalCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "FeatureCard",
+    "description": "Feature card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/FeatureCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MediaCard",
+    "description": "Media card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/MediaCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "PricingCard",
+    "description": "Pricing card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/PricingCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ProfileCard",
+    "description": "Profile card component",
+    "category": "UI",
+    "repo_path": "src/components/ui/cards/ProfileCard.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "RandomGradientImage",
+    "description": "Random gradient image component",
+    "category": "UI",
+    "repo_path": "src/components/ui/images/RandomGradientImage.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Dialog",
+    "description": "A reusable dialog component",
+    "category": "UI",
+    "repo_path": "src/components/ui/dialogs/Dialog.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "modal",
+      "overlay"
+    ],
+    "props": [],
+    "examples": [
+      "\"use client\"\r\nimport React, { useState } from \"react\";\r\nimport { Dialog } from \"../../../../index\";\r\n\r\nconst DialogExample: React.FC = () => {\r\n  const [isDialogOpen, setIsDialogOpen] = useState(false);\r\n\r\n  const openDialog = () => {\r\n    setIsDialogOpen(true);\r\n  };\r\n\r\n  const closeDialog = () => {\r\n    setIsDialogOpen(false);\r\n  };\r\n\r\n  return (\r\n    <div className=\"ihub-container\">\r\n      <h1>Dialog Example</h1>\r\n      \r\n      <button \r\n        className=\"ihub-important-btn\" \r\n        onClick={openDialog}\r\n      >\r\n        Open Dialog\r\n      </button>\r\n      \r\n      <Dialog\r\n        isOpen={isDialogOpen}\r\n        onClose={closeDialog}\r\n        title=\"Confirmation\"\r\n        footer={\r\n          <div className=\"ihub-buttons\">\r\n            <button \r\n              className=\"ihub-danger-btn\"\r\n              onClick={closeDialog}\r\n            >\r\n              Cancel\r\n            </button>\r\n            <button \r\n              className=\"ihub-important-btn\"\r\n              onClick={() => {\r\n                // Handle confirmation\r\n                closeDialog();\r\n              }}\r\n            >\r\n              Confirm\r\n            </button>\r\n          </div>\r\n        }\r\n      >\r\n        <p>Are you sure you want to proceed with this action?</p>\r\n      </Dialog>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default DialogExample;\r\n"
+    ]
+  },
+  {
+    "name": "Badge",
+    "description": "A reusable Badge component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Badge.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Action",
+    "description": "A reusable Action component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Action.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Dropdown",
+    "description": "A reusable Dropdown component",
+    "category": "UI",
+    "repo_path": "src/components/ui/Dropdown.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ColorPicker",
+    "description": "A reusable ColorPicker component",
+    "category": "UI",
+    "repo_path": "src/components/ui/ColorPicker.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": [
+      "\"use client\";\r\n\r\nimport React, { useState } from \"react\";\r\nimport { ColorPicker } from \"../../../../index\";\r\n\r\nconst ColorPickerExample: React.FC = () => {\r\n  const [primaryColor, setPrimaryColor] = useState(\"#0066cc\");\r\n  const [secondaryColor, setSecondaryColor] = useState(\"#ff6b6b\");\r\n\r\n  const handlePrimaryColorChange = (color: string) => {\r\n    console.log(\"Primary color changed:\", color);\r\n    setPrimaryColor(color);\r\n  };\r\n\r\n  const handleSecondaryColorChange = (color: string) => {\r\n    console.log(\"Secondary color changed:\", color);\r\n    setSecondaryColor(color);\r\n  };\r\n\r\n  // Override the preset colors by modifying the PRESET_COLORS array\r\n  const CUSTOM_COLORS = [\"#ff6b6b\", \"#4ecdc4\", \"#45b7d1\", \"#96ceb4\", \"#ffeaa7\"];\r\n\r\n  return (\r\n    <div className=\"space-y-8 p-4\">\r\n      {/* Basic Usage */}\r\n      <div className=\"space-y-4\">\r\n        <h2 className=\"ihub-fs-lg\">Basic Color Picker</h2>\r\n        <ColorPicker\r\n          id=\"basic-color-picker\"\r\n          label=\"Basic Color Picker\"\r\n          defaultColor=\"#000000\"\r\n          onChange={(color) => console.log(\"Basic color changed:\", color)}\r\n        />\r\n      </div>\r\n\r\n      {/* Without Dropdown Button */}\r\n      <div className=\"space-y-4\">\r\n        <h2 className=\"ihub-fs-lg\">Without Dropdown Button</h2>\r\n        <ColorPicker\r\n          showButton={false}\r\n          defaultColor=\"#4ecdc4\"\r\n          onChange={(color) => console.log(\"No button color changed:\", color)}\r\n        />\r\n      </div>\r\n\r\n      {/* Form Integration */}\r\n      <div className=\"space-y-4\">\r\n        <h2 className=\"ihub-fs-lg\">Form Integration</h2>\r\n        <form className=\"space-y-4\">\r\n          <div>\r\n            <ColorPicker\r\n              label=\"Primary Color\"\r\n              name=\"primary_color\"\r\n              defaultColor={primaryColor}\r\n              onChange={handlePrimaryColorChange}\r\n              className=\"ihub-mb-3\"\r\n            />\r\n          </div>\r\n          <div>\r\n            <ColorPicker\r\n              label=\"Secondary Color\"\r\n              name=\"secondary_color\"\r\n              defaultColor={secondaryColor}\r\n              onChange={handleSecondaryColorChange}\r\n              className=\"ihub-mb-3\"\r\n            />\r\n          </div>\r\n          <div>\r\n            <ColorPicker\r\n              label=\"Hide Preview, Formats, and EyeDropper\"\r\n              className=\"ihub-mb-3\"\r\n              hidePreview={true}\r\n              hideFormats={true}\r\n              hideEyeDropper={true}\r\n            />\r\n          </div>\r\n          <button\r\n            type=\"submit\"\r\n            className=\"px-4 py-2 bg-blue-500 text-white rounded\"\r\n          >\r\n            Save Colors\r\n          </button>\r\n        </form>\r\n      </div>\r\n\r\n      {/* Controlled Component Example */}\r\n      <div className=\"space-y-4\">\r\n        <h2 className=\"ihub-fs-lg\">Controlled Component</h2>\r\n        <ColorPicker\r\n          defaultColor={primaryColor}\r\n          onChange={handlePrimaryColorChange}\r\n        />\r\n        <div\r\n          style={{\r\n            width: \"100px\",\r\n            height: \"100px\",\r\n            backgroundColor: primaryColor,\r\n            marginTop: \"20px\",\r\n            borderRadius: \"8px\",\r\n          }}\r\n        />\r\n      </div>\r\n\r\n      {/* Custom Preset Colors */}\r\n      <div className=\"space-y-4\">\r\n        <h2 className=\"ihub-fs-lg\">Custom Preset Colors</h2>\r\n        <ColorPicker\r\n          CUSTOM_COLORS={CUSTOM_COLORS}\r\n          onChange={(color) => console.log(\"Custom color changed:\", color)}\r\n        />\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default ColorPickerExample;\r\n"
+    ]
+  },
+  {
+    "name": "Pagination",
+    "description": "A reusable Pagination component",
+    "category": "UI",
+    "repo_path": "src/components/ui/pagination/Pagination.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "PaginationDemo",
+    "description": "A demo for the Pagination component",
+    "category": "UI",
+    "repo_path": "src/components/ui/pagination/PaginationDemo.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CreateButton",
+    "description": "A reusable CreateButton component",
+    "category": "UI",
+    "repo_path": "src/components/ui/create-button/CreateButton.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CreateButtonExample",
+    "description": "An example of the CreateButton component",
+    "category": "UI",
+    "repo_path": "src/components/ui/create-button/CreateButtonExample.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MenuBar",
+    "description": "Toolbar component for the TipTap rich text editor",
+    "category": "UI",
+    "repo_path": "src/components/ui/editor/MenuBar.tsx",
+    "type": "component",
+    "tags": [
+      "ui"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InstinctHubChart",
+    "description": "Versatile chart component supporting multiple chart types",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/InstinctHubChart.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "InstinctHubChartDashboard",
+    "description": "Dashboard component showcasing multiple charts",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/InstinctHubChartDashboard.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ChartConfigurator",
+    "description": "Interactive chart configuration interface",
+    "category": "UI",
+    "repo_path": "src/components/ui/charts/ChartConfigurator.tsx",
+    "type": "component",
+    "tags": [
+      "ui",
+      "chart",
+      "visualization"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ChangeStyleVariable",
+    "description": "Style variable changer component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/ChangeStyleVariable.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DarkModeProvider",
+    "description": "Dark mode provider component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/DarkModeProvider.tsx",
+    "type": "context",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "LoadingAnimate",
+    "description": "Loading animation component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/LoadingAnimate.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SessionProviders",
+    "description": "Session providers component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/SessionProviders.tsx",
+    "type": "context",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SessionExpiresLogout",
+    "description": "Session expiration logout component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/signout/SessionExpiresLogout.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SignOutSession",
+    "description": "Sign out session component",
+    "category": "Theme",
+    "repo_path": "src/components/theme/signout/SignOutSession.tsx",
+    "type": "component",
+    "tags": [
+      "theme"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "TimeTracker",
+    "description": "Time tracking component",
+    "category": "Status",
+    "repo_path": "src/components/status/ReactTimeTracker.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "SessionHandleProvider",
+    "description": "Session handling provider component",
+    "category": "Status",
+    "repo_path": "src/components/status/SessionHandleProvider.tsx",
+    "type": "context",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Error500",
+    "description": "500 error display component",
+    "category": "Status",
+    "repo_path": "src/components/status/Error500.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ErrorState",
+    "description": "Error state display component",
+    "category": "Status",
+    "repo_path": "src/components/status/ErrorState.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ReactTimeTracker",
+    "description": "React time tracking component",
+    "category": "Status",
+    "repo_path": "src/components/status/ReactTimeTracker.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "DeleteConfirmationModal",
+    "description": "Delete confirmation modal component",
+    "category": "Status",
+    "repo_path": "src/components/status/DeleteConfirmationModal.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CopyToClipboard",
+    "description": "Copy to clipboard functionality component",
+    "category": "Status",
+    "repo_path": "src/components/status/CopyToClipBoard.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MultiPurposeModal",
+    "description": "Multi-purpose modal component",
+    "category": "Status",
+    "repo_path": "src/components/status/MultiPurposeModal.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "ModalExamples",
+    "description": "Modal examples component",
+    "category": "Status",
+    "repo_path": "src/components/status/ModalExamples.tsx",
+    "type": "component",
+    "tags": [
+      "status",
+      "modal",
+      "overlay"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "NotFound",
+    "description": "Not found component",
+    "category": "Status",
+    "repo_path": "src/components/status/NotFound.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Unauthorized",
+    "description": "Unauthorized component",
+    "category": "Status",
+    "repo_path": "src/components/status/Unauthorized.tsx",
+    "type": "component",
+    "tags": [
+      "status"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Tabs",
+    "description": "Tab navigation component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/Tabs.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ],
+    "props": [],
+    "examples": [
+      "\"use client\";\r\n\r\nimport React, { useState } from \"react\";\r\nimport { Tabs } from \"../../../../index\";\r\nimport { TabItemType } from \"@/types\";\r\n\r\nconst TabsExample: React.FC = () => {\r\n  const [activeTab, setActiveTab] = useState<string>(\"profile\");\r\n  \r\n  const handleTabChange = (tabId: string) => {\r\n    setActiveTab(tabId);\r\n    console.log(`Tab changed to: ${tabId}`);\r\n  };\r\n\r\n  const tabItems = [\r\n    {\r\n      id: \"profile\",\r\n      label: \"Profile\",\r\n      content: (\r\n        <div className=\"ihub-py-4\">\r\n          <h3>Profile Information</h3>\r\n          <p>This is the profile tab content. Here you can display user profile information.</p>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"security\",\r\n      label: \"Security\",\r\n      content: (\r\n        <div className=\"ihub-py-4\">\r\n          <h3>Security Settings</h3>\r\n          <p>Change your password and security preferences here.</p>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"notifications\",\r\n      label: \"Notifications\",\r\n      content: (\r\n        <div className=\"ihub-py-4\">\r\n          <h3>Notification Preferences</h3>\r\n          <p>Manage your notification settings and preferences.</p>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"billing\",\r\n      label: \"Billing\",\r\n      disabled: true,\r\n      content: (\r\n        <div className=\"ihub-py-4\">\r\n          <h3>Billing Information</h3>\r\n          <p>View and manage your billing settings.</p>\r\n        </div>\r\n      ),\r\n    },\r\n  ];\r\n\r\n  return (\r\n    <div className=\"ihub-container\">\r\n      <h2>Default Tabs</h2>\r\n      <Tabs \r\n        items={tabItems} \r\n        defaultActiveTab={activeTab}\r\n        onChange={(tabId: TabItemType) => handleTabChange(tabId.id)}\r\n      />\r\n      \r\n      <h2 className=\"ihub-mt-8\">Bordered Tabs</h2>\r\n      <Tabs \r\n        items={tabItems} \r\n        defaultActiveTab=\"security\"\r\n        variant=\"bordered\"\r\n      />\r\n      \r\n      <h2 className=\"ihub-mt-8\">Pills Tabs</h2>\r\n      <Tabs \r\n        items={tabItems} \r\n        defaultActiveTab=\"notifications\"\r\n        variant=\"pills\"\r\n      />\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default TabsExample;"
+    ]
+  },
+  {
+    "name": "VerticalTabs",
+    "description": "Vertical tab navigation component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/VerticalTabs.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ],
+    "props": [],
+    "examples": [
+      "\"use client\";\r\n\r\nimport React, { useState } from \"react\";\r\n\r\n\r\n// Import icons (assuming you're using a library like Lucide or similar)\r\nimport { \r\n  User, \r\n  Shield, \r\n  Bell, \r\n  CreditCard, \r\n  Settings, \r\n  HelpCircle \r\n} from \"lucide-react\";\r\nimport VerticalTabs from \"../../../../components/tabs/VerticalTabs\";\r\nimport { VerticalTabItemType } from \"@/types\";\r\n\r\nconst VerticalTabsExample: React.FC = () => {\r\n  const [activeTab, setActiveTab] = useState<string>(\"profile\");\r\n  \r\n  const handleTabChange = (tabId: string) => {\r\n    setActiveTab(tabId);\r\n    console.log(`Tab changed to: ${tabId}`);\r\n  };\r\n\r\n  const tabItems = [\r\n    {\r\n      id: \"profile\",\r\n      label: \"Profile\",\r\n      icon: <User size={18} />,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Profile Information</h3>\r\n          <p>Manage your personal information, profile picture, and public details.</p>\r\n          \r\n          <div className=\"ihub-mt-6\">\r\n            <h4 className=\"ihub-mb-2\">Personal Details</h4>\r\n            <div className=\"ihub-p-4 ihub-bg-white\">\r\n              <p>Name: John Doe</p>\r\n              <p>Email: john.doe@example.com</p>\r\n              <p>Location: New York, USA</p>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"security\",\r\n      label: \"Security\",\r\n      icon: <Shield size={18} />,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Security Settings</h3>\r\n          <p>Manage your password, two-factor authentication, and security preferences.</p>\r\n          \r\n          <div className=\"ihub-mt-6\">\r\n            <h4 className=\"ihub-mb-2\">Password</h4>\r\n            <div className=\"ihub-p-4 ihub-bg-white\">\r\n              <p>Last changed: 30 days ago</p>\r\n              <button className=\"ihub-important-btn ihub-mt-2\">Change Password</button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"notifications\",\r\n      label: \"Notifications\",\r\n      icon: <Bell size={18} />,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Notification Preferences</h3>\r\n          <p>Control which notifications you receive and how they are delivered.</p>\r\n          \r\n          <div className=\"ihub-mt-6\">\r\n            <h4 className=\"ihub-mb-2\">Email Notifications</h4>\r\n            <div className=\"ihub-p-4 ihub-bg-white\">\r\n              <div className=\"ihub-mb-2\">\r\n                <input type=\"checkbox\" id=\"updates\" checked />\r\n                <label htmlFor=\"updates\" className=\"ihub-ml-2\">Product Updates</label>\r\n              </div>\r\n              <div className=\"ihub-mb-2\">\r\n                <input type=\"checkbox\" id=\"news\" checked />\r\n                <label htmlFor=\"news\" className=\"ihub-ml-2\">InstinctHub News</label>\r\n              </div>\r\n              <div className=\"ihub-mb-2\">\r\n                <input type=\"checkbox\" id=\"activity\" />\r\n                <label htmlFor=\"activity\" className=\"ihub-ml-2\">Account Activity</label>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"billing\",\r\n      label: \"Billing\",\r\n      icon: <CreditCard size={18} />,\r\n      disabled: true,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Billing Information</h3>\r\n          <p>View and manage your subscription, payment methods, and billing history.</p>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"settings\",\r\n      label: \"Settings\",\r\n      icon: <Settings size={18} />,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Account Settings</h3>\r\n          <p>Manage your account preferences, language, and other settings.</p>\r\n          \r\n          <div className=\"ihub-mt-6\">\r\n            <h4 className=\"ihub-mb-2\">Language & Region</h4>\r\n            <div className=\"ihub-p-4 ihub-bg-white\">\r\n              <div className=\"ihub-mb-3\">\r\n                <label className=\"ihub-mb-1 ihub-block\">Language</label>\r\n                <select className=\"ihub-p-2 ihub-w-full\">\r\n                  <option>English</option>\r\n                  <option>French</option>\r\n                  <option>Spanish</option>\r\n                </select>\r\n              </div>\r\n              <div>\r\n                <label className=\"ihub-mb-1 ihub-block\">Time Zone</label>\r\n                <select className=\"ihub-p-2 ihub-w-full\">\r\n                  <option>UTC (Coordinated Universal Time)</option>\r\n                  <option>EST (Eastern Standard Time)</option>\r\n                  <option>PST (Pacific Standard Time)</option>\r\n                </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      id: \"help\",\r\n      label: \"Help & Support\",\r\n      icon: <HelpCircle size={18} />,\r\n      content: (\r\n        <div className=\"ihub-p-4\">\r\n          <h3 className=\"ihub-mb-4\">Help & Support</h3>\r\n          <p>Get assistance with using InstinctHub products and services.</p>\r\n          \r\n          <div className=\"ihub-mt-6\">\r\n            <h4 className=\"ihub-mb-2\">Support Options</h4>\r\n            <div className=\"ihub-p-4 ihub-bg-white\">\r\n              <div className=\"ihub-mb-3\">\r\n                <h5 className=\"ihub-font-semibold\">Documentation</h5>\r\n                <p>Browse our comprehensive documentation for guides and tutorials.</p>\r\n                <a href=\"#\" className=\"ihub-text-cyan-700 ihub-font-semibold\">View Documentation</a>\r\n              </div>\r\n              <div className=\"ihub-mb-3\">\r\n                <h5 className=\"ihub-font-semibold\">Contact Support</h5>\r\n                <p>Get in touch with our support team for personalized help.</p>\r\n                <button className=\"ihub-outlined-btn ihub-mt-2\">Contact Support</button>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n  ];\r\n\r\n  return (\r\n    <div className=\"ihub-container\">\r\n      <h2 className=\"ihub-mb-6\">Account Management</h2>\r\n      <VerticalTabs \r\n        items={tabItems} \r\n        defaultActiveTab={activeTab}\r\n        onChange={(tabId: VerticalTabItemType) => handleTabChange(tabId.id as string)}\r\n        className=\"ihub-border ihub-rounded-lg ihub-p-6 ihub-bg-white ihub-shadow-sm\"\r\n      />\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default VerticalTabsExample;"
+    ]
+  },
+  {
+    "name": "TabContent",
+    "description": "Tab content display component",
+    "category": "Tabs",
+    "repo_path": "src/components/tabs/TabContent.tsx",
+    "type": "component",
+    "tags": [
+      "tabs"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Cursor",
+    "description": "Custom cursor component with trailing effects and animations",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/Cursor.tsx",
+    "type": "component",
+    "tags": [
+      "cursors"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "MagneticButton",
+    "description": "Button component with magnetic cursor attraction effect",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/MagneticButton.tsx",
+    "type": "component",
+    "tags": [
+      "cursors",
+      "button",
+      "action"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CursorContext",
+    "description": "Context provider for cursor state management across the application",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/CursorContext.tsx",
+    "type": "context",
+    "tags": [
+      "cursors"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "useCursorInteraction",
+    "description": "Hook for adding interactive cursor effects to elements",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/useCursorInteraction.tsx",
+    "type": "hook",
+    "tags": [
+      "cursors"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "CursorControlDemo",
+    "description": "Comprehensive demo component for the cursor system",
+    "category": "Cursors",
+    "repo_path": "src/components/cursors/CursorControlDemo.tsx",
+    "type": "component",
+    "tags": [
+      "cursors"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
+    "name": "Paystack",
+    "description": "Paystack payment integration component",
+    "category": "Library",
+    "repo_path": "src/components/lib/readme/paystack.md",
+    "type": "component",
+    "tags": [
+      "library"
+    ],
+    "props": [],
+    "examples": []
+  }
+]

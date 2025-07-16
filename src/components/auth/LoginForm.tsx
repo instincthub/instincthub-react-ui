@@ -72,6 +72,8 @@ const LoginForm = ({
   const { error, callbackUrl } = searchParams;
   const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<number>(1);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const { data: session } = useSession();
   const user = session?.user;
@@ -93,10 +95,16 @@ const LoginForm = ({
     setStatus(0);
     setMessage("");
 
-    const formData = new FormData(e.currentTarget);
+    // const formData = new FormData(e.currentTarget);
+    // const obj = {
+    //   username: formData.get("username") as string,
+    //   password: formData.get("password") as string,
+    //   provider: "credentials",
+    //   channel: channelUsername,
+    // };
     const obj = {
-      username: formData.get("username") as string,
-      password: formData.get("password") as string,
+      username,
+      password,
       provider: "credentials",
       channel: channelUsername,
     };
@@ -108,7 +116,7 @@ const LoginForm = ({
     try {
       const res: LoginResponse = await req.json();
 
-      if (res.status === 200) {
+      if (req.status === 200 || req.ok) {
         setStatus(2);
         const context: {
           username: string;
@@ -231,12 +239,16 @@ const LoginForm = ({
         label="Email or Username"
         required={true}
         textTransform="lowercase"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <PasswordField
         name="password"
         label="Password"
         required={true}
         id="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       {message && <p className="err">{message}</p>}

@@ -273,6 +273,12 @@ const ComponentLists = () => {
       repo_path: "src/components/forms/DateInputPicker.tsx",
     },
     {
+      name: "TimePicker",
+      description: "TimePicker component for selecting time with 12/24-hour format support.",
+      category: "Form",
+      repo_path: "src/components/forms/TimePicker.tsx",
+    },
+    {
       name: "ChipsInput",
       description:
         "ChipsInput is used to enter multiple values on an input field.",

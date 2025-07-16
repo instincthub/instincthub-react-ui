@@ -37,7 +37,7 @@ const useDeleteItem = (
     return user?.name && typeof user.name === "object" && "token" in user.name;
   };
 
-  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
   const user = sessionUser;
 
   const deleteItem = useCallback(async () => {

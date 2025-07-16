@@ -82,7 +82,7 @@ export default function ChannelListAvatar({
     return user?.name && typeof user.name === "object" && "token" in user.name;
   };
 
-  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
+  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
   const user = sessionUser;
 
   const token = user?.name?.token;
