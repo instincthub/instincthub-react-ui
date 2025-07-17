@@ -195,7 +195,8 @@ export const IHubTable = <T extends object>({
     (row: T, index: number) => {
       return keyExtractor(row, index);
     },
-    [keyExtractor]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   // Handle clicking outside filter dropdown
@@ -229,35 +230,36 @@ export const IHubTable = <T extends object>({
 
     if (data.length === 0) {
       setSelectedRows([]);
-    } else if (selectedRows.length > 0) {
-      // Keep only selected rows that still exist in data
-      const updatedSelection = selectedRows.filter((selected) =>
-        data.some(
-          (item, index) =>
-            getRowKey(item, index) ===
-            getRowKey(
-              selected,
-              // Find the original index for the selected item
-              data.findIndex(
-                (d) => JSON.stringify(d) === JSON.stringify(selected)
-              )
-            )
-        )
+      return;
+    }
+
+    // Simplified selection update logic to prevent recursion
+    setSelectedRows((currentSelectedRows) => {
+      if (currentSelectedRows.length === 0) {
+        return currentSelectedRows;
+      }
+
+      // Keep only selected rows that still exist in data using simpler comparison
+      const updatedSelection = currentSelectedRows.filter((selected) =>
+        data.some((item) => JSON.stringify(item) === JSON.stringify(selected))
       );
 
       // Only update if the selection has actually changed
-      if (updatedSelection.length !== selectedRows.length) {
-        setSelectedRows(updatedSelection);
+      if (updatedSelection.length !== currentSelectedRows.length) {
+        return updatedSelection;
       }
-    }
-  }, [data, getRowKey, selectedRows]);
+
+      return currentSelectedRows;
+    });
+  }, [data]);
 
   // Notify parent component when selection changes
   useEffect(() => {
     if (onSelectionChange && !initialRenderRef.current) {
       onSelectionChange(selectedRows);
     }
-  }, [selectedRows, onSelectionChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRows]);
 
   // Handle sorting
   const handleSort = useCallback(

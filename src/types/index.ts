@@ -89,6 +89,8 @@ export interface SessionUserType {
   verified?: boolean;
   is_staff?: boolean;
   status?: number;
+  accessToken?: string;
+  refreshToken?: string;
   [key: string]: any;
 }
 
@@ -303,6 +305,7 @@ export interface NavbarPropsType {
 
 // Define props interface
 export interface LoginFormPropsType {
+  // Existing props
   params?: SearchParamsType;
   searchParams: SearchParamsType;
   endpointPath?: string;
@@ -320,6 +323,86 @@ export interface LoginFormPropsType {
     | "ecommerce"
     | "inventory"
     | "hr";
+
+  // Loading & State Control Props
+  isLoading?: boolean;
+  onSubmitStart?: () => void;
+  onSubmitComplete?: (success: boolean) => void;
+  loadingText?: string;
+  preserveFormData?: boolean;
+
+  // Custom Redirect Handlers
+  onSuccessRedirect?: (user: SessionUserType, callbackUrl?: string) => void;
+  onFailureRedirect?: (error: string) => void;
+  customValidationHandler?: (user: SessionUserType) => Promise<boolean>;
+  autoRedirectOnSession?: boolean;
+
+  // Form Customization Props
+  title?: string;
+  subtitle?: string;
+  showTitle?: boolean;
+  className?: string;
+  formClassName?: string;
+
+  // Validation & Error Handling
+  enableClientValidation?: boolean;
+  customValidationRules?: {
+    username?: (value: string) => string | null;
+    password?: (value: string) => string | null;
+  };
+  onError?: (error: string, type: 'network' | 'validation' | 'auth') => void;
+
+  // Session Management Props
+  sessionCheckInterval?: number;
+  clearCallbackAfterUse?: boolean;
+
+  // UI Customization Props
+  submitButtonText?: string;
+  submitButtonVariant?: 'primary' | 'important' | 'outlined' | 'danger' | 'default' | 'icon';
+  showRememberMe?: boolean;
+  rememberMeText?: string;
+
+  // OAuth & Social Login Props
+  enableOAuth?: boolean;
+  oauthProviders?: Array<'google' | 'github' | 'facebook' | 'linkedin'>;
+  oauthConfig?: Record<string, any>;
+
+  // Security Props
+  enableCaptcha?: boolean;
+  captchaProvider?: 'recaptcha' | 'hcaptcha';
+  enableRateLimiting?: boolean;
+  maxAttempts?: number;
+  lockoutDuration?: number;
+
+  // Analytics & Tracking Props
+  trackingEnabled?: boolean;
+  onLoginAttempt?: (username: string) => void;
+  onLoginSuccess?: (user: SessionUserType) => void;
+  onLoginFailure?: (error: string, username: string) => void;
+
+  // Accessibility Props
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
+  focusOnMount?: boolean;
+  
+  // Additional Missing Props
+  autoComplete?: boolean;
+  validateOnBlur?: boolean;
+  debounceValidation?: number;
+  showPasswordStrength?: boolean;
+  enableFormReset?: boolean;
+  autoSave?: boolean;
+  autoSaveInterval?: number;
+  offlineSupport?: boolean;
+  retryAttempts?: number;
+  retryDelay?: number;
+  sessionTimeoutWarning?: boolean;
+  sessionTimeoutDuration?: number;
+  csrfToken?: string;
+  sanitizeInputs?: boolean;
+  highContrastMode?: boolean;
+  showLoadingSkeleton?: boolean;
+  preventMultipleSubmissions?: boolean;
 }
 
 // Option interface for dropdown items
