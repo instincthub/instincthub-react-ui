@@ -245,13 +245,6 @@ const LoginForm = ({
   const { data: session } = useSession();
   const user = session?.user;
 
-  // Debug session structure
-  useEffect(() => {
-    if (session) {
-      console.log("Session data structure:", JSON.stringify(session, null, 2));
-      console.log("User data:", JSON.stringify(user, null, 2));
-    }
-  }, [session, user]);
 
   // Debounced values for validation
   const debouncedUsername = useDebounce(username, debounceValidation);
@@ -333,15 +326,9 @@ const LoginForm = ({
     const isSessionUserType = (user: any): user is SessionUserType => {
       const hasToken =
         user?.name && typeof user.name === "object" && "token" in user.name;
-      console.log("Session user type check:", {
-        user,
-        hasToken,
-        userName: user?.name,
-      });
       return hasToken;
     };
     const result = isSessionUserType(user) ? user : null;
-    console.log("Session user extraction result:", result);
     return result;
   }, [user]);
 
@@ -366,15 +353,6 @@ const LoginForm = ({
     const verifyEmail =
       sessionUser?.name?.verified || sessionUser?.name?.email_verified;
 
-    console.log("Extracted session values:", {
-      handle,
-      token,
-      uuid,
-      email,
-      verifyEmail,
-    });
-    console.log("Session user name:", sessionUser?.name);
-    console.log("Raw session for token extraction:", session);
 
     return { handle, token, uuid, email, verifyEmail };
   }, [sessionUser, session]);
@@ -390,7 +368,6 @@ const LoginForm = ({
           ).then((extend: boolean) => {
             if (extend) {
               // Trigger session refresh - will be defined later
-              console.log("Session refresh requested");
             }
             setSessionWarningShown(true);
           });
@@ -685,7 +662,6 @@ const LoginForm = ({
           return;
         }
 
-        console.log(`Login Error: ${e}`);
         const errorMsg = "Couldn't login. Please try again.";
         openToast(errorMsg, 400);
         setStatus(3);
@@ -768,7 +744,6 @@ const LoginForm = ({
         return;
       }
 
-      console.log("Handling redirect for user:", user);
 
       const cookiesCallbackUrl = getCookie("callbackUrl");
 
@@ -872,7 +847,6 @@ const LoginForm = ({
           }
         });
       } else {
-        console.log("Validation successful, redirecting...1");
         handleRedirect(sessionUser, callbackUrl);
       }
     } catch (error: any) {
@@ -965,38 +939,22 @@ const LoginForm = ({
 
   // Simple session-based redirect (without API validation)
   useEffect(() => {
-    console.log("Redirect check:", {
-      sessionUser,
-      token,
-      autoRedirectOnSession,
-      isFormLoading,
-      hasSession: !!session,
-    });
 
     if (autoRedirectOnSession && !isFormLoading && session) {
-      console.log("Session detected, attempting redirect...", {
-        sessionUser,
-        token,
-        callbackUrl,
-      });
 
       // If we have a session, redirect immediately
       if (sessionUser && token) {
         // Use validation if needed
         if (customValidationHandler) {
-          console.log("Using custom validation handler...");
           handleValidate();
         } else if (uuid) {
-          console.log("Using API validation...");
           handleValidate();
         } else {
-          console.log("Direct redirect without validation...");
           handleRedirect(sessionUser, callbackUrl);
         }
       } else if (session?.user) {
         // Fallback: if we have any session but can't extract our custom data,
         // try basic redirect anyway
-        console.log("Fallback redirect with basic session...");
         const fallbackUser = { name: session.user } as SessionUserType;
         handleRedirect(fallbackUser, callbackUrl);
       }

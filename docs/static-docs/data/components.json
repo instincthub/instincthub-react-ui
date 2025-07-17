@@ -860,6 +860,21 @@
     "examples": []
   },
   {
+    "name": "RangeRadio",
+    "description": "Range radio button component for selecting values within a range",
+    "category": "Form",
+    "repo_path": "src/components/forms/RangeRadio.tsx",
+    "type": "component",
+    "tags": [
+      "form",
+      "input",
+      "radio",
+      "range"
+    ],
+    "props": [],
+    "examples": []
+  },
+  {
     "name": "IsUsernameEmailTaken",
     "description": "Username/email availability checker",
     "category": "Auth",

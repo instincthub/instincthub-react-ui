@@ -343,6 +343,12 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputSearchDropdown.tsx",
     },
+    {
+      name: "RangeRadio",
+      description: "Range radio button component for selecting values within a range",
+      category: "Form",
+      repo_path: "src/components/forms/RangeRadio.tsx",
+    },
 
     // Auth
     {
