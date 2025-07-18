@@ -18,6 +18,7 @@ interface ComponentInfo {
   props?: any[];
   examples?: string[];
   readmeContent?: string;
+  example_path?: string;
 }
 
 interface ComponentCategory {
@@ -53,10 +54,28 @@ class StaticDocumentationGenerator {
   private srcPath: string;
   private docsOutputPath: string;
   private components: ComponentInfo[] = [];
+  private customExamples: Set<string> = new Set();
 
   constructor() {
     this.srcPath = path.join(__dirname, '../../src');
     this.docsOutputPath = path.join(__dirname, '../static-docs');
+    this.loadCustomExamplesConfig();
+  }
+
+  /**
+   * Load custom examples configuration
+   */
+  private loadCustomExamplesConfig(): void {
+    const configPath = path.join(__dirname, 'custom-examples.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+        this.customExamples = new Set(config.customComponents || []);
+        console.log(`📋 Loaded ${this.customExamples.size} custom example components`);
+      } catch (error) {
+        console.warn('⚠️  Warning: Could not load custom examples config:', error);
+      }
+    }
   }
 
   /**
@@ -124,9 +143,10 @@ class StaticDocumentationGenerator {
         name,
         description,
         category,
-        repo_path,
+        repo_path: `../../../${repo_path}`, // Transform path to be relative from docs/static-docs/data/
         type,
         tags,
+        example_path: `../components/${name}.md`, // Add example_path field
       });
     }
 
@@ -137,10 +157,12 @@ class StaticDocumentationGenerator {
    * Read README.md file for a component if it exists
    */
   private readComponentReadme(component: ComponentInfo): string | undefined {
+    // Convert relative path back to absolute for file operations
+    const absolutePath = component.repo_path.replace('../../../', '');
     const readmePaths = [
-      path.join(this.srcPath, component.repo_path.replace('.tsx', '.md')),
-      path.join(this.srcPath, path.dirname(component.repo_path), 'readme', `${component.name}.md`),
-      path.join(this.srcPath, path.dirname(component.repo_path), 'README.md'),
+      path.join(this.srcPath, absolutePath.replace('.tsx', '.md')),
+      path.join(this.srcPath, path.dirname(absolutePath), 'readme', `${component.name}.md`),
+      path.join(this.srcPath, path.dirname(absolutePath), 'README.md'),
     ];
 
     for (const readmePath of readmePaths) {
@@ -156,7 +178,9 @@ class StaticDocumentationGenerator {
    * Extract TypeScript interface/props from component file
    */
   private extractComponentProps(component: ComponentInfo): any[] {
-    const componentPath = path.join(this.srcPath, component.repo_path);
+    // Convert relative path back to absolute for file operations
+    const absolutePath = component.repo_path.replace('../../../', '');
+    const componentPath = path.join(this.srcPath, absolutePath);
     
     if (!fs.existsSync(componentPath)) {
       return [];
@@ -296,7 +320,12 @@ class StaticDocumentationGenerator {
   private generateComponentMarkdown(component: ComponentInfo): string {
     const { name, description, category, repo_path, type, tags, props, examples, readmeContent } = component;
 
-    let markdown = `# ${name}\n\n`;
+    let markdown = `---\n`;
+    markdown += `generated: true\n`;
+    markdown += `generatedAt: ${new Date().toISOString()}\n`;
+    markdown += `custom: false\n`;
+    markdown += `---\n\n`;
+    markdown += `# ${name}\n\n`;
     markdown += `**Category:** ${category} | **Type:** ${type || 'component'}\n\n`;
     markdown += `${description}\n\n`;
 
@@ -548,10 +577,27 @@ class StaticDocumentationGenerator {
 
       // Step 6: Generate individual component documentation
       console.log('📝 Generating component documentation...');
+      let skippedCount = 0;
       for (const component of this.components) {
-        const componentMarkdown = this.generateComponentMarkdown(component);
         const componentPath = path.join(this.docsOutputPath, 'components', `${component.name}.md`);
+        
+        // Check if this component has custom examples and already exists
+        if (this.customExamples.has(component.name) && fs.existsSync(componentPath)) {
+          // Check if it's marked as custom in frontmatter
+          const existingContent = fs.readFileSync(componentPath, 'utf-8');
+          if (existingContent.includes('custom: true')) {
+            console.log(`⏭️  Skipping ${component.name} - custom example detected`);
+            skippedCount++;
+            continue;
+          }
+        }
+        
+        const componentMarkdown = this.generateComponentMarkdown(component);
         fs.writeFileSync(componentPath, componentMarkdown);
+      }
+      
+      if (skippedCount > 0) {
+        console.log(`📋 Skipped ${skippedCount} components with custom examples`);
       }
 
       // Step 7: Generate category documentation

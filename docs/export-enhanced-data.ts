@@ -15,6 +15,7 @@ interface ComponentInfo {
   repo_path: string;
   type?: 'component' | 'hook' | 'context' | 'utility';
   tags?: string[];
+  example_path?: string;
 }
 
 interface EnhancedComponentData {
@@ -42,6 +43,7 @@ interface EnhancedComponentData {
   usagePatterns: string[];
   dependencies: string[];
   styleRequirements: string[];
+  example_path?: string;
   apiReference?: {
     methods?: Array<{
       name: string;
@@ -181,7 +183,9 @@ class EnhancedDataExporter {
    * Extract detailed prop information from TypeScript files
    */
   private extractDetailedProps(component: ComponentInfo): EnhancedComponentData['props'] {
-    const componentPath = path.join(this.srcPath, component.repo_path);
+    // Convert relative path back to absolute for file operations
+    const absolutePath = component.repo_path.replace('../../../', '');
+    const componentPath = path.join(this.srcPath, absolutePath);
     
     if (!fs.existsSync(componentPath)) {
       return [];
@@ -328,7 +332,9 @@ export default MyComponent;`,
    * Analyze dependencies for component
    */
   private extractDependencies(component: ComponentInfo): string[] {
-    const componentPath = path.join(this.srcPath, component.repo_path);
+    // Convert relative path back to absolute for file operations
+    const absolutePath = component.repo_path.replace('../../../', '');
+    const componentPath = path.join(this.srcPath, absolutePath);
     
     if (!fs.existsSync(componentPath)) {
       return [];
@@ -378,6 +384,7 @@ export default MyComponent;`,
       performance: this.analyzePerformance(component),
       accessibility: this.analyzeAccessibility(component),
       testing: this.analyzeTestCoverage(component),
+      example_path: component.example_path || `../components/${component.name}.md`,
     };
   }
 

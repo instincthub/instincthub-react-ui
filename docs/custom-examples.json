@@ -1,0 +1,21 @@
+{
+  "customComponents": [
+    "AnimatedBox",
+    "TextField",
+    "ContentViewOrEdit",
+    "Dialog",
+    "ColorPicker",
+    "Tabs",
+    "VerticalTabs",
+    "DateTimePicker",
+    "TimePicker"
+  ],
+  "description": "Components with custom examples that should not be overwritten during documentation generation",
+  "instructions": [
+    "To add a component to preserve its custom examples:",
+    "1. Add the component name to the 'customComponents' array above",
+    "2. Ensure the component's markdown file has 'custom: true' in its frontmatter",
+    "3. The documentation generator will skip these components during generation"
+  ],
+  "lastUpdated": "2024-01-18T00:00:00.000Z"
+}
