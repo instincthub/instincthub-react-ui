@@ -189,10 +189,10 @@ export function IHubTableServer<T extends object>({
   const defaultDataObj = {
     data: defaultData || [],
     pagination: {
-      totalCount: defaultData?.length,
+      totalCount: (defaultData || [])?.length,
       currentPage: "",
       perPage: 10,
-      totalPages: Math.ceil((defaultData?.length || 10) / 10),
+      totalPages: Math.ceil(((defaultData || [])?.length || 10) / 10),
     },
     links: {
       next: "",
@@ -468,7 +468,7 @@ export function IHubTableServer<T extends object>({
   }
 
   // Error state
-  if (error && !loading && data.length === 0) {
+  if (error && !loading && (data || []).length === 0) {
     return (
       <div className="ihub-data-list-container">
         {title && <h2>{title}</h2>}
@@ -623,7 +623,7 @@ export function IHubTableServer<T extends object>({
           </thead>
 
           {/* Empty state */}
-          {!loading && data.length === 0 ? (
+          {!loading && (data || []).length === 0 ? (
             ""
           ) : (
             <tbody>
@@ -685,7 +685,7 @@ export function IHubTableServer<T extends object>({
                     {/* Expanded row content */}
                     {expandable && renderExpandedRow && isExpanded && (
                       <tr className="ihub-expanded-row">
-                        <td colSpan={columns.length + 1}>
+                        <td colSpan={(columns || []).length + 1}>
                           <div className="ihub-row-details">
                             {renderExpandedRow(row)}
                           </div>
@@ -699,7 +699,7 @@ export function IHubTableServer<T extends object>({
           )}
         </table>
         {/* Empty state */}
-        {!loading && data.length === 0 ? (
+        {!loading && (data || []).length === 0 ? (
           <div className="ihub-data-list-container">
             {actions && (
               <div className="ihub-data-controls ihub-mb-0">{actions}</div>

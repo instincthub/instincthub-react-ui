@@ -228,14 +228,14 @@ export const IHubTable = <T extends object>({
       return;
     }
 
-    if (data.length === 0) {
+    if ((data || []).length === 0) {
       setSelectedRows([]);
       return;
     }
 
     // Simplified selection update logic to prevent recursion
     setSelectedRows((currentSelectedRows) => {
-      if (currentSelectedRows.length === 0) {
+      if ((currentSelectedRows || []).length === 0) {
         return currentSelectedRows;
       }
 
@@ -245,7 +245,9 @@ export const IHubTable = <T extends object>({
       );
 
       // Only update if the selection has actually changed
-      if (updatedSelection.length !== currentSelectedRows.length) {
+      if (
+        (updatedSelection || []).length !== (currentSelectedRows || []).length
+      ) {
         return updatedSelection;
       }
 
