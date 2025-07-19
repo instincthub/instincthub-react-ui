@@ -9,7 +9,7 @@ import {
   useDispatch,
   useSelector,
 } from "../lib/redux";
-import { SessionUserType } from "@/types";
+import { Session } from "@/types/auth";
 
 /**
  * Custom hook for handling item deletion logic
@@ -32,13 +32,7 @@ const useDeleteItem = (
   >("idle");
   const [error, setError] = useState<string | null>(null);
 
-  // Type guard to check if user.name is an object with the expected structure
-  const isSessionUserType = (user: any): user is SessionUserType => {
-    return user?.name && typeof user.name === "object" && "token" in user.name;
-  };
-
-  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
-  const user = sessionUser;
+  const userSession = session as Session;
 
   const deleteItem = useCallback(async () => {
     if (!url) return;
@@ -46,7 +40,7 @@ const useDeleteItem = (
     setStatus("loading");
     setError(null);
 
-    const token = user?.name?.token as string | undefined;
+    const token = userSession?.accessToken;
     const requestOptions = reqOptions("DELETE", null, token);
 
     try {
@@ -68,7 +62,7 @@ const useDeleteItem = (
       setStatus("error");
       setError("Network error. Please check your connection and try again.");
     }
-  }, [url, session, onSuccess]);
+  }, [url, userSession, onSuccess]);
 
   return { deleteItem, status, error };
 };

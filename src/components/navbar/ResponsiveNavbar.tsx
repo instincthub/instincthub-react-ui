@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { NavbarPropsType } from "../../types";
+import { Session } from "@/types/auth";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
@@ -56,7 +57,8 @@ const ResponsiveNavbar = ({
   );
   const [theme, setTheme] = useState<"LightMode" | "DarkMode">(initialTheme);
 
-  const user = session?.user?.name;
+  const userSession = session as Session;
+  const user = userSession?.user;
 
   // Handle scroll effect
   useEffect(() => {
@@ -306,9 +308,9 @@ const ResponsiveNavbar = ({
                     className="ihub-user-profile"
                     onClick={toggleUserDropdown}
                   >
-                    {user?.picture ? (
+                    {user?.image ? (
                       <Image
-                        src={user.picture}
+                        src={user.image}
                         alt="User"
                         width={40}
                         height={40}
@@ -316,11 +318,11 @@ const ResponsiveNavbar = ({
                       />
                     ) : (
                       <div className="ihub-user-initials">
-                        {user?.full_name?.charAt(0) || "U"}
+                        {user?.name?.charAt(0) || "U"}
                       </div>
                     )}
                     <span className="ihub-user-name ihub-hide-sm">
-                      {user?.full_name}
+                      {user?.name}
                       <span className="ihub-dropdown-arrow"></span>
                     </span>
                   </div>

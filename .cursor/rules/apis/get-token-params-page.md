@@ -21,8 +21,8 @@ Let’s say you’re building `/app/[channel]/sis/finance/dashboard/page.tsx`:
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import {
   SearchParamsPageProps,
-  SessionUserType,
 } from "@instincthub/react-ui/types";
+import { Session } from "@/types/auth";
 import DashboardComponent from "@/components/finance/DashboardComponent";
 
 export default async function DashboardPage({
@@ -33,13 +33,8 @@ export default async function DashboardPage({
   const _searchParams = await searchParams;
   const handle = _params.channel;
   const session = await auth();
-  // Type guard to check if user.name is an object with the expected structure
-  const isSessionUserType = (user: any): user is SessionUserType => {
-    return user?.name && typeof user.name === "object" && "token" in user.name;
-  };
-  const sessionUser = isSessionUserType(session?.user) ? session.user : null;
-  const user = sessionUser;
-  const token = user?.name?.token;
+  const userSession = session as Session;
+  const token = userSession?.accessToken;
 
   return (
     <DashboardComponent

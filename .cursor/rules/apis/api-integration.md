@@ -40,7 +40,10 @@ const options = {
 Used in combination with NextAuth.js, extracting token from session:
 
 ```typescript
-const token = session?.user?.name?.token;
+import { Session } from '@/types/auth';
+
+const userSession = session as Session;
+const token = userSession?.accessToken;
 const options = reqOptions("GET", null, token);
 ```
 

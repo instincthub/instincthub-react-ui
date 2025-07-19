@@ -1,6 +1,7 @@
-import NextAuth, { NextAuthConfig, User } from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
+import { User, Session } from "@/types/auth";
 
 // Define your credentials interface for clarity (optional)
 interface CredentialsType {
@@ -46,8 +47,7 @@ export const config: NextAuthConfig = {
           if (objects.token) {
             // Return a User-compatible object
             return {
-              name: objects.name || objects, // Adjust based on your needs
-              email: objects.email,
+              ...objects,
             };
           }
           return null;

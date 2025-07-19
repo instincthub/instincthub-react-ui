@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Session } from "./auth";
 
 declare global {
   namespace JSX {
@@ -306,6 +307,7 @@ export interface NavbarPropsType {
 // Define props interface
 export interface LoginFormPropsType {
   // Existing props
+  session?: Session;
   params?: SearchParamsType;
   searchParams: SearchParamsType;
   endpointPath?: string;

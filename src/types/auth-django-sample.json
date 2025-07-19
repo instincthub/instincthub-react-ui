@@ -1,0 +1,202 @@
+{
+  "user": {
+    "id": "user_123456789",
+    "uuid": "123e4567-e89b-12d3-a456-426614174000",
+    "email": "john.doe@example.com",
+    "name": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe",
+    "image": "https://cdn.example.com/avatars/johndoe.jpg",
+    "emailVerified": true,
+    "phoneNumber": "+1234567890",
+    "phoneVerified": true,
+    "twoFactorEnabled": true,
+    "lastLoginAt": "2024-07-19T14:25:30Z",
+    "lastLoginIp": "192.168.1.100",
+    "loginCount": 42,
+    "createdAt": "2023-05-10T09:15:00Z",
+    "updatedAt": "2024-07-19T14:25:30Z",
+    "locale": "en-US",
+    "timezone": "America/New_York",
+    "currency": "USD",
+    "preferences": {
+      "notifications": {
+        "email": true,
+        "push": true,
+        "sms": false
+      },
+      "theme": "dark",
+      "language": "en"
+    }
+  },
+  "channels": {
+    "active": {
+      "id": "channel_abc123",
+      "name": "John's Tech Channel",
+      "username": "johnstech",
+      "thumbnail": "https://cdn.example.com/channels/johnstech.jpg",
+      "role": "owner",
+      "plan": "pro",
+      "planStatus": "active",
+      "currentPeriodStart": "2024-07-01T00:00:00Z",
+      "currentPeriodEnd": "2024-08-01T00:00:00Z",
+      "cancelAtPeriodEnd": false,
+      "primaryColor": "#3b82f6",
+      "permissions": ["ADMIN"],
+      "joinedAt": "2023-05-10T09:15:00Z",
+      "lastAccessedAt": "2024-07-19T14:20:00Z",
+      "settings": {
+        "notifications": true,
+        "autoPublish": false,
+        "moderationLevel": "medium"
+      }
+    },
+    "list": [
+      {
+        "id": "channel_abc123",
+        "name": "John's Tech Channel",
+        "username": "johnstech",
+        "thumbnail": "https://cdn.example.com/channels/johnstech.jpg",
+        "role": "owner",
+        "plan": "pro",
+        "planStatus": "active",
+        "currentPeriodStart": "2024-07-01T00:00:00Z",
+        "currentPeriodEnd": "2024-08-01T00:00:00Z",
+        "cancelAtPeriodEnd": false,
+        "primaryColor": "#3b82f6",
+        "permissions": ["EVENT"],
+        "joinedAt": "2023-05-10T09:15:00Z",
+        "lastAccessedAt": "2024-07-19T14:20:00Z",
+        "settings": {
+          "notifications": true,
+          "autoPublish": false,
+          "moderationLevel": "medium"
+        }
+      },
+      {
+        "id": "channel_def456",
+        "name": "Collaborative Learning",
+        "username": "collablearn",
+        "thumbnail": "https://cdn.example.com/channels/collablearn.jpg",
+        "role": "admin",
+        "plan": "enterprise",
+        "planStatus": "active",
+        "currentPeriodStart": "2024-06-15T00:00:00Z",
+        "currentPeriodEnd": "2024-07-15T00:00:00Z",
+        "cancelAtPeriodEnd": false,
+        "primaryColor": "#10b981",
+        "permissions": ["REGISTRAR"],
+        "joinedAt": "2023-11-20T16:45:00Z",
+        "lastAccessedAt": "2024-07-18T11:30:00Z",
+        "settings": {
+          "notifications": true,
+          "autoPublish": true,
+          "moderationLevel": "high"
+        }
+      }
+    ],
+    "count": 2
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEyMzQ1Njc4OSIsImVtYWlsIjoiam9obi5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3MjE0MDI3MzAsImV4cCI6MTcyMTQ4OTEzMH0.sample_token_signature",
+  "refreshToken": "rt_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz",
+  "idToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1dGguZXhhbXBsZS5jb20iLCJzdWIiOiJ1c2VyXzEyMzQ1Njc4OSIsImF1ZCI6ImNsaWVudF9pZF9hYmMxMjMiLCJleHAiOjE3MjE0ODkxMzAsImlhdCI6MTcyMTQwMjczMCwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSJ9.sample_id_token_signature",
+  "csrfToken": "csrf_token_abc123def456",
+  "provider": "google",
+  "providerAccountId": "google_account_123456789",
+  "scope": "openid email profile",
+  "tokenType": "Bearer",
+  "apiKey": "api_key_abc123def456ghi789",
+  "bearerToken": "bearer_abc123def456ghi789jkl012",
+  "webhookSecret": "whsec_abc123def456ghi789jkl012mno345",
+  "expires": "2024-07-20T14:25:30Z",
+  "expiresAt": "2024-07-20T14:25:30Z",
+  "issuedAt": "2024-07-19T14:25:30Z",
+  "workspace": {
+    "id": "workspace_xyz789",
+    "name": "John's Personal Workspace",
+    "organizationId": "org_abc123",
+    "isDefault": true
+  },
+  "workspaces": [
+    {
+      "id": "workspace_xyz789",
+      "name": "John's Personal Workspace",
+      "organizationId": "org_abc123",
+      "isDefault": true
+    },
+    {
+      "id": "workspace_uvw456",
+      "name": "Team Collaboration Space",
+      "organizationId": "org_def456",
+      "isDefault": false
+    }
+  ],
+  "roles": ["user", "content_creator", "channel_owner"],
+  "permissions": ["dashboard:view", "profile:edit", "api:access"],
+  "globalPermissions": ["platform:access", "support:contact"],
+  "userSubscription": {
+    "id": "subscription_123456",
+    "plan": "pro",
+    "status": "active",
+    "currentPeriodStart": "2024-07-01T00:00:00Z",
+    "currentPeriodEnd": "2024-08-01T00:00:00Z",
+    "cancelAtPeriodEnd": false,
+    "trialEnd": null,
+    "features": [
+      "advanced_analytics",
+      "custom_branding",
+      "priority_support",
+      "api_access",
+      "webhook_integration"
+    ],
+    "limits": {
+      "channels": 10,
+      "storage": 107374182400,
+      "bandwidth": 1073741824000,
+      "apiCalls": 10000
+    }
+  },
+  "billingEmail": "billing@johndoe.com",
+  "stripeCustomerId": "cus_abc123def456ghi789",
+  "features": {
+    "new_dashboard": true,
+    "beta_analytics": true,
+    "advanced_editor": false,
+    "ai_suggestions": true
+  },
+  "experiments": {
+    "navigation_style": "sidebar",
+    "color_scheme": "variant_b",
+    "onboarding_flow": "v2"
+  },
+  "rateLimit": {
+    "limit": 1000,
+    "remaining": 847,
+    "reset": "2024-07-19T15:00:00Z",
+    "window": "hour"
+  },
+  "apiQuota": {
+    "used": 2350,
+    "limit": 10000,
+    "resetAt": "2024-08-01T00:00:00Z"
+  },
+  "ipAddress": "192.168.1.100",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+  "geoLocation": {
+    "country": "US",
+    "region": "NY",
+    "city": "New York"
+  },
+  "consentedAt": "2023-05-10T09:20:00Z",
+  "privacyPolicyVersion": "2.1",
+  "termsVersion": "3.0",
+  "error": null,
+  "errorDescription": null,
+  "metadata": {
+    "lastFeatureUsed": "content_editor",
+    "sessionScore": 95,
+    "deviceType": "desktop",
+    "referralSource": "organic"
+  }
+}

@@ -13,9 +13,11 @@ import {
 import { ReactTimeTracker, SessionHandleProvider } from "../status";
 import { SessionProvider } from "next-auth/react";
 
+import { Session } from "@/types/auth";
+
 interface ReactClientProviders {
   children: ReactNode;
-  session: any;
+  session: Session | null;
   allowTimeTracker?: boolean;
   allowChangeStyleVariable?: boolean;
   primaryColor?: string;
@@ -53,7 +55,7 @@ export default function ReactClientProviders({
   primaryColor = "#007bff",
   disableValidation = false,
 }: ReactClientProviders) {
-  const handle = session?.user?.name?.channels?.active?.channel?.username;
+  const handle = session?.channels?.active?.username;
   return (
     <SessionProvider session={session}>
       <Provider store={reduxStore}>

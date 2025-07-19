@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { reqOptions, API_HOST_URL, fetchAPI } from "../lib";
-import { SessionUserType } from "../../types";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useParams } from "next/navigation";
+import { Session } from "@/types/auth";
 
 // Define TypeScript interfaces
 interface ChannelThumbnail {
@@ -26,20 +26,7 @@ interface Selected {
   result?: any[];
 }
 
-interface User {
-  name?: {
-    token?: string;
-    channels?: {
-      active?: {
-        channel?: ChannelThumbnail;
-      };
-    };
-  };
-}
 
-interface Session {
-  user?: User;
-}
 
 interface ChannelListAvatarProps {
   className?: string;
@@ -75,19 +62,13 @@ export default function ChannelListAvatar({
   const pathname = usePathname();
   const params = useParams<{ channel: string }>();
   const channel = params.channel || "";
-  const { data: session, update: sessionUpdate } = useSession();
+  const { data: session } = useSession();
 
-  // Type guard to check if user.name is an object with the expected structure
-  const isSessionUserType = (user: any): user is SessionUserType => {
-    return user?.name && typeof user.name === "object" && "token" in user.name;
-  };
+  const userSession = session as Session;
 
-  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
-  const user = sessionUser;
-
-  const token = user?.name?.token;
-  const channels = user?.name?.channels;
-  const activeChannel = channels?.active?.channel;
+  const token = userSession?.accessToken;
+  const channels = userSession?.channels;
+  const activeChannel = channels?.active;
   const currentUsername = activeChannel?.username;
   const [channelList, setChannelList] = useState<ChannelList>({});
   const [selected, setSelected] = useState<Selected>({ result: [] });

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import ChannelListAvatar from "./ChannelListAvatar";
-import { SessionUserType } from "../../types";
+import { Session } from "@/types/auth";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
 type ThemeOption = "Device" | "LightMode" | "DarkMode";
@@ -20,13 +20,7 @@ type MenuOption = "option1" | "option2" | null;
 function MenuDropdown(): JSX.Element {
   const { data: session } = useSession();
 
-  // Type guard to check if user.name is an object with the expected structure
-  const isSessionUserType = (user: any): user is SessionUserType => {
-    return user?.name && typeof user.name === "object" && "token" in user.name;
-  };
-
-  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
-  const user = sessionUser;
+  const user = session as Session;
   const [selectedOption, setSelectedOption] = useState<MenuOption>(null);
   const [previousOption, setPreviousOption] = useState<MenuOption>(null);
   const [theme, setTheme] = useState<ThemeOption>(() => {
@@ -99,22 +93,22 @@ function MenuDropdown(): JSX.Element {
         {!selectedOption && (
           <ul className="ihub-menu">
             <div className="ihub-name-truce">
-              {user?.name?.image ? (
+              {user?.user?.image ? (
                 <Image
-                  src={user.name.image}
+                  src={user.user.image}
                   height={55}
                   width={55}
-                  alt={user.name.full_name || "User avatar"}
+                  alt={user.user.name || "User avatar"}
                   className="ihub-dp"
                 />
               ) : (
                 <p className="ihub-char-avatar">
-                  {user?.name?.full_name?.charAt(0) || ""}
+                  {user?.user?.name?.charAt(0) || ""}
                 </p>
               )}
               <div>
-                <h4 className="ihub-m-0">{user?.name?.full_name}</h4>
-                <p>@{user?.name?.username}</p>
+                <h4 className="ihub-m-0">{user?.user?.name}</h4>
+                <p>@{user?.user?.username}</p>
               </div>
             </div>
             <ul className="ihub-ff-layer">

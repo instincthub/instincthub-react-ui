@@ -41,7 +41,7 @@ interface SearchFieldDBProps {
  *   setData={setData}
  *   setNext={setNext}
  *   setPrevious={setPrevious}
- *   token={session?.user?.name?.token}
+ *   token={userSession?.accessToken}
  *   searchParams={{ channel, search }}
  *   labels="Courses"
  * />

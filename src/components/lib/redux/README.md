@@ -52,18 +52,19 @@ Ensure you load the rquired providers
 "use client";
 
 import { ReactClientProviders as ReactSessionProvider } from "@instincthub/react-ui";
+import { Session } from "@/types/auth";
 import { ReactNode } from "react";
 
 interface ReactClientProviders {
   children: ReactNode;
-  session: any;
+  session: Session | null;
 }
 
 export default function ReactClientProviders({
   children,
   session,
 }: ReactClientProviders) {
-  const handle = session?.user?.name?.channels?.active?.channel?.username;
+  const handle = session?.channels?.active?.username;
   return (
     <ReactSessionProvider session={session}>
       <>{children}</>
@@ -75,13 +76,14 @@ export default function ReactClientProviders({
 ```typescript
 // ./app/layout.tsx
 import ReactClientProviders from "@/components/themes/ReactClientProviders";
+import { Session } from "@/types/auth";
 
 export default function RootLayout({
   children,
   session,
 }: {
   children: React.ReactNode;
-  session: any;
+  session: Session | null;
 }) {
   return (
     <html lang="en">
@@ -187,6 +189,7 @@ Here's how the MainNavbar component uses the Redux store:
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { Session } from "@/types/auth";
 import {
   feedbackToggle,
   selectFeedbackToggle,
@@ -209,8 +212,9 @@ const MainNavbar: React.FC<MainNavbarProps> = (props) => {
   const { data: session } = useSession();
   const showFeedback = useSelector(selectFeedbackToggle);
 
-  const userData = session?.user?.name;
-  const token = userData?.token;
+  const userSession = session as Session;
+  const userData = userSession?.user;
+  const token = userSession?.accessToken;
   const userUUID = userData?.uuid;
 
   // Handle feedback toggle
@@ -249,7 +253,7 @@ const MainNavbar: React.FC<MainNavbarProps> = (props) => {
           {session ? (
             <div className="ihub-user-menu">
               <img
-                src={userData?.picture || "/default-avatar.png"}
+                src={userData?.image || "/default-avatar.png"}
                 alt="User avatar"
                 onClick={() => setShowDropdown(!showDropdown)}
               />

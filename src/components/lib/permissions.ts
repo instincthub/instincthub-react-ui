@@ -1,12 +1,5 @@
 import { NextApiRequest } from "next";
-
-interface Session {
-  user: {
-    name: {
-      username: string;
-    };
-  };
-}
+import { Session } from "@/types/auth";
 
 /**
  * Validates if the request has valid username and custom header
@@ -23,7 +16,7 @@ export const headerUsernamePermission = async (
 
   // Fixed logic error in the original code (negation was incorrectly applied)
   if (
-    session?.user?.name?.username !== headerUsername ||
+    session?.user?.username !== headerUsername ||
     customHeader !== process.env.NEXT_PUBLIC_X_INSTINCTHUB_NEXT_HEADER
   ) {
     return false;

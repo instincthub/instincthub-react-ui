@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { openToast } from "../lib/modals/modals";
 import Error500 from "../status/Error500";
-import { SessionUserType } from "@/types";
+import { Session } from "@/types/auth";
 
 interface SessionHandleProviderProps {
   children: ReactNode;
@@ -41,21 +41,15 @@ export default function SessionHandleProvider({
 
   const { data: session, update: sessionUpdate } = useSession();
 
-  // Type guard to check if user.name is an object with the expected structure
-  const isSessionUserType = (user: any): user is SessionUserType => {
-    return user?.name && typeof user.name === "object" && "token" in user.name;
-  };
-
-  const sessionUser = isSessionUserType(session?.user) ? session?.user : null;
-  const user = sessionUser;
+  const userSession = session as Session;
 
   // Use useMemo for derived values
   const session_handle = useMemo(
-    () => user?.name?.channels?.active?.channel?.username,
-    [user?.name?.channels?.active?.channel?.username]
+    () => userSession?.channels?.active?.username,
+    [userSession?.channels?.active?.username]
   );
 
-  const token = useMemo(() => user?.name?.token, [user?.name?.token]);
+  const token = useMemo(() => userSession?.accessToken, [userSession?.accessToken]);
 
   const [status, setStatus] = useState<boolean>(true);
 
@@ -83,12 +77,10 @@ export default function SessionHandleProvider({
 
       const res = await req.json();
 
-      if (res?.active?.id && user?.name) {
+      if (res?.active?.id && userSession) {
         sessionUpdate({
-          info: {
-            ...(user?.name as object),
-            channels: res,
-          },
+          ...userSession,
+          channels: res,
         });
       } else {
         openToast(res?.detail || "Channel switching failed", 400);
@@ -102,7 +94,7 @@ export default function SessionHandleProvider({
       openToast(errorMessage, 500);
       setStatus(false);
     }
-  }, [token, params_handle, endpointPath, user, sessionUpdate]);
+  }, [token, params_handle, endpointPath, userSession, sessionUpdate]);
 
   // Simplified validation logic
   const isInvalidHandle = useMemo(() => {

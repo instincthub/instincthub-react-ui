@@ -24,6 +24,7 @@ import InputText from "../forms/InputText";
 import OrDivider from "../ui/OrDivider";
 import FromInstinctHub from "./FromInstinctHub";
 import SubmitButton from "../forms/SubmitButton";
+import { Session } from "@/types/auth";
 
 // Define response type from API
 interface LoginResponse {
@@ -127,6 +128,7 @@ const LoadingSkeleton = () => (
  * Enhanced LoginForm component with comprehensive security, UX, and accessibility features
  */
 const LoginForm = ({
+  session,
   params,
   searchParams,
   endpointPath,
@@ -242,9 +244,7 @@ const LoginForm = ({
   const formRef = useRef<HTMLFormElement>(null);
   const retryCountRef = useRef(0);
 
-  const { data: session } = useSession();
-  const user = session?.user;
-
+  const user = session as Session;
 
   // Debounced values for validation
   const debouncedUsername = useDebounce(username, debounceValidation);
@@ -324,8 +324,7 @@ const LoginForm = ({
   // Memoized session user extraction
   const sessionUser = useMemo(() => {
     const isSessionUserType = (user: any): user is SessionUserType => {
-      const hasToken =
-        user?.name && typeof user.name === "object" && "token" in user.name;
+      const hasToken = user && typeof user === "object" && "token" in user;
       return hasToken;
     };
     const result = isSessionUserType(user) ? user : null;
@@ -334,25 +333,19 @@ const LoginForm = ({
 
   const { handle, token, uuid, email, verifyEmail } = useMemo(() => {
     // Try multiple extraction paths for flexibility
-    const handle = sessionUser?.name?.channels?.active?.channel?.username;
+    const handle =
+      typeof sessionUser?.channels === "object"
+        ? sessionUser?.channels?.active?.username
+        : "";
 
     // Try different token paths
-    const token =
-      sessionUser?.name?.token ||
-      (session as any)?.accessToken ||
-      (sessionUser as any)?.accessToken ||
-      sessionUser?.name?.access_token;
+    const token = sessionUser?.accessToken;
 
     // Try different UUID paths
-    const uuid =
-      sessionUser?.name?.uuid ||
-      sessionUser?.name?.user_uuid ||
-      sessionUser?.name?.id;
+    const uuid = sessionUser?.user?.uuid;
 
-    const email = sessionUser?.name?.email || sessionUser?.email;
-    const verifyEmail =
-      sessionUser?.name?.verified || sessionUser?.name?.email_verified;
-
+    const email = sessionUser?.user?.email || sessionUser?.user?.email;
+    const verifyEmail = sessionUser?.user?.emailVerified;
 
     return { handle, token, uuid, email, verifyEmail };
   }, [sessionUser, session]);
@@ -744,7 +737,6 @@ const LoginForm = ({
         return;
       }
 
-
       const cookiesCallbackUrl = getCookie("callbackUrl");
 
       // Priority order for redirects
@@ -939,9 +931,7 @@ const LoginForm = ({
 
   // Simple session-based redirect (without API validation)
   useEffect(() => {
-
     if (autoRedirectOnSession && !isFormLoading && session) {
-
       // If we have a session, redirect immediately
       if (sessionUser && token) {
         // Use validation if needed

@@ -1,738 +1,1238 @@
 # Paystack
 
-**Category:** Library | **Type:** component
+A comprehensive payment processing utility library that integrates with Paystack's payment gateway. This library provides functions for handling payments, charging existing authorizations, coupon validation, and complete payment workflows with error handling and user interactions.
 
-Comprehensive Paystack payment integration with advanced features
+## Features
 
-## 🏷️ Tags
+- **Multiple Payment Methods**: Support for new cards and saved payment methods
+- **Authorization Management**: Charge existing saved cards
+- **Coupon System**: Validate and apply discount coupons
+- **Fee Calculation**: Automatic gateway fee calculation with caps
+- **Email Collection**: Modal prompts for email when needed
+- **Confirmation Dialogs**: User-friendly payment confirmations
+- **Error Handling**: Comprehensive error management and user feedback
+- **Toast Notifications**: Real-time payment status updates
 
-`library`, `payment`, `integration`, `paystack`, `ecommerce`
+## Core Functions
+
+### paystackDataConfig
+
+Configures Paystack payment data for processing.
+
+```tsx
+interface PaystackConfigObjectType {
+  authorization_code?: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  amount: number;
+  currency?: string;
+  metadata?: any;
+  content_type?: string;
+  object_id?: string;
+}
+
+const config = paystackDataConfig({
+  email: "user@example.com",
+  first_name: "John",
+  last_name: "Doe",
+  amount: 1000, // Amount in naira
+  currency: "NGN"
+});
+```
+
+### chargeAuthorization
+
+Charges a customer using an existing authorization code.
+
+```tsx
+const result = await chargeAuthorization(paystackConfig);
+if (result.status === "success") {
+  console.log("Payment successful");
+}
+```
+
+### payWithPaystack
+
+Initiates payment with Paystack popup interface.
+
+```tsx
+const response = await payWithPaystack(paystackConfig);
+console.log("Payment reference:", response.reference);
+```
+
+### handlePaymentSubmit
+
+Main function that orchestrates the complete payment workflow.
+
+```tsx
+await handlePaymentSubmit({
+  objects: {
+    object_id: "123",
+    object_type: "course"
+  },
+  configObj: {
+    email: "user@example.com",
+    first_name: "John",
+    last_name: "Doe",
+    amount: 5000
+  },
+  handleDBAction: (paymentData) => {
+    console.log("Payment completed:", paymentData);
+  },
+  setStatus: (status) => {
+    console.log("Payment status:", status);
+  }
+});
+```
+
+## Basic Usage
 
 ```tsx
 "use client";
-import React, { useState, useEffect } from "react";
-import {
-  handlePaymentSubmit,
-  paystackDataConfig,
-  chargeAuthorization,
-  payWithPaystack,
-} from "@instincthub/react-ui/lib";
-import { openToast, openConfirmModal } from "@instincthub/react-ui/lib";
-import { PaystackConfigObjectType, PaymentContextType } from "@/types";
 
-/**
- * Comprehensive examples demonstrating Paystack payment integration
- * Shows various payment scenarios and implementation patterns
- */
-const PaystackIntegrationExamples = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+import React, { useState } from 'react';
+import { handlePaymentSubmit } from 'instincthub-react-ui';
+
+export default function BasicPaymentExample() {
   const [paymentStatus, setPaymentStatus] = useState<number>(1);
-  const [userProfile, setUserProfile] = useState({
-    email: "user@example.com",
-    firstName: "John",
-    lastName: "Doe",
-    savedCards: [
-      {
-        authorization_code: "AUTH_pmx3mgawyd",
-        card_type: "visa",
-        last4: "1234",
-        exp_month: "12",
-        exp_year: "2025",
-      },
-    ],
-  });
+  const [paymentResult, setPaymentResult] = useState<any>(null);
 
-  // Product/Service data
-  const [products] = useState([
-    {
-      id: 1,
-      name: "Premium Course Access",
-      price: 15000,
-      description: "Full access to all premium courses",
-      type: "subscription",
-    },
-    {
-      id: 2,
-      name: "Individual Course",
-      price: 5000,
-      description: "Access to a single course",
-      type: "one-time",
-    },
-    {
-      id: 3,
-      name: "Consultation Session",
-      price: 25000,
-      description: "1-hour personal consultation",
-      type: "service",
-    },
-  ]);
-
-  const [selectedProduct, setSelectedProduct] = useState(products[0]);
-  const [couponCode, setCouponCode] = useState("");
-  const [includeGatewayFees, setIncludeGatewayFees] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState<"new" | "saved">("new");
-
-  // Handle successful payment
-  const handlePaymentSuccess = (response: any) => {
-    console.log("Payment successful:", response);
-    setPaymentStatus(1);
-    
-    if (response.reference) {
-      openToast(`Payment successful! Reference: ${response.reference}`);
-      
-      // Here you would typically:
-      // 1. Update user's subscription/purchase status
-      // 2. Send confirmation email
-      // 3. Redirect to success page
-      // 4. Update local state
-      
-      // Simulate API call to update user status
-      setTimeout(() => {
-        openToast("Account access updated successfully!");
-      }, 1000);
-    }
-  };
-
-  // Basic payment configuration
-  const createBasicPaymentConfig = (): PaystackConfigObjectType => ({
-    email: userProfile.email,
-    first_name: userProfile.firstName,
-    last_name: userProfile.lastName,
-    amount: selectedProduct.price,
-    currency: "NGN",
-    authorization_code: paymentMethod === "saved" ? userProfile.savedCards[0]?.authorization_code : undefined,
-    content_type: "course",
-    object_id: selectedProduct.id.toString(),
-    metadata: {
-      product_name: selectedProduct.name,
-      product_type: selectedProduct.type,
-      user_id: "user_123",
-      channel_username: "instincthub",
-    },
-  });
-
-  // Handle simple payment
-  const handleSimplePayment = async () => {
-    const config = createBasicPaymentConfig();
-    
-    const paymentContext: PaymentContextType = {
-      openConfirm: true,
-      defaultConfirm: true,
-      defaultMsg: `Are you sure you want to purchase ${selectedProduct.name} for ₦${selectedProduct.price.toLocaleString()}?`,
-      label: selectedProduct.name,
-      objects: {
-        object_id: selectedProduct.id.toString(),
-        object_type: selectedProduct.type,
-        title: selectedProduct.name,
-      },
-      configObj: config,
-      handleDBAction: handlePaymentSuccess,
-      setStatus: setPaymentStatus,
-      coupon: couponCode || undefined,
-      gatwayCharges: includeGatewayFees ? 1.5 : undefined, // 1.5% gateway fee
-      paymentMethod: paymentMethod === "saved" ? {
-        authorization: userProfile.savedCards[0],
-        last4: userProfile.savedCards[0]?.last4,
-      } : undefined,
-    };
-
-    await handlePaymentSubmit(paymentContext);
-  };
-
-  // Handle subscription payment with recurring setup
-  const handleSubscriptionPayment = async () => {
-    const config: PaystackConfigObjectType = {
-      ...createBasicPaymentConfig(),
-      amount: 15000, // Monthly subscription
-      metadata: {
-        ...createBasicPaymentConfig().metadata,
-        subscription_type: "monthly",
-        auto_renew: true,
-      },
-    };
-
-    const paymentContext: PaymentContextType = {
-      openConfirm: true,
-      defaultConfirm: true,
-      defaultMsg: "This will set up a monthly subscription that will auto-renew. Continue?",
-      label: "Premium Subscription",
-      objects: {
-        object_id: "subscription_1",
-        object_type: "subscription",
-        title: "Premium Monthly Subscription",
-      },
-      configObj: config,
-      handleDBAction: (response) => {
-        console.log("Subscription created:", response);
-        openToast("Subscription activated successfully!");
-        // Set up recurring billing logic here
-      },
-      setStatus: setPaymentStatus,
-      gatwayCharges: 1.5,
-    };
-
-    await handlePaymentSubmit(paymentContext);
-  };
-
-  // Handle payment with coupon
-  const handleCouponPayment = async () => {
-    if (!couponCode) {
-      openToast("Please enter a coupon code", 400);
-      return;
-    }
-
-    const config = createBasicPaymentConfig();
-    
-    const paymentContext: PaymentContextType = {
-      openConfirm: true,
-      defaultConfirm: true,
-      label: selectedProduct.name,
-      objects: {
-        object_id: selectedProduct.id.toString(),
-        object_type: "course",
-        title: selectedProduct.name,
-      },
-      configObj: config,
-      handleDBAction: handlePaymentSuccess,
-      setStatus: setPaymentStatus,
-      coupon: couponCode,
-      gatwayCharges: includeGatewayFees ? 1.5 : undefined,
-    };
-
-    await handlePaymentSubmit(paymentContext);
-  };
-
-  // Handle direct card charge (for existing customers)
-  const handleDirectCharge = async () => {
-    if (!userProfile.savedCards.length) {
-      openToast("No saved payment methods available", 400);
-      return;
-    }
-
-    const config = paystackDataConfig(createBasicPaymentConfig());
-    
+  const handleCoursePayment = async () => {
     try {
-      setPaymentStatus(0); // Loading
-      const result = await chargeAuthorization(config);
-      
-      if (result.status === "success") {
-        handlePaymentSuccess(result);
-      } else {
-        openToast("Payment failed. Please try again.", 400);
-        setPaymentStatus(1);
-      }
+      await handlePaymentSubmit({
+        objects: {
+          object_id: "course_123",
+          object_type: "course",
+          title: "React Advanced Course"
+        },
+        configObj: {
+          email: "student@example.com",
+          first_name: "John",
+          last_name: "Smith",
+          amount: 15000, // ₦150 in kobo
+          currency: "NGN",
+          metadata: {
+            course_id: "course_123",
+            student_id: "student_456"
+          }
+        },
+        handleDBAction: (result) => {
+          setPaymentResult(result);
+          console.log("Enrollment successful:", result);
+        },
+        setStatus: setPaymentStatus,
+        label: "React Advanced Course",
+        defaultConfirm: true,
+        openConfirm: true
+      });
     } catch (error) {
-      console.error("Direct charge error:", error);
-      openToast("Payment processing error", 400);
-      setPaymentStatus(1);
+      console.error("Payment failed:", error);
     }
-  };
-
-  // Handle manual Paystack popup
-  const handleManualPaystack = async () => {
-    const config = paystackDataConfig(createBasicPaymentConfig());
-    
-    try {
-      setPaymentStatus(0);
-      const result = await payWithPaystack(config);
-      
-      if (result.status === "success") {
-        handlePaymentSuccess(result);
-      } else {
-        openToast("Payment was cancelled or failed", 400);
-        setPaymentStatus(1);
-      }
-    } catch (error) {
-      console.error("Paystack popup error:", error);
-      openToast("Could not initialize payment", 400);
-      setPaymentStatus(1);
-    }
-  };
-
-  // Calculate total with fees
-  const calculateTotal = () => {
-    let total = selectedProduct.price;
-    
-    if (includeGatewayFees) {
-      const fee = total * 0.015; // 1.5% fee
-      const localCharges = fee > 2000 ? 2000 : fee; // Cap at ₦2000
-      total += localCharges;
-    }
-    
-    return total;
   };
 
   return (
-    <div className="ihub-container ihub-mt-5">
-      <h1>Paystack Payment Integration Examples</h1>
-      <p className="ihub-mb-4">
-        Comprehensive payment integration with Paystack API, featuring multiple payment methods,
-        coupon support, recurring billing, and advanced payment flows.
-      </p>
+    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+      <h2>Course Enrollment</h2>
+      
+      <div style={{ 
+        border: '1px solid #e1e1e1', 
+        borderRadius: '8px', 
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <h3>React Advanced Course</h3>
+        <p>Master advanced React concepts and patterns</p>
+        <p><strong>Price: ₦150</strong></p>
+      </div>
 
-      {/* Payment Configuration Panel */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Payment Configuration</h2>
-        <div className="ihub-card">
-          <div className="ihub-card-header">
-            <h3>Setup Payment Details</h3>
-          </div>
-          <div className="ihub-card-body">
-            <div className="ihub-row">
-              <div className="ihub-col-md-6">
-                <div className="ihub-mb-3">
-                  <label className="ihub-form-label">Select Product/Service</label>
-                  <select
-                    className="ihub-input"
-                    value={selectedProduct.id}
-                    onChange={(e) => {
-                      const product = products.find(p => p.id === Number(e.target.value));
-                      if (product) setSelectedProduct(product);
-                    }}
-                  >
-                    {products.map((product) => (
-                      <option key={product.id} value={product.id}>
-                        {product.name} - ₦{product.price.toLocaleString()}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="ihub-mb-3">
-                  <label className="ihub-form-label">Coupon Code</label>
-                  <input
-                    type="text"
-                    className="ihub-input"
-                    placeholder="Enter coupon code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                  />
-                </div>
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <div className="ihub-mb-3">
-                  <label className="ihub-form-label">Payment Method</label>
-                  <div className="ihub-radio-group">
-                    <label className="ihub-radio-container">
-                      <input
-                        type="radio"
-                        value="new"
-                        checked={paymentMethod === "new"}
-                        onChange={(e) => setPaymentMethod(e.target.value as "new" | "saved")}
-                      />
-                      <span className="ihub-radio-mark"></span>
-                      New Payment Method
-                    </label>
-                    <label className="ihub-radio-container">
-                      <input
-                        type="radio"
-                        value="saved"
-                        checked={paymentMethod === "saved"}
-                        onChange={(e) => setPaymentMethod(e.target.value as "new" | "saved")}
-                        disabled={!userProfile.savedCards.length}
-                      />
-                      <span className="ihub-radio-mark"></span>
-                      Saved Card (**** {userProfile.savedCards[0]?.last4})
-                    </label>
-                  </div>
-                </div>
-                
-                <div className="ihub-mb-3">
-                  <label className="ihub-checkbox-container">
-                    <input
-                      type="checkbox"
-                      checked={includeGatewayFees}
-                      onChange={(e) => setIncludeGatewayFees(e.target.checked)}
-                    />
-                    <span className="ihub-checkmark"></span>
-                    Include gateway fees (1.5%, max ₦2000)
-                  </label>
-                </div>
-              </div>
-            </div>
-            
-            {/* Payment Summary */}
-            <div className="ihub-payment-summary ihub-mt-4 ihub-p-3" style={{ backgroundColor: "#f8f9fa", borderRadius: "6px" }}>
-              <h4>Payment Summary</h4>
-              <div className="ihub-d-flex ihub-justify-content-between">
-                <span>{selectedProduct.name}</span>
-                <span>₦{selectedProduct.price.toLocaleString()}</span>
-              </div>
-              {includeGatewayFees && (
-                <div className="ihub-d-flex ihub-justify-content-between ihub-text-muted">
-                  <span>Gateway fees</span>
-                  <span>₦{Math.min(selectedProduct.price * 0.015, 2000).toLocaleString()}</span>
-                </div>
-              )}
-              <hr />
-              <div className="ihub-d-flex ihub-justify-content-between">
-                <strong>Total</strong>
-                <strong>₦{calculateTotal().toLocaleString()}</strong>
-              </div>
-            </div>
-          </div>
+      <button
+        onClick={handleCoursePayment}
+        disabled={paymentStatus === 0}
+        style={{
+          width: '100%',
+          padding: '12px',
+          backgroundColor: paymentStatus === 0 ? '#9ca3af' : '#3b82f6',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px',
+          fontSize: '16px',
+          cursor: paymentStatus === 0 ? 'not-allowed' : 'pointer'
+        }}
+      >
+        {paymentStatus === 0 ? 'Processing...' : 'Enroll Now - ₦150'}
+      </button>
+
+      {paymentResult && (
+        <div style={{
+          marginTop: '20px',
+          padding: '12px',
+          backgroundColor: '#f0fdf4',
+          border: '1px solid #bbf7d0',
+          borderRadius: '6px',
+          color: '#059669'
+        }}>
+          ✅ Payment successful! Reference: {paymentResult.reference}
         </div>
-      </section>
+      )}
+    </div>
+  );
+}
+```
 
-      {/* Basic Payment Examples */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Basic Payment Methods</h2>
-        <div className="ihub-row">
-          <div className="ihub-col-md-4">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Simple Payment</h3>
-              </div>
-              <div className="ihub-card-body">
-                <p>Basic payment flow with confirmation dialog and automatic payment processing.</p>
-                <button
-                  className="ihub-primary-btn ihub-w-100"
-                  onClick={handleSimplePayment}
-                  disabled={paymentStatus === 0}
-                >
-                  {paymentStatus === 0 ? "Processing..." : "Pay Now"}
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Direct Charge</h3>
-              </div>
-              <div className="ihub-card-body">
-                <p>Charge saved payment method directly without user interaction.</p>
-                <button
-                  className="ihub-success-btn ihub-w-100"
-                  onClick={handleDirectCharge}
-                  disabled={paymentStatus === 0 || !userProfile.savedCards.length}
-                >
-                  {paymentStatus === 0 ? "Charging..." : "Charge Saved Card"}
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Manual Popup</h3>
-              </div>
-              <div className="ihub-card-body">
-                <p>Directly open Paystack popup for payment processing.</p>
-                <button
-                  className="ihub-outlined-btn ihub-w-100"
-                  onClick={handleManualPaystack}
-                  disabled={paymentStatus === 0}
-                >
-                  {paymentStatus === 0 ? "Loading..." : "Open Paystack"}
-                </button>
-              </div>
-            </div>
-          </div>
+## Advanced Usage
+
+### E-commerce Checkout
+
+```tsx
+"use client";
+
+import React, { useState } from 'react';
+import { handlePaymentSubmit } from 'instincthub-react-ui';
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export default function EcommerceCheckout() {
+  const [cart, setCart] = useState<CartItem[]>([
+    { id: '1', name: 'React Course', price: 15000, quantity: 1 },
+    { id: '2', name: 'Node.js Course', price: 20000, quantity: 1 }
+  ]);
+
+  const [customerInfo, setCustomerInfo] = useState({
+    email: '',
+    firstName: '',
+    lastName: ''
+  });
+
+  const [paymentStatus, setPaymentStatus] = useState<number>(1);
+  const [couponCode, setCouponCode] = useState('');
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shipping = 2000; // ₦20 shipping
+  const total = subtotal + shipping;
+
+  const handleCheckout = async () => {
+    if (!customerInfo.email || !customerInfo.firstName || !customerInfo.lastName) {
+      alert('Please fill in all customer information');
+      return;
+    }
+
+    try {
+      await handlePaymentSubmit({
+        objects: {
+          object_id: `order_${Date.now()}`,
+          object_type: "order",
+          title: `Order (${cart.length} items)`
+        },
+        configObj: {
+          email: customerInfo.email,
+          first_name: customerInfo.firstName,
+          last_name: customerInfo.lastName,
+          amount: total,
+          currency: "NGN",
+          metadata: {
+            cart_items: cart,
+            shipping_fee: shipping,
+            subtotal: subtotal,
+            order_type: "ecommerce"
+          }
+        },
+        coupon: couponCode || undefined,
+        gatwayCharges: 1.5, // 1.5% gateway fee
+        handleDBAction: (result) => {
+          console.log("Order completed:", result);
+          // Clear cart after successful payment
+          setCart([]);
+        },
+        setStatus: setPaymentStatus,
+        label: "Your Order",
+        defaultConfirm: true,
+        openConfirm: true,
+        defaultMsg: `Complete your order of ${cart.length} items for ₦${(total / 100).toFixed(2)}?`
+      });
+    } catch (error) {
+      console.error("Checkout failed:", error);
+    }
+  };
+
+  const updateQuantity = (id: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      setCart(prev => prev.filter(item => item.id !== id));
+    } else {
+      setCart(prev => prev.map(item => 
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      ));
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <h1>Checkout</h1>
+
+      {/* Customer Information */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3>Customer Information</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+          <input
+            type="text"
+            placeholder="First Name"
+            value={customerInfo.firstName}
+            onChange={(e) => setCustomerInfo(prev => ({ ...prev, firstName: e.target.value }))}
+            style={{
+              padding: '10px',
+              border: '1px solid #e1e1e1',
+              borderRadius: '4px'
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={customerInfo.lastName}
+            onChange={(e) => setCustomerInfo(prev => ({ ...prev, lastName: e.target.value }))}
+            style={{
+              padding: '10px',
+              border: '1px solid #e1e1e1',
+              borderRadius: '4px'
+            }}
+          />
         </div>
-      </section>
+        <input
+          type="email"
+          placeholder="Email Address"
+          value={customerInfo.email}
+          onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #e1e1e1',
+            borderRadius: '4px'
+          }}
+        />
+      </div>
 
-      {/* Advanced Payment Scenarios */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Advanced Payment Scenarios</h2>
-        <div className="ihub-row">
-          <div className="ihub-col-md-6">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Subscription Payment</h3>
-              </div>
-              <div className="ihub-card-body">
-                <p>Set up recurring payments for subscription services.</p>
-                <div className="ihub-mb-3">
-                  <strong>Features:</strong>
-                  <ul>
-                    <li>Monthly recurring billing</li>
-                    <li>Automatic card authorization</li>
-                    <li>Subscription management</li>
-                    <li>Failed payment handling</li>
-                  </ul>
-                </div>
-                <button
-                  className="ihub-gradient-btn ihub-w-100"
-                  onClick={handleSubscriptionPayment}
-                  disabled={paymentStatus === 0}
-                >
-                  {paymentStatus === 0 ? "Setting up..." : "Subscribe Monthly"}
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-6">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Payment with Coupon</h3>
-              </div>
-              <div className="ihub-card-body">
-                <p>Apply discount coupons before payment processing.</p>
-                <div className="ihub-mb-3">
-                  <strong>Coupon Features:</strong>
-                  <ul>
-                    <li>Percentage and fixed discounts</li>
-                    <li>Validation with API</li>
-                    <li>Free course coupons (100% off)</li>
-                    <li>Usage limit enforcement</li>
-                  </ul>
-                </div>
-                <button
-                  className="ihub-warning-btn ihub-w-100"
-                  onClick={handleCouponPayment}
-                  disabled={paymentStatus === 0 || !couponCode}
-                >
-                  {paymentStatus === 0 ? "Applying..." : "Apply Coupon & Pay"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Payment Flow Visualization */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Payment Flow Process</h2>
-        <div className="ihub-card">
-          <div className="ihub-card-header">
-            <h3>Step-by-Step Payment Process</h3>
-          </div>
-          <div className="ihub-card-body">
-            <div className="ihub-payment-flow">
-              <div className="ihub-flow-step">
-                <div className="ihub-flow-number">1</div>
-                <div className="ihub-flow-content">
-                  <h4>Payment Configuration</h4>
-                  <p>Set up payment details, amount, user info, and metadata</p>
-                </div>
+      {/* Cart Items */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3>Order Summary</h3>
+        <div style={{ border: '1px solid #e1e1e1', borderRadius: '8px', overflow: 'hidden' }}>
+          {cart.map(item => (
+            <div key={item.id} style={{ 
+              padding: '16px', 
+              borderBottom: '1px solid #e1e1e1',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div>
+                <div style={{ fontWeight: 'bold' }}>{item.name}</div>
+                <div style={{ color: '#6b7280' }}>₦{(item.price / 100).toFixed(2)} each</div>
               </div>
               
-              <div className="ihub-flow-arrow">→</div>
-              
-              <div className="ihub-flow-step">
-                <div className="ihub-flow-number">2</div>
-                <div className="ihub-flow-content">
-                  <h4>Validation & Confirmation</h4>
-                  <p>Validate coupon codes, show confirmation dialog if needed</p>
-                </div>
-              </div>
-              
-              <div className="ihub-flow-arrow">→</div>
-              
-              <div className="ihub-flow-step">
-                <div className="ihub-flow-number">3</div>
-                <div className="ihub-flow-content">
-                  <h4>Payment Processing</h4>
-                  <p>Execute payment via saved card or new payment method</p>
-                </div>
-              </div>
-              
-              <div className="ihub-flow-arrow">→</div>
-              
-              <div className="ihub-flow-step">
-                <div className="ihub-flow-number">4</div>
-                <div className="ihub-flow-content">
-                  <h4>Success Handling</h4>
-                  <p>Process successful payment, update user access, send confirmations</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Error Handling Examples */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Error Handling & Edge Cases</h2>
-        <div className="ihub-row">
-          <div className="ihub-col-md-6">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Common Error Scenarios</h3>
-              </div>
-              <div className="ihub-card-body">
-                <ul>
-                  <li><strong>Insufficient Funds:</strong> Card declined due to insufficient balance</li>
-                  <li><strong>Invalid Card:</strong> Expired or invalid card details</li>
-                  <li><strong>Network Issues:</strong> API connection problems</li>
-                  <li><strong>Invalid Coupon:</strong> Expired or non-existent coupon codes</li>
-                  <li><strong>Duplicate Payment:</strong> Preventing double charges</li>
-                </ul>
-                
-                <div className="ihub-mt-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <button
-                    className="ihub-danger-btn"
-                    onClick={() => {
-                      openToast("Simulated payment error: Insufficient funds", 400);
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      border: '1px solid #e1e1e1',
+                      borderRadius: '4px',
+                      backgroundColor: 'white',
+                      cursor: 'pointer'
                     }}
                   >
-                    Simulate Error
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      border: '1px solid #e1e1e1',
+                      borderRadius: '4px',
+                      backgroundColor: 'white',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    +
                   </button>
                 </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-6">
-            <div className="ihub-card">
-              <div className="ihub-card-header">
-                <h3>Recovery Mechanisms</h3>
-              </div>
-              <div className="ihub-card-body">
-                <ul>
-                  <li><strong>Retry Logic:</strong> Automatic retry for network failures</li>
-                  <li><strong>Alternative Methods:</strong> Fallback to different payment options</li>
-                  <li><strong>User Feedback:</strong> Clear error messages and next steps</li>
-                  <li><strong>Support Integration:</strong> Easy access to customer support</li>
-                  <li><strong>Transaction Logging:</strong> Detailed logs for debugging</li>
-                </ul>
                 
-                <div className="ihub-mt-3">
-                  <button
-                    className="ihub-success-btn"
-                    onClick={() => {
-                      openToast("Recovery process initiated successfully!");
-                    }}
-                  >
-                    Test Recovery
-                  </button>
+                <div style={{ fontWeight: 'bold', width: '80px', textAlign: 'right' }}>
+                  ₦{((item.price * item.quantity) / 100).toFixed(2)}
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* Security & Compliance */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Security & Compliance</h2>
-        <div className="ihub-card">
-          <div className="ihub-card-header">
-            <h3>Payment Security Features</h3>
-          </div>
-          <div className="ihub-card-body">
-            <div className="ihub-row">
-              <div className="ihub-col-md-6">
-                <h4>Data Protection</h4>
-                <ul>
-                  <li><strong>PCI DSS Compliance:</strong> Paystack handles sensitive card data</li>
-                  <li><strong>Tokenization:</strong> Card details are never stored locally</li>
-                  <li><strong>HTTPS Only:</strong> All communications are encrypted</li>
-                  <li><strong>3D Secure:</strong> Additional authentication for high-value transactions</li>
-                </ul>
+      {/* Coupon Code */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3>Coupon Code</h3>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="text"
+            placeholder="Enter coupon code"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            style={{
+              flex: 1,
+              padding: '10px',
+              border: '1px solid #e1e1e1',
+              borderRadius: '4px'
+            }}
+          />
+          <button
+            style={{
+              padding: '10px 16px',
+              backgroundColor: '#6b7280',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+
+      {/* Order Total */}
+      <div style={{ 
+        marginBottom: '24px',
+        padding: '16px',
+        backgroundColor: '#f8f9fa',
+        borderRadius: '8px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span>Subtotal:</span>
+          <span>₦{(subtotal / 100).toFixed(2)}</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span>Shipping:</span>
+          <span>₦{(shipping / 100).toFixed(2)}</span>
+        </div>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          fontWeight: 'bold',
+          fontSize: '18px',
+          borderTop: '1px solid #e1e1e1',
+          paddingTop: '8px'
+        }}>
+          <span>Total:</span>
+          <span>₦{(total / 100).toFixed(2)}</span>
+        </div>
+      </div>
+
+      {/* Checkout Button */}
+      <button
+        onClick={handleCheckout}
+        disabled={paymentStatus === 0 || cart.length === 0}
+        style={{
+          width: '100%',
+          padding: '16px',
+          backgroundColor: (paymentStatus === 0 || cart.length === 0) ? '#9ca3af' : '#10b981',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          cursor: (paymentStatus === 0 || cart.length === 0) ? 'not-allowed' : 'pointer'
+        }}
+      >
+        {paymentStatus === 0 ? 'Processing Payment...' : 
+         cart.length === 0 ? 'Cart is Empty' :
+         `Complete Order - ₦${(total / 100).toFixed(2)}`}
+      </button>
+    </div>
+  );
+}
+```
+
+### Subscription Payment System
+
+```tsx
+"use client";
+
+import React, { useState } from 'react';
+import { handlePaymentSubmit } from 'instincthub-react-ui';
+
+interface SubscriptionPlan {
+  id: string;
+  name: string;
+  price: number;
+  duration: string;
+  features: string[];
+  popular?: boolean;
+}
+
+export default function SubscriptionPayment() {
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<number>(1);
+  const [billingInfo, setBillingInfo] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    autoRenew: true
+  });
+
+  const plans: SubscriptionPlan[] = [
+    {
+      id: 'basic',
+      name: 'Basic Plan',
+      price: 5000, // ₦50/month
+      duration: 'Monthly',
+      features: ['5 Course Access', 'Basic Support', 'Certificate']
+    },
+    {
+      id: 'pro',
+      name: 'Pro Plan',
+      price: 15000, // ₦150/month
+      duration: 'Monthly',
+      features: ['Unlimited Courses', 'Priority Support', 'All Certificates', '1-on-1 Sessions'],
+      popular: true
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise Plan',
+      price: 50000, // ₦500/month
+      duration: 'Monthly',
+      features: ['Everything in Pro', 'Custom Learning Paths', 'Team Management', 'API Access']
+    }
+  ];
+
+  const handleSubscribe = async () => {
+    if (!selectedPlan || !billingInfo.email || !billingInfo.firstName || !billingInfo.lastName) {
+      alert('Please select a plan and fill in all billing information');
+      return;
+    }
+
+    try {
+      await handlePaymentSubmit({
+        objects: {
+          object_id: selectedPlan.id,
+          object_type: "subscription",
+          title: selectedPlan.name
+        },
+        configObj: {
+          email: billingInfo.email,
+          first_name: billingInfo.firstName,
+          last_name: billingInfo.lastName,
+          amount: selectedPlan.price,
+          currency: "NGN",
+          metadata: {
+            plan_id: selectedPlan.id,
+            plan_name: selectedPlan.name,
+            duration: selectedPlan.duration,
+            auto_renew: billingInfo.autoRenew,
+            subscription_type: "monthly"
+          }
+        },
+        handleDBAction: (result) => {
+          console.log("Subscription activated:", result);
+        },
+        setStatus: setPaymentStatus,
+        label: selectedPlan.name,
+        defaultConfirm: true,
+        openConfirm: true,
+        defaultMsg: `Subscribe to ${selectedPlan.name} for ₦${(selectedPlan.price / 100).toFixed(2)}/month?`
+      });
+    } catch (error) {
+      console.error("Subscription failed:", error);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+      <h1>Choose Your Plan</h1>
+      
+      {/* Plan Selection */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+        gap: '20px',
+        marginBottom: '40px'
+      }}>
+        {plans.map(plan => (
+          <div
+            key={plan.id}
+            onClick={() => setSelectedPlan(plan)}
+            style={{
+              border: selectedPlan?.id === plan.id ? '2px solid #3b82f6' : '1px solid #e1e1e1',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              position: 'relative',
+              backgroundColor: selectedPlan?.id === plan.id ? '#f0f9ff' : 'white'
+            }}
+          >
+            {plan.popular && (
+              <div style={{
+                position: 'absolute',
+                top: '-10px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: '#f59e0b',
+                color: 'white',
+                padding: '4px 16px',
+                borderRadius: '16px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}>
+                POPULAR
               </div>
-              
-              <div className="ihub-col-md-6">
-                <h4>Fraud Prevention</h4>
-                <ul>
-                  <li><strong>Risk Scoring:</strong> Automatic fraud detection</li>
-                  <li><strong>Velocity Checks:</strong> Monitoring for unusual activity</li>
-                  <li><strong>Geolocation:</strong> Location-based risk assessment</li>
-                  <li><strong>Device Fingerprinting:</strong> Device-based security</li>
-                </ul>
-              </div>
+            )}
+            
+            <h3 style={{ marginTop: plan.popular ? '16px' : '0' }}>{plan.name}</h3>
+            <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
+              ₦{(plan.price / 100).toFixed(0)}
+            </div>
+            <div style={{ color: '#6b7280', marginBottom: '20px' }}>
+              per {plan.duration.toLowerCase()}
             </div>
             
-            <div className="ihub-security-badge ihub-mt-4 ihub-text-center">
-              <div className="ihub-badge ihub-badge-success ihub-badge-lg">
-                ✓ PCI DSS Level 1 Compliant
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {plan.features.map((feature, index) => (
+                <li key={index} style={{ 
+                  padding: '8px 0',
+                  borderBottom: '1px solid #f1f1f1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <span style={{ color: '#10b981' }}>✓</span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            {selectedPlan?.id === plan.id && (
+              <div style={{
+                marginTop: '16px',
+                padding: '8px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                textAlign: 'center',
+                borderRadius: '6px',
+                fontWeight: 'bold'
+              }}>
+                Selected
               </div>
-              <div className="ihub-badge ihub-badge-primary ihub-badge-lg">
-                ✓ 256-bit SSL Encryption
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Billing Information */}
+      {selectedPlan && (
+        <div style={{ 
+          border: '1px solid #e1e1e1', 
+          borderRadius: '8px', 
+          padding: '24px',
+          marginBottom: '24px'
+        }}>
+          <h3>Billing Information</h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <input
+              type="text"
+              placeholder="First Name"
+              value={billingInfo.firstName}
+              onChange={(e) => setBillingInfo(prev => ({ ...prev, firstName: e.target.value }))}
+              style={{
+                padding: '12px',
+                border: '1px solid #e1e1e1',
+                borderRadius: '6px',
+                fontSize: '16px'
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={billingInfo.lastName}
+              onChange={(e) => setBillingInfo(prev => ({ ...prev, lastName: e.target.value }))}
+              style={{
+                padding: '12px',
+                border: '1px solid #e1e1e1',
+                borderRadius: '6px',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+          
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={billingInfo.email}
+            onChange={(e) => setBillingInfo(prev => ({ ...prev, email: e.target.value }))}
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #e1e1e1',
+              borderRadius: '6px',
+              fontSize: '16px',
+              marginBottom: '16px'
+            }}
+          />
+          
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <input
+              type="checkbox"
+              checked={billingInfo.autoRenew}
+              onChange={(e) => setBillingInfo(prev => ({ ...prev, autoRenew: e.target.checked }))}
+            />
+            Auto-renew subscription monthly
+          </label>
+        </div>
+      )}
+
+      {/* Subscribe Button */}
+      {selectedPlan && (
+        <div style={{ textAlign: 'center' }}>
+          <button
+            onClick={handleSubscribe}
+            disabled={paymentStatus === 0}
+            style={{
+              padding: '16px 32px',
+              backgroundColor: paymentStatus === 0 ? '#9ca3af' : '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              cursor: paymentStatus === 0 ? 'not-allowed' : 'pointer',
+              minWidth: '200px'
+            }}
+          >
+            {paymentStatus === 0 ? 'Processing...' : `Subscribe Now - ₦${(selectedPlan.price / 100).toFixed(2)}/month`}
+          </button>
+          
+          <p style={{ marginTop: '12px', color: '#6b7280', fontSize: '14px' }}>
+            You can cancel anytime. No long-term commitments.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Error Handling
+
+### Payment Error Management
+
+```tsx
+"use client";
+
+import React, { useState } from 'react';
+import { handlePaymentSubmit } from 'instincthub-react-ui';
+
+export default function PaymentErrorHandling() {
+  const [paymentStatus, setPaymentStatus] = useState<number>(1);
+  const [errorLogs, setErrorLogs] = useState<string[]>([]);
+  
+  const addLog = (message: string) => {
+    setErrorLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+  };
+
+  const simulateNetworkError = async () => {
+    addLog("Attempting payment with network error simulation");
+    
+    try {
+      await handlePaymentSubmit({
+        objects: {
+          object_id: "test_network_error",
+          object_type: "test"
+        },
+        configObj: {
+          email: "test@example.com",
+          first_name: "Test",
+          last_name: "User",
+          amount: 1000,
+          // Simulate network error by using invalid endpoint
+          metadata: { test_type: "network_error" }
+        },
+        handleDBAction: (result) => {
+          addLog(`Unexpected success: ${JSON.stringify(result)}`);
+        },
+        setStatus: setPaymentStatus,
+        label: "Network Error Test"
+      });
+    } catch (error) {
+      addLog(`Network error caught: ${error}`);
+    }
+  };
+
+  const simulateInvalidCard = async () => {
+    addLog("Attempting payment with invalid card simulation");
+    
+    try {
+      await handlePaymentSubmit({
+        objects: {
+          object_id: "test_invalid_card",
+          object_type: "test"
+        },
+        configObj: {
+          email: "test@example.com",
+          first_name: "Test",
+          last_name: "User",
+          amount: 1000,
+          authorization_code: "invalid_auth_code"
+        },
+        handleDBAction: (result) => {
+          if (result.status === "failed") {
+            addLog(`Card declined: ${result.gateway_response || "Invalid card"}`);
+          } else {
+            addLog(`Payment result: ${JSON.stringify(result)}`);
+          }
+        },
+        setStatus: setPaymentStatus,
+        label: "Invalid Card Test"
+      });
+    } catch (error) {
+      addLog(`Card error: ${error}`);
+    }
+  };
+
+  const simulateSuccessfulPayment = async () => {
+    addLog("Processing successful payment");
+    
+    try {
+      await handlePaymentSubmit({
+        objects: {
+          object_id: "test_success",
+          object_type: "test"
+        },
+        configObj: {
+          email: "success@example.com",
+          first_name: "Success",
+          last_name: "User",
+          amount: 1000
+        },
+        handleDBAction: (result) => {
+          addLog(`Payment successful: Reference ${result.reference}`);
+        },
+        setStatus: setPaymentStatus,
+        label: "Success Test",
+        defaultConfirm: false // Skip confirmation for demo
+      });
+    } catch (error) {
+      addLog(`Unexpected error: ${error}`);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <h1>Payment Error Handling Demo</h1>
+      
+      <div style={{ marginBottom: '24px' }}>
+        <h3>Test Scenarios:</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <button
+            onClick={simulateSuccessfulPayment}
+            disabled={paymentStatus === 0}
+            style={{
+              padding: '12px',
+              backgroundColor: paymentStatus === 0 ? '#9ca3af' : '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: paymentStatus === 0 ? 'not-allowed' : 'pointer'
+            }}
+          >
+            ✅ Simulate Successful Payment
+          </button>
+          
+          <button
+            onClick={simulateInvalidCard}
+            disabled={paymentStatus === 0}
+            style={{
+              padding: '12px',
+              backgroundColor: paymentStatus === 0 ? '#9ca3af' : '#f59e0b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: paymentStatus === 0 ? 'not-allowed' : 'pointer'
+            }}
+          >
+            ⚠️ Simulate Card Declined
+          </button>
+          
+          <button
+            onClick={simulateNetworkError}
+            disabled={paymentStatus === 0}
+            style={{
+              padding: '12px',
+              backgroundColor: paymentStatus === 0 ? '#9ca3af' : '#dc2626',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: paymentStatus === 0 ? 'not-allowed' : 'pointer'
+            }}
+          >
+            ❌ Simulate Network Error
+          </button>
+        </div>
+      </div>
+
+      {/* Payment Status */}
+      <div style={{ 
+        marginBottom: '24px',
+        padding: '16px',
+        backgroundColor: paymentStatus === 0 ? '#fef3c7' : '#f0fdf4',
+        borderRadius: '8px',
+        border: `1px solid ${paymentStatus === 0 ? '#fbbf24' : '#bbf7d0'}`
+      }}>
+        <h3>Payment Status:</h3>
+        <p style={{ margin: 0, fontWeight: 'bold' }}>
+          {paymentStatus === 0 ? '🔄 Processing...' : '✅ Ready'}
+        </p>
+      </div>
+
+      {/* Error Logs */}
+      {errorLogs.length > 0 && (
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h3>Event Log:</h3>
+            <button
+              onClick={() => setErrorLogs([])}
+              style={{
+                padding: '4px 8px',
+                fontSize: '12px',
+                backgroundColor: '#6b7280',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Clear Log
+            </button>
+          </div>
+          
+          <div style={{
+            border: '1px solid #e1e1e1',
+            borderRadius: '6px',
+            padding: '12px',
+            backgroundColor: '#f8f9fa',
+            maxHeight: '300px',
+            overflowY: 'auto',
+            fontFamily: 'monospace',
+            fontSize: '14px'
+          }}>
+            {errorLogs.map((log, index) => (
+              <div key={index} style={{ marginBottom: '4px' }}>
+                {log}
               </div>
-              <div className="ihub-badge ihub-badge-warning ihub-badge-lg">
-                ✓ 3D Secure Enabled
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </section>
+      )}
 
-      {/* Implementation Guide */}
-      <section className="ihub-mb-5">
-        <h2 className="ihub-mb-3">Implementation Guide</h2>
-        <div className="ihub-card ihub-p-4">
-          <h3>Environment Setup:</h3>
-          <pre className="ihub-code-block">
-{`// .env.local
+      {/* Error Handling Tips */}
+      <div style={{
+        padding: '16px',
+        backgroundColor: '#eff6ff',
+        border: '1px solid #bfdbfe',
+        borderRadius: '8px'
+      }}>
+        <h3 style={{ color: '#1d4ed8' }}>Error Handling Best Practices:</h3>
+        <ul style={{ color: '#1d4ed8', margin: 0 }}>
+          <li>Always provide clear error messages to users</li>
+          <li>Log payment errors for debugging</li>
+          <li>Implement retry mechanisms for network errors</li>
+          <li>Validate payment data before submission</li>
+          <li>Handle timeout scenarios gracefully</li>
+          <li>Provide alternative payment methods</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+```
+
+## Testing Examples
+
+### Unit Tests
+
+```tsx
+// __tests__/paystack.test.ts
+import { 
+  paystackDataConfig, 
+  chargeAuthorization, 
+  payWithPaystack 
+} from 'instincthub-react-ui';
+
+// Mock Paystack environment variables
+process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY = 'pk_test_123';
+process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY = 'sk_test_123';
+
+// Mock window.PaystackPop
+global.window = {
+  ...global.window,
+  PaystackPop: {
+    setup: jest.fn().mockReturnValue({
+      openIframe: jest.fn()
+    })
+  },
+  location: {
+    href: 'https://example.com'
+  }
+} as any;
+
+// Mock fetch
+global.fetch = jest.fn();
+
+describe('Paystack Utilities', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('paystackDataConfig', () => {
+    test('configures payment data correctly', () => {
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000,
+        currency: 'NGN'
+      });
+
+      expect(config).toEqual({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 100000, // Converted to kobo
+        currency: 'NGN',
+        publicKey: 'pk_test_123',
+        key: 'pk_test_123',
+        callback_url: 'https://example.com',
+        reference: expect.any(String)
+      });
+    });
+
+    test('uses default currency when not provided', () => {
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000
+      });
+
+      expect(config.currency).toBe('NGN');
+    });
+  });
+
+  describe('chargeAuthorization', () => {
+    test('handles successful charge', async () => {
+      const mockResponse = {
+        data: {
+          status: 'success',
+          reference: 'ref_123'
+        }
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse)
+      });
+
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000,
+        authorization_code: 'auth_123'
+      });
+
+      const result = await chargeAuthorization(config);
+
+      expect(fetch).toHaveBeenCalledWith(
+        'https://api.paystack.co/transaction/charge_authorization',
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.objectContaining({
+            Authorization: 'Bearer sk_test_123'
+          })
+        })
+      );
+
+      expect(result).toEqual(mockResponse.data);
+    });
+
+    test('handles failed charge', async () => {
+      const mockResponse = {
+        data: {
+          status: 'failed',
+          reference: 'ref_123'
+        }
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        json: () => Promise.resolve(mockResponse)
+      });
+
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000,
+        authorization_code: 'auth_123'
+      });
+
+      const result = await chargeAuthorization(config);
+
+      expect(result).toEqual(mockResponse.data);
+    });
+  });
+
+  describe('payWithPaystack', () => {
+    test('initializes Paystack popup correctly', async () => {
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000
+      });
+
+      const mockSetup = window.PaystackPop.setup as jest.Mock;
+      const mockOpenIframe = jest.fn();
+      mockSetup.mockReturnValue({ openIframe: mockOpenIframe });
+
+      // Start the payment process
+      const paymentPromise = payWithPaystack(config);
+      
+      // Simulate successful callback
+      const setupCall = mockSetup.mock.calls[0][0];
+      setupCall.callback({ reference: 'ref_123', status: 'success' });
+
+      const result = await paymentPromise;
+
+      expect(mockSetup).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...config,
+          callback: expect.any(Function),
+          onClose: expect.any(Function)
+        })
+      );
+
+      expect(mockOpenIframe).toHaveBeenCalled();
+      expect(result).toEqual({ reference: 'ref_123', status: 'success' });
+    });
+
+    test('handles popup close', async () => {
+      const config = paystackDataConfig({
+        email: 'test@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        amount: 1000
+      });
+
+      const mockSetup = window.PaystackPop.setup as jest.Mock;
+      mockSetup.mockReturnValue({ openIframe: jest.fn() });
+
+      // Start the payment process
+      const paymentPromise = payWithPaystack(config);
+      
+      // Simulate popup close
+      const setupCall = mockSetup.mock.calls[0][0];
+      setupCall.onClose();
+
+      const result = await paymentPromise;
+
+      expect(result).toEqual({
+        status: 'canceled',
+        cancelled: true,
+        reference: config.reference
+      });
+    });
+  });
+});
+```
+
+## Environment Setup
+
+### Environment Variables
+
+```bash
+# .env.local
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_your_public_key
 NEXT_PUBLIC_PAYSTACK_SECRET_KEY=sk_test_your_secret_key
 
-// Load Paystack script
-<script src="https://js.paystack.co/v1/inline.js"></script>`}
-          </pre>
-          
-          <h3 className="ihub-mt-3">Core Functions:</h3>
-          <ul>
-            <li><code>handlePaymentSubmit()</code> - Main payment orchestration function</li>
-            <li><code>paystackDataConfig()</code> - Configure payment data for Paystack</li>
-            <li><code>chargeAuthorization()</code> - Charge existing card authorization</li>
-            <li><code>payWithPaystack()</code> - Open Paystack popup for new payments</li>
-          </ul>
-          
-          <h3 className="ihub-mt-3">Best Practices:</h3>
-          <ul>
-            <li>Always validate payment amounts on the server</li>
-            <li>Implement proper error handling and user feedback</li>
-            <li>Use webhooks for payment confirmation</li>
-            <li>Store minimal payment data locally</li>
-            <li>Implement idempotency for payment requests</li>
-            <li>Log all payment attempts for audit purposes</li>
-            <li>Test thoroughly in sandbox environment</li>
-          </ul>
-          
-          <h3 className="ihub-mt-3">Integration Checklist:</h3>
-          <div className="ihub-checklist">
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" defaultChecked />
-              <span className="ihub-checkmark"></span>
-              Paystack account setup and API keys configured
-            </label>
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" defaultChecked />
-              <span className="ihub-checkmark"></span>
-              Webhook endpoints implemented for payment confirmation
-            </label>
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" defaultChecked />
-              <span className="ihub-checkmark"></span>
-              Error handling and user feedback implemented
-            </label>
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" defaultChecked />
-              <span className="ihub-checkmark"></span>
-              Payment flow tested in sandbox environment
-            </label>
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" />
-              <span className="ihub-checkmark"></span>
-              Production testing with small amounts
-            </label>
-            <label className="ihub-checkbox-container">
-              <input type="checkbox" />
-              <span className="ihub-checkmark"></span>
-              Customer support integration for payment issues
-            </label>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default PaystackIntegrationExamples;
+# For production
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_live_your_public_key
+NEXT_PUBLIC_PAYSTACK_SECRET_KEY=sk_live_your_secret_key
 ```
 
-## 🔗 Related Components
+### Paystack Script Integration
 
-- [SubmitButton](./SubmitButton.md) - Button component with loading states for payment processing
-- [InputText](./InputText.md) - Input components for payment forms and user data
-- [MultiPurposeModal](./MultiPurposeModal.md) - Modal component for payment confirmations and flows
-- [ActionDropdown](./ActionDropdown.md) - Dropdown component for payment method selection
-- [CheckBoxes](./CheckBoxes.md) - Checkbox components for payment options and agreements
+```tsx
+// pages/_document.tsx or app/layout.tsx
+import { Html, Head, Main, NextScript } from 'next/document';
+
+export default function Document() {
+  return (
+    <Html>
+      <Head>
+        <script src="https://js.paystack.co/v1/inline.js"></script>
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+## Configuration
+
+### Payment Flow Configuration
+
+```tsx
+interface PaymentContextType {
+  e?: Event;
+  objects: {
+    title?: string;
+    object_type?: string | number;
+    object_id?: string | number;
+  };
+  configObj: PaystackConfigObjectType;
+  paymentMethod?: any;
+  setStatus: (status: number) => void;
+  handleDBAction: (data?: any) => void;
+  defaultConfirm?: boolean;
+  label: string;
+  coupon?: string;
+  defaultMsg?: string;
+  gatwayCharges?: number;
+  openConfirm?: boolean;
+}
+```
+
+## Related Components
+
+- [Dialog](./Dialog.md) - Modal dialogs for payment confirmations
+- [TextField](./TextField.md) - Input fields for payment forms
+- [SubmitButton](./SubmitButton.md) - Payment submission buttons
+- [Toast](./Toast.md) - Payment status notifications
+- [LoadingAnimate](./LoadingAnimate.md) - Payment processing indicators
+
+## Notes
+
+- Requires Paystack script to be loaded on the page
+- All amounts are processed in kobo (smallest currency unit)
+- Environment variables must be properly configured
+- Gateway charges are automatically calculated with ₦2000 cap for local transactions
+- Coupon validation requires proper API endpoints
+- Email collection modal appears when email is not provided
+- The library handles both one-time and recurring payments
+- All payment responses include reference numbers for tracking
+- Network errors are gracefully handled with user-friendly messages
 

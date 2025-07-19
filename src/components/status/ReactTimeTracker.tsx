@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { API_HOST_URL, IN_DEV_MODE, reqOptions } from "../lib/helpFunction";
-import { SessionUserType } from "@/types";
+import { Session } from "@/types/auth";
 import { useParams } from "next/navigation";
 import {
   useDispatch,
@@ -28,7 +28,7 @@ type SelectorFunction = (state: any) => IPAddressData;
 
 interface TimeTrackerProps {
   channel_username?: string | null;
-  session: SessionUserType;
+  session: Session | null;
   endpoint: string | null;
 }
 
@@ -143,7 +143,7 @@ export default function ReactTimeTracker({
         url: window.location.href,
         datetime_start: startTime.current.toISOString(),
         datetime_end: endTime.current.toISOString(),
-        user: session?.user?.name?.id || "",
+        user: session?.user?.id || "",
       };
 
       try {
