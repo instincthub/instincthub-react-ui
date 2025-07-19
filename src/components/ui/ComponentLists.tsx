@@ -1,4 +1,5 @@
 "use client";
+import { Check, Copy } from "lucide-react";
 import React, { useState, useMemo } from "react";
 
 interface ComponentInfo {
@@ -11,6 +12,7 @@ interface ComponentInfo {
 
 const ComponentLists = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   const components: ComponentInfo[] = [
     // Forms
@@ -972,6 +974,16 @@ const ComponentLists = () => {
   const baseRepoUrl =
     "https://github.com/instincthub/instincthub-react-ui/blob/main/";
 
+  const copyToClipboard = async (url: string, linkType: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedLink(`${linkType}-${url}`);
+      setTimeout(() => setCopiedLink(null), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
   return (
     <div className="ihub-component-lists">
       <h1 className="ihub-component-lists-title">
@@ -1012,22 +1024,60 @@ const ComponentLists = () => {
                     {component.description}
                   </p>
                   <div className="ihub-component-links">
-                    <a
-                      href={`${baseRepoUrl}${component.repo_path}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ihub-component-link"
-                    >
-                      Repository
-                    </a>
-                    <a
-                      href={`${baseRepoUrl}${component.example_path}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ihub-component-link"
-                    >
-                      Example
-                    </a>
+                    <div className="ihub-link-group ihub-flex">
+                      <a
+                        href={`${baseRepoUrl}${component.repo_path}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ihub-component-link"
+                      >
+                        Repository
+                      </a>
+                      <button
+                        onClick={() =>
+                          copyToClipboard(
+                            `${baseRepoUrl}${component.repo_path}`,
+                            "repo"
+                          )
+                        }
+                        className="ihub-copy-btn"
+                        title={`Copy ${component.name} repository link`}
+                      >
+                        {copiedLink ===
+                        `repo-${baseRepoUrl}${component.repo_path}` ? (
+                          <Check />
+                        ) : (
+                          <Copy />
+                        )}
+                      </button>
+                    </div>
+                    <div className="ihub-link-group ihub-flex ihub-mt-2">
+                      <a
+                        href={`${baseRepoUrl}${component.example_path}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ihub-component-link"
+                      >
+                        Example
+                      </a>
+                      <button
+                        onClick={() =>
+                          copyToClipboard(
+                            `${baseRepoUrl}${component.example_path}`,
+                            "example"
+                          )
+                        }
+                        className="ihub-copy-btn"
+                        title={`Copy ${component.name} example link`}
+                      >
+                        {copiedLink ===
+                        `example-${baseRepoUrl}${component.example_path}` ? (
+                          <Check />
+                        ) : (
+                          <Copy />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
