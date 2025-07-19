@@ -3,6 +3,13 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { useEffect, useState, FC, ReactNode } from "react";
 
+/**
+ * Props interface for SessionProviders component
+ * @interface SessionProvidersProps
+ * @prop {ReactNode} children - Child components to wrap with session context
+ * @prop {number} [refetchInterval] - Session refetch interval in seconds (default: 12 hours)
+ * @prop {boolean} [refetchOnWindowFocus] - Whether to refetch session when window gains focus
+ */
 interface SessionProvidersProps {
   children: ReactNode;
   refetchInterval?: number;
@@ -10,7 +17,26 @@ interface SessionProvidersProps {
 }
 
 /**
- * Wraps the Next-Auth SessionProvider with hydration handling
+ * Wraps the Next-Auth SessionProvider with hydration handling.
+ * Provides a SessionProvider context only after client-side hydration
+ * to prevent hydration mismatches and useSession errors during SSR.
+ * 
+ * @example
+ * ```tsx
+ * <SessionProviders 
+ *   refetchInterval={720 * 60} 
+ *   refetchOnWindowFocus={true}
+ * >
+ *   <App />
+ * </SessionProviders>
+ * ```
+ * 
+ * @component
+ * @param {SessionProvidersProps} props - The component props
+ * @param {ReactNode} props.children - Child components to wrap with session context
+ * @param {number} [props.refetchInterval=720*60] - Session refetch interval in seconds (default: 12 hours)
+ * @param {boolean} [props.refetchOnWindowFocus=true] - Whether to refetch session on window focus
+ * @returns {JSX.Element} The wrapped children with SessionProvider context
  */
 export default function SessionProviders({
   children,
@@ -24,18 +50,13 @@ export default function SessionProviders({
     setIsMounted(true);
   }, []);
 
-  // Only wrap with SessionProvider after client-side hydration
-  if (!isMounted) {
-    // Return children without session context during SSR
-    return <>{children}</>;
-  }
-
+  // Always wrap with SessionProvider, but handle mounting state internally
   return (
     <SessionProvider
       refetchInterval={refetchInterval}
       refetchOnWindowFocus={refetchOnWindowFocus}
     >
-      {children}
+      {isMounted ? children : null}
     </SessionProvider>
   );
 }

@@ -116,6 +116,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.525.0",
     "marked": "^15.0.7",
+    "next-auth": "^5.0.0-beta.29",
     "react-dropzone": "^14.3.8",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
@@ -130,7 +131,6 @@
     "@types/redux-logger": "^3.0.13",
     "jspdf": "^3.0.1",
     "next": "^15.2.1",
-    "next-auth": "^5.0.0-beta.25",
     "primereact": "^10.9.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

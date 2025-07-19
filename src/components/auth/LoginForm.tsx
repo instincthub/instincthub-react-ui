@@ -617,7 +617,7 @@ const LoginForm = ({
             username: string;
             password: string;
             callbackUrl?: string;
-            redirect?: boolean;
+            redirect?: false;
           } = {
             username: JSON.stringify(res),
             password: "instincthub",

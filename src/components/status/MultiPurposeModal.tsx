@@ -250,8 +250,9 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       ref: modalBodyRef,
       className: "ihub-modal-body ihub-txt-modal",
       style: { height: height },
-      ...(enableContentRefresh && { key: contentKey }),
     };
+    
+    const modalBodyKey = enableContentRefresh ? contentKey : undefined;
 
     return (
       <div
@@ -264,14 +265,14 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
         {removeForm ? (
           <div className={fullClassName}>
             {headerContent}
-            <div {...modalBodyProps}>{children}</div>
+            <div key={modalBodyKey} {...modalBodyProps}>{children}</div>
             {footerSection}
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className={fullClassName}>
               {headerContent}
-              <div {...modalBodyProps}>{children}</div>
+              <div key={modalBodyKey} {...modalBodyProps}>{children}</div>
               {footerSection}
             </div>
           </form>

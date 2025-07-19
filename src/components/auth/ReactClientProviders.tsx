@@ -9,9 +9,9 @@ import {
   ChangeStyleVariable,
   DarkModeProvider,
   SessionExpiresLogout,
-  SessionProviders,
 } from "../theme";
 import { ReactTimeTracker, SessionHandleProvider } from "../status";
+import { SessionProvider } from "next-auth/react";
 
 interface ReactClientProviders {
   children: ReactNode;
@@ -55,10 +55,13 @@ export default function ReactClientProviders({
 }: ReactClientProviders) {
   const handle = session?.user?.name?.channels?.active?.channel?.username;
   return (
-    <SessionProviders>
+    <SessionProvider session={session}>
       <Provider store={reduxStore}>
         <CursorProvider enabled={true}>
-          <SessionExpiresLogout session={session} disableValidation={disableValidation}>
+          <SessionExpiresLogout
+            session={session}
+            disableValidation={disableValidation}
+          >
             <DarkModeProvider>
               <SessionHandleProvider>
                 {allowTimeTracker && (
@@ -77,6 +80,6 @@ export default function ReactClientProviders({
           </SessionExpiresLogout>
         </CursorProvider>
       </Provider>
-    </SessionProviders>
+    </SessionProvider>
   );
 }

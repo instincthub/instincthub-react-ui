@@ -10,27 +10,26 @@ interface DateInputProps {
   required?: boolean;
   controls?: boolean;
   inputEvent?: (name: string, value: string) => void;
-} 
+}
 
 /*
-* @example
-* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} />
-* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} defaultValue="2024-01-01" />
-* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} required={true} />
-* <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} inputEvent={(name, value) => console.log(name, value)} />
-* 
-* @props
-* @label: string
-* @name: string
-* @maxAge: number
-* @minAge: number
-* @defaultValue: string
-* @required: boolean
-* @controls: boolean
-* @inputEvent: (name: string, value: string) => void
-* 
-*/
-
+ * @example
+ * <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} />
+ * <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} defaultValue="2024-01-01" />
+ * <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} required={true} />
+ * <DateInput label="Year Founded" name='founded' maxAge={17} minAge={10} inputEvent={(name, value) => console.log(name, value)} />
+ *
+ * @props
+ * @label: string
+ * @name: string
+ * @maxAge: number
+ * @minAge: number
+ * @defaultValue: string
+ * @required: boolean
+ * @controls: boolean
+ * @inputEvent: (name: string, value: string) => void
+ *
+ */
 
 const DateInput: React.FC<DateInputProps> = (props) => {
   const [errMsg, setErrMsg] = useState<string>("");
@@ -50,11 +49,21 @@ const DateInput: React.FC<DateInputProps> = (props) => {
   const maxAllowedYear = new Date().getFullYear() - (props.maxAge || 0);
   const minAllowedYear = new Date().getFullYear() - (props.minAge || 0);
 
+  // Handle default date initialization
+  useEffect(() => {
+    if (defaultDateObjects && typeof defaultDateObjects === "object") {
+      setDay(lessThanTen(defaultDateObjects.getDate()));
+      setMonth(lessThanTen(defaultDateObjects.getMonth() + 1));
+      setYear(defaultDateObjects.getFullYear().toString());
+      setDefaultDateObjects(false);
+    }
+  }, [defaultDateObjects]);
+
   useEffect(() => {
     const strDate = `${year}-${month}-${day}`;
     setDate(strDate);
     if (props.inputEvent && props.name) props.inputEvent(props.name, strDate);
-  }, [year, month, day, props.name, props.inputEvent]);
+  }, [year, month, day, props.name]);
 
   const handleDayChange = (event: ChangeEvent<HTMLInputElement>) => {
     // Remove any non-numeric characters
@@ -97,15 +106,6 @@ const DateInput: React.FC<DateInputProps> = (props) => {
       return num.toString();
     }
   };
-
-  if (defaultDateObjects && typeof defaultDateObjects === "object") {
-    // Handle default date time.
-    setDay(lessThanTen(defaultDateObjects.getDate() + 1));
-    setMonth(lessThanTen(defaultDateObjects.getMonth() + 1));
-    setYear(defaultDateObjects.getFullYear().toString());
-
-    setDefaultDateObjects(false);
-  }
 
   const setToday = (add: number): void => {
     // add is used to add additional day for tomorrow
