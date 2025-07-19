@@ -12,6 +12,7 @@ interface ComponentInfo {
 
 const ComponentLists = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   const components: ComponentInfo[] = [
@@ -945,20 +946,34 @@ const ComponentLists = () => {
     },
   ];
 
-  // Filter components based on search term
+  // Get unique categories
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(components.map(component => component.category)));
+    return uniqueCategories.sort();
+  }, [components]);
+
+  // Filter components based on search term and category
   const filteredComponents = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return components;
+    let filtered = components;
+
+    // Filter by category if selected
+    if (selectedCategory) {
+      filtered = filtered.filter(component => component.category === selectedCategory);
     }
 
-    const searchLower = searchTerm.toLowerCase();
-    return components.filter(
-      (component) =>
-        component.name.toLowerCase().includes(searchLower) ||
-        component.description.toLowerCase().includes(searchLower) ||
-        component.category.toLowerCase().includes(searchLower)
-    );
-  }, [components, searchTerm]);
+    // Filter by search term
+    if (searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (component) =>
+          component.name.toLowerCase().includes(searchLower) ||
+          component.description.toLowerCase().includes(searchLower) ||
+          component.category.toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered;
+  }, [components, searchTerm, selectedCategory]);
 
   // Group filtered components by category
   const groupedComponents = useMemo(() => {
@@ -994,20 +1009,63 @@ const ComponentLists = () => {
         React UI library.
       </p>
 
-      {/* Search Field */}
+      {/* Search and Filter Section */}
       <div className="ihub-search-container">
-        <input
-          type="text"
-          placeholder="Search components by name, description, or category..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="ihub-search-input"
-        />
-        {searchTerm && (
+        <div className="ihub-flex ihub-gap-3 ihub-mb-3">
+          <input
+            type="text"
+            placeholder="Search components by name, description, or category..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="ihub-search-input"
+            style={{ flex: 1 }}
+          />
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="ihub-category-filter"
+            style={{ 
+              padding: "10px 15px",
+              border: "2px solid #e0e0e0",
+              borderRadius: "8px",
+              backgroundColor: "white",
+              fontSize: "14px",
+              minWidth: "160px"
+            }}
+          >
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+        {(searchTerm || selectedCategory) && (
           <div className="ihub-search-results-info">
             Found {filteredComponents.length} component
             {filteredComponents.length !== 1 ? "s" : ""}
             {searchTerm && ` matching "${searchTerm}"`}
+            {selectedCategory && ` in category "${selectedCategory}"`}
+            {(searchTerm || selectedCategory) && (
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedCategory("");
+                }}
+                style={{
+                  marginLeft: "10px",
+                  padding: "4px 8px",
+                  backgroundColor: "#f5f5f5",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "12px",
+                  cursor: "pointer"
+                }}
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -1086,14 +1144,17 @@ const ComponentLists = () => {
         )
       )}
 
-      {Object.keys(groupedComponents).length === 0 && searchTerm && (
+      {Object.keys(groupedComponents).length === 0 && (searchTerm || selectedCategory) && (
         <div className="ihub-no-results">
-          <p>No components found matching "{searchTerm}"</p>
+          <p>No components found{searchTerm && ` matching "${searchTerm}"`}{selectedCategory && ` in category "${selectedCategory}"`}</p>
           <button
-            onClick={() => setSearchTerm("")}
+            onClick={() => {
+              setSearchTerm("");
+              setSelectedCategory("");
+            }}
             className="ihub-clear-search-btn"
           >
-            Clear Search
+            Clear Filters
           </button>
         </div>
       )}
