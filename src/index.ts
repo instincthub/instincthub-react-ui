@@ -83,6 +83,7 @@ export { default as ContentViewOrEdit } from "./components/ui/viewer/ContentView
 export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";
 export { default as IHubTable } from "./components/ui/tables/IHubTable";
 export { default as IHubTableServer } from "./components/ui/tables/IHubTableServer";
+export type { IHubTableServerRef } from "./components/ui/tables/IHubTableServer";
 export { default as OrDivider } from "./components/ui/OrDivider";
 export { default as RandomGradientImage } from "./components/ui/images/RandomGradientImage";
 export { default as ComponentLists } from "./components/ui/ComponentLists";

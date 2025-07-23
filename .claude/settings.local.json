@@ -3,7 +3,14 @@
     "allow": [
       "Bash(ls:*)",
       "Bash(npm run build:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(rm:*)",
+      "Bash(npx next build:*)",
+      "Bash(timeout 30s npx tsc --noEmit)",
+      "Bash(/dev/null)",
+      "Bash(timeout 60s npm run build)"
     ],
     "deny": []
   }

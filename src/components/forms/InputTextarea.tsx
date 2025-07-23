@@ -153,7 +153,7 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
 
   return (
     <div
-      className={"ihub-mb-5 "+ wrapperClass}
+      className={wrapperClass}
       data-text-transform={textTransform !== "none" ? textTransform : undefined}
     >
       <textarea

@@ -85,6 +85,40 @@ function MyComponent() {
 />
 ```
 
+### Mode: Date Only
+
+```tsx
+<DateTimePicker
+  label="Select Date"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  mode="date"
+/>
+```
+
+### Mode: Time Only
+
+```tsx
+<DateTimePicker
+  label="Select Time"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  mode="time"
+  use12Hour={true}
+/>
+```
+
+### Separate Fields
+
+```tsx
+<DateTimePicker
+  label="Date and Time"
+  value={dateTime}
+  onChange={(value) => setDateTime(value)}
+  useSeparateFields={true}
+/>
+```
+
 ### Date and Time Restrictions
 
 ```tsx
@@ -177,6 +211,8 @@ function MyComponent() {
 | `showCalendarIcon` | `boolean` | `true` | Whether to show the calendar icon |
 | `showTimeIcon` | `boolean` | `true` | Whether to show the time icon |
 | `showQuickActions` | `boolean` | `true` | Whether to show quick action buttons |
+| `mode` | `"datetime" \| "date" \| "time"` | `"datetime"` | Input mode - datetime, date only, or time only |
+| `useSeparateFields` | `boolean` | `false` | Use separate input fields instead of single input |
 | `ariaLabel` | `string` | - | Accessibility label for screen readers |
 | `autoFocus` | `boolean` | `false` | Whether to focus the input on mount |
 | `onFocus` | `(e: FocusEvent) => void` | - | Focus event handler |
@@ -272,6 +308,10 @@ The component is fully typed with TypeScript. Import the type definitions:
 ```tsx
 import { DateTimePickerPropsType } from '@instincthub/react-ui/types';
 ```
+
+## Live Demo
+
+View the live examples at: [https://ui.instincthub.com/components/forms/time-picker](https://ui.instincthub.com/components/forms/time-picker)
 
 ## Related Components
 

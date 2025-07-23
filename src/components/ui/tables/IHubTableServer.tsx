@@ -1,5 +1,12 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
@@ -9,6 +16,11 @@ import { ApiResponseType, DataResponseType, TableColumnType } from "@/types";
 import { debounce } from "lodash";
 import { ServerPaginationInfoType, FetchParamsType } from "@/types";
 import { API_HOST_URL, getNestedValue, reqOptions } from "../../lib";
+
+// Ref type for exposing table methods
+export interface IHubTableServerRef {
+  refresh: () => void;
+}
 
 interface IHubTableServerPropsType<T> {
   /** Token for authentication */
@@ -72,6 +84,7 @@ interface IHubTableServerPropsType<T> {
  *
  * @example
  * ```tsx
+ * // Basic usage
  * <IHubTableServer
  *   columns={columns}
  *   endpointPath={"/api/program-courses"}
@@ -91,8 +104,20 @@ interface IHubTableServerPropsType<T> {
  *   rowsPerPageOptions={[10, 25, 50, 100]}
  *   defaultRowsPerPage={10}
  *   onFetchError={handleFetchError}
- *   refreshable={true}
- *   onRefresh={handleRefresh}
+ * />
+ *
+ * // With refresh control from parent
+ * const tableRef = useRef<IHubTableServerRef>(null);
+ *
+ * const handleExternalRefresh = () => {
+ *   tableRef.current?.refresh();
+ * };
+ *
+ * <IHubTableServer
+ *   ref={tableRef}
+ *   columns={columns}
+ *   endpointPath={"/api/program-courses"}
+ *   // ... other props
  * />
  * ```
  * @prop {string} token - The token for authentication
@@ -118,34 +143,40 @@ interface IHubTableServerPropsType<T> {
  *
  * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx
  */
-export function IHubTableServer<T extends object>({
-  token,
-  columns,
-  defaultData,
-  endpointPath,
-  initialParams = {},
-  dataAdapter,
-  title,
-  emptyStateMessage = "No data available",
-  emptyStateIcon = <InventoryOutlinedIcon />,
-  actions,
-  showSearch = true,
-  searchPlaceholder = "Search...",
-  searchDebounceMs = 1000,
-  enableSorting = true,
-  enableExport = false,
-  exportOptions = { csv: true },
-  rowsPerPageOptions = [10, 25, 50, 100],
-  defaultRowsPerPage = 10,
-  onRowClick,
-  onFetchError,
-  expandable = false,
-  renderExpandedRow,
-  keyExtractor = (row) => JSON.stringify(row),
-  stickyHeader = false,
-  maxHeight,
-  hideHeaderOnMobile = false,
-}: IHubTableServerPropsType<T>): JSX.Element {
+export const IHubTableServer = forwardRef<
+  IHubTableServerRef,
+  IHubTableServerPropsType<any>
+>(function IHubTableServerComponent<T extends object>(
+  {
+    token,
+    columns,
+    defaultData,
+    endpointPath,
+    initialParams = {},
+    dataAdapter,
+    title,
+    emptyStateMessage = "No data available",
+    emptyStateIcon = <InventoryOutlinedIcon />,
+    actions,
+    showSearch = true,
+    searchPlaceholder = "Search...",
+    searchDebounceMs = 1000,
+    enableSorting = true,
+    enableExport = false,
+    exportOptions = { csv: true },
+    rowsPerPageOptions = [10, 25, 50, 100],
+    defaultRowsPerPage = 10,
+    onRowClick,
+    onFetchError,
+    expandable = false,
+    renderExpandedRow,
+    keyExtractor = (row) => JSON.stringify(row),
+    stickyHeader = false,
+    maxHeight,
+    hideHeaderOnMobile = false,
+  }: IHubTableServerPropsType<T>,
+  ref: any
+) {
   // Refs
   const initialRenderRef = useRef(true);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -327,6 +358,15 @@ export function IHubTableServer<T extends object>({
     // Keep current params but trigger a refetch
     setParams((prev) => ({ ...prev }));
   }, []);
+
+  // Expose refresh method to parent components
+  useImperativeHandle(
+    ref,
+    () => ({
+      refresh: handleRefresh,
+    }),
+    [handleRefresh]
+  );
 
   // Handle data export
   const handleExport = useCallback(
@@ -814,6 +854,9 @@ export function IHubTableServer<T extends object>({
       )}
     </div>
   );
-}
+});
+
+// Set display name for better debugging
+IHubTableServer.displayName = "IHubTableServer";
 
 export default IHubTableServer;

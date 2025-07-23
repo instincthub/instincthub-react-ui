@@ -14,9 +14,9 @@ interface IsUsernameEmailTakenProps {
   name: "username" | "channel" | "email" | string; // Restrict to specific field names
   type: string; // HTML input type (e.g., "text", "email")
   label: string;
-  required: boolean;
-  key: string | number; // Assuming this is a key for React's key prop
-  setIsValid: (isValid: boolean) => void;
+  required?: boolean;
+  key?: string | number; // Assuming this is a key for React's key prop
+  setIsValid?: (isValid: boolean) => void;
 }
 
 // Define state interface
@@ -72,7 +72,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
 
     if (!validInput && validInput !== null) {
       e.target.classList.add("ihub-is_invalid");
-      setIsValid(false);
+      setIsValid??(false);
       setField({
         valid: false,
         note: name.includes("username")
@@ -84,7 +84,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
 
       if (!usernameValid) {
         e.target.classList.add("ihub-is_invalid");
-        setIsValid(false);
+        setIsValid??(false);
         setField({
           valid: false,
           note: `This ${name} is already taken. Please try a different ${name}.`,
@@ -92,7 +92,7 @@ export default function IsUsernameEmailTaken(props: IsUsernameEmailTakenProps) {
       } else {
         e.target.style.borderColor = "#69779B";
         e.target.classList.remove("ihub-is_invalid");
-        setIsValid(true);
+        setIsValid??(true);
         setField({
           valid: true,
           note: "",

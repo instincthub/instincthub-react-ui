@@ -2,30 +2,39 @@
 
 **Category:** UI | **Type:** component
 
-Server-side table component with built-in pagination, sorting, and filtering
+Server-side table component with built-in pagination, sorting, filtering, and external refresh control
 
 **File Location:** `src/components/ui/tables/IHubTableServer.tsx`
 
 ## 🏷️ Tags
 
-`ui`, `table`, `data`, `server`, `pagination`, `sorting`, `filtering`
+`ui`, `table`, `data`, `server`, `pagination`, `sorting`, `filtering`, `refresh`, `forwardRef`
 
 ```tsx
 "use client";
-import React, { useState } from "react";
-import { Badge, Action, IHubTableServer } from "@instincthub/react-ui";
+import React, { useState, useRef } from "react";
+import { Badge, Action, IHubTableServer, IHubTableServerRef } from "@instincthub/react-ui";
 import { DataResponseType, TableColumnType } from "@instincthub/react-ui/types";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 
 /**
  * Example component demonstrating various ways to use the IHubTableServer component
  */
 const IHubTableServerExamples = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  
+  // Create ref for table control
+  const tableRef = useRef<IHubTableServerRef>(null);
+
+  // Example: Refresh table from parent component
+  const handleExternalRefresh = () => {
+    tableRef.current?.refresh();
+  };
 
   // Sample data for different examples
   const studentsData = [
@@ -422,6 +431,34 @@ const IHubTableServerExamples = () => {
         />
       </div>
 
+      {/* Table with External Refresh Control */}
+      <div className="ihub-card ihub-mb-4">
+        <h2>Table with External Refresh Control</h2>
+        <p>Control table refresh from parent component using ref</p>
+        
+        <div style={{ marginBottom: "1rem" }}>
+          <button 
+            onClick={handleExternalRefresh}
+            className="ihub-btn ihub-btn-primary"
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
+            <RefreshOutlinedIcon /> Refresh Table from Parent
+          </button>
+        </div>
+        
+        <IHubTableServer
+          ref={tableRef}
+          columns={invoicesColumns}
+          defaultData={invoicesData}
+          endpointPath=""
+          title="Refreshable Invoices Table"
+          showSearch={true}
+          searchPlaceholder="Search invoices..."
+          enableSorting={true}
+          keyExtractor={(row) => row.id}
+        />
+      </div>
+
       {/* Invoices Table Example */}
       <div className="ihub-card ihub-mb-4">
         <h2>Invoices Management Table</h2>
@@ -475,7 +512,15 @@ const IHubTableServerExamples = () => {
         <div className="ihub-code-block">
           <pre>
 {`// Example with real API endpoint
+const tableRef = useRef<IHubTableServerRef>(null);
+
+// Refresh table data programmatically
+const handleRefreshData = () => {
+  tableRef.current?.refresh();
+};
+
 <IHubTableServer
+  ref={tableRef}
   token={process.env.NEXT_PUBLIC_API_TOKEN}
   columns={studentsColumns}
   endpointPath="/api/students"
@@ -542,7 +587,40 @@ const IHubTableServerExamples = () => {
               <li>Implement proper error handling with <code>onFetchError</code></li>
               <li>Use appropriate column widths</li>
               <li>Provide clear empty state messages</li>
+              <li>Use <code>ref</code> for external refresh control</li>
             </ul>
+          </div>
+        </div>
+        
+        <div className="ihub-mt-4">
+          <h4>External Refresh Control:</h4>
+          <p>The component exposes a <code>refresh</code> method through ref that allows parent components to trigger a data refresh:</p>
+          <div className="ihub-code-block">
+            <pre>
+{`import { useRef } from 'react';
+import { IHubTableServer, IHubTableServerRef } from '@instincthub/react-ui';
+
+function ParentComponent() {
+  const tableRef = useRef<IHubTableServerRef>(null);
+
+  const handleRefresh = () => {
+    // Trigger table refresh
+    tableRef.current?.refresh();
+  };
+
+  return (
+    <>
+      <button onClick={handleRefresh}>Refresh Data</button>
+      <IHubTableServer
+        ref={tableRef}
+        columns={columns}
+        endpointPath="/api/data"
+        // ... other props
+      />
+    </>
+  );
+}`}
+            </pre>
           </div>
         </div>
         

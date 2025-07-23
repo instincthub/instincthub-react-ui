@@ -125,7 +125,9 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   const [inputValue, setInputValue] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [activeView, setActiveView] = useState<"calendar" | "time">("calendar");
+  const [activeView, setActiveView] = useState<"calendar" | "time">(
+    mode === "time" ? "time" : "calendar"
+  );
   const [error, setError] = useState<string | null>(errorMessage || null);
   const [cursorPosition, setCursorPosition] = useState<number>(0);
   
@@ -173,6 +175,24 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
       setTempAmPm(selectedDate.getHours() >= 12 ? "PM" : "AM");
     }
   }, [selectedDate]);
+
+  // Mode-aware date/time processing helper
+  const processDateTimeByMode = useCallback((date: Date): string => {
+    if (!date) return "";
+    
+    switch (mode) {
+      case "date":
+        // Return date-only in YYYY-MM-DD format
+        return format(startOfDay(date), "yyyy-MM-dd");
+      case "time":
+        // Return time-only in HH:mm:ss format
+        return format(date, includeSeconds ? "HH:mm:ss" : "HH:mm");
+      case "datetime":
+      default:
+        // Return full ISO string
+        return date.toISOString();
+    }
+  }, [mode, includeSeconds]);
 
   // Update input value when value prop changes
   useEffect(() => {
@@ -321,33 +341,54 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
 
     let newDateTime = date;
     
-    // Preserve time if already selected
-    if (selectedDate) {
-      newDateTime = setHours(date, selectedDate.getHours());
-      newDateTime = setMinutes(newDateTime, selectedDate.getMinutes());
-      newDateTime = setSeconds(newDateTime, selectedDate.getSeconds());
+    if (mode === "date") {
+      // For date mode, use start of day (00:00:00)
+      newDateTime = startOfDay(date);
+      setSelectedDate(newDateTime);
+      setCurrentMonth(newDateTime);
+      
+      // Complete selection immediately for date mode
+      onChange?.(processDateTimeByMode(newDateTime));
+      setShowPicker(false);
+      setError(null);
     } else {
-      // Set to current time if no time selected
-      const now = new Date();
-      newDateTime = setHours(date, now.getHours());
-      newDateTime = setMinutes(newDateTime, now.getMinutes());
-      newDateTime = setSeconds(newDateTime, 0);
-    }
+      // For datetime mode, preserve time if already selected
+      if (selectedDate) {
+        newDateTime = setHours(date, selectedDate.getHours());
+        newDateTime = setMinutes(newDateTime, selectedDate.getMinutes());
+        newDateTime = setSeconds(newDateTime, selectedDate.getSeconds());
+      } else {
+        // Set to current time if no time selected
+        const now = new Date();
+        newDateTime = setHours(date, now.getHours());
+        newDateTime = setMinutes(newDateTime, now.getMinutes());
+        newDateTime = setSeconds(newDateTime, 0);
+      }
 
-    setSelectedDate(newDateTime);
-    setCurrentMonth(newDateTime);
-    
-    // Switch to time view after date selection
-    setActiveView("time");
+      setSelectedDate(newDateTime);
+      setCurrentMonth(newDateTime);
+      
+      // Switch to time view after date selection for datetime mode
+      if (mode === "datetime") {
+        setActiveView("time");
+      }
+    }
   };
 
   // Handle time selection
   const handleTimeSelect = () => {
-    if (!selectedDate) {
-      // If no date selected, use today
-      const today = new Date();
-      handleDateSelect(today);
-      return;
+    let baseDate = selectedDate;
+    
+    if (!baseDate) {
+      if (mode === "time") {
+        // For time mode, use today as base date but only return time
+        baseDate = new Date();
+      } else {
+        // For datetime mode, require date selection first
+        const today = new Date();
+        handleDateSelect(today);
+        return;
+      }
     }
 
     let hours = parseInt(tempHours);
@@ -368,15 +409,14 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
       return;
     }
 
-    let newDateTime = setHours(selectedDate, hours);
+    let newDateTime = setHours(baseDate, hours);
     newDateTime = setMinutes(newDateTime, minutes);
     newDateTime = setSeconds(newDateTime, seconds);
 
     setSelectedDate(newDateTime);
     
-    // Update parent component
-    const isoString = newDateTime.toISOString();
-    onChange?.(isoString);
+    // Update parent component with mode-aware processing
+    onChange?.(processDateTimeByMode(newDateTime));
     
     // Close picker after time selection
     setShowPicker(false);
@@ -647,8 +687,9 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     // Try to parse the input (but don't show errors while typing)
     const parsed = parseInput(formatted);
     if (parsed) {
-      setSelectedDate(parsed);
-      onChange?.(parsed.toISOString());
+      const processedDate = mode === "date" ? startOfDay(parsed) : parsed;
+      setSelectedDate(processedDate);
+      onChange?.(processDateTimeByMode(processedDate));
       setError(null);
     }
     // Don't set error while typing - only on blur
@@ -674,9 +715,10 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   // Quick actions
   const setToday = () => {
     const now = new Date();
-    setSelectedDate(now);
-    setCurrentMonth(now);
-    onChange?.(now.toISOString());
+    const dateToUse = mode === "date" ? startOfDay(now) : now;
+    setSelectedDate(dateToUse);
+    setCurrentMonth(dateToUse);
+    onChange?.(processDateTimeByMode(dateToUse));
     setError(null);
   };
 
@@ -722,9 +764,10 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     if (inputValue.trim()) {
       const parsed = parseInput(inputValue);
       if (parsed) {
-        setSelectedDate(parsed);
-        onChange?.(parsed.toISOString());
-        setInputValue(formatDisplayValue(parsed));
+        const processedDate = mode === "date" ? startOfDay(parsed) : parsed;
+        setSelectedDate(processedDate);
+        onChange?.(processDateTimeByMode(processedDate));
+        setInputValue(formatDisplayValue(processedDate));
         setError(null);
       } else {
         setError("Invalid date/time format");
@@ -765,8 +808,9 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
         );
         
         if (isValid(date)) {
-          setSelectedDate(date);
-          onChange?.(date.toISOString());
+          const processedDate = mode === "date" ? startOfDay(date) : date;
+          setSelectedDate(processedDate);
+          onChange?.(processDateTimeByMode(processedDate));
           setError(null);
         }
       } catch {
@@ -1064,26 +1108,28 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
             role="dialog"
             aria-label="Date and time picker"
           >
-            {/* View tabs */}
-            <div className="ihub-datetime-tabs">
-              <button
-                className={`ihub-datetime-tab ${activeView === "calendar" ? "active" : ""}`}
-                onClick={() => setActiveView("calendar")}
-                type="button"
-              >
-                Date
-              </button>
-              <button
-                className={`ihub-datetime-tab ${activeView === "time" ? "active" : ""}`}
-                onClick={() => setActiveView("time")}
-                type="button"
-              >
-                Time
-              </button>
-            </div>
+            {/* View tabs - only show relevant tabs based on mode */}
+            {mode === "datetime" && (
+              <div className="ihub-datetime-tabs">
+                <button
+                  className={`ihub-datetime-tab ${activeView === "calendar" ? "active" : ""}`}
+                  onClick={() => setActiveView("calendar")}
+                  type="button"
+                >
+                  Date
+                </button>
+                <button
+                  className={`ihub-datetime-tab ${activeView === "time" ? "active" : ""}`}
+                  onClick={() => setActiveView("time")}
+                  type="button"
+                >
+                  Time
+                </button>
+              </div>
+            )}
 
-            {/* Calendar view */}
-            {activeView === "calendar" && (
+            {/* Calendar view - show for date and datetime modes */}
+            {(activeView === "calendar" || mode === "date") && (mode === "date" || mode === "datetime") && (
               <div className="ihub-datetime-calendar">
                 {/* Month navigation */}
                 <div className="ihub-datetime-month-nav">
@@ -1148,8 +1194,8 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
               </div>
             )}
 
-            {/* Time view */}
-            {activeView === "time" && (
+            {/* Time view - show for time and datetime modes */}
+            {(activeView === "time" || mode === "time") && (mode === "time" || mode === "datetime") && (
               <div className="ihub-datetime-time">
                 <div className="ihub-datetime-time-inputs">
                   {/* Hours */}
@@ -1316,7 +1362,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
       )}
 
       {/* Hidden input for form submission */}
-      {name && <input type="hidden" name={name} value={selectedDate?.toISOString() || ""} />}
+      {name && <input type="hidden" name={name} value={selectedDate ? processDateTimeByMode(selectedDate) : ""} />}
     </div>
   );
 };

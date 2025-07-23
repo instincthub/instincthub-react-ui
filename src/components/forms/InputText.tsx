@@ -168,7 +168,7 @@ const InputText: React.FC<InputTextProps> = ({
 
   return (
     <div
-      className={`ihub-wrapper ihub-mb-4 ${hasValue ? "ihub-value" : ""} ${
+      className={`ihub-wrapper ${hasValue ? "ihub-value" : ""} ${
         error ? "ihub-is_invalid" : ""
       } ${className}`}
       {...dataAttributes}

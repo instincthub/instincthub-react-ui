@@ -1,13 +1,23 @@
 "use client";
+import { useRef } from "react";
 import Link from "next/link";
-import { Badge, Action, IHubTableServer } from "../../../../index";
+import { Badge, Action, IHubTableServer, IHubTableServerRef } from "../../../../index";
 import { DataResponseType, TableColumnType } from "../../../../types";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 
 // Example page component
 export default function ProgramCoursesPage() {
+  // Create ref for table control
+  const tableRef = useRef<IHubTableServerRef>(null);
+
+  // Example: Refresh table from parent component
+  const handleExternalRefresh = () => {
+    tableRef.current?.refresh();
+  };
+
   // Define table columns
   const columns = [
     {
@@ -224,8 +234,21 @@ export default function ProgramCoursesPage() {
 
   return (
     <div className="program-courses-page">
-      <h2>Valid Endpoint</h2>
+      <h2>Valid Endpoint with External Refresh Control</h2>
+      
+      {/* Example button to trigger refresh from parent */}
+      <div style={{ marginBottom: "1rem" }}>
+        <button 
+          onClick={handleExternalRefresh}
+          className="ihub-btn ihub-btn-primary"
+          style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+        >
+          <RefreshOutlinedIcon /> Refresh Table from Parent
+        </button>
+      </div>
+
       <IHubTableServer
+        ref={tableRef}
         token={process.env.NEXT_PUBLIC_TOKEN}
         columns={columns as TableColumnType<DataResponseType>[]}
         endpointPath={"sis/hust/admins/program-course-list/"}
