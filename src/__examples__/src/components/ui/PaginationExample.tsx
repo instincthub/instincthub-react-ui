@@ -1,429 +1,220 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Pagination, IHubTable, SubmitButton, InputText } from "../../../../index";
+import { Pagination, IHubTable } from "../../../../index";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  status: string;
+  created: string;
+}
 
 const PaginationExample: React.FC = () => {
-  // Basic pagination state
-  const [basicData, setBasicData] = useState<any>({
+  // Mock data for demonstration
+  const [data, setData] = useState<any>({
     count: 150,
-    next: null,
+    next: "http://api.example.com/users?offset=20",
     previous: null,
-    results: []
+    results: [
+      { id: 1, name: "John Doe", email: "john@example.com", status: "Active", created: "2024-01-15" },
+      { id: 2, name: "Jane Smith", email: "jane@example.com", status: "Inactive", created: "2024-01-14" },
+      { id: 3, name: "Bob Johnson", email: "bob@example.com", status: "Active", created: "2024-01-13" },
+      { id: 4, name: "Alice Brown", email: "alice@example.com", status: "Pending", created: "2024-01-12" },
+      { id: 5, name: "Charlie Wilson", email: "charlie@example.com", status: "Active", created: "2024-01-11" },
+    ]
   });
 
-  // Table pagination state
-  const [tableData, setTableData] = useState<any>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: []
-  });
-
-  // Search pagination state
   const [searchData, setSearchData] = useState<any>({
-    count: 0,
-    next: null,
+    count: 89,
+    next: "http://api.example.com/search?offset=10&search=user",
     previous: null,
-    results: []
-  });
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Gallery pagination state
-  const [galleryData, setGalleryData] = useState<any>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: []
+    results: [
+      { id: 10, name: "User Alpha", email: "alpha@example.com", status: "Active", created: "2024-01-10" },
+      { id: 11, name: "User Beta", email: "beta@example.com", status: "Active", created: "2024-01-09" },
+      { id: 12, name: "User Gamma", email: "gamma@example.com", status: "Inactive", created: "2024-01-08" },
+    ]
   });
 
-  // Dynamic page size state
-  const [dynamicData, setDynamicData] = useState<any>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: []
-  });
-  const [pageSize, setPageSize] = useState(10);
-
-  // Tab filter state
-  const [tabData, setTabData] = useState<any>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: []
-  });
-  const [activeTab, setActiveTab] = useState("all");
-
-  // Loading states
-  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({
-    basic: false,
-    table: false,
-    search: false,
-    gallery: false,
-    dynamic: false,
-    tab: false
-  });
-
-  // Mock data generator
-  const generateMockData = (page: number, limit: number, total: number, searchTerm?: string, filter?: string) => {
-    const offset = page * limit;
-    
-    // Filter based on search term or tab filter
-    let filteredTotal = total;
-    if (searchTerm) {
-      filteredTotal = Math.floor(total * 0.7); // Simulate search results
-    }
-    if (filter && filter !== "all") {
-      filteredTotal = Math.floor(total * 0.6); // Simulate filtered results
-    }
-
-    const results = Array.from({ length: Math.min(limit, filteredTotal - offset) }, (_, i) => ({
-      id: offset + i + 1,
-      name: searchTerm ? `${searchTerm} Result ${offset + i + 1}` : `Item ${offset + i + 1}`,
-      email: `user${offset + i + 1}@example.com`,
-      status: i % 2 === 0 ? "Active" : "Inactive",
-      role: filter !== "all" ? filter : (i % 3 === 0 ? "Admin" : i % 3 === 1 ? "User" : "Guest"),
-      created: new Date(Date.now() - Math.random() * 10000000000).toLocaleDateString(),
-      image: `https://picsum.photos/200/200?random=${offset + i + 1}`,
-      description: `Description for item ${offset + i + 1}`,
-      category: ["Technology", "Design", "Marketing", "Sales"][i % 4]
-    }));
-
-    return {
-      count: filteredTotal,
-      next: offset + limit < filteredTotal ? `?page=${page + 2}` : null,
-      previous: page > 0 ? `?page=${page}` : null,
-      results
-    };
-  };
-
-  // API call simulators
-  const fetchBasicData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, basic: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    // Simulate API delay
-    setTimeout(() => {
-      const data = generateMockData(page, 10, 150);
-      setBasicData(data);
-      setIsLoading(prev => ({ ...prev, basic: false }));
-    }, 1000);
-  };
-
-  const fetchTableData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, table: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    setTimeout(() => {
-      const data = generateMockData(page, 5, 50);
-      setTableData(data);
-      setIsLoading(prev => ({ ...prev, table: false }));
-    }, 800);
-  };
-
-  const fetchSearchData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, search: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    setTimeout(() => {
-      const data = generateMockData(page, 8, 100, searchTerm);
-      setSearchData(data);
-      setIsLoading(prev => ({ ...prev, search: false }));
-    }, 1200);
-  };
-
-  const fetchGalleryData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, gallery: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    setTimeout(() => {
-      const data = generateMockData(page, 12, 72);
-      setGalleryData(data);
-      setIsLoading(prev => ({ ...prev, gallery: false }));
-    }, 900);
-  };
-
-  const fetchDynamicData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, dynamic: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    setTimeout(() => {
-      const data = generateMockData(page, pageSize, 200);
-      setDynamicData(data);
-      setIsLoading(prev => ({ ...prev, dynamic: false }));
-    }, 700);
-  };
-
-  const fetchTabData = async (url: string) => {
-    setIsLoading(prev => ({ ...prev, tab: true }));
-    const page = url.includes('page=') ? parseInt(url.split('page=')[1]) - 1 : 0;
-    
-    setTimeout(() => {
-      const data = generateMockData(page, 6, 80, undefined, activeTab);
-      setTabData(data);
-      setIsLoading(prev => ({ ...prev, tab: false }));
-    }, 600);
-  };
-
-  // Initialize data
-  useEffect(() => {
-    fetchBasicData("?page=1");
-    fetchTableData("?page=1");
-    fetchSearchData("?page=1");
-    fetchGalleryData("?page=1");
-    fetchDynamicData("?page=1");
-    fetchTabData("?page=1");
-  }, []);
-
-  // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchSearchData("?page=1");
-  };
-
-  // Handle page size change
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    setTimeout(() => fetchDynamicData("?page=1"), 100);
-  };
-
-  // Handle tab change
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    setTimeout(() => fetchTabData("?page=1"), 100);
-  };
-
-  // Table columns configuration
+  // Table columns following correct TableColumnType interface
   const tableColumns = [
-    { key: "id", label: "ID", sortable: true },
-    { key: "name", label: "Name", sortable: true },
-    { key: "email", label: "Email", sortable: true },
-    { key: "status", label: "Status", sortable: false },
-    { key: "created", label: "Created", sortable: true }
+    { 
+      header: "ID", 
+      accessor: "id" as keyof User,
+      sortable: true,
+      width: "80px"
+    },
+    { 
+      header: "Name", 
+      accessor: "name" as keyof User,
+      sortable: true
+    },
+    { 
+      header: "Email", 
+      accessor: "email" as keyof User,
+      sortable: true
+    },
+    { 
+      header: "Status", 
+      accessor: "status" as keyof User,
+      sortable: false,
+      cell: (row: User) => (
+        <span className={`ihub-status-badge ihub-status-${row.status.toLowerCase()}`}>
+          {row.status}
+        </span>
+      )
+    },
+    { 
+      header: "Created", 
+      accessor: "created" as keyof User,
+      sortable: true
+    }
   ];
 
   return (
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
         <h1>Pagination Examples</h1>
-        <p>Enhanced Pagination Component with API Integration - Handles pagination, search, and filtering with automatic API calls</p>
+        <p>Pagination component for API-driven data with search, filters, and navigation</p>
       </div>
 
       <div className="ihub-examples-grid">
         {/* Basic Pagination */}
         <div className="ihub-example-card">
           <h3>Basic Pagination</h3>
-          <p>Simple pagination with page numbers and navigation</p>
-          {isLoading.basic ? (
-            <div className="ihub-loading">Loading...</div>
-          ) : (
-            <>
-              <div className="ihub-data-preview">
-                <p><strong>Total Items:</strong> {basicData.count}</p>
-                <p><strong>Current Page Items:</strong> {basicData.results.length}</p>
-                <div className="ihub-items-grid">
-                  {basicData.results.slice(0, 3).map((item: any) => (
-                    <div key={item.id} className="ihub-item-card">
-                      <strong>{item.name}</strong>
-                      <small>{item.email}</small>
-                    </div>
-                  ))}
-                  {basicData.results.length > 3 && <div className="ihub-more">... and {basicData.results.length - 3} more</div>}
-                </div>
-              </div>
-              <Pagination
-                data={basicData}
-                apiCall={fetchBasicData}
-                pageSize={10}
-              />
-            </>
-          )}
+          <p>Simple pagination with API data</p>
+          
+          <div className="ihub-pagination-info">
+            <p>Total Items: {data.count}</p>
+            <p>Current Results: {data.results.length}</p>
+          </div>
+
+          <Pagination
+            offset={0}
+            data={data}
+            limit={20}
+            urlPath="/api/users"
+            setData={setData}
+            className="ihub-basic-pagination"
+          />
         </div>
 
-        {/* Table with Pagination */}
+        {/* Pagination with Table */}
         <div className="ihub-example-card">
-          <h3>Table with Pagination</h3>
-          <p>Data table with integrated pagination</p>
-          {isLoading.table ? (
-            <div className="ihub-loading">Loading table data...</div>
-          ) : (
-            <>
-              <IHubTable
-                data={tableData.results}
-                columns={tableColumns}
-                showActions={false}
-              />
-              <Pagination
-                data={tableData}
-                apiCall={fetchTableData}
-                pageSize={5}
-              />
-            </>
-          )}
+          <h3>Pagination with Table</h3>
+          <p>Pagination integrated with table display</p>
+          
+          <IHubTable
+            data={data.results}
+            columns={tableColumns}
+            isLoading={false}
+          />
+
+          <Pagination
+            offset={0}
+            data={data}
+            limit={5}
+            urlPath="/api/users"
+            setData={setData}
+            rangeLimit={3}
+          />
         </div>
 
-        {/* Search with Pagination */}
+        {/* Pagination with Search */}
         <div className="ihub-example-card">
-          <h3>Search with Pagination</h3>
-          <p>Search functionality with paginated results</p>
-          <form onSubmit={handleSearch} className="ihub-mb-3">
-            <div className="ihub-search-container">
-              <InputText
-                label="Search"
-                name="search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search items..."
-              />
-              <SubmitButton
-                title="Search"
-                status={isLoading.search ? 2 : 1}
-                className="ihub-search-btn"
+          <h3>Pagination with Search</h3>
+          <p>Pagination that responds to search queries</p>
+          
+          <div className="ihub-search-info">
+            <p>Search Results: {searchData.count} items found</p>
+          </div>
+
+          <Pagination
+            offset={0}
+            data={searchData}
+            limit={10}
+            urlPath="/api/search"
+            setData={setSearchData}
+            searchValues="user"
+            showFirstLast={true}
+          />
+        </div>
+
+        {/* Advanced Pagination */}
+        <div className="ihub-example-card">
+          <h3>Advanced Pagination</h3>
+          <p>Pagination with authentication and tab filters</p>
+          
+          <Pagination
+            offset={0}
+            data={data}
+            limit={15}
+            urlPath="/api/protected/users"
+            setData={setData}
+            token="your-auth-token"
+            tabsValues="active"
+            searchValues=""
+            rangeLimit={7}
+            showFirstLast={false}
+            className="ihub-advanced-pagination"
+          />
+        </div>
+
+        {/* Pagination States */}
+        <div className="ihub-example-card">
+          <h3>Pagination States</h3>
+          <p>Different pagination states and configurations</p>
+          
+          <div className="ihub-pagination-states">
+            <div className="ihub-state-demo">
+              <h5>First Page (No Previous)</h5>
+              <Pagination
+                offset={0}
+                data={{
+                  count: 100,
+                  next: "http://api.example.com/items?offset=10",
+                  previous: null,
+                  results: []
+                }}
+                limit={10}
+                urlPath="/api/items"
+                setData={() => {}}
               />
             </div>
-          </form>
-          {isLoading.search ? (
-            <div className="ihub-loading">Searching...</div>
-          ) : (
-            <>
-              <div className="ihub-search-results">
-                <p><strong>Search Results:</strong> {searchData.count} items found</p>
-                <div className="ihub-results-list">
-                  {searchData.results.map((item: any) => (
-                    <div key={item.id} className="ihub-result-item">
-                      <strong>{item.name}</strong>
-                      <p>{item.email}</p>
-                      <span className={`ihub-status-badge ${item.status.toLowerCase()}`}>
-                        {item.status}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            
+            <div className="ihub-state-demo">
+              <h5>Middle Page</h5>
               <Pagination
-                data={searchData}
-                apiCall={fetchSearchData}
-                pageSize={8}
+                offset={20}
+                data={{
+                  count: 100,
+                  next: "http://api.example.com/items?offset=30",
+                  previous: "http://api.example.com/items?offset=10",
+                  results: []
+                }}
+                limit={10}
+                urlPath="/api/items"
+                setData={() => {}}
               />
-            </>
-          )}
-        </div>
-
-        {/* Gallery Pagination */}
-        <div className="ihub-example-card">
-          <h3>Gallery Pagination</h3>
-          <p>Image gallery with pagination</p>
-          {isLoading.gallery ? (
-            <div className="ihub-loading">Loading gallery...</div>
-          ) : (
-            <>
-              <div className="ihub-gallery-grid">
-                {galleryData.results.map((item: any) => (
-                  <div key={item.id} className="ihub-gallery-item">
-                    <img src={item.image} alt={item.name} />
-                    <div className="ihub-gallery-info">
-                      <strong>{item.name}</strong>
-                      <small>{item.category}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            </div>
+            
+            <div className="ihub-state-demo">
+              <h5>Last Page (No Next)</h5>
               <Pagination
-                data={galleryData}
-                apiCall={fetchGalleryData}
-                pageSize={12}
+                offset={90}
+                data={{
+                  count: 100,
+                  next: null,
+                  previous: "http://api.example.com/items?offset=80",
+                  results: []
+                }}
+                limit={10}
+                urlPath="/api/items"
+                setData={() => {}}
               />
-            </>
-          )}
-        </div>
-
-        {/* Dynamic Page Size */}
-        <div className="ihub-example-card">
-          <h3>Dynamic Page Size</h3>
-          <p>Adjustable number of items per page</p>
-          <div className="ihub-page-size-controls ihub-mb-3">
-            <label>Items per page:</label>
-            <select 
-              value={pageSize} 
-              onChange={(e) => handlePageSizeChange(parseInt(e.target.value))}
-              className="ihub-select-input"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
+            </div>
           </div>
-          {isLoading.dynamic ? (
-            <div className="ihub-loading">Loading with new page size...</div>
-          ) : (
-            <>
-              <div className="ihub-dynamic-list">
-                <p><strong>Showing {dynamicData.results.length} of {dynamicData.count} items</strong></p>
-                {dynamicData.results.map((item: any) => (
-                  <div key={item.id} className="ihub-list-item">
-                    <span className="ihub-item-id">#{item.id}</span>
-                    <span className="ihub-item-name">{item.name}</span>
-                    <span className="ihub-item-email">{item.email}</span>
-                    <span className={`ihub-item-status ${item.status.toLowerCase()}`}>
-                      {item.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Pagination
-                data={dynamicData}
-                apiCall={fetchDynamicData}
-                pageSize={pageSize}
-              />
-            </>
-          )}
-        </div>
-
-        {/* Tab Filters with Pagination */}
-        <div className="ihub-example-card">
-          <h3>Tab Filters with Pagination</h3>
-          <p>Filter content by tabs with pagination</p>
-          <div className="ihub-tab-filters ihub-mb-3">
-            {["all", "Admin", "User", "Guest"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => handleTabChange(tab)}
-                className={`ihub-tab-btn ${activeTab === tab ? "active" : ""}`}
-              >
-                {tab === "all" ? "All Roles" : tab}
-              </button>
-            ))}
-          </div>
-          {isLoading.tab ? (
-            <div className="ihub-loading">Filtering...</div>
-          ) : (
-            <>
-              <div className="ihub-filtered-content">
-                <p><strong>Filtered Results:</strong> {tabData.count} items ({activeTab === "all" ? "All Roles" : activeTab})</p>
-                <div className="ihub-tab-results">
-                  {tabData.results.map((item: any) => (
-                    <div key={item.id} className="ihub-tab-item">
-                      <div className="ihub-item-header">
-                        <strong>{item.name}</strong>
-                        <span className={`ihub-role-badge ${item.role.toLowerCase()}`}>
-                          {item.role}
-                        </span>
-                      </div>
-                      <p>{item.email}</p>
-                      <small>Created: {item.created}</small>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <Pagination
-                data={tabData}
-                apiCall={fetchTabData}
-                pageSize={6}
-              />
-            </>
-          )}
         </div>
       </div>
 
@@ -435,87 +226,58 @@ const PaginationExample: React.FC = () => {
           <pre><code>{`import { Pagination } from '@instincthub/react-ui';
 
 const [data, setData] = useState({
-  count: 0,
-  next: null,
+  count: 150,
+  next: "http://api.example.com/users?offset=20",
   previous: null,
   results: []
 });
 
-const fetchData = async (url: string) => {
-  // Your API call logic here
-  const response = await fetch(url);
-  const newData = await response.json();
-  setData(newData);
-};
-
 <Pagination
+  offset={0}
   data={data}
-  apiCall={fetchData}
-  pageSize={10}
+  limit={20}
+  urlPath="/api/users"
+  setData={setData}
 />`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>With Table Integration</h3>
-          <pre><code>{`import { Pagination, IHubTable } from '@instincthub/react-ui';
+          <h3>With Search and Filters</h3>
+          <pre><code>{`<Pagination
+  offset={0}
+  data={searchData}
+  limit={10}
+  urlPath="/api/search"
+  setData={setSearchData}
+  searchValues="query"
+  tabsValues="active"
+  token="auth-token"
+  rangeLimit={5}
+  showFirstLast={true}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Table Integration</h3>
+          <pre><code>{`const columns = [
+  { header: "ID", accessor: "id", sortable: true },
+  { header: "Name", accessor: "name", sortable: true },
+  { header: "Email", accessor: "email", sortable: true }
+];
 
 <IHubTable
-  data={tableData.results}
+  data={data.results}
   columns={columns}
-  showActions={false}
+  loading={false}
 />
-<Pagination
-  data={tableData}
-  apiCall={fetchTableData}
-  pageSize={5}
-/>`}</code></pre>
-        </div>
-
-        <div className="ihub-code-section">
-          <h3>With Search Functionality</h3>
-          <pre><code>{`const handleSearch = (e: React.FormEvent) => {
-  e.preventDefault();
-  fetchSearchData("?page=1&search=" + searchTerm);
-};
-
-<form onSubmit={handleSearch}>
-  <InputText
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    placeholder="Search..."
-  />
-  <SubmitButton title="Search" />
-</form>
 
 <Pagination
-  data={searchData}
-  apiCall={fetchSearchData}
-  pageSize={8}
-/>`}</code></pre>
-        </div>
-
-        <div className="ihub-code-section">
-          <h3>Dynamic Page Size</h3>
-          <pre><code>{`const [pageSize, setPageSize] = useState(10);
-
-const handlePageSizeChange = (newSize: number) => {
-  setPageSize(newSize);
-  fetchData("?page=1&limit=" + newSize);
-};
-
-<select 
-  value={pageSize} 
-  onChange={(e) => handlePageSizeChange(parseInt(e.target.value))}
->
-  <option value={5}>5</option>
-  <option value={10}>10</option>
-  <option value={20}>20</option>
-</select>
-
-<Pagination
+  offset={0}
   data={data}
-  apiCall={fetchData}
-  pageSize={pageSize}
+  limit={5}
+  urlPath="/api/users"
+  setData={setData}
+  rangeLimit={3}
 />`}</code></pre>
         </div>
       </div>

@@ -54,7 +54,6 @@ function greet(name) {
           
           <ContentViewer
             content={htmlContent}
-            type="html"
             className="ihub-content-display"
           />
         </div>
@@ -66,9 +65,8 @@ function greet(name) {
           
           <ContentViewer
             content={markdownContent}
-            type="markdown"
             className="ihub-content-display"
-            showTableOfContents={true}
+            isMarkdown={true}
           />
         </div>
 
@@ -79,9 +77,7 @@ function greet(name) {
           
           <ContentViewer
             content={plainText}
-            type="text"
             className="ihub-content-display"
-            preserveWhitespace={true}
           />
         </div>
 
@@ -92,12 +88,8 @@ function greet(name) {
           
           <ContentViewer
             content={htmlContent}
-            type="html"
-            showWordCount={true}
-            showReadingTime={true}
-            enableCopyToClipboard={true}
-            enablePrint={true}
             className="ihub-interactive-content"
+            showToolbar={true}
           />
         </div>
 
@@ -109,15 +101,11 @@ function greet(name) {
           <div className="ihub-themed-viewers">
             <ContentViewer
               content="<h4>Light Theme</h4><p>Content displayed with light theme styling</p>"
-              type="html"
-              theme="light"
               className="ihub-theme-light"
             />
             
             <ContentViewer
               content="<h4>Dark Theme</h4><p>Content displayed with dark theme styling</p>"
-              type="html"
-              theme="dark"
               className="ihub-theme-dark ihub-mt-3"
             />
           </div>
@@ -129,7 +117,7 @@ function greet(name) {
           <p>Display code with syntax highlighting and copy functionality</p>
           
           <ContentViewer
-            content={`function calculateTotal(items) {
+            content={`<pre><code class="language-javascript">function calculateTotal(items) {
   return items.reduce((sum, item) => {
     return sum + (item.price * item.quantity);
   }, 0);
@@ -141,12 +129,9 @@ const cartItems = [
   { price: 15, quantity: 1 }
 ];
 
-console.log(calculateTotal(cartItems)); // 35`}
-            type="code"
-            language="javascript"
-            showLineNumbers={true}
-            enableCopyToClipboard={true}
+console.log(calculateTotal(cartItems)); // 35</code></pre>`}
             className="ihub-code-display"
+            showToolbar={true}
           />
         </div>
       </div>

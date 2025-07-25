@@ -2,12 +2,39 @@
 import React, { useState, KeyboardEvent, ChangeEvent, FocusEvent } from "react";
 
 interface EmailListProps {
-  setEmailListValue?: (value: (prevEmails: string[]) => string[]) => void;
+  /** Label to display above the email list */
+  label?: string;
+  /** Array of email addresses */
+  emails?: string[];
+  /** Function to update emails array */
+  setEmails?: (emails: string[]) => void;
+  /** Placeholder text for input field */
+  placeholder?: string;
+  /** Custom class name */
+  className?: string;
+  /** Field name for form submission */
   names?: string;
+  /** Allow bulk email input */
+  allowBulkInput?: boolean;
+  /** Legacy prop for backward compatibility */
+  setEmailListValue?: (value: (prevEmails: string[]) => string[]) => void;
 }
 
-const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
-  const [emails, setEmails] = useState<string[]>([]);
+const EmailList: React.FC<EmailListProps> = ({ 
+  label,
+  emails: externalEmails = [],
+  setEmails: setExternalEmails,
+  placeholder = "Separate emails with commas or 'Enter'",
+  className = "",
+  names,
+  allowBulkInput = false,
+  setEmailListValue 
+}) => {
+  const [internalEmails, setInternalEmails] = useState<string[]>([]);
+  
+  // Use external emails if provided, otherwise use internal state
+  const emails = externalEmails.length > 0 ? externalEmails : internalEmails;
+  const setEmails = setExternalEmails || setInternalEmails;
   const [newEmail, setNewEmail] = useState<string>("");
   const [newGroupEmail, setNewGroupEmail] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
@@ -19,10 +46,12 @@ const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
       // check if email already on the list
 
       // add new email to list.
-      setEmails((prevEmails) => [...prevEmails, ...newEmails]);
+      const updatedEmails = [...emails, ...newEmails];
+      setEmails(updatedEmails);
 
+      // Legacy support
       setEmailListValue &&
-        setEmailListValue((prevEmails) => [...prevEmails, ...newEmails]);
+        setEmailListValue(() => updatedEmails);
       setNewEmail("");
       message && setMessage("");
     } else {
@@ -32,10 +61,11 @@ const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
   };
 
   const handleEmailDelete = (index: number): void => {
-    setEmails((prevEmails) => [
-      ...prevEmails.slice(0, index),
-      ...prevEmails.slice(index + 1),
-    ]);
+    const updatedEmails = [
+      ...emails.slice(0, index),
+      ...emails.slice(index + 1),
+    ];
+    setEmails(updatedEmails);
   };
 
   const isValidEmail = (email: string): boolean => {
@@ -71,7 +101,8 @@ const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
   };
 
   return (
-    <div className={`ihub-email-list ${names || ""}`}>
+    <div className={`ihub-email-list ${className} ${names || ""}`}>
+      {label && <label className="ihub-email-label">{label}</label>}
       <ul className="field">
         {emails.map((email, index) => (
           <li key={index} className="ihub-email-item">
@@ -92,7 +123,7 @@ const EmailList: React.FC<EmailListProps> = ({ setEmailListValue, names }) => {
         onChange={handleInputChange}
         onBlur={handleInputBlur}
         onKeyDown={handleKeyPress}
-        placeholder="Separate emails with commas or 'Enter'"
+        placeholder={placeholder}
         className="ihub-input"
       />
       {message && <p className="ihub-input-notes ihub-is_invalid">{message}</p>}

@@ -48,10 +48,10 @@ function MainNavigation() {
         <nav>
           <ul className="navlinks">
             <li>
-              <Link href="/docs">Documentation</Link>
+              <Link href="/components">Components</Link>
             </li>
             <li>
-              <Link href="/components">Components</Link>
+              <Link href="/libs">Library</Link>
             </li>
             <li>
               <Link href="/examples">Examples</Link>

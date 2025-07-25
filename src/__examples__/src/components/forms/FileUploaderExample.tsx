@@ -124,9 +124,6 @@ const FileUploaderExample: React.FC = () => {
             showProgress={true}
             isUploading={isUploading}
             uploadProgress={uploadProgress}
-            validateFiles={true}
-            allowDuplicates={false}
-            showFileSize={true}
             showFileType={true}
           />
           
@@ -153,7 +150,7 @@ const FileUploaderExample: React.FC = () => {
               
               {uploadedFiles3.length > 0 && (
                 <SubmitButton
-                  title={isUploading ? `Uploading... ${uploadProgress}%` : "Upload All Files"}
+                  label={isUploading ? `Uploading... ${uploadProgress}%` : "Upload All Files"}
                   status={isUploading ? 2 : 1}
                   className="ihub-upload-btn ihub-mt-3"
                   onClick={() => handleFileUpload(uploadedFiles3)}

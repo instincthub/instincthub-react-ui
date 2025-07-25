@@ -1,5 +1,5 @@
-import DateTimePickerExample from "src/components/forms/DateTimePickerExample";
-import TimePickerExample from "src/components/forms/TimePickerExample";
+import DateTimePickerExample from "../../../../components/forms/DateTimePickerExample";
+import TimePickerExample from "../../../../components/forms/TimePickerExample";
 
 export default function TimePickerPage() {
   return (

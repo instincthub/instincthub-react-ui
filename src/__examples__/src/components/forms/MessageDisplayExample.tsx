@@ -36,23 +36,22 @@ const MessageDisplayExample: React.FC = () => {
           
           <div className="ihub-message-types">
             <MessageDisplay 
-              message="Operation completed successfully!"
-              type="success"
+              messages="Operation completed successfully!"
+              flag="success"
             />
             
             <MessageDisplay 
-              message="Please review your information before proceeding"
-              type="warning"
+              messages="Please review your information before proceeding"
+              flag="note"
             />
             
             <MessageDisplay 
-              message="An error occurred while processing your request"
-              type="error"
+              messages="An error occurred while processing your request"
+              flag="failed"
             />
             
             <MessageDisplay 
-              message="Your profile has been updated"
-              type="info"
+              messages="Your profile has been updated"
             />
           </div>
         </div>
@@ -79,14 +78,22 @@ const MessageDisplayExample: React.FC = () => {
           
           <div className="ihub-message-list">
             {messages.map(msg => (
-              <MessageDisplay
-                key={msg.id}
-                message={msg.content}
-                type={msg.type}
-                dismissible
-                onDismiss={() => removeMessage(msg.id)}
-                timestamp={msg.timestamp}
-              />
+              <div key={msg.id} className="ihub-message-item">
+                <MessageDisplay
+                  messages={msg.content}
+                  flag={msg.type === 'success' ? 'success' : msg.type === 'error' ? 'failed' : 'note'}
+                />
+                <button 
+                  onClick={() => removeMessage(msg.id)}
+                  className="ihub-dismiss-btn"
+                  title="Dismiss"
+                >
+                  ×
+                </button>
+                <small className="ihub-timestamp">
+                  {msg.timestamp.toLocaleTimeString()}
+                </small>
+              </div>
             ))}
           </div>
         </div>
@@ -98,6 +105,7 @@ const MessageDisplayExample: React.FC = () => {
           
           <div className="ihub-custom-message-form">
             <InputText
+              name="messageContent"
               label="Message Content"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}

@@ -28,41 +28,53 @@ const CreateButtonExample: React.FC = () => {
             <CreateButton
               label="Create Post"
               onClick={() => handleCreate('Post')}
-              icon="add"
+              icon={<span>📝</span>}
+              variant="important"
             />
             
             <CreateButton
               label="Create User"
               onClick={() => handleCreate('User')}
-              icon="person_add"
-              variant="secondary"
+              icon={<span>👤</span>}
+              variant="primary"
             />
             
             <CreateButton
               label="Create Project"
               onClick={() => handleCreate('Project')}
-              icon="folder_add"
-              variant="outline"
+              icon={<span>📁</span>}
+              variant="outlined"
+            />
+            
+            <CreateButton
+              label="Delete Item"
+              onClick={() => handleCreate('Deleted Item')}
+              icon={<span>🗑️</span>}
+              variant="danger"
             />
           </div>
         </div>
 
-        {/* Dropdown Create Button */}
+        {/* Create Button with Search Parameters */}
         <div className="ihub-example-card">
-          <h3>Create Button with Dropdown</h3>
-          <p>Create button with multiple creation options</p>
+          <h3>Create Button with URL Parameters</h3>
+          <p>Create button that updates URL search parameters</p>
           
-          <CreateButton
-            label="Create New"
-            onClick={() => handleCreate('Default')}
-            showDropdown={true}
-            dropdownOptions={[
-              { label: 'Blog Post', onClick: () => handleCreate('Blog Post'), icon: 'article' },
-              { label: 'Page', onClick: () => handleCreate('Page'), icon: 'description' },
-              { label: 'Gallery', onClick: () => handleCreate('Gallery'), icon: 'photo_library' },
-              { label: 'Video', onClick: () => handleCreate('Video'), icon: 'videocam' }
-            ]}
-          />
+          <div className="ihub-url-buttons">
+            <CreateButton
+              label="Create Course"
+              searchParam={{ key: "create", value: "course" }}
+              icon={<span>🎓</span>}
+              variant="important"
+            />
+            
+            <CreateButton
+              label="Create Module"
+              searchParam={{ key: "create", value: "module" }}
+              icon={<span>📚</span>}
+              variant="primary"
+            />
+          </div>
         </div>
 
         {/* Different Sizes */}
@@ -75,18 +87,51 @@ const CreateButtonExample: React.FC = () => {
               label="Small"
               onClick={() => handleCreate('Small Item')}
               size="small"
+              icon={<span>🔹</span>}
             />
             
             <CreateButton
               label="Medium"
               onClick={() => handleCreate('Medium Item')}
               size="medium"
+              icon={<span>🔸</span>}
             />
             
             <CreateButton
               label="Large"
               onClick={() => handleCreate('Large Item')}
               size="large"
+              icon={<span>🔶</span>}
+            />
+          </div>
+        </div>
+
+        {/* Loading and Disabled States */}
+        <div className="ihub-example-card">
+          <h3>Button States</h3>
+          <p>Create buttons with loading and disabled states</p>
+          
+          <div className="ihub-state-buttons">
+            <CreateButton
+              label="Loading Button"
+              onClick={() => handleCreate('Loading Item')}
+              loading={true}
+              variant="important"
+            />
+            
+            <CreateButton
+              label="Disabled Button"
+              onClick={() => handleCreate('Disabled Item')}
+              disabled={true}
+              variant="primary"
+            />
+            
+            <CreateButton
+              label="No Animation"
+              onClick={() => handleCreate('Static Item')}
+              animated={false}
+              variant="outlined"
+              icon={<span>⚡</span>}
             />
           </div>
         </div>
@@ -135,7 +180,39 @@ const CreateButtonExample: React.FC = () => {
 <CreateButton
   label="Create Post"
   onClick={() => handleCreate()}
-  icon="add"
+  icon={<span>📝</span>}
+  variant="important"
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>With URL Parameters</h3>
+          <pre><code>{`<CreateButton
+  label="Create Course"
+  searchParam={{ key: "create", value: "course" }}
+  icon={<span>🎓</span>}
+  variant="primary"
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Different States</h3>
+          <pre><code>{`<CreateButton
+  label="Loading Button"
+  loading={true}
+  variant="important"
+/>
+
+<CreateButton
+  label="Disabled Button"
+  disabled={true}
+  variant="primary"
+/>
+
+<CreateButton
+  label="No Animation"
+  animated={false}
+  variant="outlined"
 />`}</code></pre>
         </div>
       </div>

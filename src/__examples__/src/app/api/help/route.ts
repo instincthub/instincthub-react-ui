@@ -1255,7 +1255,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await integrationHelperAPI.execute(topic, framework, version);
+    const result = await integrationHelperAPI.execute(topic, framework, version || undefined);
 
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
@@ -1281,7 +1281,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const result = await integrationHelperAPI.execute(topic, framework, version);
+    const result = await integrationHelperAPI.execute(topic, framework, version || undefined);
 
     return NextResponse.json({ success: true, data: result });
   } catch (error) {

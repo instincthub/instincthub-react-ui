@@ -2,563 +2,256 @@
 
 import React, { useState } from "react";
 import { FilterObjects, Badge } from "../../../../index";
+import { FilterObjectsType } from "../../../../types";
 
 const FilterObjectsExample: React.FC = () => {
-  const [filteredEmployees, setFilteredEmployees] = useState<any[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-  const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
+  const [selectedDepartment, setSelectedDepartment] = useState<FilterObjectsType | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<FilterObjectsType | null>(null);
+  const [selectedRole, setSelectedRole] = useState<FilterObjectsType | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<FilterObjectsType | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<FilterObjectsType | null>(null);
 
-  const employeeData = {
-    employees: [
-      { 
-        id: 1, 
-        name: "John Doe", 
-        email: "john@company.com", 
-        department: "Engineering", 
-        role: "Senior Developer",
-        salary: 95000,
-        experience: 8,
-        skills: ["React", "TypeScript", "Node.js"],
-        location: "New York",
-        startDate: "2020-03-15",
-        isActive: true
-      },
-      { 
-        id: 2, 
-        name: "Jane Smith", 
-        email: "jane@company.com", 
-        department: "Design", 
-        role: "UI/UX Designer",
-        salary: 78000,
-        experience: 5,
-        skills: ["Figma", "Adobe XD", "Prototyping"],
-        location: "San Francisco",
-        startDate: "2021-07-20",
-        isActive: true
-      },
-      { 
-        id: 3, 
-        name: "Bob Johnson", 
-        email: "bob@company.com", 
-        department: "Marketing", 
-        role: "Marketing Manager",
-        salary: 85000,
-        experience: 12,
-        skills: ["SEO", "Analytics", "Social Media"],
-        location: "Chicago",
-        startDate: "2019-01-10",
-        isActive: false
-      },
-      { 
-        id: 4, 
-        name: "Alice Brown", 
-        email: "alice@company.com", 
-        department: "Engineering", 
-        role: "DevOps Engineer",
-        salary: 92000,
-        experience: 6,
-        skills: ["AWS", "Docker", "Kubernetes"],
-        location: "Austin",
-        startDate: "2021-11-05",
-        isActive: true
-      }
-    ],
-    metadata: {
-      totalCount: 4,
-      departments: ["Engineering", "Design", "Marketing"],
-      locations: ["New York", "San Francisco", "Chicago", "Austin"]
-    }
-  };
+  // Sample department options
+  const departmentOptions: FilterObjectsType[] = [
+    { id: 1, title: "Engineering", description: "Software development and technical roles", color: "blue" },
+    { id: 2, title: "Design", description: "UI/UX and visual design", color: "purple" },
+    { id: 3, title: "Marketing", description: "Marketing and growth initiatives", color: "green" },
+    { id: 4, title: "Sales", description: "Sales and business development", color: "orange" },
+    { id: 5, title: "HR", description: "Human resources and talent management", color: "red" }
+  ];
 
-  const productCatalog = {
-    products: [
-      {
-        id: 1,
-        name: "Wireless Headphones",
-        category: "Electronics",
-        brand: "AudioTech",
-        price: 199.99,
-        specifications: {
-          batteryLife: "30 hours",
-          connectivity: ["Bluetooth 5.0", "USB-C"],
-          weight: "250g"
-        },
-        availability: {
-          inStock: true,
-          quantity: 150,
-          warehouse: "West Coast"
-        },
-        ratings: {
-          average: 4.5,
-          totalReviews: 234
-        }
-      },
-      {
-        id: 2,
-        name: "Gaming Laptop",
-        category: "Computers",
-        brand: "GameTech",
-        price: 1299.99,
-        specifications: {
-          processor: "Intel i7",
-          ram: "16GB",
-          storage: "512GB SSD",
-          graphics: "RTX 3060"
-        },
-        availability: {
-          inStock: true,
-          quantity: 25,
-          warehouse: "East Coast"
-        },
-        ratings: {
-          average: 4.8,
-          totalReviews: 89
-        }
-      },
-      {
-        id: 3,
-        name: "Smart Watch",
-        category: "Electronics",
-        brand: "WearTech",
-        price: 299.99,
-        specifications: {
-          batteryLife: "7 days",
-          display: "AMOLED",
-          waterRating: "5ATM"
-        },
-        availability: {
-          inStock: false,
-          quantity: 0,
-          warehouse: "Central"
-        },
-        ratings: {
-          average: 4.2,
-          totalReviews: 156
-        }
-      }
-    ],
-    categories: ["Electronics", "Computers", "Wearables"],
-    brands: ["AudioTech", "GameTech", "WearTech"]
-  };
+  // Sample product options
+  const productOptions: FilterObjectsType[] = [
+    { id: 1, title: "Laptop Pro", category: "Electronics", price: 1299, brand: "TechBrand" },
+    { id: 2, title: "Wireless Headphones", category: "Electronics", price: 199, brand: "AudioTech" },
+    { id: 3, title: "Office Chair", category: "Furniture", price: 299, brand: "ComfortSeats" },
+    { id: 4, title: "Coffee Maker", category: "Appliances", price: 89, brand: "BrewMaster" },
+    { id: 5, title: "Standing Desk", category: "Furniture", price: 549, brand: "WorkSpace" }
+  ];
 
-  const eventSchedule = {
-    events: [
-      {
-        id: 1,
-        title: "React Conference 2024",
-        type: "Conference",
-        organizer: {
-          name: "Tech Events Inc",
-          contact: "events@techevents.com"
-        },
-        schedule: {
-          startDate: "2024-03-15",
-          endDate: "2024-03-17",
-          duration: 3,
-          timezone: "PST"
-        },
-        location: {
-          venue: "Convention Center",
-          city: "San Francisco",
-          country: "USA",
-          isVirtual: false
-        },
-        attendees: {
-          registered: 1200,
-          capacity: 1500,
-          waitlist: 50
-        },
-        pricing: {
-          regular: 299,
-          student: 149,
-          vip: 599
-        }
-      },
-      {
-        id: 2,
-        title: "Design Thinking Workshop",
-        type: "Workshop",
-        organizer: {
-          name: "Design Academy",
-          contact: "workshop@designacademy.com"
-        },
-        schedule: {
-          startDate: "2024-04-10",
-          endDate: "2024-04-10",
-          duration: 1,
-          timezone: "EST"
-        },
-        location: {
-          venue: "Creative Space",
-          city: "New York",
-          country: "USA",
-          isVirtual: false
-        },
-        attendees: {
-          registered: 45,
-          capacity: 50,
-          waitlist: 5
-        },
-        pricing: {
-          regular: 199,
-          student: 99,
-          vip: 299
-        }
-      }
-    ],
-    eventTypes: ["Conference", "Workshop", "Seminar", "Meetup"],
-    cities: ["San Francisco", "New York", "Chicago", "Austin"]
-  };
+  // Sample role options  
+  const roleOptions: FilterObjectsType[] = [
+    { id: 1, title: "Senior Developer", level: "Senior", department: "Engineering" },
+    { id: 2, title: "UI/UX Designer", level: "Mid", department: "Design" },
+    { id: 3, title: "Marketing Manager", level: "Senior", department: "Marketing" },
+    { id: 4, title: "Sales Representative", level: "Junior", department: "Sales" },
+    { id: 5, title: "HR Specialist", level: "Mid", department: "HR" }
+  ];
+
+  // Sample category options
+  const categoryOptions: FilterObjectsType[] = [
+    { id: 1, title: "Electronics", icon: "💻", count: 156 },
+    { id: 2, title: "Furniture", icon: "🪑", count: 89 },
+    { id: 3, title: "Appliances", icon: "🏠", count: 67 },
+    { id: 4, title: "Books", icon: "📚", count: 234 },
+    { id: 5, title: "Clothing", icon: "👕", count: 445 }
+  ];
+
+  // Sample status options
+  const statusOptions: FilterObjectsType[] = [
+    { id: 1, title: "Active", color: "success", description: "Currently active and operational" },
+    { id: 2, title: "Inactive", color: "danger", description: "Not currently active" },
+    { id: 3, title: "Pending", color: "warning", description: "Awaiting approval or action" },
+    { id: 4, title: "Suspended", color: "secondary", description: "Temporarily suspended" }
+  ];
 
   return (
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
         <h1>FilterObjects Examples</h1>
-        <p>Advanced object filtering component for complex nested data structures</p>
+        <p>Object-based dropdown component for selecting from complex data structures</p>
       </div>
 
       <div className="ihub-examples-grid">
-        {/* Employee Data Filter */}
+        {/* Basic FilterObjects */}
         <div className="ihub-example-card">
-          <h3>Employee Data Filter</h3>
-          <p>Filter employees with nested object properties and complex criteria</p>
+          <h3>Basic Department Filter</h3>
+          <p>Simple object dropdown with department selection</p>
           
           <FilterObjects
-            data={employeeData.employees}
-            onFilteredData={setFilteredEmployees}
-            filterConfig={{
-              searchFields: [
-                { path: "name", weight: 1.0 },
-                { path: "email", weight: 0.8 },
-                { path: "role", weight: 0.9 },
-                { path: "skills", weight: 0.7 }
-              ],
-              filters: [
-                {
-                  key: "department",
-                  label: "Department",
-                  type: "select",
-                  path: "department",
-                  options: employeeData.metadata.departments.map(dept => ({
-                    value: dept,
-                    label: dept
-                  }))
-                },
-                {
-                  key: "location",
-                  label: "Location",
-                  type: "multiselect",
-                  path: "location",
-                  options: employeeData.metadata.locations.map(loc => ({
-                    value: loc,
-                    label: loc
-                  }))
-                },
-                {
-                  key: "salary",
-                  label: "Salary Range",
-                  type: "range",
-                  path: "salary",
-                  min: 50000,
-                  max: 120000,
-                  step: 5000,
-                  formatter: (value: number) => `$${value.toLocaleString()}`
-                },
-                {
-                  key: "experience",
-                  label: "Years of Experience",
-                  type: "range",
-                  path: "experience",
-                  min: 0,
-                  max: 20,
-                  step: 1
-                },
-                {
-                  key: "isActive",
-                  label: "Employment Status",
-                  type: "boolean",
-                  path: "isActive",
-                  trueLabel: "Active",
-                  falseLabel: "Inactive"
-                }
-              ],
-              sortOptions: [
-                { key: "name", label: "Name", path: "name" },
-                { key: "salary", label: "Salary", path: "salary" },
-                { key: "experience", label: "Experience", path: "experience" },
-                { key: "startDate", label: "Start Date", path: "startDate" }
-              ]
-            }}
-            showSearchBar={true}
-            showResultCount={true}
-            showClearFilters={true}
+            options={departmentOptions}
+            name="department"
+            label="Select Department"
+            setValue={setSelectedDepartment}
+            defaultValue=""
           />
           
-          <div className="ihub-filtered-results">
-            <h4>Filtered Employees ({filteredEmployees.length}):</h4>
-            <div className="ihub-employee-list">
-              {filteredEmployees.map(employee => (
-                <div key={employee.id} className="ihub-employee-card">
-                  <div className="ihub-employee-header">
-                    <h5>{employee.name}</h5>
-                    <Badge text={employee.isActive ? "Active" : "Inactive"} 
-                           variant={employee.isActive ? "success" : "warning"} />
-                  </div>
-                  <div className="ihub-employee-details">
-                    <p><strong>Role:</strong> {employee.role}</p>
-                    <p><strong>Department:</strong> {employee.department}</p>
-                    <p><strong>Location:</strong> {employee.location}</p>
-                    <p><strong>Salary:</strong> ${employee.salary.toLocaleString()}</p>
-                    <p><strong>Experience:</strong> {employee.experience} years</p>
-                  </div>
-                  <div className="ihub-employee-skills">
-                    {employee.skills.map((skill: string, index: number) => (
-                      <Badge key={index} text={skill} variant="secondary" />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="ihub-selection-display">
+            <p>Selected Department: 
+              {selectedDepartment ? (
+                <Badge text={selectedDepartment.title} variant="primary" />
+              ) : (
+                <span> None selected</span>
+              )}
+            </p>
+            {selectedDepartment && (
+              <p className="text-sm text-gray-600">
+                Description: {selectedDepartment.description}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Product Catalog Filter */}
+        {/* Product Filter with Default Value */}
         <div className="ihub-example-card">
-          <h3>Product Catalog Filter</h3>
-          <p>Filter products with deeply nested object properties</p>
+          <h3>Product Filter with Default</h3>
+          <p>Product selection with pre-selected default value</p>
           
           <FilterObjects
-            data={productCatalog.products}
-            onFilteredData={setFilteredProducts}
-            filterConfig={{
-              searchFields: [
-                { path: "name", weight: 1.0 },
-                { path: "brand", weight: 0.9 },
-                { path: "specifications.processor", weight: 0.6 },
-                { path: "specifications.graphics", weight: 0.6 }
-              ],
-              filters: [
-                {
-                  key: "category",
-                  label: "Category",
-                  type: "select",
-                  path: "category",
-                  options: productCatalog.categories.map(cat => ({
-                    value: cat,
-                    label: cat
-                  }))
-                },
-                {
-                  key: "brand",
-                  label: "Brand",
-                  type: "multiselect",
-                  path: "brand",
-                  options: productCatalog.brands.map(brand => ({
-                    value: brand,
-                    label: brand
-                  }))
-                },
-                {
-                  key: "price",
-                  label: "Price Range",
-                  type: "range",
-                  path: "price",
-                  min: 0,
-                  max: 2000,
-                  step: 50,
-                  formatter: (value: number) => `$${value}`
-                },
-                {
-                  key: "inStock",
-                  label: "Availability",
-                  type: "boolean",
-                  path: "availability.inStock",
-                  trueLabel: "In Stock",
-                  falseLabel: "Out of Stock"
-                },
-                {
-                  key: "rating",
-                  label: "Minimum Rating",
-                  type: "range",
-                  path: "ratings.average",
-                  min: 0,
-                  max: 5,
-                  step: 0.1
-                }
-              ],
-              nestedFilters: [
-                {
-                  key: "warehouse",
-                  label: "Warehouse Location",
-                  type: "select",
-                  path: "availability.warehouse",
-                  options: [
-                    { value: "", label: "All Warehouses" },
-                    { value: "West Coast", label: "West Coast" },
-                    { value: "East Coast", label: "East Coast" },
-                    { value: "Central", label: "Central" }
-                  ]
-                }
-              ]
-            }}
-            showSearchBar={true}
-            showResultCount={true}
-            showFilterSummary={true}
-            enableAdvancedSearch={true}
+            options={productOptions}
+            name="product"
+            label="Select Product"
+            setValue={setSelectedProduct}
+            defaultValue={productOptions[0]}
+            required={true}
           />
           
-          <div className="ihub-filtered-results">
-            <div className="ihub-product-grid">
-              {filteredProducts.map(product => (
-                <div key={product.id} className="ihub-product-card">
-                  <h5>{product.name}</h5>
-                  <div className="ihub-product-meta">
-                    <Badge text={product.category} variant="primary" />
-                    <Badge text={product.brand} variant="secondary" />
-                  </div>
-                  <div className="ihub-product-price">
-                    <strong>${product.price}</strong>
-                  </div>
-                  <div className="ihub-product-rating">
-                    ⭐ {product.ratings.average} ({product.ratings.totalReviews} reviews)
-                  </div>
-                  <div className="ihub-product-availability">
-                    <Badge 
-                      text={product.availability.inStock ? "In Stock" : "Out of Stock"} 
-                      variant={product.availability.inStock ? "success" : "danger"} 
-                    />
-                    {product.availability.inStock && (
-                      <span> • {product.availability.quantity} units</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="ihub-selection-display">
+            <p>Selected Product: 
+              {selectedProduct ? (
+                <Badge text={selectedProduct.title} variant="info" />
+              ) : (
+                <Badge text={productOptions[0].title} variant="info" />
+              )}
+            </p>
+            {selectedProduct && (
+              <div className="text-sm text-gray-600">
+                <p>Category: {selectedProduct.category}</p>
+                <p>Price: ${selectedProduct.price}</p>
+                <p>Brand: {selectedProduct.brand}</p>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Event Schedule Filter */}
+        {/* Role Filter with Validation */}
         <div className="ihub-example-card">
-          <h3>Event Schedule Filter</h3>
-          <p>Complex event filtering with multiple nested object levels</p>
+          <h3>Role Filter with Validation</h3>
+          <p>Required dropdown with error state handling</p>
           
           <FilterObjects
-            data={eventSchedule.events}
-            onFilteredData={setFilteredEvents}
-            filterConfig={{
-              searchFields: [
-                { path: "title", weight: 1.0 },
-                { path: "organizer.name", weight: 0.8 },
-                { path: "location.city", weight: 0.7 },
-                { path: "location.venue", weight: 0.6 }
-              ],
-              filters: [
-                {
-                  key: "type",
-                  label: "Event Type",
-                  type: "select",
-                  path: "type",
-                  options: eventSchedule.eventTypes.map(type => ({
-                    value: type,
-                    label: type
-                  }))
-                },
-                {
-                  key: "city",
-                  label: "City",
-                  type: "multiselect",
-                  path: "location.city",
-                  options: eventSchedule.cities.map(city => ({
-                    value: city,
-                    label: city
-                  }))
-                },
-                {
-                  key: "duration",
-                  label: "Duration (days)",
-                  type: "range",
-                  path: "schedule.duration",
-                  min: 1,
-                  max: 7,
-                  step: 1
-                },
-                {
-                  key: "price",
-                  label: "Regular Price",
-                  type: "range",
-                  path: "pricing.regular",
-                  min: 0,
-                  max: 1000,
-                  step: 25,
-                  formatter: (value: number) => `$${value}`
-                },
-                {
-                  key: "isVirtual",
-                  label: "Event Format",
-                  type: "boolean",
-                  path: "location.isVirtual",
-                  trueLabel: "Virtual",
-                  falseLabel: "In-Person"
-                }
-              ],
-              customFilters: [
-                {
-                  key: "availability",
-                  label: "Ticket Availability",
-                  filter: (items: any[], value: string) => {
-                    if (!value) return items;
-                    return items.filter(event => {
-                      const available = event.attendees.capacity - event.attendees.registered;
-                      if (value === "high") return available > 100;
-                      if (value === "medium") return available > 10 && available <= 100;
-                      if (value === "low") return available <= 10;
-                      return true;
-                    });
-                  },
-                  options: [
-                    { value: "", label: "All" },
-                    { value: "high", label: "High Availability (100+)" },
-                    { value: "medium", label: "Medium Availability (10-100)" },
-                    { value: "low", label: "Low Availability (<10)" }
-                  ]
-                }
-              ]
-            }}
-            showSearchBar={true}
-            showResultCount={true}
-            showFilterChips={true}
-            enableSaveFilters={true}
+            options={roleOptions}
+            name="role"
+            label="Select Role *"
+            setValue={setSelectedRole}
+            required={true}
+            err={!selectedRole}
+            error={!selectedRole ? "Role selection is required" : ""}
           />
           
-          <div className="ihub-filtered-results">
-            <div className="ihub-event-list">
-              {filteredEvents.map(event => (
-                <div key={event.id} className="ihub-event-card">
-                  <div className="ihub-event-header">
-                    <h5>{event.title}</h5>
-                    <Badge text={event.type} variant="primary" />
-                  </div>
-                  <div className="ihub-event-details">
-                    <p><strong>Organizer:</strong> {event.organizer.name}</p>
-                    <p><strong>Date:</strong> {event.schedule.startDate} - {event.schedule.endDate}</p>
-                    <p><strong>Duration:</strong> {event.schedule.duration} days</p>
-                    <p><strong>Location:</strong> {event.location.venue}, {event.location.city}</p>
-                    <p><strong>Price:</strong> ${event.pricing.regular} (Regular)</p>
-                  </div>
-                  <div className="ihub-event-stats">
-                    <div className="ihub-stat">
-                      <strong>Registered:</strong> {event.attendees.registered}
-                    </div>
-                    <div className="ihub-stat">
-                      <strong>Capacity:</strong> {event.attendees.capacity}
-                    </div>
-                    <div className="ihub-stat">
-                      <strong>Available:</strong> {event.attendees.capacity - event.attendees.registered}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="ihub-selection-display">
+            <p>Selected Role: 
+              {selectedRole ? (
+                <Badge text={selectedRole.title} variant="success" />
+              ) : (
+                <span className="text-red-500"> Required field</span>
+              )}
+            </p>
+            {selectedRole && (
+              <div className="text-sm text-gray-600">
+                <p>Level: {selectedRole.level}</p>
+                <p>Department: {selectedRole.department}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Category Filter with Custom Width */}
+        <div className="ihub-example-card">
+          <h3>Category Filter with Custom Styling</h3>
+          <p>Dropdown with custom width and notes</p>
+          
+          <FilterObjects
+            options={categoryOptions}
+            name="category"
+            label="Product Category"
+            setValue={setSelectedCategory}
+            defaultWidth="350px"
+            note="Choose a category to filter products"
+          />
+          
+          <div className="ihub-selection-display">
+            <p>Selected Category: 
+              {selectedCategory ? (
+                <span>
+                  {selectedCategory.icon} <Badge text={selectedCategory.title} variant="primary" />
+                </span>
+              ) : (
+                <span> None selected</span>
+              )}
+            </p>
+            {selectedCategory && (
+              <p className="text-sm text-gray-600">
+                Items in category: {selectedCategory.count}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Status Filter with Name-Value Callback */}
+        <div className="ihub-example-card">
+          <h3>Status Filter with Name-Value Callback</h3>
+          <p>Dropdown using setNameValue callback pattern</p>
+          
+          <FilterObjects
+            options={statusOptions}
+            name="status"
+            label="Account Status"
+            setNameValue={(name, value) => {
+              console.log(`Field ${name} changed to:`, value);
+              setSelectedStatus(value);
+            }}
+            upperCases={false}
+          />
+          
+          <div className="ihub-selection-display">
+            <p>Selected Status: 
+              {selectedStatus ? (
+                <Badge 
+                  text={selectedStatus.title} 
+                  variant={selectedStatus.color as any || "primary"} 
+                />
+              ) : (
+                <span> None selected</span>
+              )}
+            </p>
+            {selectedStatus && (
+              <p className="text-sm text-gray-600">
+                Description: {selectedStatus.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Advanced Filter with Array Props */}
+        <div className="ihub-example-card">
+          <h3>Advanced Filter with Array Props</h3>
+          <p>Dropdown that updates an array of properties and saves cookies</p>
+          
+          <FilterObjects
+            options={departmentOptions}
+            name="advancedDepartment"
+            label="Department (Advanced)"
+            setValue={(value) => {
+              console.log("Advanced selection:", value);
+            }}
+            setArrayProps={(arrayProps, option) => {
+              console.log("Array props updated:", arrayProps, "Selected:", option);
+            }}
+            arrayProps={[]}
+            dataName="departmentFilter"
+            setCookies="selectedDepartment"
+            setObjects={(option) => {
+              console.log("Objects callback:", option);
+            }}
+            status={1}
+          />
+          
+          <div className="ihub-selection-display">
+            <p className="text-sm text-gray-600">
+              This example demonstrates advanced callbacks and cookie storage.
+              Check the browser console for callback outputs.
+            </p>
           </div>
         </div>
       </div>
@@ -567,86 +260,61 @@ const FilterObjectsExample: React.FC = () => {
         <h2>Code Examples</h2>
         
         <div className="ihub-code-section">
-          <h3>Basic Object Filtering</h3>
+          <h3>Basic Usage</h3>
           <pre><code>{`import { FilterObjects } from '@instincthub/react-ui';
+import { FilterObjectsType } from '@instincthub/react-ui/types';
+
+const [selectedValue, setSelectedValue] = useState<FilterObjectsType | null>(null);
+const options: FilterObjectsType[] = [
+  { id: 1, title: "Option 1", description: "First option" },
+  { id: 2, title: "Option 2", description: "Second option" },
+  { id: 3, title: "Option 3", description: "Third option" }
+];
 
 <FilterObjects
-  data={employees}
-  onFilteredData={setFilteredEmployees}
-  filterConfig={{
-    searchFields: [
-      { path: "name", weight: 1.0 },
-      { path: "email", weight: 0.8 }
-    ],
-    filters: [
-      {
-        key: "department",
-        label: "Department",
-        type: "select",
-        path: "department",
-        options: departmentOptions
-      }
-    ]
-  }}
-  showSearchBar={true}
+  options={options}
+  name="example"
+  label="Select Option"
+  setValue={setSelectedValue}
 />`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>Nested Object Filtering</h3>
+          <h3>Advanced Configuration</h3>
           <pre><code>{`<FilterObjects
-  data={products}
-  onFilteredData={setFilteredProducts}
-  filterConfig={{
-    filters: [
-      {
-        key: "inStock",
-        label: "Availability",
-        type: "boolean",
-        path: "availability.inStock"
-      },
-      {
-        key: "rating",
-        label: "Rating",
-        type: "range",
-        path: "ratings.average",
-        min: 0,
-        max: 5,
-        step: 0.1
-      }
-    ],
-    nestedFilters: [
-      {
-        key: "warehouse",
-        path: "availability.warehouse",
-        type: "select"
-      }
-    ]
-  }}
+  options={options}
+  name="advanced"
+  label="Required Field *"
+  setValue={setValue}
+  defaultValue={options[0]}
+  required={true}
+  err={hasError}
+  error="This field is required"
+  defaultWidth="300px"
+  note="Additional help text"
 />`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>Custom Filter Logic</h3>
+          <h3>With Callbacks and Cookie Storage</h3>
           <pre><code>{`<FilterObjects
-  data={events}
-  filterConfig={{
-    customFilters: [
-      {
-        key: "availability",
-        label: "Ticket Availability",
-        filter: (items, value) => {
-          return items.filter(event => {
-            const available = event.capacity - event.registered;
-            return available > parseInt(value);
-          });
-        },
-        options: availabilityOptions
-      }
-    ]
+  options={options}
+  name="callbackExample"
+  label="Advanced Example"
+  setValue={setValue}
+  setNameValue={(name, value) => {
+    console.log(\`Field \${name} changed to:\`, value);
   }}
-  enableSaveFilters={true}
-  showFilterChips={true}
+  setArrayProps={(arrayProps, option) => {
+    // Handle array update logic
+  }}
+  setObjects={(option) => {
+    // Handle object selection
+  }}
+  setCookies="filterSelection"
+  arrayProps={currentArray}
+  dataName="fieldName"
+  status={1}
 />`}</code></pre>
         </div>
       </div>

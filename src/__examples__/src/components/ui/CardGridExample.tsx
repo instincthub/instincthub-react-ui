@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { CardGrid, SearchField, Badge } from "../../../../index";
+import { CardGrid, SearchField, Badge, Card } from "../../../../index";
 
 const CardGridExample: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [gridColumns, setGridColumns] = useState(3);
 
   const sampleCards = [
     {
@@ -86,45 +85,6 @@ const CardGridExample: React.FC = () => {
       duration: "14 hours",
       level: "Advanced",
       tags: ["Docker", "DevOps", "CI/CD"]
-    },
-    {
-      id: 7,
-      title: "Mobile App Development",
-      description: "Build cross-platform mobile apps with React Native",
-      image: "https://via.placeholder.com/400x250/06b6d4/ffffff?text=Mobile",
-      category: "Mobile",
-      price: "$79",
-      rating: 4.7,
-      students: 1123,
-      duration: "11 hours",
-      level: "Intermediate",
-      tags: ["React Native", "Mobile", "iOS", "Android"]
-    },
-    {
-      id: 8,
-      title: "AWS Cloud Computing",
-      description: "Deploy and manage applications on Amazon Web Services",
-      image: "https://via.placeholder.com/400x250/f97316/ffffff?text=AWS",
-      category: "Cloud",
-      price: "$109",
-      rating: 4.8,
-      students: 892,
-      duration: "16 hours",
-      level: "Advanced",
-      tags: ["AWS", "Cloud", "Infrastructure"]
-    },
-    {
-      id: 9,
-      title: "JavaScript ES6+",
-      description: "Modern JavaScript features and best practices",
-      image: "https://via.placeholder.com/400x250/fbbf24/ffffff?text=JavaScript",
-      category: "Programming",
-      price: "$39",
-      rating: 4.5,
-      students: 2156,
-      duration: "7 hours",
-      level: "Beginner",
-      tags: ["JavaScript", "ES6", "Programming"]
     }
   ];
 
@@ -142,10 +102,6 @@ const CardGridExample: React.FC = () => {
     console.log("Card clicked:", card);
   };
 
-  const handleCardAction = (action: string, card: any) => {
-    console.log(`Action ${action} on card:`, card);
-  };
-
   return (
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
@@ -157,63 +113,42 @@ const CardGridExample: React.FC = () => {
         {/* Basic Card Grid */}
         <div className="ihub-example-card">
           <h3>Basic Card Grid</h3>
-          <p>Simple responsive grid with default card styling</p>
+          <p>Simple responsive grid with card components</p>
           
-          <CardGrid
-            cards={sampleCards.slice(0, 6)}
-            onCardClick={handleCardClick}
-            columns={3}
-            gap="medium"
-          />
+          <CardGrid className="ihub-grid-3-cols">
+            {sampleCards.slice(0, 3).map(card => (
+              <Card
+                key={card.id}
+                title={card.title}
+                onClick={() => handleCardClick(card)}
+                className="ihub-course-card"
+              >
+                <div className="ihub-card-image">
+                  <img src={card.image} alt={card.title} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
+                </div>
+                <p>{card.description}</p>
+                <div className="ihub-card-meta">
+                  <Badge text={card.level} />
+                  <span className="ihub-price">{card.price}</span>
+                </div>
+                <div className="ihub-rating">
+                  ⭐ {card.rating} ({card.students} students)
+                </div>
+              </Card>
+            ))}
+          </CardGrid>
         </div>
 
-        {/* Customizable Grid */}
-        <div className="ihub-example-card">
-          <h3>Customizable Grid Layout</h3>
-          <p>Grid with adjustable columns and responsive breakpoints</p>
-          
-          <div className="ihub-grid-controls">
-            <label>
-              Columns: 
-              <select value={gridColumns} onChange={(e) => setGridColumns(Number(e.target.value))}>
-                <option value={2}>2 Columns</option>
-                <option value={3}>3 Columns</option>
-                <option value={4}>4 Columns</option>
-                <option value={6}>6 Columns</option>
-              </select>
-            </label>
-          </div>
-          
-          <CardGrid
-            cards={sampleCards}
-            onCardClick={handleCardClick}
-            columns={gridColumns}
-            responsiveColumns={{
-              mobile: 1,
-              tablet: 2,
-              desktop: gridColumns
-            }}
-            gap="large"
-            showCardFooter={true}
-            showCardActions={true}
-            cardActions={[
-              { label: "View", action: "view", icon: "👁️" },
-              { label: "Bookmark", action: "bookmark", icon: "🔖" }
-            ]}
-            onCardAction={handleCardAction}
-          />
-        </div>
-
-        {/* Searchable and Filterable Grid */}
+        {/* Card Grid with Search and Filter */}
         <div className="ihub-example-card">
           <h3>Searchable and Filterable Grid</h3>
           <p>Grid with search and category filtering</p>
           
-          <div className="ihub-grid-filters">
+          <div className="ihub-grid-filters ihub-mb-20">
             <SearchField
-              placeholder="Search courses..."
-              onSearch={setSearchTerm}
-              value={searchTerm}
+              labels="courses"
+              setSearchValues={setSearchTerm}
+              className="ihub-mr-10"
             />
             
             <select
@@ -227,145 +162,92 @@ const CardGridExample: React.FC = () => {
               <option value="design">Design</option>
               <option value="data science">Data Science</option>
               <option value="devops">DevOps</option>
-              <option value="mobile">Mobile</option>
-              <option value="cloud">Cloud</option>
               <option value="programming">Programming</option>
             </select>
           </div>
           
-          <CardGrid
-            cards={filteredCards}
-            onCardClick={handleCardClick}
-            columns={3}
-            gap="medium"
-            showLoadingState={false}
-            emptyState={{
-              title: "No courses found",
-              description: "Try adjusting your search or filters",
-              icon: "🔍"
-            }}
-          />
+          <CardGrid className="ihub-grid-2-cols">
+            {filteredCards.length > 0 ? (
+              filteredCards.map(card => (
+                <Card
+                  key={card.id}
+                  title={card.title}
+                  onClick={() => handleCardClick(card)}
+                  accent="cyan"
+                >
+                  <div className="ihub-card-image">
+                    <img src={card.image} alt={card.title} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
+                  </div>
+                  <p>{card.description}</p>
+                  <div className="ihub-card-tags">
+                    {card.tags.slice(0, 2).map((tag, index) => (
+                      <span key={index} className="ihub-tag">{tag}</span>
+                    ))}
+                  </div>
+                  <div className="ihub-card-footer-meta">
+                    <Badge text={card.category} />
+                    <span>{card.duration}</span>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <div className="ihub-empty-state ihub-col-span-2">
+                <h4>No courses found</h4>
+                <p>Try adjusting your search or filters</p>
+              </div>
+            )}
+          </CardGrid>
           
-          <div className="ihub-results-count">
+          <div className="ihub-results-count ihub-mt-10">
             {filteredCards.length} courses found
           </div>
         </div>
 
-        {/* Course Card Grid with Rich Content */}
+        {/* Different Card Styles */}
         <div className="ihub-example-card">
-          <h3>Rich Content Card Grid</h3>
-          <p>Grid with detailed card content and interactive elements</p>
+          <h3>Different Card Styles</h3>
+          <p>Grid showcasing different card accent colors and sizes</p>
           
-          <CardGrid
-            cards={sampleCards.map(card => ({
-              ...card,
-              customContent: (
-                <div className="ihub-course-card">
-                  <div className="ihub-course-image">
-                    <img src={card.image} alt={card.title} />
-                    <Badge text={card.level} variant="primary" className="ihub-level-badge" />
-                  </div>
-                  <div className="ihub-course-content">
-                    <h4 className="ihub-course-title">{card.title}</h4>
-                    <p className="ihub-course-description">{card.description}</p>
-                    
-                    <div className="ihub-course-meta">
-                      <div className="ihub-rating">
-                        ⭐ {card.rating} ({card.students} students)
-                      </div>
-                      <div className="ihub-duration">
-                        🕒 {card.duration}
-                      </div>
-                    </div>
-                    
-                    <div className="ihub-course-tags">
-                      {card.tags.slice(0, 3).map((tag, index) => (
-                        <span key={index} className="ihub-course-tag">{tag}</span>
-                      ))}
-                    </div>
-                    
-                    <div className="ihub-course-footer">
-                      <span className="ihub-course-price">{card.price}</span>
-                      <button className="ihub-enroll-btn">Enroll Now</button>
-                    </div>
-                  </div>
-                </div>
-              )
-            }))}
-            columns={3}
-            gap="large"
-            useCustomTemplate={true}
-            onCardClick={handleCardClick}
-          />
+          <CardGrid className="ihub-grid-4-cols">
+            <Card title="Cyan Accent" accent="cyan" size="sm">
+              <p>Card with cyan accent color and small size</p>
+            </Card>
+            <Card title="Rose Accent" accent="rose" shadow={true}>
+              <p>Card with rose accent and shadow</p>
+            </Card>
+            <Card title="Green Accent" accent="green" border={false}>
+              <p>Card with green accent and no border</p>
+            </Card>
+            <Card title="Purple Accent" accent="purple" accentHeader={true}>
+              <p>Card with purple accent header</p>
+            </Card>
+          </CardGrid>
         </div>
 
-        {/* Masonry Grid */}
+        {/* Cards with Footer */}
         <div className="ihub-example-card">
-          <h3>Masonry Grid Layout</h3>
-          <p>Pinterest-style masonry grid with varying card heights</p>
+          <h3>Cards with Footer</h3>
+          <p>Grid with cards that have footer content</p>
           
-          <CardGrid
-            cards={sampleCards.map((card, index) => ({
-              ...card,
-              height: `${200 + (index % 3) * 100}px`, // Varying heights
-              customContent: (
-                <div className="ihub-masonry-card" style={{ height: card.height }}>
-                  <img src={card.image} alt={card.title} />
-                  <div className="ihub-masonry-content">
-                    <h4>{card.title}</h4>
-                    <p>{card.description}</p>
-                    <div className="ihub-masonry-meta">
-                      <Badge text={card.category} variant="secondary" />
-                      <span>{card.price}</span>
-                    </div>
+          <CardGrid className="ihub-grid-3-cols">
+            {sampleCards.slice(0, 3).map(card => (
+              <Card
+                key={card.id}
+                title={card.title}
+                footer={
+                  <div className="ihub-card-actions">
+                    <button className="ihub-btn-primary">Enroll</button>
+                    <button className="ihub-btn-secondary">Preview</button>
                   </div>
+                }
+              >
+                <p>{card.description}</p>
+                <div className="ihub-course-price">
+                  <strong>{card.price}</strong>
                 </div>
-              )
-            }))}
-            layout="masonry"
-            columns={4}
-            gap="medium"
-            useCustomTemplate={true}
-            onCardClick={handleCardClick}
-          />
-        </div>
-
-        {/* Loading and Empty States */}
-        <div className="ihub-example-card">
-          <h3>Loading and Empty States</h3>
-          <p>Grid with loading skeleton and empty state demonstrations</p>
-          
-          <div className="ihub-state-demos">
-            <div className="ihub-state-demo">
-              <h5>Loading State</h5>
-              <CardGrid
-                cards={[]}
-                columns={3}
-                gap="medium"
-                showLoadingState={true}
-                loadingCards={6}
-              />
-            </div>
-            
-            <div className="ihub-state-demo">
-              <h5>Empty State</h5>
-              <CardGrid
-                cards={[]}
-                columns={3}
-                gap="medium"
-                showLoadingState={false}
-                emptyState={{
-                  title: "No items found",
-                  description: "There are no items to display at the moment.",
-                  icon: "📭",
-                  actionButton: {
-                    label: "Add New Item",
-                    onClick: () => console.log("Add new item clicked")
-                  }
-                }}
-              />
-            </div>
-          </div>
+              </Card>
+            ))}
+          </CardGrid>
         </div>
       </div>
 
@@ -374,62 +256,50 @@ const CardGridExample: React.FC = () => {
         
         <div className="ihub-code-section">
           <h3>Basic Usage</h3>
-          <pre><code>{`import { CardGrid } from '@instincthub/react-ui';
+          <pre><code>{`import { CardGrid, Card } from '@instincthub/react-ui';
 
-const cards = [
-  {
-    id: 1,
-    title: "Card Title",
-    description: "Card description",
-    image: "image-url"
+<CardGrid className="ihub-grid-3-cols">
+  <Card title="Card Title" accent="cyan">
+    <p>Card content goes here</p>
+  </Card>
+  <Card title="Another Card" accent="rose">
+    <p>More card content</p>
+  </Card>
+</CardGrid>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Card with Footer</h3>
+          <pre><code>{`<Card
+  title="Card with Footer"
+  footer={
+    <div className="card-actions">
+      <button>Action 1</button>
+      <button>Action 2</button>
+    </div>
   }
-];
-
-<CardGrid
-  cards={cards}
-  onCardClick={handleCardClick}
-  columns={3}
-  gap="medium"
-/>`}</code></pre>
+>
+  <p>Card content here</p>
+</Card>`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>Responsive Grid</h3>
-          <pre><code>{`<CardGrid
-  cards={cards}
-  columns={4}
-  responsiveColumns={{
-    mobile: 1,
-    tablet: 2,
-    desktop: 4
-  }}
-  gap="large"
-  showCardActions={true}
-  cardActions={[
-    { label: "View", action: "view" },
-    { label: "Edit", action: "edit" }
-  ]}
-  onCardAction={handleCardAction}
-/>`}</code></pre>
-        </div>
+          <h3>Search and Filter Integration</h3>
+          <pre><code>{`const [searchTerm, setSearchTerm] = useState("");
+const [filteredCards, setFilteredCards] = useState(cards);
 
-        <div className="ihub-code-section">
-          <h3>Custom Card Template</h3>
-          <pre><code>{`<CardGrid
-  cards={cards.map(card => ({
-    ...card,
-    customContent: (
-      <div className="custom-card">
-        <h3>{card.title}</h3>
-        <p>{card.description}</p>
-        <Badge text={card.category} />
-      </div>
-    )
-  }))}
-  columns={3}
-  useCustomTemplate={true}
-  onCardClick={handleCardClick}
-/>`}</code></pre>
+<SearchField
+  labels="cards"
+  setSearchValues={setSearchTerm}
+/>
+
+<CardGrid className="ihub-grid-2-cols">
+  {filteredCards.map(card => (
+    <Card key={card.id} title={card.title}>
+      <p>{card.description}</p>
+    </Card>
+  ))}
+</CardGrid>`}</code></pre>
         </div>
       </div>
     </div>

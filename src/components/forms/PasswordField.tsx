@@ -18,6 +18,7 @@ interface PasswordFieldProps {
   error?: string | null; // Optional error message
   className?: string | null; // Optional class name
   helperText?: string | null; // Optional helper text
+  placeholder?: string; // Optional placeholder text
 }
 
 /**
@@ -67,6 +68,7 @@ export default function PasswordField({
   error,
   className,
   helperText,
+  placeholder,
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -117,6 +119,7 @@ export default function PasswordField({
             onFocus={() => setFocused(true)}
             onMouseOut={() => setFocused(false)}
             className="ihub-input"
+            placeholder={placeholder}
           />
 
           <label htmlFor={name} className="ihub-text-label">

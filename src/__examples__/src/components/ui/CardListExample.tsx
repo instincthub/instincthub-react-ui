@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CardList, SearchField, Badge } from "../../../../index";
+import { CardList, Card, SearchField, Badge } from "../../../../index";
 
 const CardListExample: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -90,64 +90,98 @@ const CardListExample: React.FC = () => {
     console.log("Card clicked:", card);
   };
 
-  const handleCardAction = (action: string, card: any) => {
-    console.log(`Action ${action} on card:`, card);
-  };
-
   return (
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
         <h1>CardList Examples</h1>
-        <p>Card list component for displaying collections of cards in various layouts</p>
+        <p>Card list component for displaying collections of cards in a vertical layout</p>
       </div>
 
       <div className="ihub-examples-grid">
         {/* Basic Card List */}
         <div className="ihub-example-card">
           <h3>Basic Card List</h3>
-          <p>Simple card list with default layout</p>
+          <p>Simple card list with default cards</p>
           
-          <CardList
-            cards={sampleCards.slice(0, 3)}
-            onCardClick={handleCardClick}
-            layout="default"
-          />
+          <CardList>
+            {sampleCards.slice(0, 3).map((card) => (
+              <Card
+                key={card.id}
+                title={card.title}
+                onClick={() => handleCardClick(card)}
+              >
+                <p>{card.description}</p>
+                <div className="ihub-card-meta">
+                  <span>By {card.author}</span>
+                  <span> • {card.date}</span>
+                </div>
+              </Card>
+            ))}
+          </CardList>
         </div>
 
-        {/* Compact Card List */}
+        {/* Card List with Badges */}
         <div className="ihub-example-card">
-          <h3>Compact Card List</h3>
-          <p>Compact layout for displaying more cards in less space</p>
+          <h3>Card List with Status Badges</h3>
+          <p>Cards showing status information with badges</p>
           
-          <CardList
-            cards={sampleCards}
-            onCardClick={handleCardClick}
-            layout="compact"
-            showImage={false}
-            showAuthor={true}
-            showDate={true}
-          />
+          <CardList>
+            {sampleCards.map((card) => (
+              <Card
+                key={card.id}
+                title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{card.title}</span>
+                    <Badge
+                      text={card.status}
+                      variant={card.status === 'active' ? 'success' : 
+                              card.status === 'completed' ? 'primary' : 'warning'}
+                    />
+                  </div>
+                }
+                onClick={() => handleCardClick(card)}
+              >
+                <p>{card.description}</p>
+                <div className="ihub-card-tags" style={{ marginTop: '10px' }}>
+                  {card.tags.map((tag, index) => (
+                    <Badge key={index} text={tag} variant="secondary" />
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </CardList>
         </div>
 
-        {/* Grid Card List */}
+        {/* Card List with Images */}
         <div className="ihub-example-card">
-          <h3>Grid Card List</h3>
-          <p>Grid layout with responsive columns</p>
+          <h3>Card List with Images</h3>
+          <p>Cards displaying images alongside content</p>
           
-          <CardList
-            cards={sampleCards}
-            onCardClick={handleCardClick}
-            layout="grid"
-            columns={3}
-            showImage={true}
-            showTags={true}
-            cardActions={[
-              { label: "View", action: "view" },
-              { label: "Edit", action: "edit" },
-              { label: "Delete", action: "delete" }
-            ]}
-            onCardAction={handleCardAction}
-          />
+          <CardList>
+            {sampleCards.slice(0, 4).map((card) => (
+              <Card
+                key={card.id}
+                title={card.title}
+                onClick={() => handleCardClick(card)}
+              >
+                <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+                  <img 
+                    src={card.image} 
+                    alt={card.title}
+                    style={{ width: '100px', height: '70px', objectFit: 'cover', borderRadius: '4px' }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <p>{card.description}</p>
+                    <div className="ihub-card-meta" style={{ marginTop: '10px' }}>
+                      <span>By {card.author}</span>
+                      <span> • {card.date}</span>
+                      <span> • {card.category}</span>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </CardList>
         </div>
 
         {/* Searchable and Filterable */}
@@ -155,19 +189,19 @@ const CardListExample: React.FC = () => {
           <h3>Searchable and Filterable Card List</h3>
           <p>Card list with search and filter functionality</p>
           
-          <div className="ihub-card-controls">
+          <div className="ihub-card-controls" style={{ marginBottom: '20px' }}>
             <SearchField
-              placeholder="Search cards..."
-              onSearch={setSearchTerm}
-              value={searchTerm}
+              labels="cards"
+              setSearchValues={setSearchTerm}
             />
             
-            <div className="ihub-filter-controls">
-              <label>Filter by category:</label>
+            <div className="ihub-filter-controls" style={{ marginTop: '10px' }}>
+              <label>Filter by category: </label>
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
                 className="ihub-filter-select"
+                style={{ marginLeft: '10px', padding: '5px' }}
               >
                 <option value="all">All Categories</option>
                 <option value="frontend">Frontend</option>
@@ -180,96 +214,127 @@ const CardListExample: React.FC = () => {
             </div>
           </div>
           
-          <CardList
-            cards={filteredCards}
-            onCardClick={handleCardClick}
-            layout="list"
-            showImage={true}
-            showAuthor={true}
-            showDate={true}
-            showTags={true}
-            emptyState={{
-              title: "No cards found",
-              description: "Try adjusting your search or filter criteria",
-              icon: "🔍"
-            }}
-          />
+          {filteredCards.length > 0 ? (
+            <CardList>
+              {filteredCards.map((card) => (
+                <Card
+                  key={card.id}
+                  title={card.title}
+                  onClick={() => handleCardClick(card)}
+                  footer={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>{card.category}</span>
+                      <Badge
+                        text={card.status}
+                        variant={card.status === 'active' ? 'success' : 
+                                card.status === 'completed' ? 'primary' : 'warning'}
+                      />
+                    </div>
+                  }
+                >
+                  <p>{card.description}</p>
+                  <div className="ihub-card-meta" style={{ marginTop: '10px' }}>
+                    <span>By {card.author}</span>
+                    <span> • {card.date}</span>
+                  </div>
+                </Card>
+              ))}
+            </CardList>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '40px' }}>
+              <p>🔍 No cards found</p>
+              <p style={{ color: '#666', marginTop: '10px' }}>Try adjusting your search or filter criteria</p>
+            </div>
+          )}
           
-          <div className="ihub-results-summary">
+          <div className="ihub-results-summary" style={{ marginTop: '15px', textAlign: 'center', color: '#666' }}>
             Showing {filteredCards.length} of {sampleCards.length} cards
           </div>
         </div>
 
-        {/* Interactive Card List */}
+        {/* Card List with Accent Colors */}
         <div className="ihub-example-card">
-          <h3>Interactive Card List</h3>
-          <p>Card list with selection, sorting, and batch actions</p>
+          <h3>Card List with Accent Colors</h3>
+          <p>Cards with different accent colors for visual hierarchy</p>
           
-          <CardList
-            cards={sampleCards}
-            onCardClick={handleCardClick}
-            layout="list"
-            selectable={true}
-            sortable={true}
-            sortOptions={[
-              { key: "title", label: "Title" },
-              { key: "date", label: "Date" },
-              { key: "author", label: "Author" },
-              { key: "category", label: "Category" }
-            ]}
-            showBulkActions={true}
-            bulkActions={[
-              { label: "Archive", action: "archive" },
-              { label: "Export", action: "export" },
-              { label: "Delete", action: "bulk-delete" }
-            ]}
-            showImage={true}
-            showAuthor={true}
-            showDate={true}
-            showTags={true}
-            cardActions={[
-              { label: "View", action: "view" },
-              { label: "Edit", action: "edit" }
-            ]}
-            onCardAction={handleCardAction}
-          />
+          <CardList>
+            <Card
+              title="Primary Accent Card"
+              accent="cyan"
+              accentHeader={true}
+            >
+              <p>This card uses a primary accent color to draw attention</p>
+            </Card>
+            <Card
+              title="Success Accent Card"
+              accent="green"
+              accentHeader={true}
+            >
+              <p>This card uses a success accent color for positive actions</p>
+            </Card>
+            <Card
+              title="Purple Accent Card"
+              accent="purple"
+              accentHeader={true}
+            >
+              <p>This card uses a purple accent color for important notices</p>
+            </Card>
+            <Card
+              title="Rose Accent Card"
+              accent="rose"
+              accentHeader={true}
+            >
+              <p>This card uses a rose accent color for critical information</p>
+            </Card>
+          </CardList>
         </div>
 
         {/* Customized Card List */}
         <div className="ihub-example-card">
-          <h3>Customized Card Rendering</h3>
-          <p>Card list with custom card templates and styling</p>
+          <h3>Custom Styled Card List</h3>
+          <p>Card list with custom styling and dark theme</p>
           
-          <CardList
-            cards={sampleCards.map(card => ({
-              ...card,
-              customContent: (
-                <div className="ihub-custom-card-content">
-                  <div className="ihub-card-header">
-                    <h4>{card.title}</h4>
-                    <Badge
-                      text={card.status}
-                      variant={card.status === 'active' ? 'success' : 
-                              card.status === 'completed' ? 'primary' : 'warning'}
-                    />
+          <CardList className="custom-card-list">
+            {sampleCards.slice(0, 3).map((card, index) => (
+              <Card
+                key={card.id}
+                title={card.title}
+                darkTheme={index % 2 === 0}
+                shadow={true}
+                border={true}
+                onClick={() => handleCardClick(card)}
+                footer={
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button 
+                      className="ihub-btn ihub-btn-sm ihub-btn-primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('View clicked for:', card.title);
+                      }}
+                    >
+                      View
+                    </button>
+                    <button 
+                      className="ihub-btn ihub-btn-sm ihub-btn-secondary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('Edit clicked for:', card.title);
+                      }}
+                    >
+                      Edit
+                    </button>
                   </div>
-                  <p className="ihub-card-description">{card.description}</p>
-                  <div className="ihub-card-meta">
-                    <span>By {card.author}</span>
-                    <span>{card.date}</span>
-                  </div>
-                  <div className="ihub-card-tags">
-                    {card.tags.map((tag, index) => (
-                      <span key={index} className="ihub-tag">{tag}</span>
-                    ))}
-                  </div>
+                }
+              >
+                <p>{card.description}</p>
+                <div className="ihub-card-tags" style={{ marginTop: '10px' }}>
+                  {card.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex} className="ihub-tag" style={{ marginRight: '5px' }}>{tag}</span>
+                  ))}
                 </div>
-              )
-            }))}
-            onCardClick={handleCardClick}
-            layout="custom"
-            useCustomTemplate={true}
-          />
+              </Card>
+            ))}
+          </CardList>
         </div>
       </div>
 
@@ -278,60 +343,69 @@ const CardListExample: React.FC = () => {
         
         <div className="ihub-code-section">
           <h3>Basic Usage</h3>
-          <pre><code>{`import { CardList } from '@instincthub/react-ui';
+          <pre><code>{`import { CardList, Card } from '@instincthub/react-ui';
 
-const cards = [
-  {
-    id: 1,
-    title: "Card Title",
-    description: "Card description",
-    image: "image-url",
-    author: "Author Name",
-    date: "2024-01-15"
-  }
+<CardList>
+  <Card title="Card Title">
+    <p>Card content goes here</p>
+  </Card>
+  <Card title="Another Card">
+    <p>More content</p>
+  </Card>
+</CardList>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Card with Full Features</h3>
+          <pre><code>{`<CardList>
+  <Card
+    title="Card Title"
+    footer={<button>Action</button>}
+    accent="cyan"
+    accentHeader={true}
+    onClick={handleCardClick}
+  >
+    <p>Card description</p>
+    <div>
+      <span>By Author Name</span>
+      <span> • 2024-01-15</span>
+    </div>
+  </Card>
+</CardList>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Dynamic Card List</h3>
+          <pre><code>{`const cards = [
+  { id: 1, title: "Card 1", description: "Description 1" },
+  { id: 2, title: "Card 2", description: "Description 2" }
 ];
 
-<CardList
-  cards={cards}
-  onCardClick={handleCardClick}
-  layout="default"
-/>`}</code></pre>
+<CardList>
+  {cards.map(card => (
+    <Card
+      key={card.id}
+      title={card.title}
+      onClick={() => handleCardClick(card)}
+    >
+      <p>{card.description}</p>
+    </Card>
+  ))}
+</CardList>`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>Grid Layout with Actions</h3>
-          <pre><code>{`<CardList
-  cards={cards}
-  onCardClick={handleCardClick}
-  layout="grid"
-  columns={3}
-  showImage={true}
-  showTags={true}
-  cardActions={[
-    { label: "View", action: "view" },
-    { label: "Edit", action: "edit" }
-  ]}
-  onCardAction={handleCardAction}
-/>`}</code></pre>
-        </div>
-
-        <div className="ihub-code-section">
-          <h3>Interactive Features</h3>
-          <pre><code>{`<CardList
-  cards={cards}
-  layout="list"
-  selectable={true}
-  sortable={true}
-  sortOptions={[
-    { key: "title", label: "Title" },
-    { key: "date", label: "Date" }
-  ]}
-  showBulkActions={true}
-  bulkActions={[
-    { label: "Archive", action: "archive" },
-    { label: "Delete", action: "delete" }
-  ]}
-/>`}</code></pre>
+          <h3>Custom Styled Card List</h3>
+          <pre><code>{`<CardList className="custom-list">
+  <Card
+    title="Dark Theme Card"
+    darkTheme={true}
+    shadow={true}
+    border={true}
+  >
+    <p>Card with dark theme styling</p>
+  </Card>
+</CardList>`}</code></pre>
         </div>
       </div>
     </div>

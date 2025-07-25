@@ -3,6 +3,7 @@ import React from "react";
 export type BadgeVariant =
   | "default"
   | "primary"
+  | "secondary"
   | "success"
   | "warning"
   | "danger"
@@ -15,6 +16,11 @@ export interface BadgeProps {
    * The content to display inside the badge
    */
   children?: React.ReactNode;
+
+  /**
+   * Text content to display (alias for children)
+   */
+  text?: string;
 
   /**
    * The visual style variant of the badge
@@ -79,6 +85,7 @@ export interface BadgeProps {
  */
 const Badge: React.FC<BadgeProps> = ({
   children,
+  text,
   variant = "default",
   size = "medium",
   shape = "rounded",
@@ -91,7 +98,7 @@ const Badge: React.FC<BadgeProps> = ({
   onClick,
 }) => {
   // Determine the content to display
-  let content = children;
+  let content = text || children;
   if (dot) {
     content = null;
   } else if (count !== undefined) {

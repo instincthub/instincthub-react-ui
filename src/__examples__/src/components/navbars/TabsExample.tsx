@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { Breadcrumb, Tabs, VerticalTabs } from "../../../../index";
 import { VerticalTabItemType } from "../../../../types";
 import Link from "next/link";

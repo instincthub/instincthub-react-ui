@@ -8,6 +8,8 @@ interface FormErrorProps {
   errors?: Record<string, string[]> | null;
   /** HTTP status code of the error */
   status?: number;
+  /** Simple error message string */
+  message?: string;
 }
 
 /**
@@ -21,7 +23,12 @@ interface FormErrorProps {
  * @property {Record<string, string[]> | null} errors - Error messages grouped by field
  * @property {number} status - HTTP status code
  */
-const FormError = ({ errors, status }: FormErrorProps) => {
+const FormError = ({ errors, status, message }: FormErrorProps) => {
+  // Handle simple message prop
+  if (message) {
+    return renderErrorMessage(message, status);
+  }
+
   // Handle common HTTP error codes
   if (status === 500) {
     return renderErrorMessage(

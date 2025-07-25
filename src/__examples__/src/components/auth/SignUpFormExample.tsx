@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { LoginForm, InputText, PasswordField, CheckBoxes, SubmitButton, Badge } from "../../../../index";
+import { LoginForm, InputText, PasswordField, SubmitButton, Badge } from "../../../../index";
 
 const SignUpFormExample: React.FC = () => {
   const [basicFormData, setBasicFormData] = useState({
@@ -140,7 +140,7 @@ const SignUpFormExample: React.FC = () => {
                 name="email"
                 label="Email Address"
                 value={basicFormData.email}
-                onChange={(value) => setBasicFormData({...basicFormData, email: value})}
+                onChange={(e) => setBasicFormData({...basicFormData, email: e.target.value})}
                 placeholder="Enter your email"
                 type="email"
                 required
@@ -148,38 +148,38 @@ const SignUpFormExample: React.FC = () => {
               />
               
               <PasswordField
+                name="password"
                 label="Password"
                 value={basicFormData.password}
-                onChange={(value) => setBasicFormData({...basicFormData, password: value})}
-                placeholder="Create a password"
-                showStrengthIndicator={true}
+                setValue={(value) => setBasicFormData({...basicFormData, password: value})}
                 required
                 error={errors.password}
               />
               
               <PasswordField
+                name="confirmPassword"
                 label="Confirm Password"
                 value={basicFormData.confirmPassword}
-                onChange={(value) => setBasicFormData({...basicFormData, confirmPassword: value})}
-                placeholder="Confirm your password"
+                setValue={(value) => setBasicFormData({...basicFormData, confirmPassword: value})}
                 required
                 error={errors.confirmPassword}
               />
               
-              <CheckBoxes
-                options={[
-                  {
-                    value: "terms",
-                    label: "I agree to the Terms and Conditions and Privacy Policy",
-                    checked: basicFormData.agreeToTerms
-                  }
-                ]}
-                onChange={(selected) => setBasicFormData({...basicFormData, agreeToTerms: selected.includes("terms")})}
-                error={errors.agreeToTerms}
-              />
+              <div className="ihub-form-field">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={basicFormData.agreeToTerms}
+                    onChange={(e) => setBasicFormData({...basicFormData, agreeToTerms: e.target.checked})}
+                    required
+                  />
+                  I agree to the Terms and Conditions and Privacy Policy
+                </label>
+                {errors.agreeToTerms && <span className="ihub-error">{errors.agreeToTerms}</span>}
+              </div>
               
               <SubmitButton
-                title={isSubmitting ? "Creating Account..." : "Create Account"}
+                label={isSubmitting ? "Creating Account..." : "Create Account"}
                 status={isSubmitting ? 2 : submitStatus === "success" ? 3 : 1}
                 className="ihub-signup-btn"
                 disabled={isSubmitting}
@@ -189,13 +189,13 @@ const SignUpFormExample: React.FC = () => {
           
           {submitStatus === "success" && (
             <div className="ihub-success-message">
-              <Badge text="Account created successfully!" variant="success" />
+              <Badge variant="success">Account created successfully!</Badge>
             </div>
           )}
           
           {submitStatus === "error" && (
             <div className="ihub-error-message">
-              <Badge text="Failed to create account. Please try again." variant="danger" />
+              <Badge variant="danger">Failed to create account. Please try again.</Badge>
             </div>
           )}
         </div>
@@ -211,7 +211,7 @@ const SignUpFormExample: React.FC = () => {
                 name="firstName"
                 label="First Name"
                 value={advancedFormData.firstName}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, firstName: value})}
+                onChange={(e) => setAdvancedFormData({...advancedFormData, firstName: e.target.value})}
                 placeholder="Enter first name"
                 required
                 error={errors.firstName}
@@ -221,7 +221,7 @@ const SignUpFormExample: React.FC = () => {
                 name="lastName"
                 label="Last Name"
                 value={advancedFormData.lastName}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, lastName: value})}
+                onChange={(e) => setAdvancedFormData({...advancedFormData, lastName: e.target.value})}
                 placeholder="Enter last name"
                 required
                 error={errors.lastName}
@@ -231,7 +231,7 @@ const SignUpFormExample: React.FC = () => {
                 name="email"
                 label="Email Address"
                 value={advancedFormData.email}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, email: value})}
+                onChange={(e) => setAdvancedFormData({...advancedFormData, email: e.target.value})}
                 placeholder="Enter email address"
                 type="email"
                 required
@@ -243,7 +243,7 @@ const SignUpFormExample: React.FC = () => {
                 name="phoneNumber"
                 label="Phone Number"
                 value={advancedFormData.phoneNumber}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, phoneNumber: value})}
+                onChange={(e) => setAdvancedFormData({...advancedFormData, phoneNumber: e.target.value})}
                 placeholder="Enter phone number"
                 type="tel"
                 required
@@ -254,7 +254,7 @@ const SignUpFormExample: React.FC = () => {
                 name="dateOfBirth"
                 label="Date of Birth"
                 value={advancedFormData.dateOfBirth}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, dateOfBirth: value})}
+                onChange={(e) => setAdvancedFormData({...advancedFormData, dateOfBirth: e.target.value})}
                 type="date"
                 required
                 error={errors.dateOfBirth}
@@ -297,49 +297,52 @@ const SignUpFormExample: React.FC = () => {
               </div>
               
               <PasswordField
+                name="password"
                 label="Password"
                 value={advancedFormData.password}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, password: value})}
-                placeholder="Create a strong password"
-                showStrengthIndicator={true}
+                setValue={(value) => setAdvancedFormData({...advancedFormData, password: value})}
                 required
                 error={errors.password}
               />
               
               <PasswordField
+                name="confirmPassword"
                 label="Confirm Password"
                 value={advancedFormData.confirmPassword}
-                onChange={(value) => setAdvancedFormData({...advancedFormData, confirmPassword: value})}
-                placeholder="Confirm your password"
+                setValue={(value) => setAdvancedFormData({...advancedFormData, confirmPassword: value})}
                 required
                 error={errors.confirmPassword}
               />
               
               <div className="ihub-form-field ihub-full-width">
-                <CheckBoxes
-                  options={[
-                    {
-                      value: "terms",
-                      label: "I agree to the Terms of Service and Privacy Policy",
-                      checked: advancedFormData.agreeToTerms
-                    },
-                    {
-                      value: "marketing",
-                      label: "I want to receive marketing emails and updates",
-                      checked: advancedFormData.agreeToMarketing
-                    }
-                  ]}
-                  onChange={(selected) => setAdvancedFormData({
-                    ...advancedFormData,
-                    agreeToTerms: selected.includes("terms"),
-                    agreeToMarketing: selected.includes("marketing")
-                  })}
-                  error={errors.agreeToTerms}
-                />
+                <div className="ihub-checkboxes-group">
+                  <div className="ihub-checkbox-item">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={advancedFormData.agreeToTerms}
+                        onChange={(e) => setAdvancedFormData({...advancedFormData, agreeToTerms: e.target.checked})}
+                        required
+                      />
+                      I agree to the Terms of Service and Privacy Policy
+                    </label>
+                  </div>
+                  <div className="ihub-checkbox-item">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={advancedFormData.agreeToMarketing}
+                        onChange={(e) => setAdvancedFormData({...advancedFormData, agreeToMarketing: e.target.checked})}
+                      />
+                      I want to receive marketing emails and updates
+                    </label>
+                  </div>
+                  {errors.agreeToTerms && <span className="ihub-error">{errors.agreeToTerms}</span>}
+                </div>
               </div>
               
               <SubmitButton
-                title={isSubmitting ? "Creating Account..." : "Create Account"}
+                label={isSubmitting ? "Creating Account..." : "Create Account"}
                 status={isSubmitting ? 2 : 1}
                 className="ihub-signup-btn ihub-full-width"
                 disabled={isSubmitting}
@@ -394,31 +397,30 @@ const SignUpFormExample: React.FC = () => {
                   name="email"
                   label="Email Address"
                   value={socialFormData.email}
-                  onChange={(value) => setSocialFormData({...socialFormData, email: value})}
+                  onChange={(e) => setSocialFormData({...socialFormData, email: e.target.value})}
                   placeholder="Enter your email"
                   type="email"
                   required
                 />
                 
                 <PasswordField
+                  name="password"
                   label="Password"
                   value={socialFormData.password}
-                  onChange={(value) => setSocialFormData({...socialFormData, password: value})}
-                  placeholder="Create a password"
-                  showStrengthIndicator={true}
+                  setValue={(value) => setSocialFormData({...socialFormData, password: value})}
                   required
                 />
                 
                 <PasswordField
+                  name="confirmPassword"
                   label="Confirm Password"
                   value={socialFormData.confirmPassword}
-                  onChange={(value) => setSocialFormData({...socialFormData, confirmPassword: value})}
-                  placeholder="Confirm your password"
+                  setValue={(value) => setSocialFormData({...socialFormData, confirmPassword: value})}
                   required
                 />
                 
                 <SubmitButton
-                  title="Sign Up with Email"
+                  label="Sign Up with Email"
                   status={1}
                   className="ihub-email-signup-btn"
                 />
@@ -460,15 +462,14 @@ const SignUpFormExample: React.FC = () => {
                 />
                 
                 <PasswordField
+                  name="password"
                   label="Password"
-                  placeholder="Create a strong password"
-                  showStrengthIndicator={true}
                   required
                 />
                 
                 <div className="ihub-step-actions">
                   <SubmitButton
-                    title="Continue to Step 2"
+                    label="Continue to Step 2"
                     status={1}
                     className="ihub-continue-btn"
                   />
@@ -484,7 +485,7 @@ const SignUpFormExample: React.FC = () => {
         
         <div className="ihub-code-section">
           <h3>Basic SignUp Form</h3>
-          <pre><code>{`import { InputText, PasswordField, CheckBoxes, SubmitButton } from '@instincthub/react-ui';
+          <pre><code>{`import { InputText, PasswordField, SubmitButton } from '@instincthub/react-ui';
 
 const [formData, setFormData] = useState({
   email: "",
@@ -497,29 +498,30 @@ const [formData, setFormData] = useState({
   <InputText
     label="Email Address"
     value={formData.email}
-    onChange={(value) => setFormData({...formData, email: value})}
+    onChange={(e) => setFormData({...formData, email: e.target.value})}
     type="email"
     required
   />
   
   <PasswordField
+    name="password"
     label="Password"
     value={formData.password}
-    onChange={(value) => setFormData({...formData, password: value})}
-    showStrengthIndicator={true}
+    setValue={(value) => setFormData({...formData, password: value})}
     required
   />
   
-  <CheckBoxes
-    options={[{
-      value: "terms",
-      label: "I agree to the Terms and Conditions",
-      checked: formData.agreeToTerms
-    }]}
-    onChange={(selected) => setFormData({...formData, agreeToTerms: selected.includes("terms")})}
-  />
+  <label>
+    <input
+      type="checkbox"
+      checked={formData.agreeToTerms}
+      onChange={(e) => setFormData({...formData, agreeToTerms: e.target.checked})}
+      required
+    />
+    I agree to the Terms and Conditions
+  </label>
   
-  <SubmitButton title="Create Account" status={1} />
+  <SubmitButton label="Create Account" status={1} />
 </form>`}</code></pre>
         </div>
 

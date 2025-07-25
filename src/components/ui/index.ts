@@ -12,6 +12,7 @@ export { default as Action } from "./Action";
 export { default as Dropdown } from "./Dropdown";
 export { default as ColorPicker } from "./ColorPicker";
 export { default as ComponentLists } from "./ComponentLists";
+export { default as LibraryList } from "./LibraryList";
 
 export * from "./cards";
 export * from "./charts";

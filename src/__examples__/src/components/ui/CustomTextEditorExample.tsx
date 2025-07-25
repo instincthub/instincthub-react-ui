@@ -51,8 +51,13 @@ const CustomTextEditorExample: React.FC = () => {
             content={content2}
             onChange={setContent2}
             placeholder="Edit the existing content..."
-            showWordCount={true}
+            charLimit={1000}
           />
+          
+          <div className="ihub-editor-output ihub-mt-3">
+            <h5>Current Content:</h5>
+            <div className="ihub-content-preview" dangerouslySetInnerHTML={{ __html: content2 }} />
+          </div>
         </div>
 
         {/* Form Integration */}
@@ -64,22 +69,40 @@ const CustomTextEditorExample: React.FC = () => {
             <div className="ihub-form-field">
               <label className="ihub-label">Blog Post Content</label>
               <CustomTextEditor
+                label="Content"
+                name="blog-content"
                 content={content3}
                 onChange={setContent3}
                 placeholder="Write your blog post content here..."
-                minHeight="300px"
-                showWordCount={true}
-                required
+                charLimit={5000}
+                required={true}
+                note="Write engaging content for your blog post"
               />
             </div>
             
             <SubmitButton
-              title="Publish Post"
+              label="Publish Post"
               status={isSubmitting ? 2 : 1}
               className="ihub-important-btn"
               disabled={!content3.trim()}
             />
           </form>
+        </div>
+
+        {/* Editor with Preview */}
+        <div className="ihub-example-card">
+          <h3>Editor with Preview Mode</h3>
+          <p>Text editor with editing and preview modes</p>
+          
+          <CustomTextEditor
+            label="Article Content"
+            name="article"
+            content={content1}
+            onChange={setContent1}
+            placeholder="Write your article here..."
+            showPreviewBtn={true}
+            lastUpdated={new Date().toISOString()}
+          />
         </div>
       </div>
 
@@ -96,6 +119,30 @@ const [content, setContent] = useState("");
   content={content}
   onChange={setContent}
   placeholder="Start typing..."
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>With Character Limit</h3>
+          <pre><code>{`<CustomTextEditor
+  content={content}
+  onChange={setContent}
+  placeholder="Enter description..."
+  charLimit={1000}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Form Integration</h3>
+          <pre><code>{`<CustomTextEditor
+  label="Content"
+  name="blog-content"
+  content={content}
+  onChange={setContent}
+  placeholder="Write your content here..."
+  required={true}
+  note="This field is required"
+  showPreviewBtn={true}
 />`}</code></pre>
         </div>
       </div>

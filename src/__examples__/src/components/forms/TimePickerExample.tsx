@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import TimePicker from "@/components/forms/TimePicker";
-import { CodeDisplay } from "@/components/ui";
+import { TimePicker } from "../../../../index";
 
 const TimePickerExample: React.FC = () => {
   const [simpleTime, setSimpleTime] = useState<string>("");
@@ -142,9 +141,8 @@ const TimePickerExample: React.FC = () => {
 
       <div className="ihub-mt-10">
         <h3 className="ihub-fs-md">Usage Examples</h3>
-        <CodeDisplay
-          language="tsx"
-          code={`// Basic usage
+        <pre className="ihub-code-example">
+          <code>{`// Basic usage
 <TimePicker
   label="Select time"
   value={time}
@@ -170,8 +168,8 @@ const TimePickerExample: React.FC = () => {
   maxTime="17:00"
   step={15}
   disabledTimes={["12:00", "12:15", "12:30"]}
-/>`}
-        />
+/>`}</code>
+        </pre>
       </div>
     </div>
   );

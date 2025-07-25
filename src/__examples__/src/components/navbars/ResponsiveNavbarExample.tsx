@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 // Example usage in a Next.js app/page.tsx file
 import { ResponsiveNavbar } from "../../../../index";
 import logoImage from "/public/instincthub-logo.png";

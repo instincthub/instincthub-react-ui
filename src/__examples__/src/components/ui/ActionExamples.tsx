@@ -1,6 +1,6 @@
-"use client"
-import { useState } from "react";
-import { Action } from "../../../../components/ui";
+"use client";
+import React, { useState } from "react";
+import { Action } from "../../../../index";
 
 
 const ActionExamples = () => {

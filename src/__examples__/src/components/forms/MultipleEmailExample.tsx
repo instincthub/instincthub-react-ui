@@ -25,10 +25,6 @@ const MultipleEmailExample: React.FC = () => {
     }
   };
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   return (
     <div className="ihub-container ihub-mt-10">
@@ -43,11 +39,9 @@ const MultipleEmailExample: React.FC = () => {
           <h3>Basic Multiple Email Input</h3>
           <p>Simple email list with add and remove functionality</p>
           
+          <label>Email Addresses</label>
           <MultipleEmail
-            label="Email Addresses"
-            emails={emails1}
-            onChange={setEmails1}
-            placeholder="Enter email address and press Enter"
+            onEmailsChange={setEmails1}
           />
           
           <div className="ihub-email-display ihub-mt-3">
@@ -69,14 +63,23 @@ const MultipleEmailExample: React.FC = () => {
           <h3>Pre-populated Email List</h3>
           <p>Email input with existing email addresses</p>
           
+          <label>Team Members</label>
           <MultipleEmail
-            label="Team Members"
-            emails={emails2}
-            onChange={setEmails2}
-            placeholder="Add more team members..."
-            maxEmails={10}
-            showCount={true}
+            onEmailsChange={setEmails2}
           />
+          
+          <div className="ihub-email-display ihub-mt-3">
+            <strong>Current Emails ({emails2.length}):</strong>
+            {emails2.length === 0 ? (
+              <p className="ihub-empty-state">No emails added yet</p>
+            ) : (
+              <ul className="ihub-email-list">
+                {emails2.map((email, index) => (
+                  <li key={index} className="ihub-email-item">{email}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Email Validation */}
@@ -84,15 +87,23 @@ const MultipleEmailExample: React.FC = () => {
           <h3>Email Validation</h3>
           <p>Email input with validation and error handling</p>
           
+          <label>Newsletter Recipients</label>
           <MultipleEmail
-            label="Newsletter Recipients"
-            emails={emails3}
-            onChange={setEmails3}
-            placeholder="Enter valid email addresses..."
-            validate={validateEmail}
-            allowDuplicates={false}
-            showValidation={true}
+            onEmailsChange={setEmails3}
           />
+          
+          <div className="ihub-email-display ihub-mt-3">
+            <strong>Current Emails ({emails3.length}):</strong>
+            {emails3.length === 0 ? (
+              <p className="ihub-empty-state">No emails added yet</p>
+            ) : (
+              <ul className="ihub-email-list">
+                {emails3.map((email, index) => (
+                  <li key={index} className="ihub-email-item">{email}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Form Integration */}
@@ -101,20 +112,27 @@ const MultipleEmailExample: React.FC = () => {
           <p>Multiple email input integrated with form submission</p>
           
           <form onSubmit={handleSubmit}>
+            <label>Email Recipients</label>
             <MultipleEmail
-              label="Email Recipients"
-              emails={formData.recipients}
-              onChange={(emails) => setFormData({...formData, recipients: emails})}
-              placeholder="Add email recipients..."
-              required={true}
-              error={errors.recipients}
-              maxEmails={5}
-              showCount={true}
-              validate={validateEmail}
+              onEmailsChange={(emails) => setFormData({...formData, recipients: emails})}
             />
+            {errors.recipients && <p className="ihub-error">{errors.recipients}</p>}
+            
+            <div className="ihub-email-display ihub-mt-3">
+              <strong>Current Recipients ({formData.recipients.length}):</strong>
+              {formData.recipients.length === 0 ? (
+                <p className="ihub-empty-state">No recipients added yet</p>
+              ) : (
+                <ul className="ihub-email-list">
+                  {formData.recipients.map((email, index) => (
+                    <li key={index} className="ihub-email-item">{email}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
             
             <SubmitButton
-              title="Send Emails"
+              label="Send Emails"
               status={1}
               className="ihub-important-btn"
             />
@@ -126,26 +144,48 @@ const MultipleEmailExample: React.FC = () => {
           <h3>Advanced Email Input</h3>
           <p>Email input with advanced features and customization</p>
           
+          <label>Advanced Recipients</label>
           <MultipleEmail
-            label="Advanced Recipients"
-            emails={emails3}
-            onChange={setEmails3}
-            placeholder="Enter email addresses..."
-            allowPaste={true}
-            pasteDelimiter=","
-            showSuggestions={true}
-            suggestions={[
-              "admin@instincthub.com",
-              "support@instincthub.com",
-              "team@instincthub.com",
-              "info@instincthub.com"
-            ]}
-            maxEmails={20}
-            showCount={true}
-            validate={validateEmail}
-            allowDuplicates={false}
-            caseSensitive={false}
+            onEmailsChange={setEmails3}
           />
+          
+          <div className="ihub-suggestions ihub-mt-2">
+            <strong>Quick Add Suggestions:</strong>
+            <div className="ihub-suggestion-buttons">
+              {[
+                "admin@instincthub.com",
+                "support@instincthub.com",
+                "team@instincthub.com",
+                "info@instincthub.com"
+              ].map((suggestion) => (
+                <button
+                  key={suggestion}
+                  onClick={() => {
+                    if (!emails3.includes(suggestion)) {
+                      setEmails3([...emails3, suggestion]);
+                    }
+                  }}
+                  className="ihub-suggestion-btn"
+                  type="button"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="ihub-email-display ihub-mt-3">
+            <strong>Current Emails ({emails3.length}):</strong>
+            {emails3.length === 0 ? (
+              <p className="ihub-empty-state">No emails added yet</p>
+            ) : (
+              <ul className="ihub-email-list">
+                {emails3.map((email, index) => (
+                  <li key={index} className="ihub-email-item">{email}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Email Templates */}
@@ -187,13 +227,9 @@ const MultipleEmailExample: React.FC = () => {
             </div>
           </div>
           
+          <label>Template Recipients</label>
           <MultipleEmail
-            label="Template Recipients"
-            emails={emails1}
-            onChange={setEmails1}
-            placeholder="Use template buttons or add manually..."
-            showCount={true}
-            maxEmails={15}
+            onEmailsChange={setEmails1}
           />
         </div>
       </div>
@@ -207,42 +243,58 @@ const MultipleEmailExample: React.FC = () => {
 
 const [emails, setEmails] = useState<string[]>([]);
 
+<label>Email Addresses</label>
 <MultipleEmail
-  label="Email Addresses"
-  emails={emails}
-  onChange={setEmails}
-  placeholder="Enter email address..."
+  onEmailsChange={setEmails}
 />`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>With Validation</h3>
-          <pre><code>{`const validateEmail = (email: string) => {
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+          <h3>With Custom Validation Logic</h3>
+          <pre><code>{`const [emails, setEmails] = useState<string[]>([]);
+const [validationError, setValidationError] = useState('');
+
+const handleEmailsChange = (newEmails: string[]) => {
+  // Custom validation logic
+  if (newEmails.length > 10) {
+    setValidationError('Maximum 10 emails allowed');
+    return;
+  }
+  setValidationError('');
+  setEmails(newEmails);
 };
 
+<label>Email Addresses</label>
 <MultipleEmail
-  emails={emails}
-  onChange={setEmails}
-  validate={validateEmail}
-  allowDuplicates={false}
-  showValidation={true}
-  maxEmails={10}
-/>`}</code></pre>
+  onEmailsChange={handleEmailsChange}
+/>
+{validationError && <p className="ihub-error">{validationError}</p>}`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
-          <h3>Advanced Features</h3>
-          <pre><code>{`<MultipleEmail
-  emails={emails}
-  onChange={setEmails}
-  allowPaste={true}
-  pasteDelimiter=","
-  showSuggestions={true}
-  suggestions={["team@company.com", "admin@company.com"]}
-  maxEmails={20}
-  showCount={true}
-/>`}</code></pre>
+          <h3>With Suggestions</h3>
+          <pre><code>{`const suggestions = ["team@company.com", "admin@company.com"];
+
+<label>Email Addresses</label>
+<MultipleEmail
+  onEmailsChange={setEmails}
+/>
+
+{/* Add suggestion buttons */}
+<div className="suggestions">
+  {suggestions.map(suggestion => (
+    <button
+      key={suggestion}
+      onClick={() => {
+        if (!emails.includes(suggestion)) {
+          setEmails([...emails, suggestion]);
+        }
+      }}
+    >
+      {suggestion}
+    </button>
+  ))}
+</div>`}</code></pre>
         </div>
       </div>
     </div>

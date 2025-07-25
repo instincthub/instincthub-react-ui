@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { SearchField, InputText } from "../../../../index";
 
 const SearchFieldExample: React.FC = () => {
+  const [searchValue, setSearchValue] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,7 +17,8 @@ const SearchFieldExample: React.FC = () => {
     { id: 5, name: "Charlie Wilson", email: "charlie@example.com", role: "Admin" },
   ];
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = (query: string) => {
+    setSearchValue(query);
     if (!query.trim()) {
       setSearchResults([]);
       return;
@@ -40,19 +42,19 @@ const SearchFieldExample: React.FC = () => {
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
         <h1>SearchField Examples</h1>
-        <p>Search input field component with real-time search and filtering capabilities</p>
+        <p>Search input field component with URL parameter integration</p>
       </div>
 
       <div className="ihub-examples-grid">
         {/* Basic Search */}
         <div className="ihub-example-card">
           <h3>Basic Search Field</h3>
-          <p>Simple search with live results</p>
+          <p>Search field with URL parameter integration and debouncing</p>
           
           <SearchField
-            placeholder="Search users..."
-            onSearch={handleSearch}
-            isLoading={isLoading}
+            labels="users"
+            setSearchValues={handleSearch}
+            className="ihub-mb-20"
           />
           
           <div className="ihub-search-results">
@@ -68,41 +70,35 @@ const SearchFieldExample: React.FC = () => {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="ihub-no-results">No results found</div>
+            ) : searchValue && (
+              <div className="ihub-no-results">No results found for "{searchValue}"</div>
             )}
           </div>
         </div>
 
-        {/* Advanced Search */}
+        {/* Custom Delay Search */}
         <div className="ihub-example-card">
-          <h3>Advanced Search with Filters</h3>
-          <p>Search field with category filters and advanced options</p>
+          <h3>Search with Custom Delay</h3>
+          <p>Search field with custom debounce delay</p>
           
           <SearchField
-            placeholder="Search with filters..."
-            onSearch={handleSearch}
-            isLoading={isLoading}
-            showFilters={true}
-            filters={[
-              { key: 'all', label: 'All' },
-              { key: 'admin', label: 'Admins' },
-              { key: 'user', label: 'Users' },
-              { key: 'manager', label: 'Managers' }
-            ]}
+            labels="content"
+            setSearchValues={handleSearch}
+            delay={800}
+            className="ihub-mb-20"
           />
         </div>
 
-        {/* Search with Recent Searches */}
+        {/* Custom Name Attribute */}
         <div className="ihub-example-card">
-          <h3>Search with Recent History</h3>
-          <p>Search field that shows recent search terms</p>
+          <h3>Search with Custom Name</h3>
+          <p>Search field with custom name attribute</p>
           
           <SearchField
-            placeholder="Search with history..."
-            onSearch={handleSearch}
-            showRecentSearches={true}
-            recentSearches={['John', 'Admin', 'jane@example.com']}
+            labels="products"
+            setSearchValues={handleSearch}
+            name="product-search"
+            className="ihub-mb-20"
           />
         </div>
       </div>
@@ -114,15 +110,24 @@ const SearchFieldExample: React.FC = () => {
           <h3>Basic Usage</h3>
           <pre><code>{`import { SearchField } from '@instincthub/react-ui';
 
-const handleSearch = async (query: string) => {
-  const results = await searchAPI(query);
-  setSearchResults(results);
+const handleSearch = (query: string) => {
+  setSearchValue(query);
+  // Perform search logic
 };
 
 <SearchField
-  placeholder="Search users..."
-  onSearch={handleSearch}
-  isLoading={isLoading}
+  labels="users"
+  setSearchValues={handleSearch}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>With Custom Delay</h3>
+          <pre><code>{`<SearchField
+  labels="content"
+  setSearchValues={handleSearch}
+  delay={800}
+  className="custom-search"
 />`}</code></pre>
         </div>
       </div>

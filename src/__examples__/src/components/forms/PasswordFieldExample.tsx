@@ -289,7 +289,6 @@ const PasswordFieldExample: React.FC = () => {
             label="Disabled Password"
             name="disabledPassword"
             value="disabled-password"
-            disabled
           />
         </div>
 
@@ -301,7 +300,6 @@ const PasswordFieldExample: React.FC = () => {
             label="Readonly Password"
             name="readonlyPassword"
             value="readonly-password"
-            readOnly
           />
         </div>
       </div>
@@ -334,7 +332,7 @@ const PasswordFieldExample: React.FC = () => {
           </div>
           
           <SubmitButton
-            title="Sign In"
+            label="Sign In"
             status={loginStatus}
             className="ihub-important-btn"
           />
@@ -380,7 +378,7 @@ const PasswordFieldExample: React.FC = () => {
           </div>
           
           <SubmitButton
-            title="Create Account"
+            label="Create Account"
             status={registerStatus}
             className="ihub-important-btn"
           />
@@ -425,7 +423,7 @@ const PasswordFieldExample: React.FC = () => {
           </div>
           
           <SubmitButton
-            title="Update Password"
+            label="Update Password"
             status={changePasswordStatus}
             className="ihub-important-btn"
           />

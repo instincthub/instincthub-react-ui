@@ -10,7 +10,9 @@
       "Bash(npx next build:*)",
       "Bash(timeout 30s npx tsc --noEmit)",
       "Bash(/dev/null)",
-      "Bash(timeout 60s npm run build)"
+      "Bash(timeout 60s npm run build)",
+      "Bash(npm run:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

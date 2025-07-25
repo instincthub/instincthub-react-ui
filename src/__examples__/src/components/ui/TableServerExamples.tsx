@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { Badge, Action, IHubTableServer, IHubTableServerRef } from "../../../../index";
 import { DataResponseType, TableColumnType } from "../../../../types";

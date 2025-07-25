@@ -1,6 +1,6 @@
 import { ComponentInfo, SearchResult, RecommendationResponse, CodeGenerationResponse, IntegrationHelpResponse, DocsResponse } from '../types/components';
 
-const API_BASE_URL = process.env.API_BASE_URL
+const API_BASE_URL = process.env.API_BASE_URL || ''
 
 export class ComponentAPI {
   private baseURL: string;

@@ -242,7 +242,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Subscribe to Newsletter"
+              label="Subscribe to Newsletter"
               status={submitStatus.newsletter}
               className="ihub-important-btn"
             />
@@ -272,7 +272,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Send Invitations"
+              label="Send Invitations"
               status={submitStatus.team}
               className="ihub-important-btn"
             />
@@ -313,7 +313,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Send Message"
+              label="Send Message"
               status={submitStatus.contact}
               className="ihub-important-btn"
             />
@@ -354,7 +354,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Send Invitations"
+              label="Send Invitations"
               status={submitStatus.event}
               className="ihub-important-btn"
             />
@@ -387,7 +387,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Launch Campaign"
+              label="Launch Campaign"
               status={submitStatus.campaign}
               className="ihub-important-btn"
             />
@@ -418,7 +418,7 @@ const EmailListExample: React.FC = () => {
               />
             </div>
             <SubmitButton
-              title="Distribute Survey"
+              label="Distribute Survey"
               status={submitStatus.survey}
               className="ihub-important-btn"
             />
@@ -501,7 +501,7 @@ const handleSubmit = (e: React.FormEvent) => {
     setEmails={setEmails}
     placeholder="Add recipient emails"
   />
-  <SubmitButton title="Send" status={submitStatus} />
+  <SubmitButton label="Send" status={submitStatus} />
 </form>`}</code></pre>
         </div>
 

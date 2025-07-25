@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { ModalExamples } from "../../../index";
 import Link from "next/link";
 

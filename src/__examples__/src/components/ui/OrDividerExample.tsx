@@ -128,7 +128,7 @@ const OrDividerExample: React.FC = () => {
                 required
               />
               <SubmitButton
-                title="Sign In"
+                label="Sign In"
                 status={1}
                 className="ihub-important-btn ihub-w-100"
               />
@@ -161,7 +161,7 @@ const OrDividerExample: React.FC = () => {
               />
             </div>
             
-            <OrDivider text="Professional Details" />
+            <OrDivider labels="Professional Details" />
             
             <div className="ihub-section">
               <InputText
@@ -180,7 +180,7 @@ const OrDividerExample: React.FC = () => {
               />
             </div>
 
-            <OrDivider text="Contact Information" />
+            <OrDivider labels="Contact Information" />
             
             <div className="ihub-section">
               <InputText
@@ -223,7 +223,7 @@ const OrDividerExample: React.FC = () => {
               </button>
             </div>
             
-            <OrDivider text="or create account" />
+            <OrDivider labels="or create account" />
             
             <form onSubmit={handleSignupSubmit} className="ihub-signup-form">
               <InputText
@@ -260,7 +260,7 @@ const OrDividerExample: React.FC = () => {
                 required
               />
               <SubmitButton
-                title="Create Account"
+                label="Create Account"
                 status={1}
                 className="ihub-important-btn ihub-w-100"
               />
@@ -283,7 +283,7 @@ const OrDividerExample: React.FC = () => {
               </ul>
             </div>
             
-            <OrDivider text="Benefits" />
+            <OrDivider labels="Benefits" />
             
             <div className="ihub-benefits-section">
               <h4>Why Choose Us?</h4>
@@ -294,7 +294,7 @@ const OrDividerExample: React.FC = () => {
               </ul>
             </div>
             
-            <OrDivider text="Get Started" />
+            <OrDivider labels="Get Started" />
             
             <div className="ihub-cta-section">
               <h4>Ready to Begin?</h4>
@@ -332,7 +332,7 @@ const OrDividerExample: React.FC = () => {
                 <button className="ihub-contact-btn">💬 Live Chat</button>
               </div>
               
-              <OrDivider text="alternative" />
+              <OrDivider labels="alternative" />
               
               <div className="ihub-contact-alternative">
                 <button className="ihub-contact-btn">📧 Email Support</button>
@@ -353,7 +353,7 @@ const OrDividerExample: React.FC = () => {
               <p>Advanced tools for power users</p>
             </div>
             
-            <OrDivider text="upgrade now" className="ihub-premium-divider" />
+            <OrDivider labels="upgrade now" />
             
             <div className="ihub-basic-section">
               <h5>Basic Features</h5>
@@ -366,7 +366,7 @@ const OrDividerExample: React.FC = () => {
                 <p>See what our customers are saying</p>
               </div>
               
-              <OrDivider text="testimonials" className="ihub-success-divider" />
+              <OrDivider labels="testimonials" />
               
               <div className="ihub-testimonial">
                 <p>"This platform changed our workflow completely!"</p>
@@ -388,7 +388,7 @@ const OrDividerExample: React.FC = () => {
 <OrDivider />
 
 // Custom text
-<OrDivider text="or continue with email" />`}</code></pre>
+<OrDivider labels="or continue with email" />`}</code></pre>
         </div>
 
         <div className="ihub-code-section">
@@ -417,14 +417,14 @@ const OrDividerExample: React.FC = () => {
     <p>Feature content here</p>
   </div>
   
-  <OrDivider text="Benefits" />
+  <OrDivider labels="Benefits" />
   
   <div className="benefits">
     <h4>Why Choose Us?</h4>
     <p>Benefits content here</p>
   </div>
   
-  <OrDivider text="Get Started" />
+  <OrDivider labels="Get Started" />
   
   <div className="cta">
     <button>Start Free Trial</button>
@@ -435,7 +435,7 @@ const OrDividerExample: React.FC = () => {
         <div className="ihub-code-section">
           <h3>With Custom Styling</h3>
           <pre><code>{`// With custom CSS class
-<OrDivider text="upgrade now" className="premium-divider" />
+<OrDivider labels="upgrade now" className="premium-divider" />
 
 // CSS
 .premium-divider {
@@ -453,14 +453,14 @@ const OrDividerExample: React.FC = () => {
     <InputText label="Email" />
   </div>
   
-  <OrDivider text="Professional Details" />
+  <OrDivider labels="Professional Details" />
   
   <div className="work-info">
     <InputText label="Company" />
     <InputText label="Role" />
   </div>
   
-  <OrDivider text="Contact Information" />
+  <OrDivider labels="Contact Information" />
   
   <div className="contact-info">
     <InputText label="Phone" />

@@ -134,7 +134,7 @@ const AnimatedBoxExample: React.FC = () => {
                 placeholder="Enter content..."
               />
               <SubmitButton
-                title="Save Changes"
+                label="Save Changes"
                 status={1}
                 className="ihub-mt-2"
               />

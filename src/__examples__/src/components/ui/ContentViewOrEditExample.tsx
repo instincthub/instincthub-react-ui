@@ -35,12 +35,13 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content={content1}
-            onContentChange={setContent1}
-            onSave={(content) => handleSave(content, "html-editor")}
-            type="html"
-            editorType="rich"
+            setContent={setContent1}
+            title="HTML Content Editor"
+            showToolbar={true}
             placeholder="Enter HTML content..."
-            showPreview={true}
+            charLimit={5000}
+            showEditBtn={true}
+            showPreviewBtn={true}
           />
         </div>
 
@@ -51,14 +52,13 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content={content2}
-            onContentChange={setContent2}
-            onSave={(content) => handleSave(content, "markdown-editor")}
-            type="markdown"
-            editorType="markdown"
+            setContent={setContent2}
+            title="Markdown Content Editor"
+            showToolbar={true}
             placeholder="Enter markdown content..."
-            showPreview={true}
-            autoSave={isAutoSave}
-            autoSaveDelay={2000}
+            charLimit={5000}
+            showEditBtn={true}
+            showPreviewBtn={true}
           />
           
           <div className="ihub-editor-controls ihub-mt-2">
@@ -80,13 +80,13 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content={content3}
-            onContentChange={setContent3}
-            onSave={(content) => handleSave(content, "text-editor")}
-            type="text"
-            editorType="plain"
+            setContent={setContent3}
+            title="Plain Text Editor"
+            showToolbar={true}
             placeholder="Enter plain text content..."
-            maxLength={500}
-            showCharCount={true}
+            charLimit={500}
+            showEditBtn={true}
+            showPreviewBtn={false}
           />
         </div>
 
@@ -97,22 +97,13 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content={content1}
-            onContentChange={setContent1}
-            onSave={(content) => handleSave(content, "advanced-editor")}
-            type="html"
-            editorType="rich"
-            placeholder="Enter content with advanced features..."
-            showPreview={true}
-            showWordCount={true}
-            showCharCount={true}
-            allowFullscreen={true}
+            setContent={setContent1}
+            title="Advanced Editor"
             showToolbar={true}
-            toolbar={[
-              'bold', 'italic', 'underline', '|',
-              'heading', 'paragraph', '|',
-              'bulletList', 'orderedList', '|',
-              'link', 'blockquote', 'codeBlock'
-            ]}
+            placeholder="Enter content with advanced features..."
+            charLimit={10000}
+            showEditBtn={true}
+            showPreviewBtn={true}
           />
         </div>
 
@@ -123,10 +114,13 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content="<h4>Read-only Content</h4><p>This content is set to read-only mode and cannot be edited.</p><ul><li>Feature 1</li><li>Feature 2</li><li>Feature 3</li></ul>"
-            type="html"
-            readOnly={true}
-            showCopyButton={true}
-            showPrintButton={true}
+            setContent={() => {}}
+            title="Read-only Content"
+            showToolbar={true}
+            placeholder=""
+            charLimit={1000}
+            showEditBtn={false}
+            showPreviewBtn={false}
           />
         </div>
 
@@ -137,19 +131,14 @@ const ContentViewOrEditExample: React.FC = () => {
           
           <ContentViewOrEdit
             content={content2}
-            onContentChange={setContent2}
-            onSave={(content) => handleSave(content, "collaborative-editor")}
-            type="markdown"
-            editorType="markdown"
+            setContent={setContent2}
+            title="Collaborative Editing"
+            showToolbar={true}
             placeholder="Collaborative editing content..."
-            showPreview={true}
-            showCollaborators={true}
-            collaborators={[
-              { name: "John Doe", avatar: "JD", isOnline: true },
-              { name: "Jane Smith", avatar: "JS", isOnline: false },
-              { name: "Bob Johnson", avatar: "BJ", isOnline: true }
-            ]}
-            showComments={true}
+            charLimit={5000}
+            showEditBtn={true}
+            showPreviewBtn={true}
+            lastUpdated={new Date().toISOString()}
           />
         </div>
       </div>

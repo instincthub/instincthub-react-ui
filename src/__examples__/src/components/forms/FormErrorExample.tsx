@@ -145,32 +145,28 @@ const FormErrorExample: React.FC = () => {
             <div className="ihub-error-item">
               <h5>Validation Error</h5>
               <FormError 
-                message="This field is required" 
-                type="validation"
+                message="This field is required"
               />
             </div>
             
             <div className="ihub-error-item">
               <h5>Server Error</h5>
               <FormError 
-                message="Server error: Unable to save data" 
-                type="server"
+                message="Server error: Unable to save data"
               />
             </div>
             
             <div className="ihub-error-item">
               <h5>Warning</h5>
               <FormError 
-                message="This action cannot be undone" 
-                type="warning"
+                message="This action cannot be undone"
               />
             </div>
             
             <div className="ihub-error-item">
               <h5>Network Error</h5>
               <FormError 
-                message="Network connection failed. Please check your internet." 
-                type="network"
+                message="Network connection failed. Please check your internet."
               />
             </div>
           </div>
@@ -182,13 +178,12 @@ const FormErrorExample: React.FC = () => {
           <p>Displaying multiple error messages together</p>
           
           <FormError 
-            messages={[
-              "Email format is invalid",
-              "Password is too short",
-              "Username is already taken",
-              "Age must be at least 18"
-            ]}
-            type="validation"
+            errors={{
+              email: ["Email format is invalid"],
+              password: ["Password is too short"],
+              username: ["Username is already taken"],
+              age: ["Age must be at least 18"]
+            }}
           />
         </div>
 
@@ -220,17 +215,18 @@ const FormErrorExample: React.FC = () => {
           
           {errors.server && (
             <FormError 
-              message={errors.server} 
-              type="server"
-              dismissible
-              onDismiss={() => setErrors(prev => ({ ...prev, server: "" }))}
+              message={errors.server}
             />
           )}
           
           {Object.keys(errors).filter(key => key !== 'server').length > 0 && (
             <FormError 
-              messages={Object.keys(errors).filter(key => key !== 'server').map(key => errors[key]).filter(Boolean)}
-              type="validation"
+              errors={Object.keys(errors).reduce((acc, key) => {
+                if (key !== 'server' && errors[key]) {
+                  acc[key] = [errors[key]];
+                }
+                return acc;
+              }, {} as Record<string, string[]>)}
             />
           )}
         </div>
@@ -309,7 +305,7 @@ const FormErrorExample: React.FC = () => {
             </div>
             
             <SubmitButton
-              title="Create Account"
+              label="Create Account"
               status={submitStatus}
               className="ihub-important-btn ihub-w-100"
             />
@@ -325,20 +321,25 @@ const FormErrorExample: React.FC = () => {
             <div className="ihub-error-summary">
               <FormError 
                 message="Please fix the following errors:"
-                messages={Object.values(errors).filter(Boolean)}
-                type="validation"
-                showAsListSummary={true}
+                errors={Object.keys(errors).reduce((acc, key) => {
+                  if (errors[key]) {
+                    acc[key] = [errors[key]];
+                  }
+                  return acc;
+                }, {} as Record<string, string[]>)}
               />
             </div>
           )}
           
           <div className="ihub-form-fields">
             <InputText
+              name="field1"
               label="Field 1"
               error={errors.field1}
               placeholder="This field has an error"
             />
             <InputText
+              name="field2"
               label="Field 2"
               error={errors.field2}
               placeholder="This field also has an error"
@@ -362,27 +363,19 @@ const FormErrorExample: React.FC = () => {
           
           <div className="ihub-custom-errors">
             <FormError 
-              message="❌ Critical error: Data could not be saved" 
-              type="critical"
-              className="ihub-critical-error"
+              message="❌ Critical error: Data could not be saved"
             />
             
             <FormError 
-              message="⚠️ Warning: This action is irreversible" 
-              type="warning"
-              className="ihub-warning-error"
+              message="⚠️ Warning: This action is irreversible"
             />
             
             <FormError 
-              message="ℹ️ Info: Please review your information" 
-              type="info"
-              className="ihub-info-error"
+              message="ℹ️ Info: Please review your information"
             />
             
             <FormError 
-              message="🔒 Security: Password strength is weak" 
-              type="security"
-              className="ihub-security-error"
+              message="🔒 Security: Password strength is weak"
             />
           </div>
         </div>
