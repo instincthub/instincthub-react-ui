@@ -266,6 +266,7 @@
 }
 
 .ihub-time-wrapper .ihub-time-input-container:focus-within + .ihub-text-label,
+.ihub-time-wrapper.ihub-has-placeholder .ihub-text-label,
 .ihub-time-wrapper.ihub-value .ihub-text-label {
   top: -10px;
 }

@@ -93,7 +93,7 @@ const LibraryList = () => {
       example_path: "docs/static-docs/libs/helpFunction/getCookie.md",
     },
     {
-      name: "fetchData",
+      name: "FetchDataServer",
       description:
         "Paginated data fetching utility with loading states and error handling",
       category: "API & Request Functions",
@@ -101,7 +101,7 @@ const LibraryList = () => {
       example_path: "docs/static-docs/fetch/FetchDataServer.md",
     },
     {
-      name: "fetchAPI",
+      name: "FetchDataClient",
       description:
         "Generic TypeScript-enabled API client with error handling and type safety",
       category: "API & Request Functions",

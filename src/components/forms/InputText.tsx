@@ -170,7 +170,7 @@ const InputText: React.FC<InputTextProps> = ({
     <div
       className={`ihub-wrapper ${hasValue ? "ihub-value" : ""} ${
         error ? "ihub-is_invalid" : ""
-      } ${className}`}
+      } ${placeholder ? "ihub-has-placeholder" : ""} ${className}`}
       {...dataAttributes}
     >
       <input

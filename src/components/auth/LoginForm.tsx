@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   openConfirmModal,
@@ -924,10 +924,16 @@ const LoginForm = ({
 
   // Set callback URL in cookies
   useEffect(() => {
+    // Set callback URL in cookies if provided
     if (callbackUrl) {
       setCookie("callbackUrl", callbackUrl, 30);
     }
-  }, [callbackUrl]);
+
+    // Redirect if session is already valid
+    if (session && session?.user) {
+      router.push(callbackUrl || "/");
+    }
+  }, [callbackUrl, session]);
 
   // Simple session-based redirect (without API validation)
   useEffect(() => {

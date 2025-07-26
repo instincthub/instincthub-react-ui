@@ -45,6 +45,7 @@
 }
 
 .ihub-wrapper .ihub-input:focus + .ihub-text-label,
+.ihub-wrapper.ihub-has-placeholder .ihub-text-label,
 .ihub-wrapper.ihub-value .ihub-text-label {
   background: var(--White);
   top: -10px;
@@ -1470,6 +1471,7 @@
 }
 
 .ihub-textarea-wrapper textarea:focus + .ihub-textarea-label,
+.ihub-textarea-wrapper.ihub-has-placeholder .ihub-textarea-label,
 .ihub-textarea-wrapper.ihub-value .ihub-textarea-label {
   background: var(--White);
   top: -10px;

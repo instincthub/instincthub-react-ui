@@ -144,7 +144,9 @@ const InputTextarea: React.FC<InputTextareaProps> = ({
   // Calculate wrapper class based on state
   const wrapperClass = `ihub-wrapper ihub-textarea-wrapper ${
     error ? "ihub-error" : ""
-  } ${isLabelElevated ? "ihub-value" : ""} ${className || ""}`;
+  } ${isLabelElevated ? "ihub-value" : ""} ${
+    props.placeholder ? "ihub-has-placeholder" : ""
+  } ${className || ""}`;
 
   // Calculate input classes
   const textareaClass = `ihub-input ihub-textarea ${

@@ -33,7 +33,7 @@ export default function SessionExpiresLogout({
   const [validationState, setValidationState] =
     useState<ValidationState>("loading");
 
-  const user = session?.user?.name;
+  const user = session?.user?.name || session?.user || {};
   const token = user?.token || session?.accessToken;
 
   useEffect(() => {
