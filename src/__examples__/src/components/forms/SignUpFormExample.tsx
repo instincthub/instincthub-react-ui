@@ -52,23 +52,23 @@ const SignUpFormExample: React.FC<SignUpFormExampleProps> = () => {
     const form = new FormData(e.currentTarget);
     form.set("provider", "instincthub");
 
-    const requestOptions = reqOptions("POST", form);
+    const options = reqOptions("POST", form);
     const url = `${API_HOST_URL}auth/skills/learn-teach-signup/`;
 
     try {
-      const newRequest = await fetch(url, requestOptions);
-      const response: SignUpResponse = await newRequest.json();
+      const req = await fetch(url, options);
+      const res: SignUpResponse = await req.json();
 
-      if (response.id) {
-        // Login user if ID exist in response.
-        sessionUpdate({ info: response });
+      if (res.id) {
+        // Login user if ID exist in res.
+        sessionUpdate({ info: res });
 
         // Redirect user to verify email
-        router.push(`/auth/verify-email?email=${response.email}`);
+        router.push(`/auth/verify-email?email=${res.email}`);
       } else {
-        setStatus(response.status);
-        openToast(JSON.stringify(response), 400);
-        setError(response);
+        setStatus(res.status);
+        openToast(JSON.stringify(res), 400);
+        setError(res);
       }
     } catch (error) {
       setStatus(500);

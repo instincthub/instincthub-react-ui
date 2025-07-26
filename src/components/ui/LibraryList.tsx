@@ -92,6 +92,30 @@ const LibraryList = () => {
       repo_path: "src/components/lib/helpFunction.ts#L475",
       example_path: "docs/static-docs/libs/helpFunction/getCookie.md",
     },
+    {
+      name: "fetchData",
+      description:
+        "Paginated data fetching utility with loading states and error handling",
+      category: "API & Request Functions",
+      repo_path: "src/components/lib/helpFunction.ts#L730",
+      example_path: "docs/static-docs/fetch/FetchDataServer.md",
+    },
+    {
+      name: "fetchAPI",
+      description:
+        "Generic TypeScript-enabled API client with error handling and type safety",
+      category: "API & Request Functions",
+      repo_path: "src/components/lib/helpFunction.ts#L784",
+      example_path: "docs/static-docs/fetch/FetchDataClient.md",
+    },
+    {
+      name: "PostData",
+      description:
+        "Complete example for posting form data to backend with validation and error handling",
+      category: "API & Request Functions",
+      repo_path: "src/components/lib/helpFunction.ts#L650",
+      example_path: "docs/static-docs/fetch/PostData.md",
+    },
 
     // Time & Date
     {

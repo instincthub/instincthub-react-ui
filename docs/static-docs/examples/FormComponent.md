@@ -1,45 +1,48 @@
+# Example of form component
+
+```tsx
 "use client";
 
 import { useState } from "react";
 import {
-InputText,
-InputNumber,
-Dropdown,
-ToggleButton,
-SubmitButton,
-Tabs,
-InputAmount,
+  InputText,
+  InputNumber,
+  Dropdown,
+  ToggleButton,
+  SubmitButton,
+  Tabs,
+  InputAmount,
 } from "@instincthub/react-ui";
 import {
-PaymentSettingsType,
-PaymentGatewaySettingType,
+  PaymentSettingsType,
+  PaymentGatewaySettingType,
 } from "@/types/finance/settings";
 import { API_HOST_URL, reqOptions } from "@instincthub/react-ui/lib";
 
 interface PaymentSettingsProps {
-handle: string;
-token: string | null;
-settings: PaymentSettingsType;
-setSettings: React.Dispatch<React.SetStateAction<PaymentSettingsType>>;
-paymentGateway: PaymentGatewaySettingType;
+  handle: string;
+  token: string | null;
+  settings: PaymentSettingsType;
+  setSettings: React.Dispatch<React.SetStateAction<PaymentSettingsType>>;
+  paymentGateway: PaymentGatewaySettingType;
 }
 
 export function PaymentSettings({
-handle,
-token,
-paymentGateway,
-settings,
-setSettings,
+  handle,
+  token,
+  paymentGateway,
+  settings,
+  setSettings,
 }: PaymentSettingsProps) {
-const [gatewaySettings, setGatewaySettings] =
-useState<PaymentGatewaySettingType>(paymentGateway);
-const [status, setStatus] = useState<number | undefined>(undefined);
-const [message, setMessage] = useState<string>("");
+  const [gatewaySettings, setGatewaySettings] =
+    useState<PaymentGatewaySettingType>(paymentGateway);
+  const [status, setStatus] = useState<number | undefined>(undefined);
+  const [message, setMessage] = useState<string>("");
 
-const handleSaveSettings = async (e: React.FormEvent<HTMLFormElement>) => {
-e.preventDefault();
-setStatus(0);
-setMessage("");
+  const handleSaveSettings = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus(0);
+    setMessage("");
 
     try {
       // Check if the form is the gateway form
@@ -78,37 +81,36 @@ setMessage("");
     } finally {
       setStatus(1);
     }
+  };
 
-};
+  const paymentMethodOptions = [
+    { label: "Cash", value: "cash" },
+    { label: "Bank Transfer", value: "bank_transfer" },
+    { label: "Credit Card", value: "credit_card" },
+    { label: "Mobile Money", value: "mobile_money" },
+    { label: "Cheque", value: "cheque" },
+  ];
 
-const paymentMethodOptions = [
-{ label: "Cash", value: "cash" },
-{ label: "Bank Transfer", value: "bank_transfer" },
-{ label: "Credit Card", value: "credit_card" },
-{ label: "Mobile Money", value: "mobile_money" },
-{ label: "Cheque", value: "cheque" },
-];
+  const feeTypeOptions = [
+    { label: "Fixed Amount", value: "fixed" },
+    { label: "Percentage", value: "percentage" },
+  ];
 
-const feeTypeOptions = [
-{ label: "Fixed Amount", value: "fixed" },
-{ label: "Percentage", value: "percentage" },
-];
+  const paymentGatewayOptions = [
+    { label: "Paystack", value: "paystack" },
+    { label: "Flutterwave", value: "flutterwave" },
+    { label: "Stripe", value: "stripe" },
+    { label: "PayPal", value: "paypal" },
+  ];
 
-const paymentGatewayOptions = [
-{ label: "Paystack", value: "paystack" },
-{ label: "Flutterwave", value: "flutterwave" },
-{ label: "Stripe", value: "stripe" },
-{ label: "PayPal", value: "paypal" },
-];
-
-const generalTabContent = (
-<form
+  const generalTabContent = (
+    <form
       className="ihub-space-y-6"
       onSubmit={handleSaveSettings}
       id="id_general_settings"
     >
-<div className="ihub-space-y-4">
-<Dropdown
+      <div className="ihub-space-y-4">
+        <Dropdown
           id="id_default_payment_method"
           name="default_payment_method"
           label="Default Payment Method"
@@ -116,24 +118,24 @@ const generalTabContent = (
           options={paymentMethodOptions}
           className="ihub-mb-3"
         />
-<div className="ihub-flex ihub-items-center ihub-justify-between ihub-mb-3">
-<div className="ihub-space-y-0.5">
-<label htmlFor="online-payments" className="ihub-label">
-Online Payments
-</label>
-<p className="ihub-text-sm ihub-text-muted">
-Allow students to make payments online
-</p>
-</div>
-<ToggleButton
+        <div className="ihub-flex ihub-items-center ihub-justify-between ihub-mb-3">
+          <div className="ihub-space-y-0.5">
+            <label htmlFor="online-payments" className="ihub-label">
+              Online Payments
+            </label>
+            <p className="ihub-text-sm ihub-text-muted">
+              Allow students to make payments online
+            </p>
+          </div>
+          <ToggleButton
             id="id_enable_online_payments"
             name="enable_online_payments"
             label="Enable"
             labelPosition="left"
             initialState={settings.enable_online_payments}
           />
-</div>
-</div>
+        </div>
+      </div>
 
       <SubmitButton label="Save General Settings" status={status} />
 
@@ -147,35 +149,33 @@ Allow students to make payments online
         </div>
       )}
     </form>
+  );
 
-);
-
-const feesTabContent = (
-<form
+  const feesTabContent = (
+    <form
       className="ihub-space-y-6"
       onSubmit={handleSaveSettings}
       id="id_late_payment_fee_settings"
     >
-<div className="ihub-space-y-4">
-<div className="ihub-grid ihub-gap-4 ihub-md-grid-cols-2">
-<div className="ihub-space-y-2">
-<Dropdown
+      <div className="ihub-space-y-4">
+        <div className="ihub-grid ihub-gap-4 ihub-md-grid-cols-2">
+          <div className="ihub-space-y-2">
+            <Dropdown
               id="id_late_payment_fee_type"
               name="late_payment_fee_type"
               label="Fee Type"
               selectedValue={settings.late_payment_fee_type}
               options={feeTypeOptions}
             />
-</div>
-<div className="ihub-space-y-2 ihub-mb-4">
-
-         <InputText
-            id="id_secret_key"
-            name="secret_key"
-            label="Secret Key"
-            type="password"
-            value={gatewaySettings?.secret_key}
-          />
+          </div>
+          <div className="ihub-space-y-2 ihub-mb-4">
+            <InputText
+              id="id_secret_key"
+              name="secret_key"
+              label="Secret Key"
+              type="password"
+              value={gatewaySettings?.secret_key}
+            />
             {settings.late_payment_fee_type === "percentage" ? (
               <InputNumber
                 id="late-payment-fee"
@@ -214,30 +214,30 @@ const feesTabContent = (
         </div>
       )}
     </form>
+  );
 
-);
+  const tabItems = [
+    {
+      id: "general",
+      label: "General",
+      content: generalTabContent,
+    },
+    {
+      id: "fees",
+      label: "Late Fees",
+      content: feesTabContent,
+    },
+  ];
 
-const tabItems = [
-{
-id: "general",
-label: "General",
-content: generalTabContent,
-},
-{
-id: "fees",
-label: "Late Fees",
-content: feesTabContent,
-},
-];
-
-return (
-<div className="ihub-card">
-<div>
-<p className="ihub-text-muted">Configure payment processing settings</p>
-</div>
-<div className="ihub-card-content">
-<Tabs items={tabItems} defaultActiveTab="general" variant="pills" />
-</div>
-</div>
-);
+  return (
+    <div className="ihub-card">
+      <div>
+        <p className="ihub-text-muted">Configure payment processing settings</p>
+      </div>
+      <div className="ihub-card-content">
+        <Tabs items={tabItems} defaultActiveTab="general" variant="pills" />
+      </div>
+    </div>
+  );
 }
+```

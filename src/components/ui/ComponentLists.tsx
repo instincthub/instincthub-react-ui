@@ -19,6 +19,14 @@ const ComponentLists = () => {
   const components: ComponentInfo[] = [
     // Forms
     {
+      name: "FormComponent",
+      description: "Reusable form component for user input",
+      category: "Forms",
+      repo_path: "src/components/forms",
+      example_path: "docs/static-docs/examples/FormComponent.md",
+      visual_demo_url: "https://ui.instincthub.com/components/auth/signup-form",
+    },
+    {
       name: "ActionDropdown",
       description: "Dropdown component for actions",
       category: "Forms",
