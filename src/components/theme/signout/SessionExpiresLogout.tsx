@@ -34,7 +34,7 @@ export default function SessionExpiresLogout({
     useState<ValidationState>("loading");
 
   const user = session?.user?.name || session?.user || {};
-  const token = user?.token || session?.accessToken;
+  const token = user?.token || user?.accessToken;
 
   useEffect(() => {
     let isMounted = true;

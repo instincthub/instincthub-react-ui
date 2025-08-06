@@ -1,0 +1,477 @@
+{
+  "libraries": [
+    {
+      "name": "convertArrayToObject",
+      "description": "Convert arrays of objects into lookup objects for O(1) access performance",
+      "category": "Data Manipulation",
+      "repo_path": "src/components/lib/convertArrayToObject.ts",
+      "example_path": "docs/static-docs/libs/convertArrayToObject.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/convertArrayToObject.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/convertArrayToObject.md"
+    },
+    {
+      "name": "helpFunction",
+      "description": "Comprehensive collection of string manipulation, validation, and formatting utilities",
+      "category": "Data Manipulation",
+      "repo_path": "src/components/lib/helpFunction.ts",
+      "example_path": "docs/static-docs/libs/helpFunction/helpFunction.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/helpFunction.md"
+    },
+    {
+      "name": "stripHtmlTags",
+      "description": "Remove HTML tags from strings while preserving text content",
+      "category": "String & Text Utilities",
+      "repo_path": "src/components/lib/helpFunction.ts#L92",
+      "example_path": "docs/static-docs/libs/helpFunction/stripHtmlTags.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L92",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/stripHtmlTags.md"
+    },
+    {
+      "name": "convertToSlug",
+      "description": "Convert text to URL-friendly slugs with proper formatting and encoding",
+      "category": "String & Text Utilities",
+      "repo_path": "src/components/lib/helpFunction.ts#L341",
+      "example_path": "docs/static-docs/libs/helpFunction/convertToSlug.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L341",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/convertToSlug.md"
+    },
+    {
+      "name": "isValidEmail",
+      "description": "Email format validation with comprehensive regex pattern matching",
+      "category": "Validation Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L453",
+      "example_path": "docs/static-docs/libs/helpFunction/isValidEmail.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L453",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/isValidEmail.md"
+    },
+    {
+      "name": "formatNumberWithCommas",
+      "description": "Format numbers with thousands separators for better readability",
+      "category": "Number & Data Formatting",
+      "repo_path": "src/components/lib/helpFunction.ts#L296",
+      "example_path": "docs/static-docs/libs/helpFunction/formatNumberWithCommas.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L296",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/formatNumberWithCommas.md"
+    },
+    {
+      "name": "formatDateToWord",
+      "description": "Human-readable date formatting with custom patterns and localization",
+      "category": "Date & Time Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L421",
+      "example_path": "docs/static-docs/libs/helpFunction/formatDateToWord.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L421",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/formatDateToWord.md"
+    },
+    {
+      "name": "reqOptions",
+      "description": "HTTP request configuration builder for fetch API with authentication headers",
+      "category": "API & Request Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L650",
+      "example_path": "docs/static-docs/libs/helpFunction/reqOptions.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L650",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/reqOptions.md"
+    },
+    {
+      "name": "getCookie",
+      "description": "Retrieve cookie values from browser storage with proper parsing",
+      "category": "Browser Utilities",
+      "repo_path": "src/components/lib/helpFunction.ts#L475",
+      "example_path": "docs/static-docs/libs/helpFunction/getCookie.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L475",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/getCookie.md"
+    },
+    {
+      "name": "FetchDataServer",
+      "description": "Paginated data fetching utility with loading states and error handling",
+      "category": "API & Request Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L730",
+      "example_path": "docs/static-docs/fetch/FetchDataServer.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L730",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/fetch/FetchDataServer.md"
+    },
+    {
+      "name": "FetchDataClient",
+      "description": "Generic TypeScript-enabled API client with error handling and type safety",
+      "category": "API & Request Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L784",
+      "example_path": "docs/static-docs/fetch/FetchDataClient.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L784",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/fetch/FetchDataClient.md"
+    },
+    {
+      "name": "PostData",
+      "description": "Complete example for posting form data to backend with validation and error handling",
+      "category": "API & Request Functions",
+      "repo_path": "src/components/lib/helpFunction.ts#L650",
+      "example_path": "docs/static-docs/fetch/PostData.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/helpFunction.ts#L650",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/fetch/PostData.md"
+    },
+    {
+      "name": "format",
+      "description": "Time formatting utilities for displaying durations and timestamps",
+      "category": "Time & Date",
+      "repo_path": "src/components/lib/format.ts",
+      "example_path": "docs/static-docs/libs/format.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/format.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/format.md"
+    },
+    {
+      "name": "fileToBase64",
+      "description": "Convert files to Base64 encoding for uploads and data transmission",
+      "category": "File Operations",
+      "repo_path": "src/components/lib/fileToBase64.ts",
+      "example_path": "docs/static-docs/libs/fileToBase64.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/fileToBase64.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/fileToBase64.md"
+    },
+    {
+      "name": "elementIsVisibleInViewport",
+      "description": "Check if DOM elements are visible within the browser viewport",
+      "category": "DOM Utilities",
+      "repo_path": "src/components/lib/elementIsVisibleInViewport.ts",
+      "example_path": "docs/static-docs/libs/elementIsVisibleInViewport.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/elementIsVisibleInViewport.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/elementIsVisibleInViewport.md"
+    },
+    {
+      "name": "loadScript",
+      "description": "Dynamically load external JavaScript libraries with Promise-based API",
+      "category": "DOM Utilities",
+      "repo_path": "src/components/lib/loadScript.ts",
+      "example_path": "docs/static-docs/libs/loadScript.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/loadScript.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/loadScript.md"
+    },
+    {
+      "name": "createSubscription",
+      "description": "Subscription management utilities for handling recurring subscriptions",
+      "category": "Subscription Management",
+      "repo_path": "src/components/lib/createSubscription.ts",
+      "example_path": "docs/static-docs/libs/createSubscription.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/createSubscription.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/createSubscription.md"
+    },
+    {
+      "name": "formError",
+      "description": "Form validation and error handling with Yup schema integration",
+      "category": "Form Utilities",
+      "repo_path": "src/components/lib/formError.ts",
+      "example_path": "docs/static-docs/libs/formError.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/formError.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/formError.md"
+    },
+    {
+      "name": "getPriceObjects",
+      "description": "Price calculation utilities with currency support and internationalization",
+      "category": "Pricing & Finance",
+      "repo_path": "src/components/lib/getPriceObjects.ts",
+      "example_path": "docs/static-docs/libs/getPriceObjects.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/getPriceObjects.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/getPriceObjects.md"
+    },
+    {
+      "name": "paystack",
+      "description": "Paystack payment integration with transaction handling and webhooks",
+      "category": "Pricing & Finance",
+      "repo_path": "src/components/lib/paystack.ts",
+      "example_path": "docs/static-docs/libs/paystack.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/paystack.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/paystack.md"
+    },
+    {
+      "name": "charts",
+      "description": "Chart configuration helpers for Chart.js integration",
+      "category": "Charts & Visualization",
+      "repo_path": "src/components/lib/charts.ts",
+      "example_path": "docs/static-docs/libs/charts.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/charts.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/charts.md"
+    },
+    {
+      "name": "roles",
+      "description": "Role-based access control (RBAC) system with hierarchical permissions",
+      "category": "Authentication & Security",
+      "repo_path": "src/components/lib/roles.ts",
+      "example_path": "docs/static-docs/libs/roles.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/roles.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/roles.md"
+    },
+    {
+      "name": "permissions",
+      "description": "Permission checking utilities with role validation and access control",
+      "category": "Authentication & Security",
+      "repo_path": "src/components/lib/permissions.ts",
+      "example_path": "docs/static-docs/libs/permissions.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/permissions.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/permissions.md"
+    },
+    {
+      "name": "auth-actions",
+      "description": "Authentication actions for sign-in, sign-out, and session management",
+      "category": "Authentication & Security",
+      "repo_path": "src/components/lib/auth/actions.ts",
+      "example_path": "docs/static-docs/libs/auth-actions.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/auth/actions.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/auth-actions.md"
+    },
+    {
+      "name": "auth-dbRequestst",
+      "description": "Database request utilities for authentication and user management",
+      "category": "Authentication & Security",
+      "repo_path": "src/components/lib/auth/dbRequestst.ts",
+      "example_path": "docs/static-docs/libs/auth-dbRequestst.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/auth/dbRequestst.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/auth-dbRequestst.md"
+    },
+    {
+      "name": "utils",
+      "description": "Application constants and utility types for consistent configuration",
+      "category": "Configuration & Constants",
+      "repo_path": "src/components/lib/utils.ts",
+      "example_path": "docs/static-docs/libs/utils.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/utils.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/utils.md"
+    },
+    {
+      "name": "oauth_json",
+      "description": "OAuth provider configuration with Google, Facebook, GitHub integration",
+      "category": "Configuration & Constants",
+      "repo_path": "src/components/lib/oauth_json.ts",
+      "example_path": "docs/static-docs/libs/oauth_json.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/oauth_json.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/oauth_json.md"
+    },
+    {
+      "name": "json-accounts",
+      "description": "Account type configurations for educational and business platforms",
+      "category": "JSON Data Collections",
+      "repo_path": "src/components/lib/json/accounts.ts",
+      "example_path": "docs/static-docs/libs/json-accounts.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/json/accounts.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/json-accounts.md"
+    },
+    {
+      "name": "json-countryNigeria",
+      "description": "Nigeria states and local government areas data structure",
+      "category": "JSON Data Collections",
+      "repo_path": "src/components/lib/json/countryNigeria.ts",
+      "example_path": "docs/static-docs/libs/json-countryNigeria.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/json/countryNigeria.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/json-countryNigeria.md"
+    },
+    {
+      "name": "json-countryObjects",
+      "description": "Global country database with ISO codes, currencies, and phone prefixes",
+      "category": "JSON Data Collections",
+      "repo_path": "src/components/lib/json/countryObjects.ts",
+      "example_path": "docs/static-docs/libs/json-countryObjects.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/json/countryObjects.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/json-countryObjects.md"
+    },
+    {
+      "name": "json-educationLevels",
+      "description": "Education level definitions for academic and professional contexts",
+      "category": "JSON Data Collections",
+      "repo_path": "src/components/lib/json/educationLevels.ts",
+      "example_path": "docs/static-docs/libs/json-educationLevels.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/json/educationLevels.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/json-educationLevels.md"
+    },
+    {
+      "name": "json-unsplashDefaultObject",
+      "description": "Default Unsplash image objects for placeholder and fallback images",
+      "category": "JSON Data Collections",
+      "repo_path": "src/components/lib/json/unsplashDefaultObject.ts",
+      "example_path": "docs/static-docs/libs/json-unsplashDefaultObject.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/json/unsplashDefaultObject.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/json-unsplashDefaultObject.md"
+    },
+    {
+      "name": "modals-openConfirmDelete",
+      "description": "Advanced delete confirmation modal with GitHub-style validation",
+      "category": "Modal Systems",
+      "repo_path": "src/components/lib/modals/openConfirmDelete.ts",
+      "example_path": "docs/static-docs/libs/modals/openConfirmDelete.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/openConfirmDelete.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openConfirmDelete.md"
+    },
+    {
+      "name": "openConfirmModal",
+      "description": "Promise-based confirmation dialogs with warning levels and custom messaging",
+      "category": "Confirmation Modals",
+      "repo_path": "src/components/lib/modals/modals.ts#L27",
+      "example_path": "docs/static-docs/libs/modals/openConfirmModal.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L27",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openConfirmModal.md"
+    },
+    {
+      "name": "openToast",
+      "description": "Auto-dismissing toast notifications with status-based styling and positioning",
+      "category": "Notification Modals",
+      "repo_path": "src/components/lib/modals/modals.ts#L91",
+      "example_path": "docs/static-docs/libs/modals/openToast.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L91",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openToast.md"
+    },
+    {
+      "name": "getUserEmailInputModal",
+      "description": "Email collection modal with built-in validation and error handling",
+      "category": "Input Modals",
+      "repo_path": "src/components/lib/modals/modals.ts#L150",
+      "example_path": "docs/static-docs/libs/modals/getUserEmailInputModal.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L150",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/getUserEmailInputModal.md"
+    },
+    {
+      "name": "openConfirmDelete",
+      "description": "Advanced delete confirmation modal with GitHub-style validation requiring user input",
+      "category": "Confirmation Modals",
+      "repo_path": "src/components/lib/modals/openConfirmDelete.ts#L39",
+      "example_path": "docs/static-docs/libs/modals/openConfirmDelete.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/openConfirmDelete.ts#L39",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openConfirmDelete.md"
+    },
+    {
+      "name": "queryParameters",
+      "description": "URL query parameter management system for client-side navigation and filtering",
+      "category": "URL & Navigation",
+      "repo_path": "src/components/lib/queryParameters/index.ts",
+      "example_path": "docs/static-docs/libs/queryParameters.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/queryParameters/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/queryParameters.md"
+    },
+    {
+      "name": "redux-store",
+      "description": "Redux store configuration with middleware and devtools setup",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/store.ts",
+      "example_path": "docs/static-docs/libs/redux-store.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/store.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-store.md"
+    },
+    {
+      "name": "redux-rootReducer",
+      "description": "Root reducer combining all application slices",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/rootReducer.ts",
+      "example_path": "docs/static-docs/libs/redux-rootReducer.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/rootReducer.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-rootReducer.md"
+    },
+    {
+      "name": "redux-middleware",
+      "description": "Custom Redux middleware for logging and async handling",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/middleware.ts",
+      "example_path": "docs/static-docs/libs/redux-middleware.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/middleware.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-middleware.md"
+    },
+    {
+      "name": "redux-createAppAsyncThunk",
+      "description": "Typed async thunk creator with consistent error handling",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/createAppAsyncThunk.ts",
+      "example_path": "docs/static-docs/libs/redux-createAppAsyncThunk.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/createAppAsyncThunk.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-createAppAsyncThunk.md"
+    },
+    {
+      "name": "redux-authSlice",
+      "description": "Authentication state management with user sessions and permissions",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/authSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-authSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/authSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-authSlice.md"
+    },
+    {
+      "name": "redux-channelSlice",
+      "description": "Channel management state for course platforms and communities",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/channelSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-channelSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/channelSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-channelSlice.md"
+    },
+    {
+      "name": "redux-courseSlice",
+      "description": "Course management state with enrollment, progress, and content",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/courseSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-courseSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/courseSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-courseSlice.md"
+    },
+    {
+      "name": "redux-navigationSlice",
+      "description": "Navigation state management with routing and UI controls",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/navigationSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-navigationSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/navigationSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-navigationSlice.md"
+    },
+    {
+      "name": "redux-messageSlice",
+      "description": "Message and notification state management",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/messageSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-messageSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/messageSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-messageSlice.md"
+    },
+    {
+      "name": "redux-utilsSlice",
+      "description": "Utility state management for screen size, device detection, and preferences",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/utilsSlice/index.ts",
+      "example_path": "docs/static-docs/libs/redux-utilsSlice.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/utilsSlice/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-utilsSlice.md"
+    },
+    {
+      "name": "redux-generics",
+      "description": "Generic Redux utilities for arrays and objects manipulation",
+      "category": "Redux State Management",
+      "repo_path": "src/components/lib/redux/slices/generics/index.ts",
+      "example_path": "docs/static-docs/libs/redux-generics.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/redux/slices/generics/index.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/redux-generics.md"
+    }
+  ],
+  "categories": [
+    "Data Manipulation",
+    "String & Text Utilities", 
+    "Validation Functions",
+    "Number & Data Formatting",
+    "Date & Time Functions",
+    "API & Request Functions",
+    "Browser Utilities",
+    "Time & Date",
+    "File Operations",
+    "DOM Utilities",
+    "Subscription Management",
+    "Form Utilities",
+    "Pricing & Finance",
+    "Charts & Visualization",
+    "Authentication & Security",
+    "Configuration & Constants",
+    "JSON Data Collections",
+    "Modal Systems",
+    "Confirmation Modals",
+    "Notification Modals",
+    "Input Modals",
+    "URL & Navigation",
+    "Redux State Management"
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-08-02",
+    "totalLibraries": 47,
+    "description": "Comprehensive utility functions and libraries for the InstinctHub React UI package",
+    "baseGithubUrl": "https://github.com/instincthub/instincthub-react-ui/blob/main/"
+  }
+}

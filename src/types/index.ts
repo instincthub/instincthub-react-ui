@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Session } from "./auth";
+export * from "./payments";
+export * from "./channels";
 
 declare global {
   namespace JSX {
@@ -352,7 +354,7 @@ export interface LoginFormPropsType {
     username?: (value: string) => string | null;
     password?: (value: string) => string | null;
   };
-  onError?: (error: string, type: 'network' | 'validation' | 'auth') => void;
+  onError?: (error: string, type: "network" | "validation" | "auth") => void;
 
   // Session Management Props
   sessionCheckInterval?: number;
@@ -360,18 +362,24 @@ export interface LoginFormPropsType {
 
   // UI Customization Props
   submitButtonText?: string;
-  submitButtonVariant?: 'primary' | 'important' | 'outlined' | 'danger' | 'default' | 'icon';
+  submitButtonVariant?:
+    | "primary"
+    | "important"
+    | "outlined"
+    | "danger"
+    | "default"
+    | "icon";
   showRememberMe?: boolean;
   rememberMeText?: string;
 
   // OAuth & Social Login Props
   enableOAuth?: boolean;
-  oauthProviders?: Array<'google' | 'github' | 'facebook' | 'linkedin'>;
+  oauthProviders?: Array<"google" | "github" | "facebook" | "linkedin">;
   oauthConfig?: Record<string, any>;
 
   // Security Props
   enableCaptcha?: boolean;
-  captchaProvider?: 'recaptcha' | 'hcaptcha';
+  captchaProvider?: "recaptcha" | "hcaptcha";
   enableRateLimiting?: boolean;
   maxAttempts?: number;
   lockoutDuration?: number;
@@ -386,7 +394,7 @@ export interface LoginFormPropsType {
   ariaLabel?: string;
   ariaDescribedBy?: string;
   focusOnMount?: boolean;
-  
+
   // Additional Missing Props
   autoComplete?: boolean;
   validateOnBlur?: boolean;

@@ -4,7 +4,7 @@
 .ihub-sidenav-container {
   display: flex;
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
   width: 100%;
 }
 
@@ -565,28 +565,18 @@
 /* Main content area */
 .ihub-sidenav-main {
   flex: 1;
+  min-width: 0; /* Prevents flex shrinking issues */
   padding: 16px;
   overflow: auto;
   min-height: 100vh;
-  transition: margin-left 0.3s ease, margin-right 0.3s ease;
-  width: 100%;
+  width: auto; /* Let flex handle the width */
 }
 
-/* Adjust main content based on sidebar position and state */
-.ihub-sidenav-container-left .ihub-sidenav-main {
-  margin-left: 64px; /* Default margin for collapsed state */
-}
-
-.ihub-sidenav-container-left .ihub-sidenav-expanded + .ihub-sidenav-main {
-  margin-left: 240px; /* Margin for expanded state */
-}
-
+/* Remove fixed margin approaches - flex will handle spacing */
+.ihub-sidenav-container-left .ihub-sidenav-main,
 .ihub-sidenav-container-right .ihub-sidenav-main {
-  margin-right: 64px; /* Default margin for collapsed state */
-}
-
-.ihub-sidenav-container-right .ihub-sidenav-expanded + .ihub-sidenav-main {
-  margin-right: 240px; /* Margin for expanded state */
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Tooltips for collapsed state */
