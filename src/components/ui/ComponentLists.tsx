@@ -564,6 +564,7 @@ const ComponentLists = () => {
       category: "Navbar",
       repo_path: "src/components/navbar/SideNavbar.tsx",
       example_path: "docs/static-docs/components/SideNavbar.md",
+      visual_demo_url: "https://ui.instincthub.com/components/navbars/sidenav",
     },
     {
       name: "SideNavbarContext",

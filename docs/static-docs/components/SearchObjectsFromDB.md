@@ -145,9 +145,9 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedUsers}
               selected={selectedUsers}
               placeholder="Search by username or email"
-              key_name="display_name"
-              limit_query={10}
-              limit_select={0} // 0 = unlimited selection
+              keyName="display_name"
+              limitQuery={10}
+              limitSelect={0} // 0 = unlimited selection
               options={sampleUsers}
             />
             
@@ -172,9 +172,9 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedSingleUser}
               selected={selectedSingleUser}
               placeholder="Search for instructor"
-              key_name="display_name"
-              limit_query={5}
-              limit_select={1} // Only one selection allowed
+              keyName="display_name"
+              limitQuery={5}
+              limitSelect={1} // Only one selection allowed
               options={sampleUsers}
             />
           </div>
@@ -195,9 +195,9 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedProducts}
               selected={selectedProducts}
               placeholder="Search products by name or SKU"
-              key_name="title"
-              limit_query={20}
-              limit_select={5}
+              keyName="title"
+              limitQuery={20}
+              limitSelect={5}
               searchUrl="/api/products/search/?"
               options={sampleProducts}
             />
@@ -223,12 +223,12 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedCourses}
               selected={selectedCourses}
               placeholder="Search courses by title"
-              key_name="title"
+              keyName="title"
               appLabel="education"
               modelName="Course"
               filterChannel={true}
-              limit_query={15}
-              limit_select={3}
+              limitQuery={15}
+              limitSelect={3}
             />
           </div>
         </div>
@@ -248,12 +248,12 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedContent}
               selected={selectedContent}
               placeholder="Search articles, videos, documents"
-              key_name="title"
+              keyName="title"
               appLabel="cms"
               modelName="Content"
               filterChannel={false}
-              limit_query={25}
-              limit_select={0}
+              limitQuery={25}
+              limitSelect={0}
             />
           </div>
         </div>
@@ -271,9 +271,9 @@ const SearchObjectsExamples = () => {
               setSelected={setSelectedUsers}
               selected={selectedUsers}
               placeholder="This field is required"
-              key_name="display_name"
-              limit_query={5}
-              limit_select={1}
+              keyName="display_name"
+              limitQuery={5}
+              limitSelect={1}
               err={selectedUsers.length === 0} // Show error if no selection
               options={sampleUsers}
             />
@@ -297,12 +297,12 @@ const SearchObjectsExamples = () => {
                   setSelected={setFilteredProducts}
                   selected={filteredProducts}
                   placeholder="Advanced search with all options"
-                  key_name="name"
+                  keyName="name"
                   appLabel="inventory"
                   modelName="Product"
                   filterChannel={true}
-                  limit_query={50} // Higher query limit
-                  limit_select={10} // Allow up to 10 selections
+                  limitQuery={50} // Higher query limit
+                  limitSelect={10} // Allow up to 10 selections
                   searchUrl="/api/products/advanced-search/?"
                   options={sampleProducts}
                   err={false}
@@ -317,9 +317,9 @@ const SearchObjectsExamples = () => {
                   <li><strong>appLabel:</strong> Django app label for dynamic search</li>
                   <li><strong>modelName:</strong> Model name for dynamic search</li>
                   <li><strong>filterChannel:</strong> Filter results by channel</li>
-                  <li><strong>limit_query:</strong> Max results from API (50)</li>
-                  <li><strong>limit_select:</strong> Max user selections (10)</li>
-                  <li><strong>key_name:</strong> Display field (name)</li>
+                  <li><strong>limitQuery:</strong> Max results from API (50)</li>
+                  <li><strong>limitSelect:</strong> Max user selections (10)</li>
+                  <li><strong>keyName:</strong> Display field (name)</li>
                   <li><strong>searchUrl:</strong> Custom API endpoint</li>
                   <li><strong>options:</strong> Static/initial data</li>
                 </ul>
@@ -463,6 +463,66 @@ const SearchObjectsExamples = () => {
 
 export default SearchObjectsExamples;
 ```
+
+## Props Interface
+
+```tsx
+interface SearchObjectsFromDBProps<T extends SearchObjectItemType = SearchObjectItemType> {
+  /** The label for the search component */
+  label: string | null;
+  
+  /** Authentication token for API requests */
+  token: string;
+  
+  /** Channel or organization handle */
+  handle: string;
+  
+  /** Function to set selected items */
+  setSelected: React.Dispatch<React.SetStateAction<T[]>>;
+  
+  /** Static options to display initially */
+  options?: T[];
+  
+  /** Django app label for dynamic search */
+  appLabel?: string;
+  
+  /** Django model name for dynamic search */
+  modelName?: string;
+  
+  /** Whether to filter results by channel */
+  filterChannel?: boolean;
+  
+  /** Maximum results to fetch from API (default: 5, 0 = unlimited) */
+  limitQuery?: number;
+  
+  /** Maximum items user can select (default: 0 = unlimited, 1 = single selection) */
+  limitSelect?: number;
+  
+  /** Field name to display in results (default: "title") */
+  keyName?: string;
+  
+  /** Input placeholder text */
+  placeholder?: string;
+  
+  /** Custom search API endpoint */
+  searchUrl?: string;
+  
+  /** Currently selected items */
+  selected: T[];
+  
+  /** Show validation error state */
+  err?: boolean;
+}
+```
+
+## Key Features
+
+- **Flexible Selection Limits**: Control exactly how many items can be selected
+- **Multiple Search Modes**: Static options, custom API endpoints, or dynamic Django models
+- **Real-time Search**: Async search with loading states and error handling
+- **TypeScript Support**: Fully typed with generic support for custom data types
+- **Validation Support**: Built-in error states for form validation
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## 🔗 Related Components
 

@@ -18,9 +18,9 @@ interface SearchObjectsFromDBProps<
   appLabel?: string;
   modelName?: string;
   filterChannel?: boolean;
-  limit_query?: number;
-  limit_select?: number;
-  key_name?: string;
+  limitQuery?: number;
+  limitSelect?: number;
+  keyName?: string;
   placeholder?: string;
   searchUrl?: string;
   selected: T[];
@@ -34,9 +34,10 @@ interface SearchObjectsFromDBProps<
  * <SearchObjectsFromDB<UserType>
  *  token={authToken}
  *  handle={channelHandle}
- *  set={setSelectedUser}
- *  key_name="display_name"
+ *  setSelected={setSelectedUser}
+ *  keyName="display_name"
  *  selected={selectedUsers}
+ *  limitSelect={5}
  * />
  * ```
  * @param {SearchObjectsFromDBProps<T>} props - The component props
@@ -46,10 +47,10 @@ interface SearchObjectsFromDBProps<
  * @param {string} props.appLabel - The app label for the API request
  * @param {string} props.modelName - The model name for the API request
  * @param {boolean} props.filterChannel - The filter channel for the API request
- * @param {number} props.limit_query - 0 means unlimited, 1 means only one result
- * @param {number} props.limit_select - The limit user can select (0 means unlimited)
+ * @param {number} props.limitQuery - 0 means unlimited, 1 means only one result
+ * @param {number} props.limitSelect - The limit user can select (0 means unlimited)
  * @param {T[]} props.options - The options for the API request
- * @param {keyof T | "name_plus_username"} props.key_name - The key_name to display search results (option[key_name])
+ * @param {keyof T | "name_plus_username"} props.keyName - The keyName to display search results (option[keyName])
  * @param {string} props.placeholder - The placeholder for the API request
  * @param {string} props.searchUrl - The search url for the API request
  * @param {T[]} props.selected - The selected for the API request
@@ -66,10 +67,10 @@ function SearchObjectsFromDB<
   appLabel,
   modelName,
   filterChannel = false,
-  limit_query = 5,
-  limit_select = 0,
+  limitQuery = 5,
+  limitSelect = 0,
   options,
-  key_name = "title",
+  keyName = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
   selected,
@@ -110,7 +111,7 @@ function SearchObjectsFromDB<
       // Build user channel search urls
       url = appLabel
         ? `${API_HOST_URL}channels/${handle}/dynamic-search/?app_label=${appLabel}&model_name=${modelName}&value=${input}&filter_channel=${filterChannel}`
-        : `${API_HOST_URL}auth/${handle}/search-user/${input}/?limit=${limit_query}`;
+        : `${API_HOST_URL}auth/${handle}/search-user/${input}/?limit=${limitQuery}`;
     }
 
     try {
@@ -139,7 +140,7 @@ function SearchObjectsFromDB<
     modelName,
     handle,
     filterChannel,
-    limit_query,
+    limitQuery,
   ]);
 
   /**
@@ -191,16 +192,16 @@ function SearchObjectsFromDB<
         setSelected(selected.filter((item) => item.id !== option.id));
       } else if (
         !existingOption &&
-        (limit_select === 0 || selected.length < limit_select)
+        (limitSelect === 0 || selected.length < limitSelect)
       ) {
-        // If limit_select is 0 or the selected length is less than limit_select, add the option to the selected array
+        // If limitSelect is 0 or the selected length is less than limitSelect, add the option to the selected array
         setSelected([...selected, option]);
-      } else if (limit_select === 1) {
-        // If limit_select is 1, set the selected option to the option
+      } else if (limitSelect === 1) {
+        // If limitSelect is 1, set the selected option to the option
         setSelected([option]);
       }
     },
-    [selected, setSelected, limit_select]
+    [selected, setSelected, limitSelect]
   );
 
   return (
@@ -253,7 +254,7 @@ function SearchObjectsFromDB<
                   }}
                 />
               )}
-              {option?.[key_name] || option?.title || ""}
+              {option?.[keyName] || option?.title || ""}
               {isItemSelected(option as T) ? (
                 <CloseOutlinedIcon
                   className="ihub-delete-icon ihub-ml-auto"
@@ -278,7 +279,7 @@ function SearchObjectsFromDB<
               className="ihub-fs-sm ihub-border-bottom ihub-pb-2 ihub-flex ihub-items-center"
               key={item?.id}
             >
-              {item[key_name] || item.title}
+              {item[keyName] || item.title}
               <CloseOutlinedIcon
                 className="ihub-delete-icon ihub-ml-auto"
                 onClick={() => handleSelect(item as T, true)}
@@ -294,7 +295,7 @@ function SearchObjectsFromDB<
           <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">Selected Options:</h4>
           {selected.map((item) => (
             <li className="ihub-default-values" key={item?.id}>
-              {item[key_name] || item.title}
+              {item[keyName] || item.title}
             </li>
           ))}
         </ul>

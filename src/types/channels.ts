@@ -106,4 +106,6 @@ export interface ChannelType {
   timestamp: string;
   owner: number;
   industry: string;
+  detail?: string | null;
+  [key: string]: any;
 }

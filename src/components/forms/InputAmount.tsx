@@ -132,6 +132,7 @@ const InputAmount: React.FC<InputAmountProps> = ({
     }
 
     // Format the value with commas
+    setNumberValue(Number(value));
     const formatted = formatNumberWithCommas(value);
     setDisplayValue(formatted);
   }, [value]);
@@ -154,6 +155,11 @@ const InputAmount: React.FC<InputAmountProps> = ({
 
     // Calculate the raw numeric value
     const numericValue = numericString === "" ? 0 : parseFloat(numericString);
+
+    // Prevent recurssion if value are the same.
+    if (numericValue === numberValue) {
+      return;
+    }
 
     // Format with commas for display
     let formattedValue = inputValue;

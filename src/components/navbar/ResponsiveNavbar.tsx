@@ -60,6 +60,29 @@ const ResponsiveNavbar = ({
   const userSession = session as Session;
   const user = userSession?.user;
 
+  // Helper function to get display name from user object
+  const getUserDisplayName = () => {
+    if (!user?.name) return "";
+    
+    // If name is a string, return it directly
+    if (typeof user.name === "string") {
+      return user.name;
+    }
+    
+    // If name is an object with full_name, first_name, or last_name
+    if (typeof user.name === "object") {
+      const nameObj = user.name as any;
+      return nameObj.full_name || 
+             `${nameObj.first_name || ""} ${nameObj.last_name || ""}`.trim() ||
+             nameObj.email || 
+             "";
+    }
+    
+    return "";
+  };
+
+  const userDisplayName = getUserDisplayName();
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -318,11 +341,11 @@ const ResponsiveNavbar = ({
                       />
                     ) : (
                       <div className="ihub-user-initials">
-                        {user?.name?.charAt(0) || "U"}
+                        {userDisplayName.charAt(0) || "U"}
                       </div>
                     )}
                     <span className="ihub-user-name ihub-hide-sm">
-                      {user?.name}
+                      {userDisplayName}
                       <span className="ihub-dropdown-arrow"></span>
                     </span>
                   </div>

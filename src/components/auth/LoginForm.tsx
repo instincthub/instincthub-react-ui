@@ -206,7 +206,9 @@ const LoginForm = ({
   preventMultipleSubmissions = true,
 }: LoginFormPropsType) => {
   const router = useRouter();
-  const { error, callbackUrl } = searchParams;
+  const { error, callbackUrl: rawCallbackUrl } = searchParams;
+  // Ensure callbackUrl is properly decoded if it comes as an encoded URL parameter
+  const callbackUrl = rawCallbackUrl ? decodeURIComponent(rawCallbackUrl) : undefined;
 
   // Core state
   const [message, setMessage] = useState<string>("");
@@ -619,6 +621,8 @@ const LoginForm = ({
 
           if (callbackUrl) {
             context.callbackUrl = callbackUrl;
+            // Ensure callbackUrl is saved in cookies for the redirect after session updates
+            setCookie("callbackUrl", callbackUrl, 30);
           }
 
           // Call success handlers
@@ -731,25 +735,22 @@ const LoginForm = ({
 
   // Unified redirect handler
   const handleRedirect = useCallback(
-    (user: SessionUserType, callbackUrl?: string) => {
+    (user: SessionUserType, passedCallbackUrl?: string) => {
       if (onSuccessRedirect) {
-        onSuccessRedirect(user, callbackUrl);
+        onSuccessRedirect(user, passedCallbackUrl);
         return;
       }
 
       const cookiesCallbackUrl = getCookie("callbackUrl");
+      // Use passed URL first, fall back to cookie, ensuring we have a valid redirect URL
+      const finalCallbackUrl = passedCallbackUrl || cookiesCallbackUrl;
 
       // Priority order for redirects
-      if (callbackUrl) {
+      if (finalCallbackUrl) {
         if (clearCallbackAfterUse) {
           setCookie("callbackUrl", "", -1);
         }
-        router.push(callbackUrl);
-      } else if (cookiesCallbackUrl) {
-        if (clearCallbackAfterUse) {
-          setCookie("callbackUrl", "", -1);
-        }
-        router.push(cookiesCallbackUrl);
+        router.push(finalCallbackUrl);
       } else if (redirectPath) {
         router.push(redirectPath);
       } else if (type === "skills") {
@@ -779,7 +780,6 @@ const LoginForm = ({
     },
     [
       onSuccessRedirect,
-      callbackUrl,
       clearCallbackAfterUse,
       redirectPath,
       type,
@@ -928,12 +928,9 @@ const LoginForm = ({
     if (callbackUrl) {
       setCookie("callbackUrl", callbackUrl, 30);
     }
-
-    // Redirect if session is already valid
-    if (session && session?.user) {
-      router.push(callbackUrl || "/");
-    }
-  }, [callbackUrl, session]);
+    // Remove direct redirect - let the main validation flow handle it
+    // This was causing conflicts with the proper redirect logic
+  }, [callbackUrl]);
 
   // Simple session-based redirect (without API validation)
   useEffect(() => {

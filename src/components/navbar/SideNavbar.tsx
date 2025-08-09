@@ -605,8 +605,13 @@ const SideNavbar = ({
     .filter(Boolean)
     .join(" ");
 
+  // Set CSS variable for dynamic sidebar width (for resizable sidebar)
+  const containerStyle: React.CSSProperties = {
+    '--ihub-sidenav-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth,
+  } as React.CSSProperties;
+
   return (
-    <div className={containerClass}>
+    <div className={containerClass} style={containerStyle}>
       {/* Backdrop for mobile */}
       {isMobile && getIsExpanded() && showBackdrop && (
         <div
