@@ -74,7 +74,7 @@ export const CHANNEL_LEARNER_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
@@ -86,7 +86,7 @@ export const CHANNEL_BLOGGER_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
@@ -98,7 +98,7 @@ export const CHANNEL_EVENT_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
@@ -111,7 +111,7 @@ export const CHANNEL_MODERATOR_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
@@ -123,7 +123,7 @@ export const CHANNEL_INSTRUCTOR_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
@@ -134,48 +134,48 @@ export const CHANNEL_ADMIN_ROLES: InstructorType[] = [
   "ADMIN",
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
  * Channel registrar roles with user registration and academic record permissions.
- * Includes registrar-specific capabilities plus financial and super admin roles.
+ * Includes registrar-specific capabilities plus financial and super_admin roles.
  */
 export const CHANNEL_REGISTRAR_ROLES: InstructorType[] = [
   "REGISTRAR",
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
  * Channel finance roles with financial management and billing permissions.
- * Includes finance-specific capabilities plus super admin role.
+ * Includes finance-specific capabilities plus super_admin role.
  */
 export const CHANNEL_FINANCE_ROLES: InstructorType[] = [
   "FINANCE",
-  "SUPER ADMIN",
+  "SUPER_ADMIN",
 ];
 
 /**
- * Channel super admin roles with complete system access and control.
- * This is the most restrictive role set with only super admin permissions.
+ * Channel super_admin roles with complete system access and control.
+ * This is the most restrictive role set with only super_admin permissions.
  */
-export const CHANNEL_SUPER_ADMIN_ROLES: InstructorType[] = ["SUPER ADMIN"];
+export const CHANNEL_SUPER_ADMIN_ROLES: InstructorType[] = ["SUPER_ADMIN"];
 
 /**
  * Role mapping object that connects role names to their corresponding permission arrays.
  * Used by hasUserPermission function to dynamically select appropriate permissions
  * based on the provided roleName parameter.
- * 
+ *
  * @example
  * ```ts
  * // Get permissions for instructor role
  * const instructorPermissions = ROLE_MAP['INSTRUCTOR'];
- * // Returns: ["INSTRUCTOR", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
- * 
+ * // Returns: ["INSTRUCTOR", "ADMIN", "REGISTRAR", "FINANCE", "SUPER_ADMIN"]
+ *
  * // Get permissions for finance role
  * const financePermissions = ROLE_MAP['FINANCE'];
- * // Returns: ["FINANCE", "SUPER ADMIN"]
+ * // Returns: ["FINANCE", "SUPER_ADMIN"]
  * ```
  */
 export const ROLE_MAP: Record<string, InstructorType[]> = {
@@ -197,8 +197,6 @@ export const ROLE_MAP: Record<string, InstructorType[]> = {
   FINANCE: CHANNEL_FINANCE_ROLES,
   /** Maps to CHANNEL_SUPER_ADMIN_ROLES - complete system access (underscore format) */
   SUPER_ADMIN: CHANNEL_SUPER_ADMIN_ROLES,
-  /** Maps to CHANNEL_SUPER_ADMIN_ROLES - complete system access (space format) */
-  "SUPER ADMIN": CHANNEL_SUPER_ADMIN_ROLES,
 };
 
 /**

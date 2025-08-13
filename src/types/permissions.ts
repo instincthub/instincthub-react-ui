@@ -7,4 +7,4 @@ export type InstructorType =
   | "ADMIN" // Oversees platform management and user roles.
   | "REGISTRAR" // Manages learner enrollments and records.
   | "FINANCE" // Handles platform finances and transactions.
-  | "SUPER ADMIN"; // Ultimate authority over all roles and settings.
+  | "SUPER_ADMIN"; // Ultimate authority over all roles and settings.
