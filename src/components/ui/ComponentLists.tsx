@@ -528,6 +528,14 @@ const ComponentLists = () => {
       repo_path: "src/components/auth/useExternalData.ts",
       example_path: "docs/static-docs/components/useExternalData.md",
     },
+    {
+      name: "PermissionWrapper",
+      description:
+        "Component that conditionally renders children based on user permissions using role-based access control",
+      category: "Auth",
+      repo_path: "src/components/auth/PermissionWrapper.tsx",
+      example_path: "docs/static-docs/components/PermissionWrapper.md",
+    },
 
     // Navbar
     {

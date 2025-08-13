@@ -138,6 +138,7 @@ export { default as useStableRandom } from "./components/auth/useStableRandom";
 export { default as useExternalData } from "./components/auth/useExternalData";
 export { default as ClientOnly } from "./components/auth/ClientOnly";
 export { default as SideNavbarContext } from "./components/navbar/SideNavbarContext";
+export { default as PermissionWrapper } from "./components/auth/PermissionWrapper"
 
 // Redux exports
 export * from "./components/lib/redux";

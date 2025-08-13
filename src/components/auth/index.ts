@@ -4,6 +4,7 @@ export { default as ClientDetector } from "./ClientDetector";
 export { default as ClientOnly } from "./ClientOnly";
 export { default as IsUsernameEmailTaken } from "./IsUsernameEmailTaken";
 export { default as PasswordsMatch } from "./PasswordsMatch";
+export { default as PermissionWrapper } from "./PermissionWrapper";
 export { default as FromInstinctHub } from "./FromInstinctHub";
 export { default as LoginForm } from "./LoginForm";
 export { default as ReactClientProviders } from "./ReactClientProviders";
