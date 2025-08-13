@@ -25,6 +25,7 @@ interface SearchObjectsFromDBProps<
   searchUrl?: string;
   selected: T[];
   err?: boolean;
+  required?: boolean;
 }
 
 /**
@@ -75,6 +76,7 @@ function SearchObjectsFromDB<
   searchUrl,
   selected,
   err = false,
+  required = false,
 }: SearchObjectsFromDBProps<T>): JSX.Element {
   const [input, setInput] = useState<string>("");
   const [data, setData] = useState<SearchObjectItemType[]>([]);
@@ -207,7 +209,11 @@ function SearchObjectsFromDB<
   return (
     <div className="ihub-react-search-container">
       <div className="ihub-react-search card">
-        {label && <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">{label}</h4>}
+        {label && (
+          <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">
+            {label} {required && <span className="ihub-required">*</span>}
+          </h4>
+        )}
         <div className="ihub-search-input">
           <input
             type="text"
@@ -216,6 +222,7 @@ function SearchObjectsFromDB<
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
+            required={required && !selected.length}
           />
           <div className="ihub-search-icons">
             {input && (
@@ -254,7 +261,7 @@ function SearchObjectsFromDB<
                   }}
                 />
               )}
-              {option?.[keyName] || option?.title || ""}
+              {option[keyName] || option?.title || ""}
               {isItemSelected(option as T) ? (
                 <CloseOutlinedIcon
                   className="ihub-delete-icon ihub-ml-auto"

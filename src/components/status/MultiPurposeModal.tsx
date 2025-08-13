@@ -27,11 +27,20 @@ interface MultiPurposeModalProps {
   /**
    * Controls whether the modal should force re-render when children change
    * @default true
+   * @deprecated Use refreshStrategy instead for better control
    * Set to false when using forms or components that manage their own state
    */
   enableContentRefresh?: boolean;
   /**
-   * Preserves scroll position when content refreshes (only works when enableContentRefresh is true)
+   * Content refresh strategy
+   * - 'none': Never force refresh (best for forms with inputs)
+   * - 'smart': Refresh only on structural changes (default)
+   * - 'aggressive': Always refresh on any change (original behavior)
+   * @default 'smart'
+   */
+  refreshStrategy?: 'none' | 'smart' | 'aggressive';
+  /**
+   * Preserves scroll position when content refreshes
    * @default true
    */
   preserveScrollPosition?: boolean;
@@ -43,24 +52,34 @@ interface MultiPurposeModalProps {
  * @component
  * @example
  * ```tsx
- * // For forms - disable content refresh to prevent scroll jumping
+ * // For forms - no forced refresh to preserve input focus
  * <MultiPurposeModal
  *   isOpen={isOpen}
  *   onClose={onClose}
  *   title="User Form"
- *   enableContentRefresh={false}
+ *   refreshStrategy="none"
  * >
  *   <UserForm />
  * </MultiPurposeModal>
  *
- * // For dynamic content - enable content refresh (default behavior)
+ * // For dynamic content - smart refresh (default)
  * <MultiPurposeModal
  *   isOpen={isOpen}
  *   onClose={onClose}
  *   title="Dynamic Content"
- *   enableContentRefresh={true}
+ *   refreshStrategy="smart"
  * >
  *   {dynamicContent}
+ * </MultiPurposeModal>
+ * 
+ * // For complete refresh needs
+ * <MultiPurposeModal
+ *   isOpen={isOpen}
+ *   onClose={onClose}
+ *   title="Fully Dynamic"
+ *   refreshStrategy="aggressive"
+ * >
+ *   {completelyDynamicContent}
  * </MultiPurposeModal>
  * ```
  *
@@ -78,8 +97,9 @@ interface MultiPurposeModalProps {
  * @param disableScroll Whether to disable body scrolling when modal is open
  * @param handleSubmit Function to call when the modal is submitted
  * @param removeForm Whether to remove the default form element
- * @param enableContentRefresh Whether to force re-render when children change (default: true)
- * @param preserveScrollPosition Whether to maintain scroll position during refreshes (default: true)
+ * @param enableContentRefresh (Deprecated) Use refreshStrategy instead
+ * @param refreshStrategy Content refresh strategy - 'none' | 'smart' | 'aggressive'
+ * @param preserveScrollPosition Whether to maintain scroll position during refreshes
  */
 const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
   ({
@@ -97,31 +117,123 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     disableScroll = true,
     handleSubmit,
     removeForm = false,
-    enableContentRefresh = true,
+    enableContentRefresh,
+    refreshStrategy = 'smart',
     preserveScrollPosition = true,
   }) => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [contentKey, setContentKey] = useState<number>(0);
+    const [structuralKey, setStructuralKey] = useState<number>(0);
     const modalBodyRef = useRef<HTMLDivElement>(null);
+    const previousChildrenRef = useRef<ReactNode>(children);
+    const focusInfoRef = useRef<{
+      id?: string;
+      value?: string;
+      selectionStart?: number | null;
+      selectionEnd?: number | null;
+    }>({});
 
-    // Conditional re-render logic based on enableContentRefresh prop
+    // Determine actual refresh strategy (backward compatibility)
+    const actualStrategy = enableContentRefresh === false ? 'none' : 
+                          enableContentRefresh === true ? 'aggressive' : 
+                          refreshStrategy;
+
+    // Helper function to detect if children structure changed significantly
+    const hasStructuralChange = useCallback((prevChildren: ReactNode, newChildren: ReactNode): boolean => {
+      // If types are different, it's a structural change
+      if (typeof prevChildren !== typeof newChildren) return true;
+      
+      // If one is null/undefined and the other isn't
+      if (!prevChildren !== !newChildren) return true;
+      
+      // For arrays, check if length changed
+      if (Array.isArray(prevChildren) && Array.isArray(newChildren)) {
+        if (prevChildren.length !== newChildren.length) return true;
+      }
+      
+      // For React elements, check if type changed
+      if (React.isValidElement(prevChildren) && React.isValidElement(newChildren)) {
+        if (prevChildren.type !== newChildren.type) return true;
+      }
+      
+      return false;
+    }, []);
+
+    // Helper function to preserve focus
+    const preserveFocus = useCallback(() => {
+      const activeElement = document.activeElement as HTMLInputElement | HTMLTextAreaElement;
+      if (activeElement && modalBodyRef.current?.contains(activeElement)) {
+        focusInfoRef.current = {
+          id: activeElement.id,
+          value: activeElement.value,
+          selectionStart: activeElement.selectionStart,
+          selectionEnd: activeElement.selectionEnd,
+        };
+      }
+    }, []);
+
+    // Helper function to restore focus
+    const restoreFocus = useCallback(() => {
+      if (focusInfoRef.current.id) {
+        setTimeout(() => {
+          const element = document.getElementById(focusInfoRef.current.id!) as HTMLInputElement | HTMLTextAreaElement;
+          if (element) {
+            element.focus();
+            if (focusInfoRef.current.value !== undefined && 'value' in element) {
+              element.value = focusInfoRef.current.value;
+              if (focusInfoRef.current.selectionStart !== null && 
+                  focusInfoRef.current.selectionStart !== undefined &&
+                  focusInfoRef.current.selectionEnd !== null && 
+                  focusInfoRef.current.selectionEnd !== undefined) {
+                element.setSelectionRange(focusInfoRef.current.selectionStart, focusInfoRef.current.selectionEnd);
+              }
+            }
+          }
+          // Clear the focus info after restoring
+          focusInfoRef.current = {};
+        }, 0);
+      }
+    }, []);
+
+    // Handle content refresh based on strategy
     useEffect(() => {
-      if (!enableContentRefresh) {
-        // Skip the forced re-render when disabled
+      if (actualStrategy === 'none') {
+        // No forced refresh at all
         return;
       }
 
       let scrollTop = 0;
+      const hasActiveFormElement = document.activeElement && 
+                                   modalBodyRef.current?.contains(document.activeElement) &&
+                                   ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
 
-      // Store current scroll position if we want to preserve it
+      // Store scroll position if needed
       if (preserveScrollPosition && modalBodyRef.current) {
         scrollTop = modalBodyRef.current.scrollTop;
       }
 
-      // Force re-render when children change
-      setContentKey((prevKey) => prevKey + 1);
+      if (actualStrategy === 'aggressive') {
+        // Always refresh (original behavior)
+        if (hasActiveFormElement) {
+          preserveFocus();
+        }
+        setContentKey((prevKey) => prevKey + 1);
+        if (hasActiveFormElement) {
+          restoreFocus();
+        }
+      } else if (actualStrategy === 'smart') {
+        // Only refresh on structural changes
+        const isStructuralChange = hasStructuralChange(previousChildrenRef.current, children);
+        
+        if (isStructuralChange && !hasActiveFormElement) {
+          // Only update if there's a structural change and no active form element
+          setStructuralKey((prevKey) => prevKey + 1);
+        }
+        
+        previousChildrenRef.current = children;
+      }
 
-      // Restore scroll position after the re-render
+      // Restore scroll position
       if (preserveScrollPosition && scrollTop > 0) {
         setTimeout(() => {
           if (modalBodyRef.current) {
@@ -129,7 +241,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
           }
         }, 0);
       }
-    }, [children, enableContentRefresh, preserveScrollPosition]);
+    }, [children, actualStrategy, preserveScrollPosition, hasStructuralChange, preserveFocus, restoreFocus]);
 
     // Handle modal visibility with animation
     useEffect(() => {
@@ -245,14 +357,26 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       return null;
     }
 
-    // Conditionally apply the contentKey only when refresh is enabled
+    // Determine which key to use based on strategy
+    const getModalBodyKey = () => {
+      switch (actualStrategy) {
+        case 'none':
+          return undefined; // No key, natural React updates only
+        case 'smart':
+          return structuralKey; // Key changes only on structural changes
+        case 'aggressive':
+          return contentKey; // Key changes on every update
+        default:
+          return undefined;
+      }
+    };
+
     const modalBodyProps = {
       ref: modalBodyRef,
       className: "ihub-modal-body ihub-txt-modal",
       style: { height: height },
+      key: getModalBodyKey(),
     };
-    
-    const modalBodyKey = enableContentRefresh ? contentKey : undefined;
 
     return (
       <div
@@ -265,14 +389,14 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
         {removeForm ? (
           <div className={fullClassName}>
             {headerContent}
-            <div key={modalBodyKey} {...modalBodyProps}>{children}</div>
+            <div {...modalBodyProps}>{children}</div>
             {footerSection}
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className={fullClassName}>
               {headerContent}
-              <div key={modalBodyKey} {...modalBodyProps}>{children}</div>
+              <div {...modalBodyProps}>{children}</div>
               {footerSection}
             </div>
           </form>
@@ -288,18 +412,28 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     // Always re-render if isOpen state changes
     if (prevProps.isOpen !== nextProps.isOpen) return false;
 
-    // Handle children changes based on enableContentRefresh setting
-    if (nextProps.enableContentRefresh) {
-      // When refresh is enabled, always re-render on children change
-      if (prevProps.children !== nextProps.children) return false;
-    } else {
-      // When refresh is disabled, only re-render if it's a completely different component type
-      if (
-        prevProps.children !== nextProps.children &&
-        typeof prevProps.children !== typeof nextProps.children
-      ) {
+    // Determine the actual refresh strategy for both prev and next
+    const prevStrategy = prevProps.enableContentRefresh === false ? 'none' : 
+                        prevProps.enableContentRefresh === true ? 'aggressive' : 
+                        prevProps.refreshStrategy || 'smart';
+    
+    const nextStrategy = nextProps.enableContentRefresh === false ? 'none' : 
+                        nextProps.enableContentRefresh === true ? 'aggressive' : 
+                        nextProps.refreshStrategy || 'smart';
+
+    // Handle children changes based on refresh strategy
+    if (nextStrategy === 'none') {
+      // With 'none' strategy, don't force re-render for children changes
+      // React will handle updates naturally
+    } else if (nextStrategy === 'smart') {
+      // With 'smart' strategy, only re-render on type changes
+      if (prevProps.children !== nextProps.children &&
+          typeof prevProps.children !== typeof nextProps.children) {
         return false;
       }
+    } else if (nextStrategy === 'aggressive') {
+      // With 'aggressive' strategy, always re-render on children change
+      if (prevProps.children !== nextProps.children) return false;
     }
 
     // Always re-render if footerContent changes
@@ -311,6 +445,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
     // Check for other important prop changes
     if (
       prevProps.size !== nextProps.size ||
+      prevProps.height !== nextProps.height ||
       prevProps.showFooter !== nextProps.showFooter ||
       prevProps.showCloseButton !== nextProps.showCloseButton ||
       prevProps.closeOnOverlayClick !== nextProps.closeOnOverlayClick ||
@@ -318,7 +453,7 @@ const MultiPurposeModal: React.FC<MultiPurposeModalProps> = React.memo(
       prevProps.disableScroll !== nextProps.disableScroll ||
       prevProps.handleSubmit !== nextProps.handleSubmit ||
       prevProps.removeForm !== nextProps.removeForm ||
-      prevProps.enableContentRefresh !== nextProps.enableContentRefresh ||
+      prevStrategy !== nextStrategy ||
       prevProps.preserveScrollPosition !== nextProps.preserveScrollPosition
     ) {
       return false;

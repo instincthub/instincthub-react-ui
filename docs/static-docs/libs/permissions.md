@@ -23,7 +23,12 @@ import React, { useState } from "react";
 import {
   headerUsernamePermission,
   headerKeyPermission,
-  findPermissions
+  findPermissions,
+  hasUserPermission,
+  CHANNEL_LEARNER_ROLES,
+  CHANNEL_INSTRUCTOR_ROLES,
+  CHANNEL_ADMIN_ROLES,
+  ROLE_MAP
 } from "@instincthub/react-ui/lib";
 
 /**
@@ -461,15 +466,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <div className="ihub-card ihub-p-4">
             <h5>
               <i className="pi pi-user ihub-me-2"></i>
-              Client-side Permission Hook
+              Client-side Permission Hook (Updated)
             </h5>
             <pre className="ihub-bg-light ihub-p-3" style={{ fontSize: "11px" }}>
 {`// hooks/usePermissions.ts
 import { useSession } from 'next-auth/react';
-import { findPermissions } from '@instincthub/react-ui/lib';
+import { hasUserPermission, findPermissions } from '@instincthub/react-ui/lib';
 
 interface UsePermissionsReturn {
-  hasPermission: (permissionArray: string[]) => boolean;
+  hasPermission: (accessType: string, roleName?: string) => boolean;
+  hasLegacyPermission: (permissionArray: string[]) => boolean;
   userRole: string | null;
   isLoading: boolean;
 }
@@ -477,26 +483,45 @@ interface UsePermissionsReturn {
 export const usePermissions = (): UsePermissionsReturn => {
   const { data: session, status } = useSession();
   
-  const hasPermission = useCallback((permissionArray: string[]) => {
+  // NEW: Use the hasUserPermission function for better role-based checking
+  const hasPermission = useCallback((accessType: string, roleName?: string) => {
+    if (!session?.user) return false;
+    
+    return hasUserPermission({
+      accessType,
+      permissions: session.user.permissions, // If available
+      roleName: roleName || session.user.role
+    });
+  }, [session]);
+
+  // Legacy method for backward compatibility
+  const hasLegacyPermission = useCallback((permissionArray: string[]) => {
     if (!session?.user?.role) return false;
     return !!findPermissions(permissionArray, session.user.role);
   }, [session]);
 
   return {
     hasPermission,
+    hasLegacyPermission,
     userRole: session?.user?.role || null,
     isLoading: status === 'loading'
   };
 };
 
-// Component usage
+// Component usage with NEW hasUserPermission
 const AdminPanel = () => {
   const { hasPermission, isLoading } = usePermissions();
 
   if (isLoading) return <LoadingSpinner />;
 
-  const canManageUsers = hasPermission(['ADMIN', 'SUPER_ADMIN']);
-  const canAccessFinance = hasPermission(['FINANCE', 'SUPER_ADMIN']);
+  // NEW: More semantic permission checking
+  const canManageUsers = hasPermission('ADMIN');
+  const canAccessFinance = hasPermission('FINANCE');
+  const hasInstructorAccess = hasPermission('INSTRUCTOR');
+  
+  // NEW: Check permissions for specific roles
+  const hasAdminLevelAccess = hasPermission('ADMIN', 'ADMIN');
+  const hasSuperAdminAccess = hasPermission('SUPER ADMIN', 'SUPER_ADMIN');
 
   return (
     <div>
@@ -507,12 +532,47 @@ const AdminPanel = () => {
       {canAccessFinance && (
         <FinanceSection />
       )}
-      {!canManageUsers && !canAccessFinance && (
+      {hasInstructorAccess && (
+        <InstructorPanel />
+      )}
+      {hasSuperAdminAccess && (
+        <SuperAdminControls />
+      )}
+      {!canManageUsers && !canAccessFinance && !hasInstructorAccess && (
         <div>You don't have permission to access any admin features.</div>
       )}
     </div>
   );
-};`}
+};
+
+// NEW: Role-based component wrapper
+const PermissionWrapper = ({ 
+  accessType, 
+  roleName, 
+  children,
+  fallback 
+}: {
+  accessType: string;
+  roleName?: string;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}) => {
+  const { hasPermission } = usePermissions();
+  
+  if (hasPermission(accessType, roleName)) {
+    return <>{children}</>;
+  }
+  
+  return fallback ? <>{fallback}</> : null;
+};
+
+// Usage of PermissionWrapper
+<PermissionWrapper 
+  accessType="ADMIN" 
+  fallback={<div>Access denied</div>}
+>
+  <AdminOnlyContent />
+</PermissionWrapper>`}
             </pre>
           </div>
         </div>
@@ -573,7 +633,12 @@ npm install @instincthub/react-ui
 import {
   headerUsernamePermission,
   headerKeyPermission,
-  findPermissions
+  findPermissions,
+  hasUserPermission,
+  CHANNEL_LEARNER_ROLES,
+  CHANNEL_INSTRUCTOR_ROLES,
+  CHANNEL_ADMIN_ROLES,
+  ROLE_MAP
 } from '@instincthub/react-ui/lib';
 ```
 
@@ -625,12 +690,48 @@ Searches for a permission in an array of permissions.
 
 **Returns:** string | undefined - Found permission or undefined
 
+### `hasUserPermission(params: object): boolean`
+**NEW:** Checks if user has required permission with dynamic role-based selection.
+
+**Parameters:**
+- `accessType` (string) - The permission type to check for
+- `permissions` (string[] | InstructorType[], optional) - Array of user permissions
+- `roleName` (string, optional) - Role name to select predefined permission set
+
+**Returns:** boolean - True if user has the required permission
+
+**Examples:**
+```tsx
+// Check with explicit permissions
+const hasAccess = hasUserPermission({
+  accessType: 'ADMIN',
+  permissions: ['USER', 'ADMIN', 'MODERATOR']
+});
+
+// Use role-based permissions
+const hasInstructorAccess = hasUserPermission({
+  accessType: 'INSTRUCTOR',
+  roleName: 'INSTRUCTOR'
+});
+
+// Use default permissions (CHANNEL_LEARNER_ROLES)
+const hasLearnerAccess = hasUserPermission({
+  accessType: 'LEARNER'
+});
+```
+
 ## 🔒 Security Features
 
 ### Header Validation
 - **Custom Header Check**: Validates `x-instincthub-next-header` against environment variable
 - **Username Verification**: Ensures session username matches request header
 - **CSRF Protection**: Custom headers help prevent cross-site request forgery
+
+### Role-Based Permission System
+- **Dynamic Role Selection**: Uses ROLE_MAP to select appropriate permissions based on role
+- **Hierarchical Permissions**: Each role includes higher-level administrative permissions
+- **Case-Insensitive Matching**: Permission checks are case-insensitive for flexibility
+- **Default Fallback**: Uses CHANNEL_LEARNER_ROLES when no specific role is provided
 
 ### Environment Variables Required
 ```bash
@@ -642,14 +743,89 @@ NEXT_PUBLIC_X_INSTINCTHUB_NEXT_HEADER=your-secret-header-value
 - Expects `session.user.username` property
 - Validates session existence before checks
 
+## 📋 Available Role Constants
+
+### Permission Role Arrays
+All role constants follow a hierarchical structure where each role includes higher-level permissions:
+
+```tsx
+import { 
+  CHANNEL_LEARNER_ROLES,
+  CHANNEL_BLOGGER_ROLES,
+  CHANNEL_EVENT_ROLES,
+  CHANNEL_MODERATOR_ROLES,
+  CHANNEL_INSTRUCTOR_ROLES,
+  CHANNEL_ADMIN_ROLES,
+  CHANNEL_REGISTRAR_ROLES,
+  CHANNEL_FINANCE_ROLES,
+  CHANNEL_SUPER_ADMIN_ROLES,
+  ROLE_MAP 
+} from '@instincthub/react-ui/lib';
+
+// Most permissive - includes all roles
+console.log(CHANNEL_LEARNER_ROLES);
+// ["LEARNER", "BLOGGER", "MODERATOR", "INSTRUCTOR", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Content creation permissions
+console.log(CHANNEL_BLOGGER_ROLES);
+// ["BLOGGER", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Event management permissions
+console.log(CHANNEL_EVENT_ROLES);
+// ["EVENT", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Moderation and teaching permissions
+console.log(CHANNEL_MODERATOR_ROLES);
+// ["MODERATOR", "INSTRUCTOR", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Teaching and course management permissions
+console.log(CHANNEL_INSTRUCTOR_ROLES);
+// ["INSTRUCTOR", "ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Administrative permissions
+console.log(CHANNEL_ADMIN_ROLES);
+// ["ADMIN", "REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Registration and academic record permissions
+console.log(CHANNEL_REGISTRAR_ROLES);
+// ["REGISTRAR", "FINANCE", "SUPER ADMIN"]
+
+// Financial management permissions
+console.log(CHANNEL_FINANCE_ROLES);
+// ["FINANCE", "SUPER ADMIN"]
+
+// Most restrictive - super admin only
+console.log(CHANNEL_SUPER_ADMIN_ROLES);
+// ["SUPER ADMIN"]
+```
+
+### Role Mapping Object
+The `ROLE_MAP` provides dynamic access to role permissions:
+
+```tsx
+// Dynamic role-based permission checking
+const getRolePermissions = (roleName: string) => {
+  return ROLE_MAP[roleName.toUpperCase()] || CHANNEL_LEARNER_ROLES;
+};
+
+// Examples
+console.log(ROLE_MAP['INSTRUCTOR']); // CHANNEL_INSTRUCTOR_ROLES
+console.log(ROLE_MAP['FINANCE']);    // CHANNEL_FINANCE_ROLES
+console.log(ROLE_MAP['SUPER_ADMIN']); // CHANNEL_SUPER_ADMIN_ROLES
+console.log(ROLE_MAP['SUPER ADMIN']); // CHANNEL_SUPER_ADMIN_ROLES (space format supported)
+```
+
 ## 💡 Use Cases
 
-- **API Route Protection**: Secure Next.js API endpoints
-- **User Authorization**: Validate user permissions for actions
-- **Header Security**: Implement custom header validation
-- **Session Validation**: Ensure authenticated requests
-- **Role-based Access**: Check user roles against permission arrays
-- **Microservice Security**: Validate requests between services
+- **API Route Protection**: Secure Next.js API endpoints with role-based access control
+- **User Authorization**: Validate user permissions for actions using dynamic role selection
+- **Header Security**: Implement custom header validation for CSRF protection
+- **Session Validation**: Ensure authenticated requests with username verification
+- **Role-based Access**: Check user roles against hierarchical permission arrays
+- **Microservice Security**: Validate requests between services with standardized headers
+- **Dynamic Permission Checking**: Use role names to automatically select appropriate permission sets
+- **Component Access Control**: Show/hide UI components based on user permissions
+- **Multi-tenant Applications**: Support different permission levels across channels
 
 ## ⚠️ Known Issues
 

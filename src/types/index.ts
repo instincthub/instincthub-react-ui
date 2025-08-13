@@ -2,6 +2,7 @@ import * as React from "react";
 import { Session } from "./auth";
 export * from "./payments";
 export * from "./channels";
+export * from "./permissions";
 
 declare global {
   namespace JSX {

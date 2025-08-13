@@ -26,7 +26,7 @@ export default function SearchObjectsFromDBExample() {
         handle={"skills"}
         setSelected={setValue}
         selected={value}
-        key_name="display_name"
+        keyName="display_name"
         options={defaultOptions}
       />
 
