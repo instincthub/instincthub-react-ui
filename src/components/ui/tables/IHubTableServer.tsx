@@ -12,7 +12,7 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import { ApiResponseType, DataResponseType, TableColumnType } from "@/types";
+import { ApiResponseType, DataResponseType, SearchParamsType, TableColumnType } from "@/types";
 import { debounce } from "lodash";
 import { ServerPaginationInfoType, FetchParamsType } from "@/types";
 import { API_HOST_URL, getNestedValue, reqOptions } from "../../lib";
@@ -34,6 +34,9 @@ interface IHubTableServerPropsType<T> {
   // API and fetching
   endpointPath: string;
   initialParams?: Partial<FetchParamsType>;
+  
+  /** External search parameters that trigger table refetch when changed */
+  searchParams?: SearchParamsType;
 
   // Custom data mapping (for non-standard APIs)
   dataAdapter?: (apiResponse: any) => ApiResponseType<T>;
@@ -89,6 +92,7 @@ interface IHubTableServerPropsType<T> {
  *   columns={columns}
  *   endpointPath={"/api/program-courses"}
  *   initialParams={{ sort: "title", direction: "asc" }}
+ *   searchParams={{ category: "active", status: "published" }}
  *   title="Program Courses"
  *   showSearch={true}
  *   enableSorting={true}
@@ -125,6 +129,7 @@ interface IHubTableServerPropsType<T> {
  * @prop {any<T>[]} defaultData - The default data of the table
  * @prop {string} endpointPath - The path to the API endpoint
  * @prop {Partial<FetchParamsType>} initialParams - The initial parameters for the API request
+ * @prop {Record<string, any>} searchParams - External search parameters that trigger table refetch when changed
  * @prop {string} title - The title of the table
  * @prop {boolean} showSearch - Whether to show the search input
  * @prop {boolean} enableSorting - Whether to enable sorting
@@ -153,6 +158,7 @@ export const IHubTableServer = forwardRef<
     defaultData,
     endpointPath,
     initialParams = {},
+    searchParams,
     dataAdapter,
     title,
     emptyStateMessage = "No data available",
@@ -260,6 +266,15 @@ export const IHubTableServer = forwardRef<
           apiParams.append("ordering", `${prefix}${params.sort}`);
         }
 
+        // Add external search parameters if provided
+        if (searchParams) {
+          Object.entries(searchParams).forEach(([key, value]) => {
+            if (value !== undefined && value !== null && value !== "") {
+              apiParams.append(key, String(value));
+            }
+          });
+        }
+
         const options = reqOptions("GET", null, token);
         const url = `${API_HOST_URL}${endpointPath}?${apiParams.toString()}`;
 
@@ -291,7 +306,7 @@ export const IHubTableServer = forwardRef<
         setLoading(false);
       }
     },
-    []
+    [searchParams]
   );
 
   // Handle search input change
@@ -494,6 +509,15 @@ export const IHubTableServer = forwardRef<
       isMounted = false;
     };
   }, [params, dataAdapter, onFetchError]);
+
+  // Watch for searchParams changes and trigger refetch
+  useEffect(() => {
+    // Only trigger refetch if searchParams exists and component has been initialized
+    if (searchParams && !initialRenderRef.current) {
+      // Trigger a refetch by updating params state
+      setParams((prev) => ({ ...prev }));
+    }
+  }, [searchParams]);
 
   // Loading state
   if (loading && initialRenderRef.current) {

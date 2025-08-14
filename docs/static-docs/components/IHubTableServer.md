@@ -2,13 +2,13 @@
 
 **Category:** UI | **Type:** component
 
-Server-side table component with built-in pagination, sorting, filtering, and external refresh control
+Server-side table component with built-in pagination, sorting, filtering, external refresh control, and dynamic search parameters
 
 **File Location:** `src/components/ui/tables/IHubTableServer.tsx`
 
 ## 🏷️ Tags
 
-`ui`, `table`, `data`, `server`, `pagination`, `sorting`, `filtering`, `refresh`, `forwardRef`
+`ui`, `table`, `data`, `server`, `pagination`, `sorting`, `filtering`, `refresh`, `forwardRef`, `searchParams`, `dynamic`
 
 ```tsx
 "use client";
@@ -27,6 +27,7 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
  */
 const IHubTableServerExamples = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [searchParams, setSearchParams] = useState<Record<string, any>>({});
   
   // Create ref for table control
   const tableRef = useRef<IHubTableServerRef>(null);
@@ -459,6 +460,64 @@ const IHubTableServerExamples = () => {
         />
       </div>
 
+      {/* Table with Dynamic Search Parameters */}
+      <div className="ihub-card ihub-mb-4">
+        <h2>Table with Dynamic Search Parameters</h2>
+        <p>Control table filtering using external searchParams that trigger automatic refetch</p>
+        
+        <div style={{ marginBottom: "1rem", display: "flex", gap: "1rem", alignItems: "center" }}>
+          <label>
+            Department:
+            <select 
+              onChange={(e) => setSearchParams({ ...searchParams, department: e.target.value })}
+              className="ihub-select"
+            >
+              <option value="">All Departments</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Business">Business</option>
+            </select>
+          </label>
+          
+          <label>
+            Status:
+            <select 
+              onChange={(e) => setSearchParams({ ...searchParams, status: e.target.value })}
+              className="ihub-select"
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </label>
+          
+          <label>
+            Min GPA:
+            <input 
+              type="number" 
+              step="0.1" 
+              min="0" 
+              max="4"
+              onChange={(e) => setSearchParams({ ...searchParams, min_gpa: e.target.value })}
+              className="ihub-input"
+              placeholder="0.0"
+            />
+          </label>
+        </div>
+        
+        <IHubTableServer
+          columns={studentsColumns}
+          defaultData={studentsData}
+          endpointPath="/api/students" // Would include searchParams in API request
+          searchParams={searchParams}
+          title="Filtered Students Table"
+          showSearch={true}
+          searchPlaceholder="Search students..."
+          enableSorting={true}
+          keyExtractor={(row) => row.id}
+        />
+      </div>
+
       {/* Invoices Table Example */}
       <div className="ihub-card ihub-mb-4">
         <h2>Invoices Management Table</h2>
@@ -526,8 +585,12 @@ const handleRefreshData = () => {
   endpointPath="/api/students"
   initialParams={{
     sort: "name",
-    direction: "asc",
-    department: "Computer Science"
+    direction: "asc"
+  }}
+  searchParams={{
+    department: "Computer Science",
+    status: "active",
+    min_gpa: "3.0"
   }}
   title="Students from API"
   showSearch={true}
@@ -588,10 +651,54 @@ const handleRefreshData = () => {
               <li>Use appropriate column widths</li>
               <li>Provide clear empty state messages</li>
               <li>Use <code>ref</code> for external refresh control</li>
+              <li>Use <code>searchParams</code> for dynamic filtering</li>
+              <li>Combine <code>initialParams</code> and <code>searchParams</code> appropriately</li>
             </ul>
           </div>
         </div>
         
+        <div className="ihub-mt-4">
+          <h4>Dynamic Search Parameters:</h4>
+          <p>Use the <code>searchParams</code> prop to control table filtering from parent components. Changes to searchParams automatically trigger a data refetch:</p>
+          <div className="ihub-code-block">
+            <pre>
+{`import { useState } from 'react';
+import { IHubTableServer } from '@instincthub/react-ui';
+
+function FilterableTable() {
+  const [searchParams, setSearchParams] = useState({
+    department: 'Computer Science',
+    status: 'active'
+  });
+
+  const handleFilterChange = (newFilters) => {
+    // Table will automatically refetch with new parameters
+    setSearchParams({ ...searchParams, ...newFilters });
+  };
+
+  return (
+    <>
+      <div className="filters">
+        <select onChange={(e) => handleFilterChange({ department: e.target.value })}>
+          <option value="">All Departments</option>
+          <option value="CS">Computer Science</option>
+          <option value="ENG">Engineering</option>
+        </select>
+      </div>
+      
+      <IHubTableServer
+        columns={columns}
+        endpointPath="/api/students"
+        searchParams={searchParams} // API request includes these params
+        // ... other props
+      />
+    </>
+  );
+}`}
+            </pre>
+          </div>
+        </div>
+
         <div className="ihub-mt-4">
           <h4>External Refresh Control:</h4>
           <p>The component exposes a <code>refresh</code> method through ref that allows parent components to trigger a data refresh:</p>
@@ -624,6 +731,20 @@ function ParentComponent() {
           </div>
         </div>
         
+        <div className="ihub-mt-4">
+          <h4>API Request Format with searchParams:</h4>
+          <p>When <code>searchParams</code> are provided, they are included in the API request URL:</p>
+          <div className="ihub-code-block">
+            <pre>
+{`// Example API request URL with searchParams
+GET /api/students?limit=10&offset=0&ordering=name&search=john&department=Computer%20Science&status=active&min_gpa=3.0
+
+// searchParams = { department: "Computer Science", status: "active", min_gpa: "3.0" }
+// Combined with internal params: limit, offset, ordering, search`}
+            </pre>
+          </div>
+        </div>
+
         <div className="ihub-mt-4">
           <h4>API Response Format:</h4>
           <div className="ihub-code-block">
