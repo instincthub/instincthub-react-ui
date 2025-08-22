@@ -397,6 +397,7 @@ const IHubTableServerExamples = () => {
           showSearch={true}
           searchPlaceholder="Search students..."
           enableSorting={true}
+          showRowNumbers={true}
           keyExtractor={(row) => row.id}
         />
       </div>
@@ -428,6 +429,8 @@ const IHubTableServerExamples = () => {
           keyExtractor={(row) => row.id}
           stickyHeader={true}
           maxHeight="400px"
+          showRowNumbers={true}
+          rowNumberStartFrom={1}
           onFetchError={handleFetchError}
         />
       </div>
@@ -545,6 +548,27 @@ const IHubTableServerExamples = () => {
         />
       </div>
 
+      {/* Row Numbering Example */}
+      <div className="ihub-card ihub-mb-4">
+        <h2>Table with Row Numbering</h2>
+        <p>Shows row numbers that work correctly with pagination</p>
+        
+        <IHubTableServer
+          columns={invoicesColumns}
+          defaultData={invoicesData}
+          endpointPath=""
+          title="Numbered Invoices List"
+          showSearch={true}
+          searchPlaceholder="Search invoices..."
+          enableSorting={true}
+          showRowNumbers={true}
+          rowNumberStartFrom={100} // Custom starting number
+          rowsPerPageOptions={[3, 5, 10]}
+          defaultRowsPerPage={3}
+          keyExtractor={(row) => row.id}
+        />
+      </div>
+
       {/* Compact Table Example */}
       <div className="ihub-card ihub-mb-4">
         <h2>Compact Courses Table</h2>
@@ -608,6 +632,8 @@ const handleRefreshData = () => {
   keyExtractor={(row) => row.id}
   stickyHeader={true}
   maxHeight="600px"
+  showRowNumbers={true}
+  rowNumberStartFrom={1}
   dataAdapter={(apiResponse) => ({
     data: apiResponse.results,
     pagination: {
@@ -653,6 +679,8 @@ const handleRefreshData = () => {
               <li>Use <code>ref</code> for external refresh control</li>
               <li>Use <code>searchParams</code> for dynamic filtering</li>
               <li>Combine <code>initialParams</code> and <code>searchParams</code> appropriately</li>
+              <li>Enable <code>showRowNumbers</code> for better data identification</li>
+              <li>Use <code>rowNumberStartFrom</code> for custom numbering sequences</li>
             </ul>
           </div>
         </div>
@@ -741,6 +769,31 @@ GET /api/students?limit=10&offset=0&ordering=name&search=john&department=Compute
 
 // searchParams = { department: "Computer Science", status: "active", min_gpa: "3.0" }
 // Combined with internal params: limit, offset, ordering, search`}
+            </pre>
+          </div>
+        </div>
+
+        <div className="ihub-mt-4">
+          <h4>Row Numbering Feature:</h4>
+          <p>Enable row numbers to help users identify specific records. Row numbers automatically adjust for pagination:</p>
+          <div className="ihub-code-block">
+            <pre>
+{`<IHubTableServer
+  columns={columns}
+  endpointPath="/api/data"
+  showRowNumbers={true}          // Enable row numbering
+  rowNumberStartFrom={1}         // Start counting from 1 (default)
+  defaultRowsPerPage={10}
+  // ... other props
+/>
+
+// For pagination:
+// Page 1: Shows rows 1, 2, 3, 4, 5...
+// Page 2: Shows rows 11, 12, 13, 14, 15... (if 10 rows per page)
+// Page 3: Shows rows 21, 22, 23, 24, 25...
+
+// Custom starting number:
+// rowNumberStartFrom={100} would show: 100, 101, 102, etc.`}
             </pre>
           </div>
         </div>

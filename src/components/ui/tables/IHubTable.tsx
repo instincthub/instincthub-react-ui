@@ -62,6 +62,8 @@ export interface TableProps<T> {
   };
   refreshable?: boolean;
   onRefresh?: () => Promise<void>;
+  showRowNumbers?: boolean;
+  rowNumberStartFrom?: number;
 }
 
 /**
@@ -98,6 +100,8 @@ export interface TableProps<T> {
  *  exportOptions={exportOptions}
  *  refreshable={refreshable}
  *  onRefresh={onRefresh}
+ *  showRowNumbers={true}
+ *  rowNumberStartFrom={1}
  * />
  * ```
  * @prop {TableColumnType<T>[]} columns - The columns to display in the table
@@ -128,6 +132,8 @@ export interface TableProps<T> {
  * @prop {object} exportOptions - The options for exporting the table
  * @prop {boolean} refreshable - Whether to allow refreshing the table
  * @prop {function} onRefresh - The function to call when the table is refreshed
+ * @prop {boolean} showRowNumbers - Whether to show row numbers for each record
+ * @prop {number} rowNumberStartFrom - The starting number for row numbering (defaults to 1)
  *
  * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableExamples.tsx
  */
@@ -160,6 +166,8 @@ export const IHubTable = <T extends object>({
   exportOptions,
   refreshable = false,
   onRefresh,
+  showRowNumbers = false,
+  rowNumberStartFrom = 1,
 }: TableProps<T>): JSX.Element => {
   // Refs
   const tableRef = useRef<HTMLDivElement>(null);
@@ -404,19 +412,25 @@ export const IHubTable = <T extends object>({
 
       // Simple CSV export example
       if (type === "csv") {
-        const headers = columns
-          .filter((col) => typeof col.accessor === "string")
-          .map((col) => col.header);
-
-        const csvData = data.map((row) =>
-          columns
+        const headers = [
+          ...(showRowNumbers ? ["#"] : []),
+          ...columns
             .filter((col) => typeof col.accessor === "string")
-            .map((col) => {
-              const accessor = col.accessor as keyof T;
-              return String(row[accessor] ?? "");
-            })
-            .join(",")
-        );
+            .map((col) => col.header)
+        ];
+
+        const csvData = data.map((row, index) => {
+          const rowData = [
+            ...(showRowNumbers ? [String(index + rowNumberStartFrom)] : []),
+            ...columns
+              .filter((col) => typeof col.accessor === "string")
+              .map((col) => {
+                const accessor = col.accessor as keyof T;
+                return String(row[accessor] ?? "");
+              })
+          ];
+          return rowData.join(",");
+        });
 
         const csv = [headers.join(","), ...csvData].join("\n");
 
@@ -629,6 +643,11 @@ export const IHubTable = <T extends object>({
         <table className="ihub-table ihub-scroll-container">
           <thead className={hideHeaderOnMobile ? "ihub-hide-on-mobile" : ""}>
             <tr>
+              {/* Row number column */}
+              {showRowNumbers && (
+                <th style={{ width: "60px", textAlign: "center" }}>#</th>
+              )}
+
               {/* Selection checkbox column */}
               {selectable && (
                 <th className="ihub-checkbox-cell">
@@ -785,6 +804,13 @@ export const IHubTable = <T extends object>({
                       ${isRowSelected(row, rowIndex) ? "ihub-selected-row" : ""}
                     `}
                   >
+                    {/* Row number cell */}
+                    {showRowNumbers && (
+                      <td style={{ textAlign: "center", fontWeight: "500" }}>
+                        {(currentPage - 1) * rowsPerPage + rowIndex + rowNumberStartFrom}
+                      </td>
+                    )}
+
                     {/* Selection checkbox cell */}
                     {selectable && (
                       <td
@@ -846,7 +872,12 @@ export const IHubTable = <T extends object>({
                   {/* Expanded row content */}
                   {expandable && renderExpandedRow && isExpanded && (
                     <tr className="ihub-expanded-row">
-                      <td colSpan={columns.length + (selectable ? 1 : 0) + 1}>
+                      <td colSpan={
+                        columns.length + 
+                        (selectable ? 1 : 0) + 
+                        1 + // expandable column (since we're inside the expandable condition)
+                        (showRowNumbers ? 1 : 0)
+                      }>
                         <div className="ihub-row-details">
                           {renderExpandedRow(row)}
                         </div>

@@ -79,6 +79,10 @@ interface IHubTableServerPropsType<T> {
   stickyHeader?: boolean;
   maxHeight?: string;
   hideHeaderOnMobile?: boolean;
+
+  // Row numbering
+  showRowNumbers?: boolean;
+  rowNumberStartFrom?: number;
 }
 
 /**
@@ -103,6 +107,8 @@ interface IHubTableServerPropsType<T> {
  *   stickyHeader={true}
  *   maxHeight="600px"
  *   hideHeaderOnMobile={true}
+ *   showRowNumbers={true}
+ *   rowNumberStartFrom={1}
  *   token={process.env.NEXT_PUBLIC_TOKEN}
  *   dataAdapter={dataAdapter}
  *   rowsPerPageOptions={[10, 25, 50, 100]}
@@ -145,6 +151,8 @@ interface IHubTableServerPropsType<T> {
  * @prop {boolean} stickyHeader - Whether to enable sticky header
  * @prop {string} maxHeight - The maximum height of the table
  * @prop {boolean} hideHeaderOnMobile - Whether to hide the header on mobile
+ * @prop {boolean} showRowNumbers - Whether to show row numbers for each record
+ * @prop {number} rowNumberStartFrom - The starting number for row numbering (defaults to 1)
  *
  * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx
  */
@@ -180,6 +188,8 @@ export const IHubTableServer = forwardRef<
     stickyHeader = false,
     maxHeight,
     hideHeaderOnMobile = false,
+    showRowNumbers = false,
+    rowNumberStartFrom = 1,
   }: IHubTableServerPropsType<T>,
   ref: any
 ) {
@@ -408,19 +418,25 @@ export const IHubTableServer = forwardRef<
 
           // Simple CSV export example
           if (type === "csv") {
-            const headers = columns
-              .filter((col) => typeof col.accessor === "string")
-              .map((col) => col.header);
-
-            const csvData = exportData.map((row: any) =>
-              columns
+            const headers = [
+              ...(showRowNumbers ? ["#"] : []),
+              ...columns
                 .filter((col) => typeof col.accessor === "string")
-                .map((col) => {
-                  const accessor = col.accessor as keyof T;
-                  return String(row[accessor] ?? "");
-                })
-                .join(",")
-            );
+                .map((col) => col.header)
+            ];
+
+            const csvData = exportData.map((row: any, index: number) => {
+              const rowData = [
+                ...(showRowNumbers ? [String(index + rowNumberStartFrom)] : []),
+                ...columns
+                  .filter((col) => typeof col.accessor === "string")
+                  .map((col) => {
+                    const accessor = col.accessor as keyof T;
+                    return String(row[accessor] ?? "");
+                  })
+              ];
+              return rowData.join(",");
+            });
 
             const csv = [headers.join(","), ...csvData].join("\n");
 
@@ -640,6 +656,11 @@ export const IHubTableServer = forwardRef<
         <table className="ihub-table ihub-scroll-container">
           <thead className={hideHeaderOnMobile ? "ihub-hide-on-mobile" : ""}>
             <tr>
+              {/* Row number column */}
+              {showRowNumbers && (
+                <th style={{ width: "60px", textAlign: "center" }}>#</th>
+              )}
+
               {/* Expandable row icon column */}
               {expandable && renderExpandedRow && (
                 <th style={{ width: "40px" }}></th>
@@ -701,6 +722,13 @@ export const IHubTableServer = forwardRef<
                       onClick={() => onRowClick && onRowClick(row)}
                       className={onRowClick ? "ihub-clickable-row" : ""}
                     >
+                      {/* Row number cell */}
+                      {showRowNumbers && (
+                        <td style={{ textAlign: "center", fontWeight: "500" }}>
+                          {(pagination.currentPage - 1) * pagination.perPage + rowIndex + rowNumberStartFrom}
+                        </td>
+                      )}
+
                       {/* Expandable row toggle cell */}
                       {expandable && renderExpandedRow && (
                         <td onClick={(e) => toggleRowExpansion(rowKey, e)}>
@@ -749,7 +777,11 @@ export const IHubTableServer = forwardRef<
                     {/* Expanded row content */}
                     {expandable && renderExpandedRow && isExpanded && (
                       <tr className="ihub-expanded-row">
-                        <td colSpan={(columns || []).length + 1}>
+                        <td colSpan={
+                          (columns || []).length + 
+                          1 + // expandable column (since we're inside the expandable condition)
+                          (showRowNumbers ? 1 : 0)
+                        }>
                           <div className="ihub-row-details">
                             {renderExpandedRow(row)}
                           </div>

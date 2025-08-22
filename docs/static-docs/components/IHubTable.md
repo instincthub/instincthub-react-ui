@@ -814,6 +814,7 @@ const TableExamples = () => {
           keyExtractor={basicKeyExtractor}
           pagination={true}
           defaultRowsPerPage={10}
+          showRowNumbers={true}
         />
       </div>
 
@@ -838,6 +839,8 @@ const TableExamples = () => {
           renderExpandedRow={renderUserExpandedRow}
           stickyHeader={true}
           maxHeight="500px"
+          showRowNumbers={true}
+          rowNumberStartFrom={1}
           actions={
             <button className="ihub-important-btn">
               <PersonOutlinedIcon style={{ color: "#fff" }} className="ihub-mr-1" />
@@ -974,6 +977,40 @@ const TableExamples = () => {
         />
       </div>
 
+      {/* Row Numbering Example */}
+      <div className="ihub-mb-8">
+        <h2 className="ihub-mb-3">🔢 Table with Row Numbering</h2>
+        <p className="ihub-mb-4">Demonstrates row numbering feature that works perfectly with pagination and sorting.</p>
+        
+        <IHubTable
+          columns={productColumns.slice(0, 4)} // Show fewer columns for clarity
+          data={productData}
+          title="Numbered Product List"
+          showSearch={true}
+          pagination={true}
+          rowsPerPageOptions={[3, 5, 10]}
+          defaultRowsPerPage={3}
+          keyExtractor={productKeyExtractor}
+          showRowNumbers={true}
+          rowNumberStartFrom={100} // Custom starting number
+          sortable={true}
+          exportOptions={{
+            csv: true,
+            fileName: "numbered-products",
+          }}
+        />
+        
+        <div className="ihub-mt-3 ihub-p-3 ihub-bg-light ihub-rounded">
+          <h5>Row Numbering Features:</h5>
+          <ul className="ihub-mb-0">
+            <li><strong>Pagination-aware:</strong> Numbers continue correctly across pages (e.g., 100-102, then 103-105)</li>
+            <li><strong>Custom starting number:</strong> Use <code>rowNumberStartFrom</code> prop to set initial value</li>
+            <li><strong>Export support:</strong> Row numbers are included in CSV/Excel exports</li>
+            <li><strong>Sorting compatible:</strong> Row numbers remain consistent during sorting operations</li>
+          </ul>
+        </div>
+      </div>
+
       {/* Financial Table Example */}
       <div className="ihub-mb-8">
         <h2 className="ihub-mb-3">💰 Financial Data Table</h2>
@@ -1023,6 +1060,7 @@ const TableExamples = () => {
           title="Financial Accounts"
           keyExtractor={basicKeyExtractor}
           pagination={false}
+          showRowNumbers={true}
           actions={
             <button className="ihub-success-btn">
               <AttachMoneyIcon style={{ color: "#fff" }} className="ihub-mr-1" />
@@ -1035,6 +1073,92 @@ const TableExamples = () => {
             fileName: "financial-summary",
           }}
         />
+      </div>
+
+      {/* Props Documentation */}
+      <div className="ihub-mb-8">
+        <h2 className="ihub-mb-3">📋 Row Numbering Props</h2>
+        <p className="ihub-mb-4">Complete guide to row numbering props and their usage.</p>
+        
+        <div className="ihub-code-block">
+          <pre>
+{`// Basic row numbering
+<IHubTable
+  showRowNumbers={true}        // Enable row numbering (default: false)
+  rowNumberStartFrom={1}       // Starting number (default: 1)
+  // ... other props
+/>
+
+// Advanced examples
+<IHubTable
+  showRowNumbers={true}
+  rowNumberStartFrom={100}     // Start from 100: shows 100, 101, 102...
+  pagination={true}
+  defaultRowsPerPage={5}       // Page 1: 100-104, Page 2: 105-109, etc.
+  // ... other props
+/>
+
+// Combined with other features
+<IHubTable
+  showRowNumbers={true}
+  rowNumberStartFrom={1}
+  selectable={true}            // Row numbers appear before checkboxes
+  expandable={true}            // Row numbers appear before expand icons
+  exportOptions={{ csv: true }} // Row numbers included in exports
+  // ... other props
+/>`}
+          </pre>
+        </div>
+        
+        <div className="ihub-mt-4">
+          <h4>Props Reference</h4>
+          <table className="ihub-table ihub-table-bordered">
+            <thead>
+              <tr>
+                <th>Prop</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>showRowNumbers</code></td>
+                <td><code>boolean</code></td>
+                <td><code>false</code></td>
+                <td>Enables row numbering as the first column</td>
+              </tr>
+              <tr>
+                <td><code>rowNumberStartFrom</code></td>
+                <td><code>number</code></td>
+                <td><code>1</code></td>
+                <td>Starting number for row numbering sequence</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="ihub-mt-4">
+          <h4>Key Features</h4>
+          <ul>
+            <li><strong>Pagination Integration:</strong> Row numbers automatically adjust across pages</li>
+            <li><strong>Column Order:</strong> Row numbers always appear as the first column</li>
+            <li><strong>Export Support:</strong> Included in CSV and Excel exports when enabled</li>
+            <li><strong>Custom Starting Numbers:</strong> Use any starting value for specialized numbering</li>
+            <li><strong>Responsive Design:</strong> Numbers are properly styled and centered</li>
+            <li><strong>Sorting Compatibility:</strong> Row numbers remain consistent during data sorting</li>
+          </ul>
+        </div>
+
+        <div className="ihub-mt-4">
+          <h4>Column Order with Row Numbers</h4>
+          <ol>
+            <li><strong>Row Numbers</strong> (when enabled)</li>
+            <li><strong>Selection Checkboxes</strong> (when <code>selectable=true</code>)</li>
+            <li><strong>Expandable Icons</strong> (when <code>expandable=true</code>)</li>
+            <li><strong>Data Columns</strong> (your defined columns)</li>
+          </ol>
+        </div>
       </div>
 
       <div className="ihub-mb-5">
