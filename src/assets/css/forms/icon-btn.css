@@ -1,0 +1,60 @@
+/* Action buttons */
+.ihub-action-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ihub-action-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.ihub-icon-btn {
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.ihub-icon-btn:hover {
+  opacity: 0.8;
+}
+
+.ihub-icon-btn-info {
+  color: #0fabbc;
+}
+
+.ihub-icon-btn-info:hover {
+  background: #0fabbc;
+  color: white;
+}
+
+.ihub-icon-btn-primary {
+  color: #00838f;
+}
+
+.ihub-icon-btn-primary:hover {
+  background: #00838f;
+  color: white;
+}
+
+.ihub-icon-btn-secondary {
+  color: #009ba2;
+}
+
+.ihub-icon-btn-secondary:hover {
+  background: #009ba2;
+  color: white;
+}
+
+.ihub-icon-btn-danger {
+  color: #ea5f5e;
+}
+
+.ihub-icon-btn-danger:hover {
+  background: #ea5f5e;
+  color: white;
+}

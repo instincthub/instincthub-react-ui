@@ -643,6 +643,7 @@ const LoginForm = ({
 
           await signIn("credentials", context);
           setStatus(1);
+          router.refresh()
         } else {
           const errorMsg = res.message || res.detail || "An error occurred";
           setMessage(errorMsg);
