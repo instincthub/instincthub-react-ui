@@ -5,16 +5,24 @@
 
 import { useEffect, useState } from "react";
 import { SVGs } from "../assets/svg/SVGs";
-import TextField from "./forms/TextField";
-import TextArea from "./forms/TextArea";
 import Image from "next/image";
-import { openToast, reqOptions } from "@instincthub/react-ui/lib";
-import { SubmitButton } from "@instincthub/react-ui";
-import { printInputError } from "@/assets/js/help_func";
+import {
+  openToast,
+  reqOptions,
+  printInputError,
+  API_HOST_URL,
+} from "@instincthub/react-ui/lib";
+import { TextField, TextArea, SubmitButton } from "@instincthub/react-ui";
 import * as Sentry from "@sentry/nextjs";
 import { getIPAddress } from "@/lib/leadboard/getIPAddress";
 
-const ContactForm = () => {
+const ContactForm = ({
+  handle,
+  token,
+}: {
+  handle: string;
+  token: string | null;
+}) => {
   const [error, setError] = useState();
   const [status, setStatus] = useState(1);
 
@@ -27,9 +35,9 @@ const ContactForm = () => {
       const formdata = new FormData(e.target);
       formdata.append("ip_data", JSON.stringify(ipData));
 
-      const options = reqOptions("POST", formdata);
+      const options = reqOptions("POST", formdata, token);
 
-      const url = `${process.env.NEXT_PUBLIC_LEAD_API_HOST}contacts/instincthub/contactus/`;
+      const url = `${API_HOST_URL}contacts/${handle}/contactus/`;
       const req = await fetch(url, options);
       const res = await req.json();
 
