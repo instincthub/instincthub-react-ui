@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { NavbarPropsType } from "../../types";
+import { NavbarPropsType, DropdownRenderProps } from "../../types";
 import { Session } from "@/types/auth";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -47,15 +47,22 @@ const ResponsiveNavbar = ({
   bottomBanner,
   hideTopBanner = false,
   hideBottomBanner = false,
+  userDropdownOpen: controlledDropdownOpen,
+  onUserDropdownToggle,
+  renderUserDropdown,
 }: NavbarPropsType) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState<boolean>(false);
+  const [internalDropdownOpen, setInternalDropdownOpen] = useState<boolean>(false);
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
   const [activeUserSubmenu, setActiveUserSubmenu] = useState<number | null>(
     null
   );
   const [theme, setTheme] = useState<"LightMode" | "DarkMode">(initialTheme);
+  
+  // Determine if dropdown is controlled or uncontrolled
+  const isControlled = controlledDropdownOpen !== undefined;
+  const userDropdownOpen = isControlled ? controlledDropdownOpen : internalDropdownOpen;
 
   const userSession = session as Session;
   const user = userSession?.user;
@@ -125,8 +132,7 @@ const ResponsiveNavbar = ({
 
       // Handle user dropdown
       if (userDropdownOpen && !target.closest(".ihub-user-dropdown")) {
-        setUserDropdownOpen(false);
-        setActiveUserSubmenu(null);
+        closeUserDropdown();
       }
 
       // Handle nav submenus
@@ -161,7 +167,25 @@ const ResponsiveNavbar = ({
   };
 
   const toggleUserDropdown = () => {
-    setUserDropdownOpen(!userDropdownOpen);
+    const newState = !userDropdownOpen;
+    
+    if (isControlled) {
+      // Call the external handler for controlled mode
+      onUserDropdownToggle?.(newState);
+    } else {
+      // Update internal state for uncontrolled mode
+      setInternalDropdownOpen(newState);
+    }
+    
+    setActiveUserSubmenu(null);
+  };
+  
+  const closeUserDropdown = () => {
+    if (isControlled) {
+      onUserDropdownToggle?.(false);
+    } else {
+      setInternalDropdownOpen(false);
+    }
     setActiveUserSubmenu(null);
   };
 
@@ -352,87 +376,100 @@ const ResponsiveNavbar = ({
 
                   {userDropdownOpen && (
                     <div className="ihub-dropdown ihub-user-menu-dropdown">
-                      {userAreaLinks.map((link, index) => (
-                        <div key={index} className="ihub-dropdown-item-wrapper">
-                          {link.submenu ? (
-                            <div className="ihub-dropdown-with-submenu">
-                              <a
-                                href="#"
-                                className="ihub-dropdown-item ihub-dropdown-parent"
-                                onClick={(e) => toggleUserSubmenu(index, e)}
-                                target={link.isExternal ? "_blank" : undefined}
-                                rel={
-                                  link.isExternal
-                                    ? "noopener noreferrer"
-                                    : undefined
-                                }
-                              >
-                                {link.icon && (
-                                  <span className="ihub-dropdown-icon">
-                                    {link.icon}
-                                  </span>
-                                )}
-                                {link.title}
-                                <span
-                                  className={`ihub-submenu-caret ${
-                                    activeUserSubmenu === index
-                                      ? "ihub-active"
-                                      : ""
-                                  }`}
-                                ></span>
-                              </a>
+                      {renderUserDropdown ? (
+                        // Custom dropdown content
+                        renderUserDropdown({
+                          user,
+                          isOpen: userDropdownOpen,
+                          toggleDropdown: toggleUserDropdown,
+                          closeDropdown: closeUserDropdown,
+                        } as DropdownRenderProps)
+                      ) : (
+                        // Default dropdown content
+                        <>
+                          {userAreaLinks.map((link, index) => (
+                            <div key={index} className="ihub-dropdown-item-wrapper">
+                              {link.submenu ? (
+                                <div className="ihub-dropdown-with-submenu">
+                                  <a
+                                    href="#"
+                                    className="ihub-dropdown-item ihub-dropdown-parent"
+                                    onClick={(e) => toggleUserSubmenu(index, e)}
+                                    target={link.isExternal ? "_blank" : undefined}
+                                    rel={
+                                      link.isExternal
+                                        ? "noopener noreferrer"
+                                        : undefined
+                                    }
+                                  >
+                                    {link.icon && (
+                                      <span className="ihub-dropdown-icon">
+                                        {link.icon}
+                                      </span>
+                                    )}
+                                    {link.title}
+                                    <span
+                                      className={`ihub-submenu-caret ${
+                                        activeUserSubmenu === index
+                                          ? "ihub-active"
+                                          : ""
+                                      }`}
+                                    ></span>
+                                  </a>
 
-                              {activeUserSubmenu === index && (
-                                <div className="ihub-user-submenu">
-                                  {link.submenu.map((subItem, subIndex) => (
-                                    <Link
-                                      key={subIndex}
-                                      href={subItem.href}
-                                      className="ihub-dropdown-subitem"
-                                      target={
-                                        subItem.isExternal
-                                          ? "_blank"
-                                          : undefined
-                                      }
-                                      rel={
-                                        subItem.isExternal
-                                          ? "noopener noreferrer"
-                                          : undefined
-                                      }
-                                    >
-                                      {subItem.icon && (
-                                        <span className="ihub-dropdown-icon">
-                                          {subItem.icon}
-                                        </span>
-                                      )}
-                                      {subItem.title}
-                                    </Link>
-                                  ))}
+                                  {activeUserSubmenu === index && (
+                                    <div className="ihub-user-submenu">
+                                      {link.submenu.map((subItem, subIndex) => (
+                                        <Link
+                                          key={subIndex}
+                                          href={subItem.href}
+                                          className="ihub-dropdown-subitem"
+                                          target={
+                                            subItem.isExternal
+                                              ? "_blank"
+                                              : undefined
+                                          }
+                                          rel={
+                                            subItem.isExternal
+                                              ? "noopener noreferrer"
+                                              : undefined
+                                          }
+                                        >
+                                          {subItem.icon && (
+                                            <span className="ihub-dropdown-icon">
+                                              {subItem.icon}
+                                            </span>
+                                          )}
+                                          {subItem.title}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
+                              ) : (
+                                <Link
+                                  href={link.href}
+                                  className="ihub-dropdown-item"
+                                >
+                                  {link.icon && (
+                                    <span className="ihub-dropdown-icon">
+                                      {link.icon}
+                                    </span>
+                                  )}
+                                  {link.title}
+                                </Link>
                               )}
                             </div>
-                          ) : (
-                            <Link
-                              href={link.href}
-                              className="ihub-dropdown-item"
-                            >
-                              {link.icon && (
-                                <span className="ihub-dropdown-icon">
-                                  {link.icon}
-                                </span>
-                              )}
-                              {link.title}
-                            </Link>
-                          )}
-                        </div>
-                      ))}
-                      <Link
-                        href="/api/auth/signout"
-                        className="ihub-dropdown-item ihub-signout"
-                      >
-                        <span className="ihub-dropdown-icon">⤴</span>
-                        Sign out
-                      </Link>
+                          ))}
+                          <Link
+                            href="/api/auth/signout"
+                            className="ihub-dropdown-item ihub-signout"
+                          >
+                            <span className="ihub-dropdown-icon">⤴</span>
+                            Sign out
+                          </Link>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>

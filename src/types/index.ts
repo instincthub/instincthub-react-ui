@@ -293,6 +293,13 @@ export interface UserAreaLinkType {
   submenu?: UserSubMenuItemType[];
 }
 
+export interface DropdownRenderProps {
+  user: any;
+  isOpen: boolean;
+  toggleDropdown: () => void;
+  closeDropdown: () => void;
+}
+
 export interface NavbarPropsType {
   session: SessionType | null;
   logoSrc: string;
@@ -305,6 +312,9 @@ export interface NavbarPropsType {
   hideTopBanner?: boolean;
   bottomBanner?: React.ReactNode | JSX.Element | null;
   hideBottomBanner?: boolean;
+  userDropdownOpen?: boolean;
+  onUserDropdownToggle?: (isOpen: boolean) => void;
+  renderUserDropdown?: (props: DropdownRenderProps) => React.ReactNode;
 }
 
 // Define props interface

@@ -567,63 +567,7 @@ small {
 /* .video_component {
   border: 3px solid blue;
 } */
-.addAccount::before {
-  content: "\e7fe";
-  font-family: "Material Icons";
-  -webkit-font-feature-settings: "liga";
-  margin-right: 10px;
-  position: absolute;
-  left: 15px;
-  top: 8px;
-  font-size: 20px;
-  font-weight: 400;
-  margin-right: 10px;
-}
-.stepBackBtn::before {
-  content: "\e5c4";
-  font-family: "Material Icons";
-  -webkit-font-feature-settings: "liga";
-  margin-right: 10px;
-  position: absolute;
-  left: 7px;
-  top: 8px;
-  font-size: 20px;
-  font-weight: 400;
-  margin-right: 10px;
-}
-.switch_acct::before {
-  content: "\e9ed";
-  font-family: "Material Icons";
-  -webkit-font-feature-settings: "liga";
-  margin-right: 10px;
-  position: absolute;
-  left: 19px;
-  top: 8px;
-  font-size: 20px;
-  font-weight: 400;
-  margin-right: 10px;
-}
-.switch_acct::after {
-  content: "\e5e1";
-  font-family: "Material Icons";
-  -webkit-font-feature-settings: "liga";
-  margin-right: 10px;
-  position: absolute;
-  right: 10px;
-  top: 11px;
-}
-.sign_out::before {
-  content: "\e9ba";
-  font-family: "Material Icons";
-  -webkit-font-feature-settings: "liga";
-  margin-right: 10px;
-  position: absolute;
-  left: 14px;
-  top: 8px;
-  font-size: 20px;
-  font-weight: 400;
-  margin-right: 10px;
-}
+
 .DarkLavender {
   background-color: var(--DarkLavender);
 }

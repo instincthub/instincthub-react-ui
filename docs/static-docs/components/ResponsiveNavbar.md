@@ -2,17 +2,21 @@
 
 **Category:** Navbar | **Type:** component
 
-A fully responsive navbar component with mobile menu, submenus, user authentication support, and theme switching capabilities.
+A fully responsive navbar component with mobile menu, submenus, user authentication support, theme switching capabilities, controlled dropdown state, and custom dropdown rendering.
 
 ## 🏷️ Tags
 
-`navbar`, `navigation`, `menu`, `responsive`, `authentication`, `theme-switching`
+`navbar`, `navigation`, `menu`, `responsive`, `authentication`, `theme-switching`, `controlled-dropdown`, `custom-render`
 
 ```tsx
 "use client";
 import React, { useState } from "react";
 import { ResponsiveNavbar } from "@instincthub/react-ui";
-import { NavLinkType, UserAreaLinkType } from "@instincthub/react-ui/types";
+import { 
+  NavLinkType, 
+  UserAreaLinkType,
+  DropdownRenderProps 
+} from "@instincthub/react-ui/types";
 
 /**
  * Example component demonstrating various ways to use the ResponsiveNavbar
@@ -20,6 +24,8 @@ import { NavLinkType, UserAreaLinkType } from "@instincthub/react-ui/types";
 const ResponsiveNavbarExamples = () => {
   const [currentExample, setCurrentExample] = useState<string>("basic");
   const [mockSession, setMockSession] = useState<any>(null);
+  const [controlledDropdown, setControlledDropdown] = useState<boolean>(false);
+  const [useCustomDropdown, setUseCustomDropdown] = useState<boolean>(false);
 
   // Mock session data
   const mockSessionData = {
@@ -324,6 +330,199 @@ const ResponsiveNavbarExamples = () => {
           />
         );
 
+      case "controlled":
+        return (
+          <ResponsiveNavbar
+            session={mockSessionData}
+            logoSrc="https://via.placeholder.com/120x40/8e44ad/ffffff?text=CTRL"
+            logoAlt="Controlled Dropdown"
+            navLinks={basicNavLinks}
+            userAreaLinks={userAreaLinks}
+            theme="LightMode"
+            containerClass="ihub-container"
+            userDropdownOpen={controlledDropdown}
+            onUserDropdownToggle={(isOpen) => {
+              console.log("Dropdown toggled:", isOpen);
+              setControlledDropdown(isOpen);
+            }}
+          />
+        );
+
+      case "custom-dropdown":
+        const renderCustomDropdown = ({ user, closeDropdown }: DropdownRenderProps) => (
+          <div style={{
+            padding: "1rem",
+            backgroundColor: "var(--bg-secondary)",
+            borderRadius: "8px",
+            minWidth: "280px",
+          }}>
+            {/* Custom Header */}
+            <div style={{
+              borderBottom: "1px solid var(--border-color)",
+              paddingBottom: "1rem",
+              marginBottom: "1rem",
+            }}>
+              <h4 style={{ margin: 0, marginBottom: "0.5rem" }}>
+                👋 Welcome back!
+              </h4>
+              <p style={{ margin: 0, fontSize: "0.875rem", opacity: 0.7 }}>
+                {user?.email || "user@example.com"}
+              </p>
+            </div>
+
+            {/* Quick Actions Grid */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "0.5rem",
+              marginBottom: "1rem",
+            }}>
+              <button 
+                style={{
+                  padding: "0.75rem",
+                  backgroundColor: "#3498db",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+                onClick={() => {
+                  alert("Dashboard clicked!");
+                  closeDropdown();
+                }}
+              >
+                <span>📊</span>
+                <span style={{ fontSize: "0.75rem" }}>Dashboard</span>
+              </button>
+              <button 
+                style={{
+                  padding: "0.75rem",
+                  backgroundColor: "#2ecc71",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+                onClick={() => {
+                  alert("Projects clicked!");
+                  closeDropdown();
+                }}
+              >
+                <span>📁</span>
+                <span style={{ fontSize: "0.75rem" }}>Projects</span>
+              </button>
+              <button 
+                style={{
+                  padding: "0.75rem",
+                  backgroundColor: "#9b59b6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+                onClick={() => {
+                  alert("Settings clicked!");
+                  closeDropdown();
+                }}
+              >
+                <span>⚙️</span>
+                <span style={{ fontSize: "0.75rem" }}>Settings</span>
+              </button>
+              <button 
+                style={{
+                  padding: "0.75rem",
+                  backgroundColor: "#e67e22",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                }}
+                onClick={() => {
+                  alert("Support clicked!");
+                  closeDropdown();
+                }}
+              >
+                <span>❓</span>
+                <span style={{ fontSize: "0.75rem" }}>Support</span>
+              </button>
+            </div>
+
+            {/* Progress Section */}
+            <div style={{
+              padding: "0.75rem",
+              backgroundColor: "var(--bg-tertiary)",
+              borderRadius: "4px",
+              marginBottom: "1rem",
+            }}>
+              <div style={{ fontSize: "0.875rem", marginBottom: "0.5rem" }}>
+                Storage Used: 2.5 GB / 10 GB
+              </div>
+              <div style={{
+                height: "8px",
+                backgroundColor: "var(--bg-primary)",
+                borderRadius: "4px",
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  height: "100%",
+                  width: "25%",
+                  backgroundColor: "#3498db",
+                  borderRadius: "4px",
+                }} />
+              </div>
+            </div>
+
+            {/* Sign Out Button */}
+            <button
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                backgroundColor: "#e74c3c",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+              onClick={() => {
+                alert("Signing out...");
+                closeDropdown();
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
+        );
+
+        return (
+          <ResponsiveNavbar
+            session={mockSessionData}
+            logoSrc="https://via.placeholder.com/120x40/e74c3c/ffffff?text=CUSTOM"
+            logoAlt="Custom Dropdown"
+            navLinks={basicNavLinks}
+            userAreaLinks={userAreaLinks}
+            theme="LightMode"
+            containerClass="ihub-container"
+            renderUserDropdown={renderCustomDropdown}
+          />
+        );
+
       case "with-banners":
         return (
           <ResponsiveNavbar
@@ -438,6 +637,24 @@ const ResponsiveNavbarExamples = () => {
         >
           With Banners
         </button>
+
+        <button
+          className={`${
+            currentExample === "controlled" ? "ihub-important-btn" : "ihub-outlined-btn"
+          }`}
+          onClick={() => setCurrentExample("controlled")}
+        >
+          Controlled Dropdown
+        </button>
+
+        <button
+          className={`${
+            currentExample === "custom-dropdown" ? "ihub-important-btn" : "ihub-outlined-btn"
+          }`}
+          onClick={() => setCurrentExample("custom-dropdown")}
+        >
+          Custom Dropdown
+        </button>
       </div>
 
       {/* Authentication Toggle */}
@@ -539,6 +756,60 @@ const ResponsiveNavbarExamples = () => {
           </div>
         )}
 
+        {currentExample === "controlled" && (
+          <div>
+            <h3>Controlled Dropdown State</h3>
+            <p>
+              Demonstrates external control of the user dropdown state using boolean props.
+              The dropdown can be controlled programmatically from parent components.
+            </p>
+            <ul>
+              <li>External dropdown state management</li>
+              <li>Programmatic open/close control</li>
+              <li>State synchronization with parent</li>
+              <li>Callback on dropdown toggle</li>
+              <li>Useful for complex state management scenarios</li>
+            </ul>
+            <div style={{ marginTop: "1rem", padding: "1rem", backgroundColor: "#f0f0f0", borderRadius: "4px" }}>
+              <strong>Controlled State:</strong>
+              <button
+                style={{
+                  marginLeft: "1rem",
+                  padding: "0.5rem 1rem",
+                  backgroundColor: controlledDropdown ? "#e74c3c" : "#27ae60",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setControlledDropdown(!controlledDropdown)}
+              >
+                {controlledDropdown ? "Close Dropdown" : "Open Dropdown"}
+              </button>
+              <span style={{ marginLeft: "1rem" }}>
+                Status: {controlledDropdown ? "🟢 Open" : "🔴 Closed"}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {currentExample === "custom-dropdown" && (
+          <div>
+            <h3>Custom Dropdown Rendering</h3>
+            <p>
+              Shows how to completely customize the dropdown content using a render function.
+              This allows for unique layouts, custom styling, and interactive elements.
+            </p>
+            <ul>
+              <li>Custom dropdown layout and design</li>
+              <li>Quick action buttons grid</li>
+              <li>Progress indicators and stats</li>
+              <li>Custom styling and animations</li>
+              <li>Full control over dropdown behavior</li>
+            </ul>
+          </div>
+        )}
+
         {currentExample === "with-banners" && (
           <div>
             <h3>Navigation with Promotional Banners</h3>
@@ -619,6 +890,17 @@ const ResponsiveNavbarExamples = () => {
           <li><strong>Keyboard Navigation:</strong> Accessibility support</li>
           <li><strong>State Management:</strong> Proper menu state handling</li>
           <li><strong>Event Handling:</strong> Custom click and navigation events</li>
+          <li><strong>Controlled Dropdown:</strong> External state control via props</li>
+          <li><strong>Custom Rendering:</strong> Fully customizable dropdown content</li>
+        </ul>
+
+        <h4>🎯 Advanced Features (New)</h4>
+        <ul>
+          <li><strong>Controlled Mode:</strong> <code>userDropdownOpen</code> and <code>onUserDropdownToggle</code> props for external control</li>
+          <li><strong>Custom Dropdown:</strong> <code>renderUserDropdown</code> prop for custom dropdown content</li>
+          <li><strong>Dropdown Render Props:</strong> Access to user, toggle functions, and state</li>
+          <li><strong>Backward Compatible:</strong> Works with existing implementations</li>
+          <li><strong>Flexible Integration:</strong> Supports both controlled and uncontrolled modes</li>
         </ul>
       </div>
     </div>
@@ -626,6 +908,125 @@ const ResponsiveNavbarExamples = () => {
 };
 
 export default ResponsiveNavbarExamples;
+```
+
+## 📖 API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `session` | `SessionType \| null` | Required | User session object for authentication |
+| `logoSrc` | `string` | Required | URL or path to the logo image |
+| `logoAlt` | `string` | `"Company Logo"` | Alt text for the logo |
+| `navLinks` | `NavLinkType[]` | Required | Array of navigation links |
+| `userAreaLinks` | `UserAreaLinkType[]` | `[]` | Links for user area (dropdown or auth buttons) |
+| `theme` | `"LightMode" \| "DarkMode"` | `"LightMode"` | Initial theme setting |
+| `containerClass` | `string` | `"ihub-container"` | CSS class for the container |
+| `topBanner` | `React.ReactNode` | `null` | Content for top banner |
+| `bottomBanner` | `React.ReactNode` | `null` | Content for bottom banner |
+| `hideTopBanner` | `boolean` | `false` | Hide the top banner |
+| `hideBottomBanner` | `boolean` | `false` | Hide the bottom banner |
+| **`userDropdownOpen`** | `boolean` | `undefined` | **NEW: Controlled dropdown state** |
+| **`onUserDropdownToggle`** | `(isOpen: boolean) => void` | `undefined` | **NEW: Callback when dropdown toggles** |
+| **`renderUserDropdown`** | `(props: DropdownRenderProps) => ReactNode` | `undefined` | **NEW: Custom dropdown renderer** |
+
+### Type Definitions
+
+#### NavLinkType
+```typescript
+interface NavLinkType {
+  title: string;
+  href: string;
+  isExternal?: boolean;
+  highlight?: boolean;
+  submenu?: SubMenuItemType[];
+}
+```
+
+#### UserAreaLinkType
+```typescript
+interface UserAreaLinkType {
+  title: string;
+  href: string;
+  isExternal?: boolean;
+  icon?: string | React.ReactNode;
+  isButton?: boolean;
+  buttonStyle?: "primary" | "outline";
+  submenu?: UserSubMenuItemType[];
+}
+```
+
+#### DropdownRenderProps (NEW)
+```typescript
+interface DropdownRenderProps {
+  user: any;                    // User object from session
+  isOpen: boolean;              // Current dropdown state
+  toggleDropdown: () => void;   // Toggle dropdown function
+  closeDropdown: () => void;    // Close dropdown function
+}
+```
+
+### Usage Examples
+
+#### Basic Usage
+```tsx
+<ResponsiveNavbar
+  session={session}
+  logoSrc="/logo.png"
+  navLinks={navLinks}
+  userAreaLinks={userAreaLinks}
+/>
+```
+
+#### Controlled Dropdown
+```tsx
+const [dropdownOpen, setDropdownOpen] = useState(false);
+
+<ResponsiveNavbar
+  session={session}
+  logoSrc="/logo.png"
+  navLinks={navLinks}
+  userAreaLinks={userAreaLinks}
+  userDropdownOpen={dropdownOpen}
+  onUserDropdownToggle={(isOpen) => setDropdownOpen(isOpen)}
+/>
+```
+
+#### Custom Dropdown Content
+```tsx
+const renderCustomDropdown = ({ user, closeDropdown }) => (
+  <div className="custom-dropdown">
+    <h3>Welcome, {user.name}!</h3>
+    <button onClick={() => handleAction(closeDropdown)}>
+      Custom Action
+    </button>
+    <a href="/signout" onClick={closeDropdown}>
+      Sign Out
+    </a>
+  </div>
+);
+
+<ResponsiveNavbar
+  session={session}
+  logoSrc="/logo.png"
+  navLinks={navLinks}
+  renderUserDropdown={renderCustomDropdown}
+/>
+```
+
+#### Combined Controlled + Custom
+```tsx
+<ResponsiveNavbar
+  session={session}
+  logoSrc="/logo.png"
+  navLinks={navLinks}
+  userDropdownOpen={dropdownOpen}
+  onUserDropdownToggle={setDropdownOpen}
+  renderUserDropdown={({ user, closeDropdown }) => (
+    <CustomDropdown user={user} onClose={closeDropdown} />
+  )}
+/>
 ```
 
 ## 🔗 Related Components
