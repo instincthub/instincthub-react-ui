@@ -31,6 +31,6 @@
     "**/*.tsx",
     "../components/auth/ReduxProvider.tsx",
     "../components/auth/ReactClientProviders.tsx"
-  ],
+, "../components/ui/GetSuccessFailedIcon.tsx"  ],
   "exclude": ["node_modules"]
 }

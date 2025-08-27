@@ -96,6 +96,8 @@ export { default as Pagination } from "./components/ui/pagination/Pagination";
 export { default as PaginationDemo } from "./components/ui/pagination/PaginationDemo";
 export { default as CreateButton } from "./components/ui/create-button/CreateButton";
 export { default as CreateButtonExample } from "./components/ui/create-button/CreateButtonExample";
+export { default as StatusIcon } from "./components/ui/StatusIcon";
+export { default as GetSuccessFailedIcon } from "./components/ui/GetSuccessFailedIcon";
 export * from "./components/ui/cards";
 export * from "./components/ui/charts";
 

@@ -768,3 +768,37 @@ export interface DateTimePickerPropsType {
   /** Input mode: datetime (default), date only, or time only */
   mode?: "datetime" | "date" | "time";
 }
+
+// StatusIcon Types and Props
+
+export type StatusType =
+  | "success"
+  | "error"
+  | "warning"
+  | "info"
+  | "pending"
+  | "loading"
+  | "question"
+  | "check"
+  | "close";
+
+export type IconSize = "small" | "medium" | "large" | "inherit";
+
+export interface StatusIconProps {
+  /** Status type to determine which icon to show */
+  status: StatusType;
+  /** Size of the icon */
+  size?: IconSize;
+  /** Custom CSS classes */
+  className?: string;
+  /** Custom color override */
+  color?: string;
+  /** Show animated loading spinner for pending/loading states */
+  animated?: boolean;
+  /** Custom title/tooltip text */
+  title?: string;
+  /** Click handler */
+  onClick?: () => void;
+  /** Custom style object */
+  style?: React.CSSProperties;
+}
