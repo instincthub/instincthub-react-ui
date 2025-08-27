@@ -184,6 +184,10 @@
   padding: 12px;
 }
 
+.ihub-sidenav-logo img {
+  object-fit: contain;
+}
+
 /* Toggle button */
 .ihub-sidenav-toggle {
   position: absolute;
@@ -574,20 +578,30 @@
 }
 
 /* Desktop: Dynamic margin adjustments based on sidebar state */
-.ihub-sidenav-container-left.ihub-sidenav-container-expanded .ihub-sidenav-main {
-  margin-left: var(--ihub-sidenav-width, 240px); /* Use CSS variable for dynamic width, fallback to 240px */
+.ihub-sidenav-container-left.ihub-sidenav-container-expanded
+  .ihub-sidenav-main {
+  margin-left: var(
+    --ihub-sidenav-width,
+    240px
+  ); /* Use CSS variable for dynamic width, fallback to 240px */
 }
 
-.ihub-sidenav-container-left.ihub-sidenav-container-collapsed .ihub-sidenav-main {
+.ihub-sidenav-container-left.ihub-sidenav-container-collapsed
+  .ihub-sidenav-main {
   margin-left: 64px; /* Match collapsed sidebar width */
 }
 
 /* For right-positioned sidebar */
-.ihub-sidenav-container-right.ihub-sidenav-container-expanded .ihub-sidenav-main {
-  margin-right: var(--ihub-sidenav-width, 240px); /* Use CSS variable for dynamic width, fallback to 240px */
+.ihub-sidenav-container-right.ihub-sidenav-container-expanded
+  .ihub-sidenav-main {
+  margin-right: var(
+    --ihub-sidenav-width,
+    240px
+  ); /* Use CSS variable for dynamic width, fallback to 240px */
 }
 
-.ihub-sidenav-container-right.ihub-sidenav-container-collapsed .ihub-sidenav-main {
+.ihub-sidenav-container-right.ihub-sidenav-container-collapsed
+  .ihub-sidenav-main {
   margin-right: 64px; /* Match collapsed sidebar width */
 }
 
@@ -627,12 +641,12 @@
     margin-right: 0 !important;
     width: 100%;
   }
-  
+
   /* Ensure sidebar properly overlays on mobile */
   .ihub-sidenav-mobile {
     z-index: 1001; /* Above content and backdrop */
   }
-  
+
   /* No margin adjustments needed on mobile since sidebar overlays */
   .ihub-sidenav-container-left .ihub-sidenav-main,
   .ihub-sidenav-container-right .ihub-sidenav-main {
@@ -643,14 +657,16 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   /* Tablet adjustments */
-  .ihub-sidenav-container-left.ihub-sidenav-container-expanded .ihub-sidenav-main {
+  .ihub-sidenav-container-left.ihub-sidenav-container-expanded
+    .ihub-sidenav-main {
     margin-left: 200px; /* Slightly smaller on tablet */
   }
-  
-  .ihub-sidenav-container-right.ihub-sidenav-container-expanded .ihub-sidenav-main {
+
+  .ihub-sidenav-container-right.ihub-sidenav-container-expanded
+    .ihub-sidenav-main {
     margin-right: 200px;
   }
-  
+
   .ihub-sidenav-expanded {
     width: 200px; /* Narrower sidebar on tablet */
   }

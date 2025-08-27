@@ -916,6 +916,13 @@ const ComponentLists = () => {
       repo_path: "src/components/status/Unauthorized.tsx",
       example_path: "docs/static-docs/components/Unauthorized.md",
     },
+    {
+      name: "ModalWrapper",
+      description: "ModalWrapper component",
+      category: "Status",
+      repo_path: "src/components/status/ModalWrapper.tsx",
+      example_path: "docs/static-docs/components/ModalWrapper.md",
+    },
 
     // Tabs
     {

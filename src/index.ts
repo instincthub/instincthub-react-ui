@@ -119,6 +119,7 @@ export { default as MultiPurposeModal } from "./components/status/MultiPurposeMo
 export { default as ModalExamples } from "./components/status/ModalExamples";
 export { default as NotFound } from "./components/status/NotFound";
 export { default as Unauthorized } from "./components/status/Unauthorized";
+export { default as ModalWrapper } from "./components/status/ModalWrapper";
 
 // Tabs
 export { default as Tabs } from "./components/tabs/Tabs";
@@ -138,7 +139,7 @@ export { default as useStableRandom } from "./components/auth/useStableRandom";
 export { default as useExternalData } from "./components/auth/useExternalData";
 export { default as ClientOnly } from "./components/auth/ClientOnly";
 export { default as SideNavbarContext } from "./components/navbar/SideNavbarContext";
-export { default as PermissionWrapper } from "./components/auth/PermissionWrapper"
+export { default as PermissionWrapper } from "./components/auth/PermissionWrapper";
 
 // Redux exports
 export * from "./components/lib/redux";

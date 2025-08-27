@@ -13,6 +13,8 @@ interface DropFileProps {
   maxSize?: number;
   /** Template download URL */
   tmplateUrl?: string;
+  /** Function called when template download button is clicked */
+  onTemplateDownload?: () => void;
   /** Allow multiple files */
   multiple?: boolean;
   /** Custom className */
@@ -25,6 +27,7 @@ const DropFile: React.FC<DropFileProps> = ({
   acceptedTypes,
   maxSize,
   tmplateUrl = "https://github.com/instincthub/images/raw/main/leadcontact_upload_template.xlsx",
+  onTemplateDownload,
   multiple = false,
   className = "",
 }) => {
@@ -107,13 +110,23 @@ const DropFile: React.FC<DropFileProps> = ({
 
         {fileName && <p>File: {fileName}</p>}
       </div>
-      {!fileName && tmplateUrl && (
+      {!fileName && (onTemplateDownload || tmplateUrl) && (
         <div className="ihub-download-template">
           <p>
             PS: Existing contact will be update while new contacts will be
             created.
           </p>
-          <a href={tmplateUrl}>Download Template</a>
+          {onTemplateDownload ? (
+            <button 
+              type="button"
+              onClick={onTemplateDownload}
+              className="ihub-template-download-btn"
+            >
+              Download Template
+            </button>
+          ) : (
+            <a href={tmplateUrl}>Download Template</a>
+          )}
         </div>
       )}
     </div>

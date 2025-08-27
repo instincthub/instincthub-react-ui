@@ -170,14 +170,29 @@ const DropFileExample: React.FC = () => {
           )}
         </div>
 
-        {/* Custom Template */}
+        {/* Custom Template with onClick */}
         <div className="ihub-example-card">
-          <h3>Template Upload</h3>
-          <p>Upload custom templates with special handling</p>
+          <h3>Template Upload with Dynamic Download</h3>
+          <p>Upload templates with dynamic template generation</p>
           <DropFile
             label="Drop template file here"
             onDrop={handleCustomDrop}
             acceptedTypes={[".xlsx", ".docx", ".pptx"]}
+            onTemplateDownload={() => {
+              console.log("Generating custom template...");
+              // Simulate dynamic template generation
+              const templateData = {
+                name: "Custom Template",
+                columns: ["Name", "Email", "Phone", "Company"],
+                timestamp: new Date().toISOString()
+              };
+              
+              // In a real app, you might:
+              // 1. Call an API to generate the template
+              // 2. Show a loading spinner
+              // 3. Download the generated file
+              alert(`Generating template with columns: ${templateData.columns.join(", ")}\n\nTimestamp: ${templateData.timestamp}`);
+            }}
           />
           {customUploadedFile && (
             <div className="ihub-file-info ihub-mt-3">
@@ -243,6 +258,66 @@ const DropFileExample: React.FC = () => {
             label="Drop documents here"
             onDrop={(file) => console.log("Document uploaded:", file)}
             acceptedTypes={[".pdf", ".doc", ".docx", ".txt"]}
+          />
+        </div>
+
+        {/* Async Template Generation */}
+        <div className="ihub-example-card">
+          <h3>Async Template Generation</h3>
+          <p>Template generation with loading states</p>
+          <DropFile
+            label="Drop contact file here"
+            onDrop={(file) => console.log("Contact file uploaded:", file)}
+            acceptedTypes={[".xlsx", ".csv"]}
+            onTemplateDownload={async () => {
+              console.log("Starting async template generation...");
+              
+              try {
+                // Simulate loading state
+                const button = document.querySelector('.ihub-template-download-btn') as HTMLButtonElement;
+                const originalText = button?.textContent;
+                if (button) {
+                  button.textContent = 'Generating...';
+                  button.disabled = true;
+                  button.style.opacity = '0.6';
+                }
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulate template download
+                const templateContent = "Name,Email,Phone,Company\nJohn Doe,john@example.com,123-456-7890,Acme Inc";
+                const blob = new Blob([templateContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'contact-template.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                // Reset button state
+                if (button) {
+                  button.textContent = originalText;
+                  button.disabled = false;
+                  button.style.opacity = '1';
+                }
+
+                alert("Template generated and downloaded successfully!");
+              } catch (error) {
+                console.error("Template generation failed:", error);
+                alert("Failed to generate template. Please try again.");
+                
+                // Reset button state on error
+                const button = document.querySelector('.ihub-template-download-btn') as HTMLButtonElement;
+                if (button) {
+                  button.textContent = 'Download Template';
+                  button.disabled = false;
+                  button.style.opacity = '1';
+                }
+              }
+            }}
           />
         </div>
 
@@ -312,6 +387,47 @@ const handleDrop = (file: File) => {
   onDrop={handleDrop}
   maxSize={5 * 1024 * 1024} // 5MB
   acceptedTypes={[".pdf", ".docx"]}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>With Dynamic Template Download</h3>
+          <pre><code>{`<DropFile
+  label="Drop contact file here"
+  onDrop={handleDrop}
+  acceptedTypes={[".xlsx", ".csv"]}
+  onTemplateDownload={() => {
+    console.log("Generating template...");
+    // Custom template generation logic
+    generateAndDownloadTemplate();
+  }}
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Async Template Generation</h3>
+          <pre><code>{`<DropFile
+  label="Drop file here"
+  onDrop={handleDrop}
+  onTemplateDownload={async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/generate-template');
+      const blob = await response.blob();
+      
+      // Download the generated template
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'template.xlsx';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Template generation failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  }}
 />`}</code></pre>
         </div>
 
