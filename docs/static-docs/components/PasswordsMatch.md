@@ -2,11 +2,100 @@
 
 **Category:** Auth | **Type:** component
 
-Password matching validation component with real-time validation and confirmation
+Password matching validation component with real-time validation, confirmation, and default value support
+
+## Features
+
+- **Real-time Validation**: Password length and matching validation as you type
+- **Default Password Support**: Pre-populate password fields with existing values
+- **Callback Functions**: Get notified when passwords change and their validation status
+- **Visual Feedback**: Clear error states with colored borders and helper text
+- **Security Features**: Password visibility toggle and secure field implementation
+- **TypeScript Support**: Full type definitions and interfaces
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultPassword` | `string` | `""` | Pre-populate the password field with a default value |
+| `onPasswordChange` | `(password: string, isValid: boolean) => void` | - | Callback triggered when password is validated |
+| `onConfirmPasswordChange` | `(confirmPassword: string, isValid: boolean) => void` | - | Callback triggered when password confirmation is validated |
 
 ## 🏷️ Tags
 
-`auth`, `password`, `validation`, `forms`
+`auth`, `password`, `validation`, `forms`, `default-value`, `callbacks`
+
+## Basic Usage
+
+### Simple Password Matching
+```tsx
+import { PasswordsMatch } from '@instincthub/react-ui';
+
+function MyForm() {
+  return (
+    <form>
+      <PasswordsMatch />
+    </form>
+  );
+}
+```
+
+### With Default Password
+```tsx
+import { PasswordsMatch } from '@instincthub/react-ui';
+
+function EditProfileForm() {
+  return (
+    <form>
+      <PasswordsMatch 
+        defaultPassword="existingPassword123"
+        onPasswordChange={(password, isValid) => {
+          console.log('Password:', password, 'Valid:', isValid);
+        }}
+        onConfirmPasswordChange={(confirmPassword, isValid) => {
+          console.log('Confirm Password:', confirmPassword, 'Valid:', isValid);
+        }}
+      />
+    </form>
+  );
+}
+```
+
+### With State Management
+```tsx
+import { PasswordsMatch } from '@instincthub/react-ui';
+import { useState } from 'react';
+
+function FormWithValidation() {
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [confirmPasswordValid, setConfirmPasswordValid] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
+
+  const handlePasswordChange = (password: string, isValid: boolean) => {
+    setPasswordValid(isValid);
+    setCanSubmit(isValid && confirmPasswordValid);
+  };
+
+  const handleConfirmPasswordChange = (confirmPassword: string, isValid: boolean) => {
+    setConfirmPasswordValid(isValid);
+    setCanSubmit(passwordValid && isValid);
+  };
+
+  return (
+    <form>
+      <PasswordsMatch 
+        onPasswordChange={handlePasswordChange}
+        onConfirmPasswordChange={handleConfirmPasswordChange}
+      />
+      <button type="submit" disabled={!canSubmit}>
+        Submit
+      </button>
+    </form>
+  );
+}
+```
+
+## Complete Example
 
 ```tsx
 "use client";
@@ -112,6 +201,23 @@ const PasswordsMatchExamples = () => {
         <p>Simple password confirmation with real-time validation:</p>
         <div className="ihub-p-4" style={{ border: "1px solid #ddd", borderRadius: "8px" }}>
           <PasswordsMatch />
+        </div>
+      </div>
+
+      {/* Default Password Example */}
+      <div className="ihub-mb-5">
+        <h2>With Default Password</h2>
+        <p>Pre-populated password field with validation callbacks:</p>
+        <div className="ihub-p-4" style={{ border: "1px solid #ddd", borderRadius: "8px" }}>
+          <PasswordsMatch 
+            defaultPassword="MySecurePass123"
+            onPasswordChange={(password, isValid) => {
+              console.log('Password updated:', password, 'Valid:', isValid);
+            }}
+            onConfirmPasswordChange={(confirmPassword, isValid) => {
+              console.log('Confirm password updated:', confirmPassword, 'Valid:', isValid);
+            }}
+          />
         </div>
       </div>
 
@@ -333,22 +439,34 @@ const PasswordsMatchExamples = () => {
       <div className="ihub-mt-5">
         <h2>Component Features</h2>
         <div className="ihub-row">
-          <div className="ihub-col-md-6">
+          <div className="ihub-col-md-4">
             <h4>Real-time Validation</h4>
             <ul>
               <li>Password length validation (minimum 8 characters)</li>
               <li>Real-time password matching confirmation</li>
               <li>Visual feedback with border color changes</li>
               <li>Error messages for invalid inputs</li>
+              <li>Cross-field validation between password fields</li>
             </ul>
           </div>
-          <div className="ihub-col-md-6">
+          <div className="ihub-col-md-4">
             <h4>Security Features</h4>
             <ul>
               <li>Password visibility toggle</li>
               <li>Secure password field implementation</li>
               <li>Client-side validation</li>
               <li>Helper text for user guidance</li>
+              <li>Secure state management</li>
+            </ul>
+          </div>
+          <div className="ihub-col-md-4">
+            <h4>Advanced Features</h4>
+            <ul>
+              <li>Default password support</li>
+              <li>Validation callback functions</li>
+              <li>TypeScript interface exports</li>
+              <li>Controlled component pattern</li>
+              <li>Parent component integration</li>
             </ul>
           </div>
         </div>

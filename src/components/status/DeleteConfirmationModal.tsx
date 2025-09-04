@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { useSession } from "next-auth/react";
 import CopyToClipboard from "./CopyToClipBoard";
 import { reqOptions } from "../lib/helpFunction";
 import {
@@ -9,7 +8,6 @@ import {
   useDispatch,
   useSelector,
 } from "../lib/redux";
-import { Session } from "@/types/auth";
 
 /**
  * Custom hook for handling item deletion logic
@@ -24,15 +22,13 @@ import { Session } from "@/types/auth";
 const useDeleteItem = (
   url: string | undefined | null,
   title: string | undefined | null,
+  token: string | null,
   onSuccess: () => void
 ) => {
-  const { data: session } = useSession();
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [error, setError] = useState<string | null>(null);
-
-  const userSession = session as Session;
 
   const deleteItem = useCallback(async () => {
     if (!url) return;
@@ -40,7 +36,6 @@ const useDeleteItem = (
     setStatus("loading");
     setError(null);
 
-    const token = userSession?.accessToken;
     const requestOptions = reqOptions("DELETE", null, token);
 
     try {
@@ -62,12 +57,13 @@ const useDeleteItem = (
       setStatus("error");
       setError("Network error. Please check your connection and try again.");
     }
-  }, [url, userSession, onSuccess]);
+  }, [url, onSuccess]);
 
   return { deleteItem, status, error };
 };
 
 interface DeleteConfirmationModalProps {
+  token: string | null;
   itemTitle?: string;
 }
 
@@ -85,6 +81,7 @@ interface ConfirmDeleteState {
  * <DeleteConfirmationModal
  *   url="http://endpoint"
  *   title="Some Title"
+ *   token={token}
  *   onSuccess={() => {
  *     // Additional actions after successful deletion
  *   }}
@@ -102,9 +99,10 @@ interface ConfirmDeleteState {
  *   }
  * }, [deleteStatus]);
  */
-const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
-  props
-) => {
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  token,
+  ...props
+}) => {
   const [confirmation, setConfirmation] = useState<string>("");
   const dispatch = useDispatch();
   const { url, title } = useSelector(selectConfirmDelete) as ConfirmDeleteState;
@@ -116,6 +114,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
   const { deleteItem, status, error } = useDeleteItem(
     url,
     title,
+    token,
     handleSuccess
   );
 
