@@ -4,6 +4,7 @@ export * from "./courseFilterDuration";
 export * from "./courseSearch";
 export * from "./stepQuestions";
 export * from "./stepContent";
+export * from "./courseDetails";
 export * from "./videoTimestamp";
 export * from "./videoTimestampObject";
 export * from "./courseModules";

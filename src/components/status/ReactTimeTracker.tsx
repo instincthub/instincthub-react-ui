@@ -5,7 +5,7 @@ import { Session } from "@/types/auth";
 import { useParams } from "next/navigation";
 import {
   useDispatch,
-  useSelector,
+  useSelector,  
   selectIPAdress,
   IPAdress,
 } from "../lib/redux";

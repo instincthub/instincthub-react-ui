@@ -31,8 +31,8 @@ import {
   selectedCourses,
   screenSize,
   channelCallbackUrl,
+  courseDetails,
 } from "./slices";
-import { courseDetails } from "./slices/courseSlice/courseDetails";
 
 export const reducer = {
   objectSlice: objectSlice.reducer,
