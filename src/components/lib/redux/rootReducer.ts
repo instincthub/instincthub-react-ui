@@ -32,6 +32,8 @@ import {
   screenSize,
   channelCallbackUrl,
   courseDetails,
+  videoEndCountdown,
+  unsplashObject,
 } from "./slices";
 
 export const reducer = {
@@ -44,10 +46,12 @@ export const reducer = {
   durations: courseFilterDuration.reducer,
   courseSearch: courseSearch.reducer,
   callbackUrl: channelCallbackUrl.reducer,
+  unsplashObject: unsplashObject.reducer,
   stepQuestions: stepQuestions.reducer,
   stepContent: stepContent.reducer,
   courseDetails: courseDetails.reducer,
   videoTimestamp: videoTimestamp.reducer,
+  videoEndCountdown: videoEndCountdown.reducer,
   videoTimestampObject: videoTimestampObject.reducer,
 
   // navigation

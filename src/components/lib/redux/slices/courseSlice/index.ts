@@ -6,6 +6,7 @@ export * from "./stepQuestions";
 export * from "./stepContent";
 export * from "./courseDetails";
 export * from "./videoTimestamp";
+export * from "./videoEndCountdown";
 export * from "./videoTimestampObject";
 export * from "./courseModules";
 export * from "./courseOverview";

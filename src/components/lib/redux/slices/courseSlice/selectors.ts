@@ -20,6 +20,8 @@ export const selectCourseDetails = (state: ReduxState) =>
 	state.courseDetails.value;
 export const selectVideoTimestamp = (state: ReduxState) =>
 	state.videoTimestamp.value;
+export const selectVideoEndCountdown = (state: ReduxState) =>
+	state.videoEndCountdown.value;
 
 // Creator
 export const selectVideoTimestampObject = (state: ReduxState) =>
