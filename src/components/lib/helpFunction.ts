@@ -561,6 +561,171 @@ export const printErr = (key: string, value: string, index: number): void => {
 };
 
 /**
+ * Removes all error messages and styles from form fields.
+ * Cleans up error classes, borders, and error message elements.
+ */
+export const removeErrMsg = (): void => {
+  // Remove error messages from fields with .s_err class
+  const errElements = document.querySelectorAll(".s_err");
+  if (errElements) {
+    errElements.forEach((element) => {
+      // Remove error styling from field
+      const field = element.querySelector(".field") as HTMLElement | null;
+      if (field) {
+        field.style.border = "none";
+      }
+
+      // Remove error message and reset input/textarea borders
+      const errMsg = element.querySelector(".err_msg");
+      if (errMsg) {
+        errMsg.remove();
+
+        const input = element.querySelector("input") as HTMLInputElement | null;
+        const textarea = element.querySelector("textarea") as HTMLTextAreaElement | null;
+
+        if (input) {
+          input.style.border = "var(--borderDefault)";
+        } else if (textarea) {
+          textarea.style.border = "var(--borderDefault)";
+        }
+      }
+
+      element.classList.remove("s_err");
+    });
+  }
+
+  // Remove error banner messages
+  const errBanner = document.querySelector("#err_message") as HTMLElement | null;
+  if (errBanner) {
+    errBanner.classList.remove("active");
+    const ul = errBanner.querySelector("ul");
+    if (ul) {
+      ul.innerHTML = "";
+    }
+  }
+};
+
+/**
+ * Displays validation errors on form fields.
+ * @param items Object containing field names as keys and error messages as values
+ */
+export const printErrNew = (items: Record<string, string | string[]>): void => {
+  if (!items) return;
+
+  let inputField: Element | null;
+
+  Object.entries(items).forEach((item, index) => {
+    const [key, value] = item;
+    inputField = document.querySelector(`.${key}`);
+
+    // Create error message element
+    const errTag = document.createElement("P");
+    errTag.classList.add("err_msg");
+    errTag.style.color = "var(--TurkishRose)";
+    errTag.textContent = Array.isArray(value) ? value[0] : value;
+
+    // Add error styling if not already present
+    if (
+      inputField &&
+      !inputField.classList.contains("s_err") &&
+      !inputField.querySelector(".err_msg")
+    ) {
+      inputField.classList.add("s_err");
+      inputField.append(errTag);
+
+      const inputElement = inputField.querySelector(".field input") as HTMLInputElement | null;
+      const textareaElement = inputField.querySelector(".field textarea") as HTMLTextAreaElement | null;
+
+      if (
+        inputElement &&
+        (inputElement.getAttribute("type") === "number" ||
+          inputElement.getAttribute("type") === "text" ||
+          inputElement.getAttribute("type") === "email" ||
+          inputElement.getAttribute("type") === "password")
+      ) {
+        inputElement.style.border = "1px solid var(--TurkishRose)";
+        if (index === 0) {
+          const targetInput = inputField.querySelector(`[name="${key}"]`) as HTMLInputElement | null;
+          targetInput?.focus();
+        }
+      } else if (textareaElement) {
+        textareaElement.style.border = "1px solid var(--TurkishRose)";
+      } else {
+        const field = inputField.querySelector(".field") as HTMLElement | null;
+        if (field) {
+          field.style.border = "1px solid var(--TurkishRose)";
+        }
+      }
+
+      inputTagErrorEvent(key, false);
+    }
+  });
+};
+
+/**
+ * Adds error styling and message to a specific input field.
+ * @param tags The class name of the input field wrapper
+ * @param border Whether to add border styling (default: true)
+ */
+export const inputTagErrorEvent = (tags: string, border: boolean = true): void => {
+  const inputFieldWrap = document.querySelector(`div.${tags}`) as HTMLElement | null;
+  const msgWrap = document.querySelector("#err_message") as HTMLElement | null;
+
+  if (!inputFieldWrap || !msgWrap) return;
+
+  // Only add error if not already present
+  if (!inputFieldWrap.classList.contains("s_err")) {
+    inputFieldWrap.classList.add("s_err");
+    msgWrap.classList.add("active");
+
+    // Add border styling if requested
+    if (border) {
+      const field = inputFieldWrap.querySelector(".field") as HTMLElement | null;
+      if (field) {
+        field.style.border = "1px solid var(--TurkishRose)";
+      }
+    }
+
+    // Add error message to the banner
+    const msgTag = document.createElement("LI");
+    const h5 = inputFieldWrap.querySelector("h5");
+    const textLabel = inputFieldWrap.querySelector(".text_label");
+
+    if (h5) {
+      msgTag.textContent = h5.textContent;
+    } else if (textLabel) {
+      msgTag.textContent = textLabel.textContent;
+    }
+
+    const ul = msgWrap.querySelector("ul");
+    if (ul) {
+      ul.append(msgTag);
+    }
+  }
+};
+
+/**
+ * Abbreviates large numbers into a shorter format with suffixes.
+ * @param amount The number to abbreviate
+ * @returns Abbreviated string (e.g., "1.5K", "2.3M")
+ * @example
+ * abbreviateNumber(1500) // Returns "1.5K"
+ * abbreviateNumber(2300000) // Returns "2.3M"
+ */
+export const abbreviateNumber = (amount: number): string => {
+  const suffixes = ["", "K", "M", "B", "T"];
+  const tier = Math.floor(Math.log10(Math.abs(amount)) / 3);
+
+  if (tier === 0) return amount.toString();
+
+  const suffix = suffixes[tier];
+  const scale = Math.pow(10, tier * 3);
+  const scaledAmount = amount / scale;
+
+  return scaledAmount.toFixed(1) + suffix;
+};
+
+/**
  * Handles server response errors for forms.
  * @param status HTTP status code
  * @param items Error or success data
