@@ -8,6 +8,7 @@ interface TextFieldProps {
   label: string;
   required?: boolean;
   defaultValue?: string | number | boolean;
+  placeholder?: string;
   id?: string;
   maxLength?: number;
   width?: string;
@@ -21,6 +22,7 @@ interface TextFieldProps {
   setNameValue?: (name: string, value: string) => void;
   arrayProps?: [number, string];
   setArrayProps?: (props: [number, string], value: string) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 /**
@@ -47,6 +49,19 @@ interface TextFieldProps {
  * @property {boolean} required - Whether the field is required
  * @property {string} placeholder - Placeholder text
  * @property {boolean} disabled - Whether the field is disabled
+ * @property {string} type - Type of the input field (e.g., text, email, password)
+ * @property {string} id - ID of the input field
+ * @property {number} maxLength - Maximum length of the input value
+ * @property {string} width - Width of the input field (e.g., 'auto', '100%')
+ * @property {string} note - Additional note or description below the input field
+ * @property {boolean} active - Whether the field is active (for styling purposes)
+ * @property {"lowercase" | "uppercase" | "capitalize" | "none"} TextTransform - Text transformation style
+ * @property {(value: string) => void} setValue - Function to set the value of the input field
+ * @property {(target: HTMLInputElement) => void} inputTarget - Function to get the input element reference
+ * @property {(name: string, value: string) => void} setNameValue - Function to set the name and value of the input field
+ * @property {[number, string]} arrayProps - Array of properties for dynamic input fields
+ * @property {(props: [number, string], value: string) => void} setArrayProps - Function to set array properties
+ * @property {(e: React.KeyboardEvent<HTMLInputElement>) => void} onKeyDown - Callback for key down events
  * */
 
 function TextField(props: TextFieldProps) {
@@ -115,6 +130,7 @@ function TextField(props: TextFieldProps) {
             ref={inputRef}
             type={props.type}
             name={props.name}
+            placeholder={props.placeholder}
             required={props.required}
             defaultValue={
               typeof props.defaultValue === "boolean"
@@ -132,6 +148,7 @@ function TextField(props: TextFieldProps) {
               props.width === "auto" ? "ihub-width-auto" : ""
             }`}
             readOnly={props.disabled ? props.disabled : false}
+            onKeyDown={props.onKeyDown}
           />
           <span className="ihub-text-label">{props.label}</span>
         </div>
