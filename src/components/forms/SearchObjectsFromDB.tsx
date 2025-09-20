@@ -64,6 +64,7 @@ function SearchObjectsFromDB<
   label,
   token,
   handle,
+  selected,
   setSelected,
   appLabel,
   modelName,
@@ -74,7 +75,6 @@ function SearchObjectsFromDB<
   keyName = "title",
   placeholder = "Search by Username or Email",
   searchUrl,
-  selected,
   err = false,
   required = false,
 }: SearchObjectsFromDBProps<T>): JSX.Element {
@@ -173,12 +173,15 @@ function SearchObjectsFromDB<
    */
   const isItemSelected = useCallback(
     (option: T): boolean => {
+      if (!option || !selected || selected.length === 0) return false;
+
       return selected.some((item) => {
+        if (!item) return false;
         // Check if the item is in the selected array
         const itemId = typeof item === "object" ? item?.id : item;
         const optionId = option?.username || option?.id;
         // Return true if the item is in the selected array
-        return itemId === optionId;
+        return itemId === optionId && itemId != null && optionId != null;
       });
     },
     [selected]
@@ -186,12 +189,14 @@ function SearchObjectsFromDB<
 
   const handleSelect = useCallback(
     (option: T, deleteOption: boolean = false): void => {
-      if (!option || !option.id) return;
-      const existingOption = selected.find((item) => item.id === option.id);
+      if (!option || !option.id || !selected) return;
+
+      const existingOption = selected.find((item) => item?.id === option.id);
 
       if (deleteOption) {
         // If deleteOption is true, remove the option from the selected array
-        setSelected(selected.filter((item) => item.id !== option.id));
+        const filteredItems = selected.filter((item) => item?.id !== option.id);
+        setSelected(filteredItems);
       } else if (
         !existingOption &&
         (limitSelect === 0 || selected.length < limitSelect)
@@ -279,34 +284,36 @@ function SearchObjectsFromDB<
             ""
           )}
         </ul>
-        <ul className="ihub-selected-options ihub-mt-2 ihub-">
-          <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">Selected Options:</h4>
-          {selected.map((item) => (
-            <li
-              className="ihub-fs-sm ihub-border-bottom ihub-pb-2 ihub-flex ihub-items-center"
-              key={item?.id}
-            >
-              {item[keyName] || item.title}
-              <CloseOutlinedIcon
-                className="ihub-delete-icon ihub-ml-auto"
-                onClick={() => handleSelect(item as T, true)}
-              />
-            </li>
-          ))}
-        </ul>
+
+        {/* Selected Options - Only show when there are selected items */}
+        {selected && selected.length > 0 && (
+          <ul className="ihub-selected-options">
+            <h4 className="ihub-fs-md">Selected Options:</h4>
+            {selected.map((item, index) => {
+              if (!item) return null;
+
+              const displayText =
+                (item as any)[keyName] ||
+                item.title ||
+                item.name ||
+                `Item ${index + 1}`;
+              const itemKey = item.id || item.username || `selected-${index}`;
+
+              return (
+                <li key={itemKey}>
+                  <span>{displayText}</span>
+                  <CloseOutlinedIcon
+                    className="ihub-delete-icon"
+                    onClick={() => handleSelect(item as T, true)}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
         {err && <p className="ihub-error">This field is required</p>}
       </div>
-      {/* {selected.length && (
-        <ul className="ihub-selected-options">
-          <h4 className="ihub-fs-sm ihub-mt-2 ihub-mb-2">Selected Options:</h4>
-          {selected.map((item) => (
-            <li className="ihub-default-values" key={item?.id}>
-              {item[keyName] || item.title}
-            </li>
-          ))}
-        </ul>
-      )} */}
     </div>
   );
 }

@@ -170,13 +170,63 @@
   border-radius: 5px;
 }
 
+/* Selected Options Styles */
+.ihub-selected-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--borderDefault);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.ihub-selected-options h4 {
+  margin: 0 0 10px 0;
+  color: var(--Gunmetal);
+  font-weight: 600;
+}
+
+.ihub-selected-options li {
+  background-color: rgba(0, 131, 143, 0.1);
+  border: 1px solid var(--DarkCyan);
+  border-radius: 4px;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--Gunmetal);
+}
+
+.ihub-selected-options .ihub-delete-icon {
+  color: var(--Danger);
+  cursor: pointer;
+  font-size: 18px !important;
+  margin-left: auto;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.ihub-selected-options .ihub-delete-icon:hover {
+  color: var(--TurkishRose);
+  transform: scale(1.1);
+}
+
+.ihub-selected-options .ihub-delete-icon:active {
+  transform: scale(0.95);
+}
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .ihub-react-search {
     max-width: 100%;
   }
-  
+
   .ihub-search-result-item {
     padding: 14px 12px;
+  }
+
+  .ihub-selected-options li {
+    padding: 10px 12px;
   }
 }
