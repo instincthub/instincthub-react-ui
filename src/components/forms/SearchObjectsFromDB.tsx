@@ -123,35 +123,32 @@ function SearchObjectsFromDB<
     setData(options || []);
   }, [options]);
 
-  // Normalize selected prop to prevent mixed data structures
+  // Debug and warn about malformed data (but don't auto-fix to avoid infinite loops)
   useEffect(() => {
     if (selected && selected.length > 0) {
       const flattenedSelected = flattenSelectedArray(selected);
 
-      // Only update if the structure has changed (to avoid infinite loops)
+      // Check if data structure is malformed
       if (JSON.stringify(flattenedSelected) !== JSON.stringify(selected)) {
         console.warn(
-          "SearchObjectsFromDB: Detected malformed selected array, normalizing...",
+          "SearchObjectsFromDB: Detected malformed selected array. Parent should provide flattened data:",
           {
             original: selected,
-            flattened: flattenedSelected,
+            expectedFormat: flattenedSelected,
             keyName: keyName,
           }
         );
-        setSelected(flattenedSelected);
       }
     }
-  }, [selected, setSelected, keyName]);
 
-  // Debug component props
-  useEffect(() => {
+    // Debug component props
     console.log("SearchObjectsFromDB Debug:", {
       keyName,
       selectedLength: selected?.length || 0,
       selectedSample: selected?.[0],
       label,
     });
-  }, [keyName, selected, label]);
+  }, [selected, keyName, label]);
 
   /**
    * Handles search functionality by fetching data from API
