@@ -1,6 +1,6 @@
 {
   "name": "@instincthub/react-ui",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "InstinctHub React UI components and assets in TypeScript",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",

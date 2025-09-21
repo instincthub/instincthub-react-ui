@@ -29,6 +29,35 @@ interface SearchObjectsFromDBProps<
 }
 
 /**
+ * Helper function to flatten nested arrays in selected items
+ * Ensures all items are individual objects, not nested arrays
+ */
+const flattenSelectedArray = <T extends SearchObjectItemType>(
+  selected: T[]
+): T[] => {
+  if (!selected || !Array.isArray(selected)) return [];
+
+  const flattened: T[] = [];
+
+  for (const item of selected) {
+    if (Array.isArray(item)) {
+      // If item is an array, flatten it recursively
+      flattened.push(...flattenSelectedArray(item as T[]));
+    } else if (item && typeof item === "object" && item.id) {
+      // If item is a valid object with an id, add it
+      flattened.push(item);
+    }
+  }
+
+  // Remove duplicates based on id
+  const uniqueItems = flattened.filter(
+    (item, index, arr) => arr.findIndex((i) => i.id === item.id) === index
+  );
+
+  return uniqueItems;
+};
+
+/**
  * Component for searching objects from a database with filtering capabilities
  * @example
  * ```tsx
@@ -93,6 +122,36 @@ function SearchObjectsFromDB<
   useEffect(() => {
     setData(options || []);
   }, [options]);
+
+  // Normalize selected prop to prevent mixed data structures
+  useEffect(() => {
+    if (selected && selected.length > 0) {
+      const flattenedSelected = flattenSelectedArray(selected);
+
+      // Only update if the structure has changed (to avoid infinite loops)
+      if (JSON.stringify(flattenedSelected) !== JSON.stringify(selected)) {
+        console.warn(
+          "SearchObjectsFromDB: Detected malformed selected array, normalizing...",
+          {
+            original: selected,
+            flattened: flattenedSelected,
+            keyName: keyName,
+          }
+        );
+        setSelected(flattenedSelected);
+      }
+    }
+  }, [selected, setSelected, keyName]);
+
+  // Debug component props
+  useEffect(() => {
+    console.log("SearchObjectsFromDB Debug:", {
+      keyName,
+      selectedLength: selected?.length || 0,
+      selectedSample: selected?.[0],
+      label,
+    });
+  }, [keyName, selected, label]);
 
   /**
    * Handles search functionality by fetching data from API
@@ -175,7 +234,10 @@ function SearchObjectsFromDB<
     (option: T): boolean => {
       if (!option || !selected || selected.length === 0) return false;
 
-      return selected.some((item) => {
+      // Use flattened data for consistent checking
+      const flattenedSelected = flattenSelectedArray(selected);
+
+      return flattenedSelected.some((item) => {
         if (!item) return false;
         // Check if the item is in the selected array
         const itemId = typeof item === "object" ? item?.id : item;
@@ -191,18 +253,25 @@ function SearchObjectsFromDB<
     (option: T, deleteOption: boolean = false): void => {
       if (!option || !option.id || !selected) return;
 
-      const existingOption = selected.find((item) => item?.id === option.id);
+      // Flatten the selected array to ensure consistent data structure
+      const flattenedSelected = flattenSelectedArray(selected);
+
+      const existingOption = flattenedSelected.find(
+        (item) => item?.id === option.id
+      );
 
       if (deleteOption) {
-        // If deleteOption is true, remove the option from the selected array
-        const filteredItems = selected.filter((item) => item?.id !== option.id);
+        // If deleteOption is true, remove the option from the flattened array
+        const filteredItems = flattenedSelected.filter(
+          (item) => item?.id !== option.id
+        );
         setSelected(filteredItems);
       } else if (
         !existingOption &&
-        (limitSelect === 0 || selected.length < limitSelect)
+        (limitSelect === 0 || flattenedSelected.length < limitSelect)
       ) {
         // If limitSelect is 0 or the selected length is less than limitSelect, add the option to the selected array
-        setSelected([...selected, option]);
+        setSelected([...flattenedSelected, option]);
       } else if (limitSelect === 1) {
         // If limitSelect is 1, set the selected option to the option
         setSelected([option]);
@@ -286,31 +355,65 @@ function SearchObjectsFromDB<
         </ul>
 
         {/* Selected Options - Only show when there are selected items */}
-        {selected && selected.length > 0 && (
-          <ul className="ihub-selected-options">
-            <h4 className="ihub-fs-md">Selected Options:</h4>
-            {selected.map((item, index) => {
-              if (!item) return null;
+        {(() => {
+          // Flatten selected array for rendering to ensure consistency
+          const flattenedSelected = flattenSelectedArray(selected || []);
 
-              const displayText =
-                (item as any)[keyName] ||
-                item.title ||
-                item.name ||
-                `Item ${index + 1}`;
-              const itemKey = item.id || item.username || `selected-${index}`;
+          if (flattenedSelected.length === 0) return null;
 
-              return (
-                <li key={itemKey}>
-                  <span>{displayText}</span>
-                  <CloseOutlinedIcon
-                    className="ihub-delete-icon"
-                    onClick={() => handleSelect(item as T, true)}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-        )}
+          return (
+            <ul className="ihub-selected-options">
+              <h4 className="ihub-fs-md">Selected Options:</h4>
+              {flattenedSelected.map((item, index) => {
+                if (!item || typeof item !== "object") {
+                  console.warn(
+                    "SearchObjectsFromDB: Invalid item in selected array:",
+                    item
+                  );
+                  return null;
+                }
+
+                // Enhanced display text calculation with debugging
+                const itemAsAny = item as any;
+                const displayText =
+                  itemAsAny[keyName] ||
+                  itemAsAny.title ||
+                  itemAsAny.name ||
+                  itemAsAny.full_name ||
+                  itemAsAny.name_plus_username ||
+                  itemAsAny.display_name ||
+                  itemAsAny.username ||
+                  `Item ${index + 1}`;
+
+                const itemKey =
+                  item.id || itemAsAny.username || `selected-${index}`;
+
+                // Debug logging for empty display text
+                if (!displayText || displayText === `Item ${index + 1}`) {
+                  console.log("SearchObjectsFromDB: Display text debug:", {
+                    item,
+                    keyName,
+                    itemKeyName: itemAsAny[keyName],
+                    title: itemAsAny.title,
+                    name: itemAsAny.name,
+                    fullName: itemAsAny.full_name,
+                    displayText,
+                  });
+                }
+
+                return (
+                  <li key={itemKey}>
+                    <span>{displayText}</span>
+                    <CloseOutlinedIcon
+                      className="ihub-delete-icon"
+                      onClick={() => handleSelect(item as T, true)}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        })()}
 
         {err && <p className="ihub-error">This field is required</p>}
       </div>
