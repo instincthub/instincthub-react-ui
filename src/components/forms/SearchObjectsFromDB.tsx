@@ -112,13 +112,7 @@ function SearchObjectsFromDB<
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize with value
-  useEffect(() => {
-    if (selected && selected.length > 0 && data.length === 0) {
-      setData(selected as SearchObjectItemType[]);
-    }
-  }, [selected]);
-
+  // Initialize data with options when they change
   useEffect(() => {
     setData(options || []);
   }, [options]);
@@ -128,7 +122,7 @@ function SearchObjectsFromDB<
     if (selected && selected.length > 0) {
       const flattenedSelected = flattenSelectedArray(selected);
 
-      // Check if data structure is malformed
+      // Check if data structure is malformed and warn (but don't fix)
       if (JSON.stringify(flattenedSelected) !== JSON.stringify(selected)) {
         console.warn(
           "SearchObjectsFromDB: Detected malformed selected array. Parent should provide flattened data:",
