@@ -416,7 +416,7 @@ export const IHubTable = <T extends object>({
           ...(showRowNumbers ? ["#"] : []),
           ...columns
             .filter((col) => typeof col.accessor === "string")
-            .map((col) => col.header)
+            .map((col) => col.header),
         ];
 
         const csvData = data.map((row, index) => {
@@ -427,7 +427,7 @@ export const IHubTable = <T extends object>({
               .map((col) => {
                 const accessor = col.accessor as keyof T;
                 return String(row[accessor] ?? "");
-              })
+              }),
           ];
           return rowData.join(",");
         });
@@ -466,7 +466,7 @@ export const IHubTable = <T extends object>({
             const value = row[column.accessor as keyof T];
             return String(value)
               .toLowerCase()
-              .includes(searchTerm.toLowerCase());
+              .includes((searchTerm || "").toLowerCase());
           }
           return false;
         })
@@ -757,7 +757,9 @@ export const IHubTable = <T extends object>({
                                     e.target.value
                                   )
                                 }
-                                placeholder={`Filter by ${column.header.toLowerCase()}`}
+                                placeholder={`Filter by ${(
+                                  column.header || ""
+                                ).toLowerCase()}`}
                                 autoFocus
                               />
                               <div className="ihub-filter-actions">
@@ -807,7 +809,9 @@ export const IHubTable = <T extends object>({
                     {/* Row number cell */}
                     {showRowNumbers && (
                       <td style={{ textAlign: "center", fontWeight: "500" }}>
-                        {(currentPage - 1) * rowsPerPage + rowIndex + rowNumberStartFrom}
+                        {(currentPage - 1) * rowsPerPage +
+                          rowIndex +
+                          rowNumberStartFrom}
                       </td>
                     )}
 
@@ -872,12 +876,14 @@ export const IHubTable = <T extends object>({
                   {/* Expanded row content */}
                   {expandable && renderExpandedRow && isExpanded && (
                     <tr className="ihub-expanded-row">
-                      <td colSpan={
-                        columns.length + 
-                        (selectable ? 1 : 0) + 
-                        1 + // expandable column (since we're inside the expandable condition)
-                        (showRowNumbers ? 1 : 0)
-                      }>
+                      <td
+                        colSpan={
+                          columns.length +
+                          (selectable ? 1 : 0) +
+                          1 + // expandable column (since we're inside the expandable condition)
+                          (showRowNumbers ? 1 : 0)
+                        }
+                      >
                         <div className="ihub-row-details">
                           {renderExpandedRow(row)}
                         </div>

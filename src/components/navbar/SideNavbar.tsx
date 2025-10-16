@@ -214,7 +214,7 @@ const SideNavbar = ({
 
       if (
         key &&
-        e.key.toLowerCase() === key &&
+        (e.key || "").toLowerCase() === key &&
         modifiers.every((mod) => {
           switch (mod) {
             case "ctrl":
@@ -607,7 +607,8 @@ const SideNavbar = ({
 
   // Set CSS variable for dynamic sidebar width (for resizable sidebar)
   const containerStyle: React.CSSProperties = {
-    '--ihub-sidenav-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth,
+    "--ihub-sidenav-width":
+      typeof sidebarWidth === "number" ? `${sidebarWidth}px` : sidebarWidth,
   } as React.CSSProperties;
 
   return (

@@ -124,10 +124,12 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
     return options.filter((option) =>
       key_name
-        ? option[key_name as keyof DropdownOptionType]
-            ?.toLowerCase()
-            .includes(searchTerm?.toLowerCase())
-        : option?.label?.toLowerCase().includes(searchTerm?.toLowerCase())
+        ? (option[key_name as keyof DropdownOptionType] || "")
+            .toLowerCase()
+            .includes((searchTerm || "").toLowerCase())
+        : (option?.label || "")
+            .toLowerCase()
+            .includes((searchTerm || "").toLowerCase())
     );
   }, [options, searchTerm]);
 

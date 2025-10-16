@@ -103,9 +103,12 @@ const FileField: React.FC<FileFieldProps> = ({
 }) => {
   /** Reference to the file input element for programmatic access */
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   /** State to manage the preview URL for the selected file */
   const [previewUrl, setPreviewUrl] = useState<string>(defaultImageUrl || "");
+
+  /** State to track whether a file has been selected */
+  const [hasFile, setHasFile] = useState<boolean>(false);
 
   /**
    * Handles file selection and validation
@@ -118,17 +121,22 @@ const FileField: React.FC<FileFieldProps> = ({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    if (!file) return;
+    if (!file) {
+      setHasFile(false);
+      return;
+    }
 
     // Ensure file upload size limit.
     const maxFileSize = (maxLimit || 10) * 1024 * 1024; // 10MB in bytes
     if (file.size > maxFileSize) {
       openToast(`File ${file.name.slice(0, 15)}... exceeds 10MB limit`, 400);
       e.target.value = ""; // Reset the input field
+      setHasFile(false);
       return; // Stop further processing
     }
 
     setPreviewUrl(URL.createObjectURL(file));
+    setHasFile(true);
     if (onChange) {
       onChange(file);
     }
@@ -152,7 +160,7 @@ const FileField: React.FC<FileFieldProps> = ({
             type="file"
             id={id}
             accept={acceptedTypes}
-            name={name}
+            name={hasFile ? name : undefined}
             ref={fileInputRef}
             required={required}
             onChange={handleFileChange}

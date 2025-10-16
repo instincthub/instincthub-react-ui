@@ -5,26 +5,11 @@ import { Session } from "@/types/auth";
 import { useParams } from "next/navigation";
 import {
   useDispatch,
-  useSelector,  
+  useSelector,
   selectIPAdress,
   IPAdress,
 } from "../lib/redux";
 
-// Improved type definitions
-interface IPAddressData {
-  ip_address?: string;
-  [key: string]: any;
-}
-
-interface IPAddressActions {
-  actions: {
-    set: (data: IPAddressData) => { type: string; payload: IPAddressData };
-  };
-}
-
-// Redux selector and dispatch types
-type AppDispatch = (action: any) => void;
-type SelectorFunction = (state: any) => IPAddressData;
 
 interface TimeTrackerProps {
   channel_username?: string | null;
@@ -34,12 +19,8 @@ interface TimeTrackerProps {
 
 /**
  * React Time Tracker Component
- * @component
- * @example
- * <ReactTimeTracker />
- * @param {string} channel_username - The channel username
- * @param {SessionUserType} session - The session user type
- * @param {string} endpoint - The endpoint to fetch the IP Address
+ * Tracks user active time on a page and reports it to the backend.
+ * <ReactTimeTracker channel_username="skills" session={session} endpoint="/api/user-ip-address"/>
  */
 export default function ReactTimeTracker({
   channel_username = null,
@@ -50,13 +31,20 @@ export default function ReactTimeTracker({
   const ipAds = useSelector<any>(selectIPAdress);
   const startTime = useRef<Date>(new Date());
   const endTime = useRef<Date | null>(null);
-  const [visibility, setVisibility] = useState<string>(
-    document?.visibilityState || "visible"
-  );
+  const timeUpdatePending = useRef<boolean>(false);
   const params = useParams<{ channel: string }>();
   const handle = params.channel || channel_username;
-  const timeUpdatePending = useRef<boolean>(false);
 
+  // ✅ Safe initialization for SSR
+  const [visibility, setVisibility] = useState<string>("visible");
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      setVisibility(document.visibilityState);
+    }
+  }, []);
+
+  // Handle visibility changes
   const handleVisibilityChange = (): void => {
     const newVisibility = document.visibilityState;
     setVisibility(newVisibility);
@@ -70,41 +58,39 @@ export default function ReactTimeTracker({
     }
   };
 
+  // Handle idle event (if supported)
   const handleIdle = (): void => {
     endTime.current = new Date();
     timeUpdatePending.current = true;
-    // Force a re-render to trigger the time sending effect
     setVisibility((prev) => (prev === "idle" ? "idle_update" : "idle"));
   };
 
   // Setup event listeners
   useEffect(() => {
-    startTime.current = new Date();
+    if (typeof document === "undefined") return;
 
+    startTime.current = new Date();
     document.addEventListener("visibilitychange", handleVisibilityChange);
     document.addEventListener("idle", handleIdle);
 
     return () => {
-      // If component unmounts, try to send the final time data
       if (startTime.current && !endTime.current) {
         endTime.current = new Date();
         timeUpdatePending.current = true;
       }
-
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("idle", handleIdle);
     };
   }, []);
 
-  // Fetch IP address if not available
+  // Fetch IP address once
   useEffect(() => {
     if (!ipAds?.ip_address) {
       const fetchIpAddress = async (): Promise<void> => {
         try {
           const response = await fetch(endpoint || "");
-          if (!response.ok) {
+          if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
-          }
           const data = await response.json();
           dispatch(IPAdress.actions.set(data));
         } catch (error) {
@@ -113,25 +99,18 @@ export default function ReactTimeTracker({
       };
       fetchIpAddress();
     }
-  }, [dispatch, ipAds?.ip_address, IPAdress?.actions]);
+  }, [dispatch, ipAds?.ip_address, endpoint]);
 
-  // Send time data to server when visibility changes or component unmounts
+  // Send time data to server when needed
   useEffect(() => {
     const sendTime = async (): Promise<void> => {
-      // Only send time if there's a pending update and we have valid start/end times
-      if (
-        !timeUpdatePending.current ||
-        !startTime.current ||
-        !endTime.current
-      ) {
+      if (!timeUpdatePending.current || !startTime.current || !endTime.current)
         return;
-      }
 
       const timeSpent = Math.round(
         (endTime.current.getTime() - startTime.current.getTime()) / 1000
       );
 
-      // Don't send if time spent is too small (e.g., less than 1 second)
       if (timeSpent <= 0) {
         timeUpdatePending.current = false;
         return;
@@ -140,7 +119,7 @@ export default function ReactTimeTracker({
       const dataset = {
         ...ipAds,
         seconds: timeSpent,
-        url: window.location.href,
+        url: typeof window !== "undefined" ? window.location.href : "",
         datetime_start: startTime.current.toISOString(),
         datetime_end: endTime.current.toISOString(),
         user: session?.user?.id || "",
@@ -154,16 +133,13 @@ export default function ReactTimeTracker({
 
         const raw = JSON.stringify(dataset);
         const requestOptions = reqOptions("POST", raw, null, "json");
-
         const req = await fetch(
           `${API_HOST_URL}history/${handle}/timespent/`,
           requestOptions
         );
 
         if (req.status === 201) {
-          // Reset the pending flag as we've successfully sent the data
           timeUpdatePending.current = false;
-
           if (IN_DEV_MODE) {
             console.log("Time spent sent to server successfully!");
             const responseData = await req.json();
@@ -174,19 +150,15 @@ export default function ReactTimeTracker({
         }
       } catch (error) {
         console.error("Couldn't send time data:", error);
-        // We could implement retry logic here if needed
       }
     };
 
     sendTime();
 
-    // Cleanup function to ensure we attempt to send any pending time data
     return () => {
-      if (timeUpdatePending.current) {
-        sendTime();
-      }
+      if (timeUpdatePending.current) sendTime();
     };
-  }, [visibility, session, ipAds, handle]); // Removed refs from dependencies
+  }, [visibility, session, ipAds, handle]);
 
-  return null; // Using null instead of empty fragment for slightly better performance
+  return null;
 }
