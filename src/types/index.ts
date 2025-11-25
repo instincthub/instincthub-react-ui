@@ -553,6 +553,8 @@ export interface PaystackConfigType {
 }
 
 export interface PaystackResponseType {
+  email: string;
+  amount: number;
   status: string;
   reference: string;
   message?: string;

@@ -160,32 +160,20 @@ export const getUserEmailInputModal = (
     }
     let emailValue: string | undefined;
 
-    const modalContent = `
-      <section id="myModal" class="modal">
-        <div class="modal-content">
-          <svg width="800px" height="800px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" 
-            class="ih_get_user_email_modal_close_btn" onclick="window.handleCleanUpInput()">
-            <path d="M3 21.32L21 3.32001" stroke="var(--Gunmetal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 3.32001L21 21.32" stroke="var(--Gunmetal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h4>Enrol for ${title}</h4>
-          <p>Enter a valid Email Address</p>
-          <input type="email" name="email" id="userInput" oninput="window.handleInput(this)" />
-          <div class="action_btn">
-            <button type="button" disabled id="proceedBtn" class="delete_btn important-btn" onclick="window.handleConfirm()">Proceed</button>
-          </div>
-        </div>
-      </section>
-    `;
+    const cleanup = () => {
+      modalContainer?.remove();
+    };
 
-    modalContainer.innerHTML = modalContent;
-    document.body.appendChild(modalContainer);
-
-    const proceedBtn = document.getElementById(
-      "proceedBtn"
-    ) as HTMLButtonElement | null;
+    window.handleCleanUpInput = () => {
+      cleanup();
+      resolve(undefined);
+    };
 
     window.handleInput = (e: HTMLInputElement) => {
+      const proceedBtn = document.getElementById(
+        "proceedBtn"
+      ) as HTMLButtonElement | null;
+
       if (isValidEmail(e.value)) {
         if (proceedBtn) proceedBtn.disabled = false;
         emailValue = e.value;
@@ -193,10 +181,6 @@ export const getUserEmailInputModal = (
         if (proceedBtn) proceedBtn.disabled = true;
         emailValue = undefined;
       }
-    };
-
-    const cleanup = () => {
-      modalContainer?.remove();
     };
 
     window.handleConfirm = () => {
@@ -208,9 +192,33 @@ export const getUserEmailInputModal = (
       }
     };
 
-    window.handleCleanUpInput = () => {
-      cleanup();
-      resolve(undefined);
-    };
+    const modalContent = `
+      <section id="myModal" class="modal">
+        <div class="modal-content">
+          <svg width="800px" height="800px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="ih_get_user_email_modal_close_btn" onclick="window.handleCleanUpInput()">
+            <path d="M3 21.32L21 3.32001" stroke="var(--Gunmetal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 3.32001L21 21.32" stroke="var(--Gunmetal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h4>Enrol for ${title}</h4>
+          <p class="ihub-mt-3">Enter a valid Email Address</p>
+          <input type="email" name="email" id="userInput" oninput="window.handleInput(this)" />
+          <div class="action_btn ihub-mt-3">
+            <button type="button" disabled id="proceedBtn" class="delete_btn important-btn" onclick="window.handleConfirm()">Proceed</button>
+          </div>
+        </div>
+      </section>
+    `;
+
+    modalContainer.innerHTML = modalContent;
+    document.body.appendChild(modalContainer);
+
+    modalContainer.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.id === "myModal" || target.id === "confirmModal") {
+        cleanup();
+        resolve(undefined);
+      }
+    });
   });
 };

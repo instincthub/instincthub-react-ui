@@ -112,7 +112,7 @@ export const payWithPaystack = (
         callback: (response: PaystackResponseType) => {
           // This happens after the payment is completed successfully
           openToast("Payment complete! Reference: " + response.reference);
-          resolve(response);
+          resolve({ ...response, email: config.email, amount: config.amount });
         },
         onClose: () => {
           openToast("Transaction was not completed, window closed.", 400);
@@ -120,6 +120,8 @@ export const payWithPaystack = (
             status: "canceled",
             cancelled: true,
             reference: config.reference,
+            email: config.email,
+            amount: config.amount,
           } as PaystackResponseType);
         },
       });
@@ -132,6 +134,8 @@ export const payWithPaystack = (
         cancelled: true,
         reference: config.reference,
         error,
+        email: config.email,
+        amount: config.amount,
       } as PaystackResponseType);
     }
   });
@@ -316,6 +320,153 @@ export async function handlePaymentSubmit(
   };
 
   checkEmailInConfig();
+}
+
+/**
+ * Handles payment submission without requiring user data upfront
+ * Useful for guest checkout or anonymous payments
+ * @example
+ * ```ts
+ * handlePaymentWithoutUserData({
+ *   amount: 5000,
+ *   label: "Course Enrollment",
+ *   currency: "NGN",
+ *   metadata: {
+ *     content_type: "course",
+ *     object_id: "123",
+ *   },
+ *   handleDBAction: (data: any) => {
+ *     console.log(data);
+ *   },
+ *   setStatus: (status: number) => {
+ *     console.log(status);
+ *   },
+ * });
+ * ```
+ * @param config - Minimal payment configuration without user details
+ */
+export async function handlePaymentWithoutUserData(config: {
+  amount: number;
+  label: string;
+  currency?: string;
+  metadata?: PaystackConfigObjectType["metadata"];
+  handleDBAction: (data?: any) => void;
+  setStatus: (status: number) => void;
+  coupon?: string;
+  gatwayCharges?: number;
+  defaultConfirm?: boolean;
+  defaultMsg?: string;
+  e?: Event | null;
+  content_type?: string | number;
+  object_id?: string | number;
+}): Promise<void> {
+  if (config.e) config.e.preventDefault();
+
+  if (config.defaultConfirm) {
+    const msg =
+      config.defaultMsg ||
+      `By clicking okay, you are proceeding with payment for ${config.label}.`;
+    const confirm = await openConfirmModal(msg);
+    if (!confirm) return;
+  }
+
+  config.setStatus(0);
+
+  // Always prompt for email input
+  const emailValue = await getUserEmailInputModal(config.label);
+
+  if (!emailValue) {
+    openToast("You need to enter a valid email to proceed!", 400);
+    config.setStatus(1);
+    return;
+  }
+
+  // Store email for potential signup
+  setCookie("email", emailValue, 2);
+
+  // Build minimal config object
+  let configObj: PaystackConfigObjectType = {
+    email: emailValue,
+    first_name: "Guest",
+    last_name: "User",
+    amount: config.amount,
+    currency: config.currency || "NGN",
+    metadata: config.metadata,
+    content_type: config.content_type,
+    object_id: config.object_id,
+  };
+
+  // Handle coupon validation if provided
+  if (config.coupon) {
+    const handle = config.metadata?.channel_username;
+    const couponObj = JSON.stringify({
+      code: config.coupon,
+      email: emailValue,
+      content_type: config.content_type,
+      object_id: config.object_id,
+    });
+
+    const requestOptions = reqOptions("POST", couponObj, null, "json");
+    const url = `${API_HOST_URL}coupons/${handle}/validate-coupon/`;
+
+    try {
+      const dataset = await fetch(url, requestOptions);
+      const res = await dataset.json();
+
+      const discount = res.discount || 0;
+      if (res.detail) {
+        openToast(res.detail, 400);
+      } else if (res.id) {
+        openToast(`${discount}% discount was applied.`);
+      }
+
+      // Apply discount
+      if (discount) {
+        if (discount === 100) {
+          config.handleDBAction({ reference: `COUPON__${config.coupon}` });
+          config.setStatus(1);
+          return;
+        }
+
+        const amount = calculateAmountAfterDeduction(
+          configObj.amount,
+          discount
+        );
+        openToast(amount.detail);
+        configObj = {
+          ...configObj,
+          ...amount,
+        };
+      }
+    } catch (error) {
+      console.error("Coupon validation error:", error);
+      openToast("Could not validate coupon", 400);
+    }
+  }
+
+  // Add gateway charges if applicable
+  if (config.gatwayCharges) {
+    const fee = config.gatwayCharges / 100;
+    const totalAmount = configObj.amount / (1 - fee);
+    const decimalAmount = parseFloat(totalAmount.toFixed(2));
+    const localCharges = decimalAmount - configObj.amount;
+    const noMoreThan2k =
+      localCharges > 2000 ? configObj.amount + 2000 : decimalAmount;
+    configObj.amount = noMoreThan2k;
+  }
+
+  const dataset = paystackDataConfig(configObj);
+
+  if (configObj.amount > 0) {
+    // Process payment with Paystack
+    const payActivate = await payWithPaystack(dataset);
+    config.handleDBAction(payActivate);
+  } else {
+    // Free item
+    config.handleDBAction();
+  }
+
+  config.setStatus(1);
 }
 
 // Add PaystackPop to Window interface

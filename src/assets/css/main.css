@@ -1409,6 +1409,11 @@ RADIO ENDS
   background-color: var(--DarkCyan);
   opacity: 0.8;
 }
+.default-btn:hover {
+  background-color: var(--DarkCyan);
+  color: #fff;
+  opacity: 0.8;
+}
 
 .outlined-btn {
   padding: 12px 35px;

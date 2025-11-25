@@ -8,6 +8,7 @@ interface LibraryInfo {
   category: string;
   repo_path: string;
   example_path: string;
+  visual_demo_url?: string;
 }
 
 const LibraryList = () => {
@@ -153,6 +154,7 @@ const LibraryList = () => {
       category: "DOM Utilities",
       repo_path: "src/components/lib/loadScript.ts",
       example_path: "docs/static-docs/libs/loadScript.md",
+      visual_demo_url: "https://ui.instincthub.com/libs/examples/loadscript",
     },
 
     // Subscription Management
@@ -191,6 +193,7 @@ const LibraryList = () => {
       category: "Pricing & Finance",
       repo_path: "src/components/lib/paystack.ts",
       example_path: "docs/static-docs/libs/paystack.md",
+      visual_demo_url: "https://ui.instincthub.com/libs/examples/paystacks",
     },
 
     // Charts & Visualization
@@ -629,6 +632,31 @@ const LibraryList = () => {
                       )}
                     </button>
                   </div>
+                  {library.visual_demo_url && (
+                    <div className="ihub-link-group ihub-flex ihub-mt-2">
+                      <a
+                        href={library.visual_demo_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ihub-component-link ihub-demo-link"
+                      >
+                        Live Demo
+                      </a>
+                      <button
+                        onClick={() =>
+                          copyToClipboard(library.visual_demo_url!, "demo")
+                        }
+                        className="ihub-copy-btn"
+                        title={`Copy ${library.name} live demo link`}
+                      >
+                        {copiedLink === `demo-${library.visual_demo_url}` ? (
+                          <Check />
+                        ) : (
+                          <Copy />
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

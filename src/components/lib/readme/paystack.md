@@ -286,7 +286,7 @@ Initiates payment with PayStack popup.
 
 ### handlePaymentSubmit
 
-Handles the complete payment submission process.
+Handles the complete payment submission process with full user data.
 
 - **Parameters**:
   - `contexts: PaymentContext` - Payment context information
@@ -332,7 +332,116 @@ Handles the complete payment submission process.
   await handlePaymentSubmit(paymentContext);
   ```
 
+### handlePaymentWithoutUserData
+
+Handles payment submission without requiring user data upfront. Useful for guest checkout or anonymous payments.
+
+- **Parameters**:
+  - `config` - Minimal payment configuration object
+    - `amount: number` - Payment amount in lowest currency (e.g., Kobo)
+    - `label: string` - Payment description/label
+    - `currency?: string` - Currency code (default: "NGN")
+    - `metadata?: object` - Additional metadata
+    - `handleDBAction: (data?: any) => void` - Success callback
+    - `setStatus: (status: number) => void` - Status update callback
+    - `coupon?: string` - Optional coupon code
+    - `gatwayCharges?: number` - Gateway charges percentage
+    - `defaultConfirm?: boolean` - Show confirmation dialog
+    - `defaultMsg?: string` - Custom confirmation message
+    - `e?: Event` - Form event
+    - `content_type?: string | number` - Content type ID
+    - `object_id?: string | number` - Object ID
+- **Returns**: `Promise<void>`
+- **Usage**:
+
+  ```typescript
+  // Guest checkout example
+  await handlePaymentWithoutUserData({
+    amount: 5000, // ₦50.00
+    label: "Course Enrollment",
+    currency: "NGN",
+    content_type: "course",
+    object_id: "123",
+    metadata: {
+      channel_username: "my-channel",
+    },
+    handleDBAction: (data) => {
+      if (data && data.reference) {
+        console.log("Payment successful:", data.reference);
+      }
+    },
+    setStatus: (status) => {
+      setIsLoading(status === 0);
+    },
+    defaultConfirm: true,
+    gatwayCharges: 2.5,
+  });
+  ```
+
 ## Usage Examples
+
+### Guest Checkout / Payment without User Data
+
+For scenarios where you need to collect payment from users without requiring authentication or pre-existing user data:
+
+```typescript
+import { handlePaymentWithoutUserData, loadScript } from "@instincthub/react-ui";
+
+// Load Paystack script first
+useEffect(() => {
+  const script = loadScript("https://js.paystack.co/v1/inline.js");
+  if (script) {
+    script.onload = () => console.log("Paystack loaded");
+  }
+}, []);
+
+const handleGuestCheckout = async (e) => {
+  e.preventDefault();
+
+  await handlePaymentWithoutUserData({
+    e,
+    amount: 5000, // ₦50.00
+    label: "Course Purchase",
+    currency: "NGN",
+    content_type: "course",
+    object_id: "123",
+    metadata: {
+      channel_username: "guest-channel",
+      purchase_type: "one-time",
+    },
+    handleDBAction: (data) => {
+      if (data && data.reference) {
+        // Save transaction to your database
+        saveGuestTransaction({
+          reference: data.reference,
+          amount: 5000,
+          status: data.status,
+        });
+        // Redirect to success page
+        router.push(`/checkout/success?ref=${data.reference}`);
+      }
+    },
+    setStatus: (status) => {
+      setIsProcessing(status === 0);
+    },
+    defaultConfirm: true,
+    defaultMsg: "Complete your purchase?",
+    gatwayCharges: 2.5,
+  });
+};
+
+// Usage in component
+<button onClick={handleGuestCheckout} className="checkout-btn">
+  Pay Now
+</button>
+```
+
+**Key Features of Guest Checkout:**
+- No authentication required
+- Email collected via modal during payment
+- Uses "Guest User" as default name
+- Email stored in cookie for potential signup
+- Ideal for quick purchases, donations, or first-time users
 
 ### Basic Payment Processing
 
@@ -471,6 +580,20 @@ const processSavedCardPayment = async () => {
   }
 };
 ```
+
+## Comparison: With vs Without User Data
+
+| Feature | handlePaymentSubmit | handlePaymentWithoutUserData |
+|---------|---------------------|------------------------------|
+| **User Authentication** | Required | Not required |
+| **Email Collection** | Pre-populated from user profile | Requested via modal during payment |
+| **User Name** | From authenticated user | "Guest User" (default) |
+| **Saved Payment Methods** | Can use existing saved cards | Always requires new card entry |
+| **Best Use Cases** | - Subscription renewals<br>- Member purchases<br>- Recurring payments<br>- Authenticated checkout | - Guest checkout<br>- Quick purchases<br>- Donations<br>- First-time buyers<br>- Non-authenticated flows |
+| **Configuration Complexity** | Higher (requires full user context) | Lower (minimal config needed) |
+| **Coupon Support** | ✅ Yes | ✅ Yes |
+| **Gateway Charges** | ✅ Yes | ✅ Yes |
+| **Email Cookie Storage** | ✅ Yes | ✅ Yes (for potential signup) |
 
 ## CSS Classes
 
