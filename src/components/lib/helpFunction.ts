@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { forbidden, notFound } from "next/navigation";
 import { openToast } from "./modals/modals";
 import React from "react";
+import { CouponType } from "@/types";
 
 // Constants with Type Safety
 export const IN_DEV_MODE: boolean = process.env.NODE_ENV === "development";
@@ -139,6 +140,48 @@ export const calculateAmountAfterDeduction = (
   }
   const deduction = (amount * percentage) / 100;
   return { amount: amount - deduction };
+};
+
+/**
+ * Calculates amount after percentage deduction.
+ * @param amount Base amount
+ * @param coupon CouponType object
+ * @returns Object with final amount or error details
+ */
+export const calculateCouponDeduction = (
+  amount: number,
+  currency: string,
+  coupon: CouponType
+): { amount: number; detail?: string; discounted: boolean } => {
+  let deduction = 0;
+  if (coupon.discount_type === "percentage" || currency !== coupon.currency) {
+    if (amount < 0 || coupon.discount < 0 || coupon.discount > 100) {
+      return {
+        discounted: false,
+        amount: 0,
+        detail:
+          "Amount and percentage should be positive, and percentage should be between 0 and 100.",
+      };
+    }
+    deduction = (amount * coupon.discount) / 100;
+  } else if (coupon.discount_type === "amount") {
+    if (amount < 0 || coupon.amount < 0 || coupon.amount > amount) {
+      return {
+        discounted: false,
+        amount: coupon.amount,
+        detail:
+          coupon.amount > amount
+            ? "Coupon amount cannot be greater than actual product price."
+            : "Amount and discount should be positive.",
+      };
+    }
+    deduction = coupon.amount;
+  }
+  return {
+    amount: amount - deduction,
+    discounted: true,
+    detail: "Coupon applied successfully.",
+  };
 };
 
 /**
@@ -581,7 +624,9 @@ export const removeErrMsg = (): void => {
         errMsg.remove();
 
         const input = element.querySelector("input") as HTMLInputElement | null;
-        const textarea = element.querySelector("textarea") as HTMLTextAreaElement | null;
+        const textarea = element.querySelector(
+          "textarea"
+        ) as HTMLTextAreaElement | null;
 
         if (input) {
           input.style.border = "var(--borderDefault)";
@@ -595,7 +640,9 @@ export const removeErrMsg = (): void => {
   }
 
   // Remove error banner messages
-  const errBanner = document.querySelector("#err_message") as HTMLElement | null;
+  const errBanner = document.querySelector(
+    "#err_message"
+  ) as HTMLElement | null;
   if (errBanner) {
     errBanner.classList.remove("active");
     const ul = errBanner.querySelector("ul");
@@ -633,8 +680,12 @@ export const printErrNew = (items: Record<string, string | string[]>): void => {
       inputField.classList.add("s_err");
       inputField.append(errTag);
 
-      const inputElement = inputField.querySelector(".field input") as HTMLInputElement | null;
-      const textareaElement = inputField.querySelector(".field textarea") as HTMLTextAreaElement | null;
+      const inputElement = inputField.querySelector(
+        ".field input"
+      ) as HTMLInputElement | null;
+      const textareaElement = inputField.querySelector(
+        ".field textarea"
+      ) as HTMLTextAreaElement | null;
 
       if (
         inputElement &&
@@ -645,7 +696,9 @@ export const printErrNew = (items: Record<string, string | string[]>): void => {
       ) {
         inputElement.style.border = "1px solid var(--TurkishRose)";
         if (index === 0) {
-          const targetInput = inputField.querySelector(`[name="${key}"]`) as HTMLInputElement | null;
+          const targetInput = inputField.querySelector(
+            `[name="${key}"]`
+          ) as HTMLInputElement | null;
           targetInput?.focus();
         }
       } else if (textareaElement) {
@@ -667,8 +720,13 @@ export const printErrNew = (items: Record<string, string | string[]>): void => {
  * @param tags The class name of the input field wrapper
  * @param border Whether to add border styling (default: true)
  */
-export const inputTagErrorEvent = (tags: string, border: boolean = true): void => {
-  const inputFieldWrap = document.querySelector(`div.${tags}`) as HTMLElement | null;
+export const inputTagErrorEvent = (
+  tags: string,
+  border: boolean = true
+): void => {
+  const inputFieldWrap = document.querySelector(
+    `div.${tags}`
+  ) as HTMLElement | null;
   const msgWrap = document.querySelector("#err_message") as HTMLElement | null;
 
   if (!inputFieldWrap || !msgWrap) return;
@@ -680,7 +738,9 @@ export const inputTagErrorEvent = (tags: string, border: boolean = true): void =
 
     // Add border styling if requested
     if (border) {
-      const field = inputFieldWrap.querySelector(".field") as HTMLElement | null;
+      const field = inputFieldWrap.querySelector(
+        ".field"
+      ) as HTMLElement | null;
       if (field) {
         field.style.border = "1px solid var(--TurkishRose)";
       }

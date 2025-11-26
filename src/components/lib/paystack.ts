@@ -1,6 +1,7 @@
 import {
   API_HOST_URL,
   calculateAmountAfterDeduction,
+  calculateCouponDeduction,
   reqOptions,
   setCookie,
 } from "./helpFunction";
@@ -14,6 +15,7 @@ import {
   PaystackConfigType,
   PaystackResponseType,
   PaymentContextType,
+  CouponType,
 } from "@/types";
 
 /**
@@ -198,7 +200,25 @@ export async function handlePaymentSubmit(
     contexts.setStatus(0);
 
     // Check if contexts.coupon is valid
-    let discount: number | undefined;
+    let coupon_res: CouponType = {
+      id: 0,
+      code: "",
+      email_list: "",
+      object_id: "",
+      valid_from: "",
+      valid_to: "",
+      days_count: 0,
+      discount_type: null,
+      discount: 0,
+      amount: 0,
+      currency: "",
+      active: false,
+      timestamp: "",
+      channel: "",
+      content_type: 0,
+      students: [],
+    };
+
     let mewConfigObj: PaystackConfigObjectType;
 
     if (contexts.coupon) {
@@ -215,13 +235,17 @@ export async function handlePaymentSubmit(
 
       try {
         const dataset = await fetch(url, requestOptions);
-        const res = await dataset.json();
+        coupon_res = (await dataset.json()) as CouponType;
 
-        discount = res.discount || 0;
-        if (res.detail) {
-          openToast(res.detail, 400);
-        } else if (res.id) {
-          openToast(`${discount}% token was applied.`);
+        if (coupon_res.detail) {
+          openToast(coupon_res.detail, 400);
+        } else if (coupon_res.id) {
+          openToast(
+            `${
+              coupon_res.discount ||
+              `${coupon_res.currency}${coupon_res.amount}`
+            }% token was applied.`
+          );
         }
       } catch (error) {
         console.error("Coupon validation error:", error);
@@ -230,24 +254,33 @@ export async function handlePaymentSubmit(
     }
 
     // Remove the discount from actual amount
-    if (discount) {
-      if (discount === 100) {
+    if (coupon_res.discount || coupon_res.amount) {
+      if (coupon_res.discount === 100) {
         contexts.handleDBAction({ reference: `COUPON__${contexts.coupon}` });
         contexts.setStatus(1);
         return;
       }
 
-      const amount = calculateAmountAfterDeduction(
+      const amount = calculateCouponDeduction(
         contexts.configObj.amount,
-        discount
+        contexts.configObj.currency || "NGN",
+        coupon_res
       );
 
-      openToast(amount.detail, 400);
-      mewConfigObj = {
-        ...contexts.configObj,
-        ...amount,
-      };
+      if (!amount.discounted) {
+        openToast(amount.detail, 400);
+
+        // Abort payment due to invalid coupon
+        mewConfigObj = contexts.configObj;
+      } else {
+        openToast(amount.detail);
+        mewConfigObj = {
+          ...contexts.configObj,
+          ...amount,
+        };
+      }
     } else {
+      // No coupon applied
       mewConfigObj = contexts.configObj;
     }
 
