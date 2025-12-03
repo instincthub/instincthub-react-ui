@@ -1,6 +1,5 @@
 import {
   API_HOST_URL,
-  calculateAmountAfterDeduction,
   calculateCouponDeduction,
   reqOptions,
   setCookie,
@@ -49,7 +48,7 @@ export const paystackDataConfig = (
   email: obj.email,
   first_name: obj.first_name,
   last_name: obj.last_name,
-  amount: obj.amount * 100, // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+  amount: Math.round(obj.amount * 100), // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
   currency: obj.currency || "NGN",
   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY,
   key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
@@ -461,9 +460,10 @@ export async function handlePaymentWithoutUserData(config: {
           return;
         }
 
-        const amount = calculateAmountAfterDeduction(
+        const amount = calculateCouponDeduction(
           configObj.amount,
-          discount
+          configObj.currency || "NGN",
+          res
         );
         openToast(amount.detail);
         configObj = {

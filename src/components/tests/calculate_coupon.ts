@@ -1,0 +1,31 @@
+const couponObj = {
+  id: 1,
+  total_claimed_coupon: 1,
+  content_objects: {
+    id: 50,
+    uuid: "4f0e9992-fcda-4709-83c6-48d9086c412d",
+    slug: "getting-started-with-visual-studio-code",
+    title: "Getting Started with Visual Studio Code",
+    privacy: "PRIVATE",
+    timestamp: "2023-09-08T10:05:03.424885+01:00",
+    reward_option: "CERTIFICATE",
+    content_type_id: 7,
+  },
+  code: "DEMO",
+  email_list: "",
+  object_id: "50",
+  valid_from: "2025-01-16T03:04:00+01:00",
+  valid_to: "2026-01-17T03:04:00+01:00",
+  days_count: 7,
+  discount_type: "percentage",
+  discount: 100,
+  amount: null,
+  currency: "NGN",
+  active: true,
+  timestamp: "2025-01-16T03:06:58.401091+01:00",
+  channel: "10ce8a17-2651-4ddc-86a9-bfe7926869fc",
+  content_type: 7,
+  students: [],
+};
+
+
