@@ -254,8 +254,20 @@ export async function handlePaymentSubmit(
 
     // Remove the discount from actual amount
     if (coupon_res.discount || coupon_res.amount) {
-      if (coupon_res.discount === 100) {
-        contexts.handleDBAction({ reference: `COUPON__${contexts.coupon}` });
+      if (
+        coupon_res.discount === 100 &&
+        coupon_res.discount_type === "percentage"
+      ) {
+        const resContext = {
+          email: contexts.configObj.email,
+          amount: 0,
+          status: "success",
+          reference: `COUPON__${contexts.coupon}__${contexts.configObj.email}`,
+          message: "Payment complete with 100% token coupon",
+          transaction: "",
+          canceled: false,
+        };
+        contexts.handleDBAction(resContext);
         contexts.setStatus(1);
         return;
       }
@@ -327,7 +339,16 @@ export async function handlePaymentSubmit(
       }
     } else {
       // If cohort is free, don't request for payment
-      contexts.handleDBAction();
+      const resContext = {
+        email: contexts.configObj.email,
+        amount: 0,
+        status: "success",
+        reference: `COUPON__${contexts.coupon}__${contexts.configObj.email}`,
+        message: "No payment required for free item",
+        transaction: "",
+        canceled: false,
+      };
+      contexts.handleDBAction(resContext);
     }
 
     contexts.setStatus(1);
@@ -452,23 +473,33 @@ export async function handlePaymentWithoutUserData(config: {
         openToast(`${discount}% discount was applied.`);
       }
 
+      const _discounted = calculateCouponDeduction(
+        configObj.amount,
+        configObj.currency || "NGN",
+        res
+      );
+
       // Apply discount
-      if (discount) {
+      if (_discounted.discounted) {
         if (discount === 100) {
-          config.handleDBAction({ reference: `COUPON__${config.coupon}` });
+          const resContext = {
+            email: configObj.email,
+            amount: 0,
+            status: "success",
+            reference: `COUPON__${config.coupon}__${configObj.email}`,
+            message: "No payment required for free item",
+            transaction: "",
+            canceled: false,
+          };
+          config.handleDBAction(resContext);
           config.setStatus(1);
           return;
         }
 
-        const amount = calculateCouponDeduction(
-          configObj.amount,
-          configObj.currency || "NGN",
-          res
-        );
-        openToast(amount.detail);
+        openToast(_discounted.detail);
         configObj = {
           ...configObj,
-          ...amount,
+          ..._discounted,
         };
       }
     } catch (error) {
@@ -496,7 +527,16 @@ export async function handlePaymentWithoutUserData(config: {
     config.handleDBAction(payActivate);
   } else {
     // Free item
-    config.handleDBAction();
+    const resContext = {
+      email: configObj.email,
+      amount: 0,
+      status: "success",
+      reference: `COUPON__${config.coupon}__${configObj.email}`,
+      message: "No payment required for free item",
+      transaction: "",
+      canceled: false,
+    };
+    config.handleDBAction(resContext);
   }
 
   config.setStatus(1);

@@ -1863,7 +1863,7 @@
 
 .ihub-checkbox-wrapper {
   overflow: auto;
-  background-color: #f4f4f4;
+  background-color: var(--OpacityBackground);
   padding: 15px;
   border-radius: 5px;
   scrollbar-width: thin;

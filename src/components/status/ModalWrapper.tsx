@@ -1,6 +1,13 @@
+/* 
+createPortal(children, domNode): 
+This is the core React function that tells the renderer: 
+"Take this JSX and put it inside this specific DOM element (the body), 
+instead of where this component is actually called.
+*/
+
 "use client";
-import { X } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalWrapperProps {
   isOpen: boolean;
@@ -17,9 +24,19 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
   title,
   size = "full",
 }) => {
-  if (!isOpen) return null;
+  // 1. State to track if we are mounted on the client
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // 2. Don't render anything if the modal is closed OR if we aren't on the client yet
+  // (This prevents Hydration Mismatch errors in Next.js/SSR)
+  if (!isOpen || !mounted) return null;
+
+  const modalContent = (
     <div
       className="ihub-modal ihub-modal-open"
       aria-labelledby="ihub-modal-title"
@@ -39,7 +56,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
             className="ihub-close-it"
             aria-label="Close modal"
           >
-            <X />
+            X
           </button>
         </div>
         <div
@@ -51,6 +68,9 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
       </div>
     </div>
   );
+
+  // 3. Use createPortal to inject the content into the body
+  return createPortal(modalContent, document.body);
 };
 
 export default ModalWrapper;

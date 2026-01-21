@@ -3,6 +3,7 @@ import { Session } from "./auth";
 export * from "./payments";
 export * from "./channels";
 export * from "./permissions";
+export * from "./ip-address";
 
 declare global {
   namespace JSX {
