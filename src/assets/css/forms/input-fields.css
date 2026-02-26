@@ -627,7 +627,7 @@
   position: absolute;
   top: calc(100% + 5px);
   left: 0;
-  z-index: 1;
+  z-index: var(--z-popup);
   font-family: var(--Nunito);
   width: 100%;
   max-height: 300px;

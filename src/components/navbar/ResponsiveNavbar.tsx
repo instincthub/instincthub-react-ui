@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 import { NavbarPropsType, DropdownRenderProps } from "../../types";
 import { Session } from "@/types/auth";
 import LightModeIcon from "@mui/icons-material/LightMode";
@@ -47,6 +48,7 @@ const ResponsiveNavbar = ({
   bottomBanner,
   hideTopBanner = false,
   hideBottomBanner = false,
+  signoutUrl,
   userDropdownOpen: controlledDropdownOpen,
   onUserDropdownToggle,
   renderUserDropdown,
@@ -461,13 +463,23 @@ const ResponsiveNavbar = ({
                               )}
                             </div>
                           ))}
-                          <Link
-                            href="/api/auth/signout"
-                            className="ihub-dropdown-item ihub-signout"
-                          >
-                            <span className="ihub-dropdown-icon">⤴</span>
-                            Sign out
-                          </Link>
+                          {signoutUrl ? (
+                            <Link
+                              href={signoutUrl}
+                              className="ihub-dropdown-item ihub-signout"
+                            >
+                              <span className="ihub-dropdown-icon">⤴</span>
+                              Sign out
+                            </Link>
+                          ) : (
+                            <button
+                              onClick={() => signOut()}
+                              className="ihub-dropdown-item ihub-signout"
+                            >
+                              <span className="ihub-dropdown-icon">⤴</span>
+                              Sign out
+                            </button>
+                          )}
                         </>
                       )}
                     </div>

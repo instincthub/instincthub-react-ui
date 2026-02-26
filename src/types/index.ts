@@ -313,6 +313,7 @@ export interface NavbarPropsType {
   hideTopBanner?: boolean;
   bottomBanner?: React.ReactNode | JSX.Element | null;
   hideBottomBanner?: boolean;
+  signoutUrl?: string;
   userDropdownOpen?: boolean;
   onUserDropdownToggle?: (isOpen: boolean) => void;
   renderUserDropdown?: (props: DropdownRenderProps) => React.ReactNode;

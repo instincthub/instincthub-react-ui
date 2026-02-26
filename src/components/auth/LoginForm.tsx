@@ -647,7 +647,7 @@ const LoginForm = ({
         } else {
           const errorMsg = res.message || res.detail || "An error occurred";
           setMessage(errorMsg);
-          setStatus(res.status);
+          setStatus(1);
           onError?.(errorMsg, "auth");
           onSubmitComplete?.(false);
           if (trackingEnabled) {
@@ -662,7 +662,7 @@ const LoginForm = ({
 
         const errorMsg = "Couldn't login. Please try again.";
         openToast(errorMsg, 400);
-        setStatus(3);
+        setStatus(1);
         onError?.(errorMsg, "network");
         onSubmitComplete?.(false);
         if (trackingEnabled) {

@@ -315,7 +315,7 @@
   }
 
   .ihub-empty-state {
-    background-color: var(--Gunmetal);
+    background-color: var(--White);
     color: var(--LavenderGray);
   }
 }

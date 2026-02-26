@@ -473,6 +473,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/LoginForm.tsx",
       example_path: "docs/static-docs/components/LoginForm.md",
+      visual_demo_url: "https://ui.instincthub.com/components/auth/login-form",
     },
     {
       name: "SignUpForm",
