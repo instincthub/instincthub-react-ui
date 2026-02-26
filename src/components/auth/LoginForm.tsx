@@ -822,6 +822,7 @@ const LoginForm = ({
 
       if (res?.detail === "Unauthorized" || res?.detail === "Not found.") {
         openToast("Couldn't login. Please try again.", 400);
+        setStatus(1);
         onFailureRedirect?.("Token validation failed");
         return;
       } else if (verifyEmail === false) {
@@ -849,6 +850,7 @@ const LoginForm = ({
 
       console.error("Validation error:", error);
       openToast("Validation failed. Please try again.", 400);
+      setStatus(1);
       onFailureRedirect?.("Network error during validation");
     }
   }, [
@@ -1217,11 +1219,6 @@ const LoginForm = ({
             label={submitButtonText}
             type="submit"
             status={status}
-            disabled={
-              isFormLoading ||
-              isLocked ||
-              (preventMultipleSubmissions && submissionInProgress)
-            }
             variant={submitButtonVariant}
           />
 
