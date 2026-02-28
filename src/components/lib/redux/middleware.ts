@@ -1,7 +1,8 @@
 /* Core */
+import type { Middleware } from '@reduxjs/toolkit'
 import { createLogger } from 'redux-logger'
 
-const middleware = [
+const middleware: Middleware[] = [
   createLogger({
     duration: true,
     timestamp: false,

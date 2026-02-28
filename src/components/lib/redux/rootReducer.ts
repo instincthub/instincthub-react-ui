@@ -36,7 +36,7 @@ import {
   unsplashObject,
 } from "./slices";
 
-export const reducer = {
+export const reducer: Record<string, import('@reduxjs/toolkit').Reducer> = {
   objectSlice: objectSlice.reducer,
   arraySlice: arraySlice.reducer,
 
