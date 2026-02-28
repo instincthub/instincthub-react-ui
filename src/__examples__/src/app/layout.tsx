@@ -11,10 +11,8 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-  session,
 }: Readonly<{
   children: React.ReactNode;
-  session: any;
 }>) {
   return (
     <CursorProviders>
@@ -31,7 +29,7 @@ export default function RootLayout({
           />
         </head>
         <body>
-          <ReactClientProviders session={session}>
+          <ReactClientProviders session={null}>
             {children}
             <MainFooter />
           </ReactClientProviders>
