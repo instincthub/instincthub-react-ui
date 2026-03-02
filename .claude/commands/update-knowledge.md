@@ -6,7 +6,13 @@ When you create, modify, or update a component, follow this checklist:
 - **If component name changed:**
   - Update `src/components/ui/ComponentLists.tsx`
   - Update `docs/static-docs/data/components.json`
-  
+  - Update `~/.claude/skills/instincthub-ui-components/SKILL.md` (add/rename in category list, update component counts)
+
+- **If new component created:**
+  - Add to the appropriate category section in `~/.claude/skills/instincthub-ui-components/SKILL.md`
+  - Update the total component count in the frontmatter `description` and the Overview section
+  - Update the category count (e.g., "Forms (38 components)")
+
 - **If component name changed OR structure modified:**
   - Update documentation in `docs/static-docs/components/`
   - Regenerate component documentation if automated tools are available

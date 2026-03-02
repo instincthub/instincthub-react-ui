@@ -221,7 +221,7 @@
 }
 
 .ihub-code-example {
-  background-color: var(--Gunmetal);
+  background-color: var(--OpacityBackground);
   border-radius: 8px;
   overflow: hidden;
   position: relative;
@@ -248,7 +248,7 @@
 .ihub-code-example code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   white-space: pre;
-  color: #f8f8f2;
+  color: var(--Gunmetal);
   font-size: 14px;
   line-height: 1.6;
 }

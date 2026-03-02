@@ -7,6 +7,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useMemo,
   KeyboardEvent,
   ChangeEvent,
   FocusEvent,
@@ -165,6 +166,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   const pickerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const separateFieldsRef = useRef<HTMLDivElement>(null);
+  const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   // Update time states when selected date changes
   useEffect(() => {
@@ -194,6 +196,32 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     }
   }, [mode, includeSeconds]);
 
+  // Format display value based on mode
+  const formatDisplayValue = useCallback((date?: Date): string => {
+    const dateToFormat = date || selectedDate;
+    if (!dateToFormat) return "";
+
+    try {
+      if (mode === "date") {
+        return format(dateToFormat, dateFormat);
+      } else if (mode === "time") {
+        return includeSeconds
+          ? format(dateToFormat, timeFormat)
+          : format(dateToFormat, timeFormat.replace(":ss", ""));
+      } else {
+        // datetime mode
+        const dateStr = format(dateToFormat, dateFormat);
+        const timeStr = includeSeconds
+          ? format(dateToFormat, timeFormat)
+          : format(dateToFormat, timeFormat.replace(":ss", ""));
+
+        return `${dateStr} ${timeStr}`;
+      }
+    } catch {
+      return "";
+    }
+  }, [selectedDate, mode, dateFormat, timeFormat, includeSeconds]);
+
   // Update input value when value prop changes
   useEffect(() => {
     if (value !== undefined) {
@@ -203,7 +231,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
         setInputValue(parsedDate ? formatDisplayValue(parsedDate) : "");
       }
     }
-  }, [value, isInputFocused]);
+  }, [value, isInputFocused, formatDisplayValue]);
 
   // Handle outside click
   useEffect(() => {
@@ -237,66 +265,40 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     };
   }, [useSeparateFields]);
 
-  // Format display value based on mode
-  const formatDisplayValue = (date?: Date): string => {
-    const dateToFormat = date || selectedDate;
-    if (!dateToFormat) return "";
-    
-    try {
-      if (mode === "date") {
-        return format(dateToFormat, dateFormat);
-      } else if (mode === "time") {
-        return includeSeconds
-          ? format(dateToFormat, timeFormat)
-          : format(dateToFormat, timeFormat.replace(":ss", ""));
-      } else {
-        // datetime mode
-        const dateStr = format(dateToFormat, dateFormat);
-        const timeStr = includeSeconds
-          ? format(dateToFormat, timeFormat)
-          : format(dateToFormat, timeFormat.replace(":ss", ""));
-        
-        return `${dateStr} ${timeStr}`;
-      }
-    } catch {
-      return "";
-    }
-  };
-
   // Validation functions
-  const isDateDisabled = (date: Date): boolean => {
+  const isDateDisabled = useCallback((date: Date): boolean => {
     const dateStr = format(date, "yyyy-MM-dd");
     return disabledDates.includes(dateStr);
-  };
+  }, [disabledDates]);
 
-  const isDateInRange = (date: Date): boolean => {
+  const isDateInRange = useCallback((date: Date): boolean => {
     if (minDate && isBefore(date, startOfDay(new Date(minDate)))) return false;
     if (maxDate && isAfter(date, endOfDay(new Date(maxDate)))) return false;
     return true;
-  };
+  }, [minDate, maxDate]);
 
-  const isTimeInRange = (hours: number, minutes: number): boolean => {
+  const isTimeInRange = useCallback((hours: number, minutes: number): boolean => {
     if (!minTime && !maxTime) return true;
-    
+
     const timeMinutes = hours * 60 + minutes;
-    
+
     if (minTime) {
       const [minH, minM] = minTime.split(":").map(Number);
       if (timeMinutes < minH * 60 + minM) return false;
     }
-    
+
     if (maxTime) {
       const [maxH, maxM] = maxTime.split(":").map(Number);
       if (timeMinutes > maxH * 60 + maxM) return false;
     }
-    
-    return true;
-  };
 
-  const isTimeDisabled = (hours: number, minutes: number): boolean => {
+    return true;
+  }, [minTime, maxTime]);
+
+  const isTimeDisabled = useCallback((hours: number, minutes: number): boolean => {
     const timeStr = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
     return disabledTimes.includes(timeStr);
-  };
+  }, [disabledTimes]);
 
   // Validate complete datetime
   const validateDateTime = useCallback((): boolean => {
@@ -333,7 +335,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     }
 
     return true;
-  }, [selectedDate, required, minDate, maxDate, minTime, maxTime, disabledDates, disabledTimes]);
+  }, [selectedDate, required, isDateInRange, isDateDisabled, isTimeInRange, isTimeDisabled]);
 
   // Handle date selection
   const handleDateSelect = (date: Date) => {
@@ -432,13 +434,13 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  // Generate calendar days
-  const generateCalendarDays = () => {
+  // Memoized calendar days
+  const calendarDays = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
     const firstDay = startOfMonth(currentMonth);
     const startingDayOfWeek = getDay(firstDay);
-    const daysInMonth = getDaysInMonth(currentMonth);
+    const totalDays = getDaysInMonth(currentMonth);
 
     const days: (Date | null)[] = [];
 
@@ -448,36 +450,36 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     }
 
     // Add days of the month
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= totalDays; day++) {
       days.push(new Date(year, month, day));
     }
 
     return days;
-  };
+  }, [currentMonth]);
 
-  // Generate time options
-  const generateTimeOptions = () => {
+  // Memoized time options
+  const timeOptions = useMemo(() => {
     const options: { hours: number; minutes: number; display: string }[] = [];
-    
+
     for (let h = 0; h < 24; h++) {
       for (let m = 0; m < 60; m += timeStep) {
         if (!isTimeDisabled(h, m) && isTimeInRange(h, m)) {
           let displayHour = h;
           let suffix = "";
-          
+
           if (use12Hour) {
             suffix = h < 12 ? " AM" : " PM";
             displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
           }
-          
+
           const display = `${displayHour.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}${suffix}`;
           options.push({ hours: h, minutes: m, display });
         }
       }
     }
-    
+
     return options;
-  };
+  }, [timeStep, use12Hour, isTimeDisabled, isTimeInRange]);
 
   // Create format mask for visual guidance based on mode
   const createFormatMask = (inputStr: string): string => {
@@ -820,14 +822,14 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   };
   
   // Auto-advance to next field
-  const handleSeparateFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: keyof typeof separateFields, maxLength: number, nextFieldId?: string) => {
+  const handleSeparateFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: keyof typeof separateFields, maxLength: number, nextFieldKey?: string) => {
     const target = e.target as HTMLInputElement;
     const value = target.value;
-    
+
     // Auto-advance when field is full
-    if (value.length >= maxLength && nextFieldId && /\d/.test(e.key)) {
+    if (value.length >= maxLength && nextFieldKey && /\d/.test(e.key)) {
       e.preventDefault();
-      const nextField = document.getElementById(nextFieldId) as HTMLInputElement;
+      const nextField = fieldRefs.current[nextFieldKey];
       if (nextField) {
         nextField.focus();
         nextField.select();
@@ -870,11 +872,12 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
             {(mode === "date" || mode === "datetime") && (
               <div className="ihub-datetime-date-fields">
               <input
+                ref={(el) => { fieldRefs.current["year"] = el; }}
                 type="text"
                 className="ihub-datetime-field ihub-datetime-year"
                 value={separateFields.year}
                 onChange={(e) => handleSeparateFieldChange("year", e.target.value.replace(/\D/g, "").slice(0, 4))}
-                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "year", 4, `${id}-month`)}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "year", 4, "month")}
                 placeholder="YYYY"
                 maxLength={4}
                 disabled={disabled}
@@ -883,6 +886,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
               />
               <span className="ihub-datetime-separator">/</span>
               <input
+                ref={(el) => { fieldRefs.current["month"] = el; }}
                 type="text"
                 className="ihub-datetime-field ihub-datetime-month"
                 value={separateFields.month}
@@ -892,7 +896,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                     handleSeparateFieldChange("month", val);
                   }
                 }}
-                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "month", 2, `${id}-day`)}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "month", 2, "day")}
                 placeholder="MM"
                 maxLength={2}
                 disabled={disabled}
@@ -901,6 +905,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
               />
               <span className="ihub-datetime-separator">/</span>
               <input
+                ref={(el) => { fieldRefs.current["day"] = el; }}
                 type="text"
                 className="ihub-datetime-field ihub-datetime-day"
                 value={separateFields.day}
@@ -910,7 +915,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                     handleSeparateFieldChange("day", val);
                   }
                 }}
-                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "day", 2, `${id}-hour`)}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "day", 2, "hour")}
                 placeholder="DD"
                 maxLength={2}
                 disabled={disabled}
@@ -924,6 +929,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
             {(mode === "time" || mode === "datetime") && (
               <div className="ihub-datetime-time-fields">
               <input
+                ref={(el) => { fieldRefs.current["hour"] = el; }}
                 type="text"
                 className="ihub-datetime-field ihub-datetime-hour"
                 value={separateFields.hour}
@@ -934,7 +940,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                     handleSeparateFieldChange("hour", val);
                   }
                 }}
-                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "hour", 2, `${id}-minute`)}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "hour", 2, "minute")}
                 placeholder={use12Hour ? "HH" : "HH"}
                 maxLength={2}
                 disabled={disabled}
@@ -943,6 +949,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
               />
               <span className="ihub-datetime-separator">:</span>
               <input
+                ref={(el) => { fieldRefs.current["minute"] = el; }}
                 type="text"
                 className="ihub-datetime-field ihub-datetime-minute"
                 value={separateFields.minute}
@@ -952,7 +959,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                     handleSeparateFieldChange("minute", val);
                   }
                 }}
-                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "minute", 2, includeSeconds ? `${id}-second` : undefined)}
+                onKeyDown={(e) => handleSeparateFieldKeyDown(e, "minute", 2, includeSeconds ? "second" : undefined)}
                 placeholder="MM"
                 maxLength={2}
                 disabled={disabled}
@@ -964,6 +971,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                 <>
                   <span className="ihub-datetime-separator">:</span>
                   <input
+                    ref={(el) => { fieldRefs.current["second"] = el; }}
                     type="text"
                     className="ihub-datetime-field ihub-datetime-second"
                     value={separateFields.second}
@@ -1165,7 +1173,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
 
                 {/* Calendar days */}
                 <div className="ihub-datetime-days">
-                  {generateCalendarDays().map((date, index) => {
+                  {calendarDays.map((date, index) => {
                     if (!date) {
                       return <div key={`empty-${index}`} className="ihub-datetime-day-empty" />;
                     }
@@ -1286,7 +1294,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                 <div className="ihub-datetime-time-list">
                   <div className="ihub-datetime-time-list-header">Quick select:</div>
                   <div className="ihub-datetime-time-options">
-                    {generateTimeOptions().map((option, index) => {
+                    {timeOptions.map((option, index) => {
                       const isSelected = 
                         selectedDate &&
                         selectedDate.getHours() === option.hours &&
@@ -1351,13 +1359,13 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
       {/* Quick action links */}
       {showQuickActions && !disabled && !showPicker && (
         <div className="ihub-datetime-quick-links">
-          <span className="ihub-datetime-link" onClick={setToday}>
+          <button type="button" className="ihub-datetime-link" onClick={setToday}>
             Now
-          </span>
+          </button>
           <span className="ihub-datetime-separator">|</span>
-          <span className="ihub-datetime-link" onClick={clearDateTime}>
+          <button type="button" className="ihub-datetime-link" onClick={clearDateTime}>
             Clear
-          </span>
+          </button>
         </div>
       )}
 

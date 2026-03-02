@@ -773,6 +773,54 @@ export interface DateTimePickerPropsType {
   mode?: "datetime" | "date" | "time";
 }
 
+// DateRangePicker Types and Props
+
+export interface DateRange {
+  startDate: string;
+  endDate: string;
+}
+
+export interface DateRangePickerPropsType {
+  /** Label text for the date range picker */
+  label?: string;
+  /** Label for the start date input */
+  startLabel?: string;
+  /** Label for the end date input */
+  endLabel?: string;
+  /** The current date range value */
+  value?: DateRange;
+  /** Callback when the date range changes */
+  onChange?: (range: DateRange) => void;
+  /** Whether the field is required */
+  required?: boolean;
+  /** Minimum allowed date in YYYY-MM-DD format */
+  minDate?: string;
+  /** Maximum allowed date in YYYY-MM-DD format */
+  maxDate?: string;
+  /** Array of disabled dates in YYYY-MM-DD format */
+  disabledDates?: string[];
+  /** Date display format (default: "yyyy-MM-dd") */
+  dateFormat?: string;
+  /** Placeholder text for start and end inputs */
+  placeholder?: { start?: string; end?: string };
+  /** Custom error message */
+  errorMessage?: string;
+  /** Additional CSS classes */
+  className?: string;
+  /** Name attributes for form submission */
+  name?: { start?: string; end?: string };
+  /** Unique identifier */
+  id?: string;
+  /** Whether the input is disabled */
+  disabled?: boolean;
+  /** Whether to show the calendar icon */
+  showCalendarIcon?: boolean;
+  /** Whether to show quick action presets */
+  showQuickActions?: boolean;
+  /** Accessibility label */
+  ariaLabel?: string;
+}
+
 // StatusIcon Types and Props
 
 export type StatusType =

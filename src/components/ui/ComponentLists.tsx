@@ -74,6 +74,16 @@ const ComponentLists = () => {
       visual_demo_url: "https://ui.instincthub.com/components/forms/time-picker",
     },
     {
+      name: "DateRangePicker",
+      description:
+        "Date range picker with two-click selection, hover preview, and quick presets",
+      category: "Forms",
+      repo_path: "src/components/forms/DateRangePicker.tsx",
+      example_path: "docs/static-docs/components/DateRangePicker.md",
+      visual_demo_url:
+        "https://ui.instincthub.com/components/forms/date-range-picker",
+    },
+    {
       name: "DropFile",
       description: "File drag and drop component",
       category: "Forms",

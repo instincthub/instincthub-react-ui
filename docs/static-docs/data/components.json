@@ -132,6 +132,74 @@
     "example_path": "../components/DateTimePicker.md"
   },
   {
+    "name": "DateRangePicker",
+    "description": "Date range picker with two-click selection, hover preview, and quick presets",
+    "category": "Forms",
+    "repo_path": "../../../src/components/forms/DateRangePicker.tsx",
+    "type": "component",
+    "tags": ["forms", "input", "form", "picker", "calendar", "date", "range"],
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "description": "Label text for the date range picker"
+      },
+      {
+        "name": "value",
+        "type": "DateRange",
+        "required": false,
+        "description": "Current date range value { startDate: string; endDate: string }"
+      },
+      {
+        "name": "onChange",
+        "type": "(range: DateRange) => void",
+        "required": false,
+        "description": "Callback when date range changes"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether the field is required"
+      },
+      {
+        "name": "minDate",
+        "type": "string",
+        "required": false,
+        "description": "Minimum allowed date (YYYY-MM-DD)"
+      },
+      {
+        "name": "maxDate",
+        "type": "string",
+        "required": false,
+        "description": "Maximum allowed date (YYYY-MM-DD)"
+      },
+      {
+        "name": "disabledDates",
+        "type": "string[]",
+        "required": false,
+        "description": "Array of disabled dates (YYYY-MM-DD)"
+      },
+      {
+        "name": "showQuickActions",
+        "type": "boolean",
+        "required": false,
+        "description": "Show preset buttons (Today, This Week, etc.)"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": "Whether the input is disabled"
+      }
+    ],
+    "examples": [
+      "import { DateRangePicker } from '@instincthub/react-ui';\nimport type { DateRange } from '@instincthub/react-ui';\n\nconst [range, setRange] = useState<DateRange>({ startDate: '', endDate: '' });\n\n<DateRangePicker\n  label=\"Select Date Range\"\n  value={range}\n  onChange={(range) => setRange(range)}\n/>"
+    ],
+    "example_path": "../components/DateRangePicker.md"
+  },
+  {
     "name": "DropFile",
     "description": "File drag and drop component",
     "category": "Forms",

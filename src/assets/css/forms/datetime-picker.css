@@ -492,6 +492,9 @@
 }
 
 .ihub-datetime-link {
+  background: none;
+  border: none;
+  padding: 0;
   color: var(--Gunmetal, #2c333a);
   cursor: pointer;
   font-size: 0.875rem;
@@ -561,84 +564,82 @@
 }
 
 /* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .ihub-datetime-picker-dropdown {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-picker-dropdown {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-input-container {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-input-container {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-input {
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-input {
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-tabs {
-    background: var(--DarkSecondary, #4a5568);
-    border-color: var(--DarkBorder, #4a5568);
-  }
+.DarkMode .ihub-datetime-tabs {
+  background: var(--DarkSecondary, #4a5568);
+  border-color: var(--DarkBorder, #4a5568);
+}
 
-  .ihub-datetime-tab {
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-tab {
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-tab.active {
-    background: var(--DarkBackground, #2d3748);
-  }
+.DarkMode .ihub-datetime-tab.active {
+  background: var(--DarkBackground, #2d3748);
+}
 
-  .ihub-datetime-day {
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-day {
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-day:hover:not(:disabled) {
-    background: var(--DarkHover, #4a5568);
-  }
+.DarkMode .ihub-datetime-day:hover:not(:disabled) {
+  background: var(--DarkHover, #4a5568);
+}
 
-  .ihub-datetime-time-input {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-time-input {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-time-option {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-time-option {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-time-option:hover {
-    background: var(--DarkHover, #4a5568);
-  }
+.DarkMode .ihub-datetime-time-option:hover {
+  background: var(--DarkHover, #4a5568);
+}
 
-  .ihub-datetime-action-btn {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-action-btn {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-action-btn:hover {
-    background: var(--DarkHover, #4a5568);
-  }
+.DarkMode .ihub-datetime-action-btn:hover {
+  background: var(--DarkHover, #4a5568);
+}
 
-  .ihub-datetime-actions {
-    background: var(--DarkSecondary, #4a5568);
-    border-color: var(--DarkBorder, #4a5568);
-  }
+.DarkMode .ihub-datetime-actions {
+  background: var(--DarkSecondary, #4a5568);
+  border-color: var(--DarkBorder, #4a5568);
+}
 
-  .ihub-datetime-ampm-btn {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-ampm-btn {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-ampm-btn:hover {
-    background: var(--DarkHover, #4a5568);
-  }
+.DarkMode .ihub-datetime-ampm-btn:hover {
+  background: var(--DarkHover, #4a5568);
 }
 
 /* Focus indicators for accessibility */
@@ -875,62 +876,60 @@
 }
 
 /* Dark mode support for separate fields */
-@media (prefers-color-scheme: dark) {
-  .ihub-datetime-field {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-field {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-field:focus {
-    border-color: var(--DarkCyan, #00838f);
-    box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
-  }
+.DarkMode .ihub-datetime-field:focus {
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
 
-  .ihub-datetime-field:disabled {
-    background: var(--DarkSecondary, #4a5568);
-    color: var(--DarkTextDisabled, #a0aec0);
-  }
+.DarkMode .ihub-datetime-field:disabled {
+  background: var(--DarkSecondary, #4a5568);
+  color: var(--DarkTextDisabled, #a0aec0);
+}
 
-  .ihub-datetime-field::placeholder {
-    color: var(--DarkTextSecondary, #a0aec0);
-  }
+.DarkMode .ihub-datetime-field::placeholder {
+  color: var(--DarkTextSecondary, #a0aec0);
+}
 
-  .ihub-datetime-separate-fields .ihub-datetime-separator {
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-separate-fields .ihub-datetime-separator {
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-ampm-toggle {
-    background: var(--DarkBackground, #2d3748);
-    border-color: var(--DarkBorder, #4a5568);
-    color: var(--DarkText, #e2e8f0);
-  }
+.DarkMode .ihub-datetime-ampm-toggle {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+  color: var(--DarkText, #e2e8f0);
+}
 
-  .ihub-datetime-ampm-toggle:hover:not(:disabled) {
-    background: var(--DarkSecondary, #4a5568);
-    border-color: var(--DarkCyan, #00838f);
-    color: var(--DarkCyan, #00838f);
-  }
+.DarkMode .ihub-datetime-ampm-toggle:hover:not(:disabled) {
+  background: var(--DarkSecondary, #4a5568);
+  border-color: var(--DarkCyan, #00838f);
+  color: var(--DarkCyan, #00838f);
+}
 
-  .ihub-datetime-ampm-toggle:focus {
-    border-color: var(--DarkCyan, #00838f);
-    box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
-  }
+.DarkMode .ihub-datetime-ampm-toggle:focus {
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
 
-  .ihub-datetime-ampm-toggle:active {
-    background: var(--DarkCyan, #00838f);
-    color: var(--White, #ffffff);
-  }
+.DarkMode .ihub-datetime-ampm-toggle:active {
+  background: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+}
 
-  .ihub-datetime-ampm-toggle:disabled {
-    background: var(--DarkSecondary, #4a5568);
-    color: var(--DarkTextDisabled, #a0aec0);
-    border-color: var(--DarkBorder, #4a5568);
-  }
+.DarkMode .ihub-datetime-ampm-toggle:disabled {
+  background: var(--DarkSecondary, #4a5568);
+  color: var(--DarkTextDisabled, #a0aec0);
+  border-color: var(--DarkBorder, #4a5568);
+}
 
-  .ihub-datetime-ampm-toggle:disabled:hover {
-    background: var(--DarkSecondary, #4a5568);
-    color: var(--DarkTextDisabled, #a0aec0);
-    border-color: var(--DarkBorder, #4a5568);
-  }
+.DarkMode .ihub-datetime-ampm-toggle:disabled:hover {
+  background: var(--DarkSecondary, #4a5568);
+  color: var(--DarkTextDisabled, #a0aec0);
+  border-color: var(--DarkBorder, #4a5568);
 }

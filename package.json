@@ -1,6 +1,6 @@
 {
   "name": "@instincthub/react-ui",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "InstinctHub React UI components and assets in TypeScript",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",
@@ -125,6 +125,7 @@
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.4",
     "html2canvas": "^1.4.1",
+    "immer": "^11.1.4",
     "lodash": "^4.17.21",
     "lucide-react": "^0.525.0",
     "marked": "^15.0.7",

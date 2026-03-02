@@ -1,0 +1,184 @@
+/* DateRangePicker Component Styles */
+
+/* Wrapper */
+.ihub-daterange-picker-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: var(--Nunito);
+}
+
+/* Input row: two inputs with arrow separator */
+.ihub-daterange-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Individual input container */
+.ihub-daterange-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: var(--borderDefault);
+  border-radius: 6px;
+  background: var(--White, #ffffff);
+  transition: all 0.2s ease;
+  min-height: 48px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.ihub-daterange-input-container:hover {
+  border-color: var(--DarkCyan, #00838f);
+}
+
+.ihub-daterange-input-container.active {
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
+
+.ihub-daterange-input-container .ihub-datetime-input {
+  cursor: pointer;
+}
+
+/* Arrow separator */
+.ihub-daterange-separator-arrow {
+  font-size: 1.25rem;
+  color: var(--Rhythm, #69779b);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Constrain dropdown width within the wider range wrapper */
+.ihub-daterange-picker-wrapper .ihub-datetime-picker-dropdown {
+  right: auto;
+  max-width: 380px;
+}
+
+/* Phase indicator */
+.ihub-daterange-phase-indicator {
+  padding: 10px 16px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--DarkCyan, #00838f);
+  background: var(--Magnolia, #f4f3fe);
+  text-align: center;
+  font-family: var(--Nunito);
+  border-bottom: 1px solid var(--LightGray, #dee2e6);
+}
+
+/* Quick preset buttons */
+.ihub-daterange-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 12px 16px;
+  border-top: 1px solid var(--LightGray, #dee2e6);
+  background: var(--Gray, #f4f4f4);
+}
+
+/* Range day styles */
+.ihub-datetime-day.range-start {
+  background: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+  border-radius: 6px 0 0 6px;
+}
+
+.ihub-datetime-day.range-end {
+  background: var(--DarkCyan, #00838f);
+  color: var(--White, #ffffff);
+  border-radius: 0 6px 6px 0;
+}
+
+.ihub-datetime-day.range-start.range-end {
+  border-radius: 6px;
+}
+
+.ihub-datetime-day.in-range {
+  background: rgba(0, 131, 143, 0.1);
+  color: var(--Gunmetal, #2c333a);
+  border-radius: 0;
+}
+
+.ihub-datetime-day.in-range:hover:not(:disabled) {
+  background: rgba(0, 131, 143, 0.2);
+}
+
+/* Responsive: stack inputs vertically on mobile */
+@media (max-width: 768px) {
+  .ihub-daterange-inputs {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ihub-daterange-separator-arrow {
+    transform: rotate(90deg);
+    font-size: 1rem;
+  }
+
+  .ihub-daterange-input-container {
+    width: 100%;
+  }
+
+  .ihub-daterange-presets {
+    gap: 4px;
+    padding: 8px 12px;
+  }
+
+  .ihub-daterange-presets .ihub-datetime-action-btn {
+    font-size: 0.6875rem;
+    padding: 5px 8px;
+  }
+}
+
+/* Dark mode via .DarkMode class */
+.DarkMode .ihub-daterange-input-container {
+  background: var(--DarkBackground, #2d3748);
+  border-color: var(--DarkBorder, #4a5568);
+}
+
+.DarkMode .ihub-daterange-input-container:hover {
+  border-color: var(--DarkCyan, #00838f);
+}
+
+.DarkMode .ihub-daterange-input-container.active {
+  border-color: var(--DarkCyan, #00838f);
+}
+
+.DarkMode .ihub-daterange-separator-arrow {
+  color: var(--DarkText, #e2e8f0);
+}
+
+.DarkMode .ihub-daterange-phase-indicator {
+  background: var(--DarkSecondary, #4a5568);
+  color: var(--TiffanyBlue, #0fabbc);
+  border-color: var(--DarkBorder, #4a5568);
+}
+
+.DarkMode .ihub-daterange-presets {
+  background: var(--DarkSecondary, #4a5568);
+  border-color: var(--DarkBorder, #4a5568);
+}
+
+.DarkMode .ihub-datetime-day.in-range {
+  background: rgba(0, 131, 143, 0.2);
+  color: var(--DarkText, #e2e8f0);
+}
+
+.DarkMode .ihub-datetime-day.in-range:hover:not(:disabled) {
+  background: rgba(0, 131, 143, 0.35);
+}
+
+/* Focus indicators for accessibility */
+.ihub-daterange-input-container:focus-within {
+  border-color: var(--DarkCyan, #00838f);
+  box-shadow: 0 0 0 0.2rem rgba(0, 131, 143, 0.25);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ihub-daterange-input-container {
+    transition: none;
+  }
+}

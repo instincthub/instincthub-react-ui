@@ -327,7 +327,7 @@ const DateTimePickerExample: React.FC = () => {
 
       <div className="ihub-code-examples">
         <h2>Code Examples</h2>
-        
+
         <div className="ihub-code-section">
           <h3>Basic Usage</h3>
           <pre><code>{`import { DateTimePicker } from '@instincthub/react-ui';
@@ -400,6 +400,7 @@ const [dateTime, setDateTime] = useState('');
   mode="datetime"
 />`}</code></pre>
         </div>
+
       </div>
 
       <div className="ihub-api-reference">
@@ -539,6 +540,7 @@ const [dateTime, setDateTime] = useState('');
           </table>
         </div>
       </div>
+
     </div>
   );
 };

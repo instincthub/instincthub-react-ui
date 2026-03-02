@@ -4,6 +4,7 @@ export { default as PasswordField } from "./PasswordField";
 export { default as DateInput } from "./DateInput";
 export { default as DateTimeInput } from "./DateTimeInput";
 export { default as DateTimePicker } from "./DateTimePicker";
+export { default as DateRangePicker } from "./DateRangePicker";
 export { default as DropFile } from "./DropFile";
 export { default as EmailList } from "./EmailList";
 export { default as FilterArray } from "./FilterArray";
