@@ -24,7 +24,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms",
       example_path: "docs/static-docs/examples/FormComponent.md",
-      visual_demo_url: "https://ui.instincthub.com/components/auth/signup-form",
+      visual_demo_url: "/components/auth/signup-form",
     },
     {
       name: "ActionDropdown",
@@ -32,7 +32,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/ActionDropdown.tsx",
       example_path: "docs/static-docs/components/ActionDropdown.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/action-dropdown",
+      visual_demo_url: "/components/forms/action-dropdown",
     },
     {
       name: "AnimatedBox",
@@ -40,7 +40,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/AnimatedBox.tsx",
       example_path: "docs/static-docs/components/AnimatedBox.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/animated-box",
+      visual_demo_url: "/components/forms/animated-box",
     },
     {
       name: "PasswordField",
@@ -48,7 +48,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/PasswordField.tsx",
       example_path: "docs/static-docs/components/PasswordField.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/password-field",
+      visual_demo_url: "/components/forms/password-field",
     },
     {
       name: "DateInput",
@@ -56,7 +56,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/DateInput.tsx",
       example_path: "docs/static-docs/components/DateInput.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/date-input",
+      visual_demo_url: "/components/forms/date-input",
     },
     {
       name: "DateTimeInput",
@@ -71,7 +71,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/DateTimePicker.tsx",
       example_path: "docs/static-docs/components/DateTimePicker.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/time-picker",
+      visual_demo_url: "/components/forms/time-picker",
     },
     {
       name: "DateRangePicker",
@@ -81,7 +81,7 @@ const ComponentLists = () => {
       repo_path: "src/components/forms/DateRangePicker.tsx",
       example_path: "docs/static-docs/components/DateRangePicker.md",
       visual_demo_url:
-        "https://ui.instincthub.com/components/forms/date-range-picker",
+        "/components/forms/date-range-picker",
     },
     {
       name: "DropFile",
@@ -89,7 +89,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/DropFile.tsx",
       example_path: "docs/static-docs/components/DropFile.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/drop-file",
+      visual_demo_url: "/components/forms/drop-file",
     },
     {
       name: "EmailList",
@@ -97,7 +97,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/EmailList.tsx",
       example_path: "docs/static-docs/components/EmailList.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/email-list",
+      visual_demo_url: "/components/forms/email-list",
     },
     {
       name: "FilterArray",
@@ -105,7 +105,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/FilterArray.tsx",
       example_path: "docs/static-docs/components/FilterArray.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/filter-array",
+      visual_demo_url: "/components/forms/filter-array",
     },
     {
       name: "FilterBy",
@@ -120,7 +120,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/FilterObjects.tsx",
       example_path: "docs/static-docs/components/FilterObjects.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/filter-objects",
+      visual_demo_url: "/components/forms/filter-objects",
     },
     {
       name: "FormError",
@@ -156,7 +156,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/MultipleEmail.tsx",
       example_path: "docs/static-docs/components/MultipleEmail.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/multiple-email",
+      visual_demo_url: "/components/forms/multiple-email",
     },
     {
       name: "PageLoading",
@@ -171,7 +171,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/PhoneNumberInput.tsx",
       example_path: "docs/static-docs/components/PhoneNumberInput.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/phone-number-input",
+      visual_demo_url: "/components/forms/phone-number-input",
     },
     {
       name: "RadioField",
@@ -214,6 +214,15 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/SearchFieldDB.tsx",
       example_path: "docs/static-docs/components/SearchFieldDB.md",
+    },
+    {
+      name: "SearchableDropdown",
+      description:
+        "API-powered searchable dropdown with debounced search, selection, and clear",
+      category: "Forms",
+      repo_path: "src/components/forms/SearchableDropdown.tsx",
+      example_path: "docs/static-docs/components/SearchableDropdown.md",
+      visual_demo_url: "/components/forms/searchable-dropdown",
     },
     {
       name: "StepProgressBar",
@@ -298,7 +307,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/uploads/FileUploader.tsx",
       example_path: "docs/static-docs/components/FileUploader.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/file-uploader",
+      visual_demo_url: "/components/forms/file-uploader",
     },
     {
       name: "IhubFileUploader",
@@ -320,7 +329,7 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputNumber.tsx",
       example_path: "docs/static-docs/components/InputNumber.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/input-number",
+      visual_demo_url: "/components/forms/input-number",
     },
     {
       name: "InputText",
@@ -328,7 +337,7 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputText.tsx",
       example_path: "docs/static-docs/components/InputText.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/input-text",
+      visual_demo_url: "/components/forms/input-text",
     },
     {
       name: "InputTextarea",
@@ -336,7 +345,7 @@ const ComponentLists = () => {
       category: "Form",
       repo_path: "src/components/forms/InputTextarea.tsx",
       example_path: "docs/static-docs/components/InputTextarea.md",
-      visual_demo_url: "https://ui.instincthub.com/components/forms/input-textarea",
+      visual_demo_url: "/components/forms/input-textarea",
     },
     {
       name: "SearchObjectsFromDB",
@@ -453,7 +462,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/IsUsernameEmailTaken.tsx",
       example_path: "docs/static-docs/components/IsUsernameEmailTaken.md",
-      visual_demo_url: "https://ui.instincthub.com/components/auth/username-email-checker",
+      visual_demo_url: "/components/auth/username-email-checker",
     },
     {
       name: "ClientDetector",
@@ -461,7 +470,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/ClientDetector.tsx",
       example_path: "docs/static-docs/components/ClientDetector.md",
-      visual_demo_url: "https://ui.instincthub.com/components/auth/client-detector",
+      visual_demo_url: "/components/auth/client-detector",
     },
     {
       name: "PasswordsMatch",
@@ -483,7 +492,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/components/auth/LoginForm.tsx",
       example_path: "docs/static-docs/components/LoginForm.md",
-      visual_demo_url: "https://ui.instincthub.com/components/auth/login-form",
+      visual_demo_url: "/components/auth/login-form",
     },
     {
       name: "SignUpForm",
@@ -491,7 +500,7 @@ const ComponentLists = () => {
       category: "Auth",
       repo_path: "src/__examples__/src/components/forms/SignUpFormExample.tsx",
       example_path: "docs/static-docs/components/SignUpForm.md",
-      visual_demo_url: "https://ui.instincthub.com/components/auth/signup-form",
+      visual_demo_url: "/components/auth/signup-form",
     },
     {
       name: "ReactClientProviders",
@@ -583,7 +592,7 @@ const ComponentLists = () => {
       category: "Navbar",
       repo_path: "src/components/navbar/SideNavbar.tsx",
       example_path: "docs/static-docs/components/SideNavbar.md",
-      visual_demo_url: "https://ui.instincthub.com/components/navbars/sidenav",
+      visual_demo_url: "/components/navbars/sidenav",
     },
     {
       name: "SideNavbarContext",
@@ -607,7 +616,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/viewer/ContentViewer.tsx",
       example_path: "docs/static-docs/components/ContentViewer.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/content-viewer",
+      visual_demo_url: "/components/ui/content-viewer",
     },
     {
       name: "ContentViewOrEdit",
@@ -615,7 +624,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/viewer/ContentViewOrEdit.tsx",
       example_path: "docs/static-docs/components/ContentViewOrEdit.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/content-view-or-edit",
+      visual_demo_url: "/components/ui/content-view-or-edit",
     },
     {
       name: "CodeDisplay",
@@ -644,7 +653,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/OrDivider.tsx",
       example_path: "docs/static-docs/components/OrDivider.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/or-divider",
+      visual_demo_url: "/components/ui/or-divider",
     },
     {
       name: "Card",
@@ -659,7 +668,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/cards/CardList.tsx",
       example_path: "docs/static-docs/components/CardList.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/card-list",
+      visual_demo_url: "/components/ui/card-list",
     },
     {
       name: "CardGrid",
@@ -667,7 +676,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/cards/CardGrid.tsx",
       example_path: "docs/static-docs/components/CardGrid.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/card-grid",
+      visual_demo_url: "/components/ui/card-grid",
     },
     {
       name: "HorizontalCard",
@@ -710,7 +719,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/images/RandomGradientImage.tsx",
       example_path: "docs/static-docs/components/RandomGradientImage.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/random-gradient-image",
+      visual_demo_url: "/components/ui/random-gradient-image",
     },
     {
       name: "Dialog",
@@ -753,7 +762,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/pagination/Pagination.tsx",
       example_path: "docs/static-docs/components/Pagination.md",
-      visual_demo_url: "https://ui.instincthub.com/components/ui/pagination",
+      visual_demo_url: "/components/ui/pagination",
     },
     {
       name: "PaginationDemo",
@@ -1050,6 +1059,8 @@ const ComponentLists = () => {
   const baseRepoUrl =
     "https://github.com/instincthub/instincthub-react-ui/blob/main/";
 
+  const uiBaseUrl= window.location.origin;
+
   const copyToClipboard = async (url: string, linkType: string) => {
     try {
       await navigator.clipboard.writeText(url);
@@ -1210,15 +1221,15 @@ const ComponentLists = () => {
                         <button
                           onClick={() =>
                             copyToClipboard(
-                              component.visual_demo_url!,
+                              uiBaseUrl+component.visual_demo_url!,
                               "demo"
                             )
                           }
                           className="ihub-copy-btn"
-                          title={`Copy ${component.name} live demo link`}
+                          title={`Copy ${component.name}live demo link`}
                         >
                           {copiedLink ===
-                          `demo-${component.visual_demo_url}` ? (
+                          `demo-${uiBaseUrl}${component.visual_demo_url}` ? (
                             <Check />
                           ) : (
                             <Copy />

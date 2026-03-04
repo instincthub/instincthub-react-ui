@@ -19,7 +19,7 @@
 }
 
 .ihub-table th {
-  background-color: var(--Magnolia);
+  background-color: var(--OpacityBackground);
   font-weight: 600;
   color: var(--Gunmetal);
   position: relative;
@@ -158,6 +158,12 @@
   color: var(--Gunmetal);
 }
 
+.ihub-rows-select, .ihub-search-input {
+    background-color: var(--OpacityBackground);
+    color: var(--Gunmetal);
+    border-color: rgba(197, 192, 219, .3);
+}
+
 .ihub-sticky-header {
   overflow: auto;
 }
@@ -171,7 +177,7 @@
 .ihub-empty-state {
   padding: 40px 0;
   text-align: center;
-  color: var(--ChineseSilver);
+  color: var(--LavenderGray);
   background-color: var(--White);
   border-radius: 5px;
   box-shadow: var(--lightShadow);
@@ -279,8 +285,8 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .ihub-table th {
-    background-color: var(--Gunmetal);
-    color: var(--White);
+    background-color: var(--OpacityBackground);
+    color: var(--Gunmetal);
   }
 
   .ihub-table {
@@ -309,8 +315,6 @@
   }
 
   .ihub-search-input {
-    background-color: var(--Gunmetal);
-    color: var(--White);
     border-color: rgba(197, 192, 219, 0.3);
   }
 

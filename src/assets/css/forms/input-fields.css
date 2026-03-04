@@ -1390,6 +1390,7 @@
   width: 100%;
   margin-bottom: 20px;
   overflow-x: auto;
+  background-color: transparent;
 }
 
 .ihub-table-filter {

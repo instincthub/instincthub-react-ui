@@ -1,11 +1,11 @@
 /* Improved Search Objects Component Styles */
 
 .ihub-react-search {
-  max-width: 400px;
+  max-width: 600px;
+  max-height: 500px;
   border: var(--borderDefault);
   padding: 15px;
   border-radius: 5px;
-  max-height: 400px;
   overflow: auto;
   position: relative;
 }

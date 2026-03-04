@@ -65,6 +65,7 @@ export { default as CountryInput } from "./components/forms/CountryInput";
 export { default as CountryStateInput } from "./components/forms/CountryStateInput";
 export { default as InputSearchDropdown } from "./components/forms/InputSearchDropdown";
 export { default as RangeRadio } from "./components/forms/RangeRadio";
+export { default as SearchableDropdown } from "./components/forms/SearchableDropdown";
 
 // Navbar components
 export { default as ChannelListAvatar } from "./components/navbar/ChannelListAvatar";
