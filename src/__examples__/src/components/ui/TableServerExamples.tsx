@@ -2,11 +2,38 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { Badge, Action, IHubTableServer, IHubTableServerRef } from "../../../../index";
-import { DataResponseType, TableColumnType } from "../../../../types";
+import { IHubTableDefaultDataType, TableColumnType } from "../../../../types";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
+
+// Typed interfaces for table data
+interface ProgramCourseData extends IHubTableDefaultDataType {
+  id: string | number;
+  course: {
+    id: string;
+    code: string;
+    title: string;
+    level: string;
+    semester: string;
+    credits: number;
+    choice: string;
+  };
+  enroll_count: number;
+  program: string;
+  last_action: string;
+}
+
+interface InvoiceData extends IHubTableDefaultDataType {
+  id: string;
+  student: string;
+  amount: number;
+  category: string;
+  date: string;
+  dueDate: string;
+  status: "paid" | "pending" | "overdue";
+}
 
 // Example page component
 export default function ProgramCoursesPage() {
@@ -58,7 +85,7 @@ export default function ProgramCoursesPage() {
     },
     {
       header: "Actions",
-      cell: (row: DataResponseType) => (
+      cell: (row: ProgramCourseData) => (
         <div className="ihub-item-actions">
           <p
             onClick={(e) => {
@@ -104,28 +131,28 @@ export default function ProgramCoursesPage() {
       header: "Amount",
       accessor: "amount",
       sortable: true,
-      cell: (row: any) => `$${row.amount}`,
+      cell: (row: InvoiceData) => `$${row.amount}`,
       width: "100px",
     },
     {
       header: "Date",
       accessor: "date",
       sortable: true,
-      cell: (row: any) => new Date(row.date).toLocaleDateString(),
+      cell: (row: InvoiceData) => new Date(row.date).toLocaleDateString(),
       width: "120px",
     },
     {
       header: "Due Date",
       accessor: "dueDate",
       sortable: true,
-      cell: (row: any) => new Date(row.dueDate).toLocaleDateString(),
+      cell: (row: InvoiceData) => new Date(row.dueDate).toLocaleDateString(),
       width: "120px",
     },
     {
       header: "Status",
       accessor: "status",
       sortable: true,
-      cell: (row: any) => (
+      cell: (row: InvoiceData) => (
         <Badge
           variant={
             row.status === "paid"
@@ -143,7 +170,7 @@ export default function ProgramCoursesPage() {
     },
     {
       header: "Actions",
-      cell: (row: any) => (
+      cell: (row: InvoiceData) => (
         <Action
           label="Actions"
           dropdown
@@ -173,7 +200,7 @@ export default function ProgramCoursesPage() {
 
   // Mock data for demo purposes
   // In a real implementation, this would be fetched from an API
-  const mockData = [
+  const mockData: InvoiceData[] = [
     {
       id: "INV-001",
       student: "John Smith",
@@ -196,20 +223,20 @@ export default function ProgramCoursesPage() {
   ];
 
   // Action handlers
-  const handleRowClick = (row: DataResponseType) => {
+  const handleRowClick = (row: ProgramCourseData) => {
     console.log("Row clicked:", row);
   };
 
-  const handleViewCourse = (course: DataResponseType) => {
+  const handleViewCourse = (course: ProgramCourseData) => {
     console.log("View course:", course);
   };
 
-  const handleEditCourse = (course: DataResponseType) => {
+  const handleEditCourse = (course: ProgramCourseData) => {
     console.log("Edit course:", course);
   };
 
   // Render expanded row content
-  const renderExpandedRow = (row: DataResponseType) => (
+  const renderExpandedRow = (row: ProgramCourseData) => (
     <div className="ihub-row-detail-content">
       <div className="ihub-detail-item">
         <div className="ihub-detail-label">Course ID</div>
@@ -250,7 +277,7 @@ export default function ProgramCoursesPage() {
       <IHubTableServer
         ref={tableRef}
         token={process.env.NEXT_PUBLIC_TOKEN}
-        columns={columns as TableColumnType<DataResponseType>[]}
+        columns={columns as TableColumnType<ProgramCourseData>[]}
         endpointPath={"sis/hust/admins/program-course-list/"}
         initialParams={{
           sort: "course.title",
@@ -276,7 +303,7 @@ export default function ProgramCoursesPage() {
 
       <h2>Dummy Data</h2>
       <IHubTableServer
-        columns={columns2 as TableColumnType<DataResponseType>[]}
+        columns={columns2 as TableColumnType<InvoiceData>[]}
         defaultData={mockData} // For demo, in production use endpoint
         // endpointPath="finance/payments" // Use in production
         // token={process.env.NEXT_PUBLIC_TOKEN} // Use in production

@@ -646,6 +646,7 @@ const ComponentLists = () => {
       category: "UI",
       repo_path: "src/components/ui/tables/IHubTableServer.tsx",
       example_path: "docs/static-docs/components/IHubTableServer.md",
+      visual_demo_url: "/components/ui/table-server-examples",
     },
     {
       name: "OrDivider",

@@ -260,6 +260,37 @@ export interface DataResponseType {
   [key: string]: any;
 }
 
+/**
+ * Type for IHubTableServer's defaultData prop.
+ * Use this to type your default data array items.
+ *
+ * @example
+ * ```tsx
+ * import type { IHubTableDefaultDataType } from "@instincthub/react-ui/types";
+ *
+ * interface Student extends IHubTableDefaultDataType {
+ *   first_name: string;
+ *   last_name: string;
+ *   email: string;
+ *   enrollment_date: string;
+ * }
+ *
+ * const defaultStudents: Student[] = [
+ *   { id: "1", first_name: "Jane", last_name: "Doe", email: "jane@example.com", enrollment_date: "2024-01-15" },
+ * ];
+ *
+ * <IHubTableServer<Student>
+ *   columns={columns}
+ *   defaultData={defaultStudents}
+ *   endpointPath="students/"
+ * />
+ * ```
+ */
+export interface IHubTableDefaultDataType {
+  id: string | number;
+  [key: string]: any;
+}
+
 // Navbar Types
 
 export interface SubMenuItemType {

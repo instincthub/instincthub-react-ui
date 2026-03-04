@@ -12,7 +12,8 @@
       "Bash(/dev/null)",
       "Bash(timeout 60s npm run build)",
       "Bash(npm run:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(pnpm rollup:*)"
     ],
     "deny": []
   }

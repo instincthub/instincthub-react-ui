@@ -14,7 +14,7 @@ Server-side table component with built-in pagination, sorting, filtering, extern
 "use client";
 import React, { useState, useRef } from "react";
 import { Badge, Action, IHubTableServer, IHubTableServerRef } from "@instincthub/react-ui";
-import { DataResponseType, TableColumnType } from "@instincthub/react-ui/types";
+import { IHubTableDefaultDataType, TableColumnType } from "@instincthub/react-ui/types";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -25,10 +25,43 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 /**
  * Example component demonstrating various ways to use the IHubTableServer component
  */
+// Define typed interfaces for your data
+interface StudentData extends IHubTableDefaultDataType {
+  id: string;
+  name: string;
+  email: string;
+  department: string;
+  level: string;
+  gpa: number;
+  status: "active" | "inactive";
+  enrollment_date: string;
+}
+
+interface InvoiceData extends IHubTableDefaultDataType {
+  id: string;
+  student: string;
+  amount: number;
+  category: string;
+  date: string;
+  dueDate: string;
+  status: "paid" | "pending" | "overdue";
+}
+
+interface CourseData extends IHubTableDefaultDataType {
+  id: string;
+  title: string;
+  instructor: string;
+  credits: number;
+  enrollment: number;
+  capacity: number;
+  semester: string;
+  status: string;
+}
+
 const IHubTableServerExamples = () => {
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const [searchParams, setSearchParams] = useState<Record<string, any>>({});
-  
+  const [selectedRows, setSelectedRows] = useState<StudentData[]>([]);
+  const [searchParams, setSearchParams] = useState<Record<string, string>>({});
+
   // Create ref for table control
   const tableRef = useRef<IHubTableServerRef>(null);
 
@@ -38,7 +71,7 @@ const IHubTableServerExamples = () => {
   };
 
   // Sample data for different examples
-  const studentsData = [
+  const studentsData: StudentData[] = [
     {
       id: "STU-001",
       name: "John Smith",
@@ -72,7 +105,7 @@ const IHubTableServerExamples = () => {
     // ... more students
   ];
 
-  const invoicesData = [
+  const invoicesData: InvoiceData[] = [
     {
       id: "INV-001",
       student: "John Smith",
@@ -103,7 +136,7 @@ const IHubTableServerExamples = () => {
     // ... more invoices
   ];
 
-  const coursesData = [
+  const coursesData: CourseData[] = [
     {
       id: "CS101",
       title: "Introduction to Computer Science",
@@ -128,7 +161,7 @@ const IHubTableServerExamples = () => {
   ];
 
   // Column definitions for students table
-  const studentsColumns: TableColumnType<any>[] = [
+  const studentsColumns: TableColumnType<StudentData>[] = [
     {
       header: "Student ID",
       accessor: "id",
@@ -162,14 +195,14 @@ const IHubTableServerExamples = () => {
       header: "GPA",
       accessor: "gpa",
       sortable: true,
-      cell: (row: any) => row.gpa.toFixed(2),
+      cell: (row: StudentData) => row.gpa.toFixed(2),
       width: "80px",
     },
     {
       header: "Status",
       accessor: "status",
       sortable: true,
-      cell: (row: any) => (
+      cell: (row: StudentData) => (
         <Badge
           variant={row.status === "active" ? "success" : "warning"}
           shape="pill"
@@ -181,7 +214,7 @@ const IHubTableServerExamples = () => {
     },
     {
       header: "Actions",
-      cell: (row: any) => (
+      cell: (row: StudentData) => (
         <Action
           label="Actions"
           dropdown
@@ -210,7 +243,7 @@ const IHubTableServerExamples = () => {
   ];
 
   // Column definitions for invoices table
-  const invoicesColumns: TableColumnType<any>[] = [
+  const invoicesColumns: TableColumnType<InvoiceData>[] = [
     {
       header: "Invoice ID",
       accessor: "id",
@@ -226,7 +259,7 @@ const IHubTableServerExamples = () => {
       header: "Amount",
       accessor: "amount",
       sortable: true,
-      cell: (row: any) => `$${row.amount.toFixed(2)}`,
+      cell: (row: InvoiceData) => `$${row.amount.toFixed(2)}`,
       width: "100px",
     },
     {
@@ -239,21 +272,21 @@ const IHubTableServerExamples = () => {
       header: "Date",
       accessor: "date",
       sortable: true,
-      cell: (row: any) => new Date(row.date).toLocaleDateString(),
+      cell: (row: InvoiceData) => new Date(row.date).toLocaleDateString(),
       width: "100px",
     },
     {
       header: "Due Date",
       accessor: "dueDate",
       sortable: true,
-      cell: (row: any) => new Date(row.dueDate).toLocaleDateString(),
+      cell: (row: InvoiceData) => new Date(row.dueDate).toLocaleDateString(),
       width: "100px",
     },
     {
       header: "Status",
       accessor: "status",
       sortable: true,
-      cell: (row: any) => (
+      cell: (row: InvoiceData) => (
         <Badge
           variant={
             row.status === "paid"
@@ -271,7 +304,7 @@ const IHubTableServerExamples = () => {
     },
     {
       header: "Actions",
-      cell: (row: any) => (
+      cell: (row: InvoiceData) => (
         <div className="ihub-item-actions">
           <span
             onClick={(e) => {
@@ -299,7 +332,7 @@ const IHubTableServerExamples = () => {
   ];
 
   // Column definitions for courses table
-  const coursesColumns: TableColumnType<any>[] = [
+  const coursesColumns: TableColumnType<CourseData>[] = [
     {
       header: "Course ID",
       accessor: "id",
@@ -328,13 +361,13 @@ const IHubTableServerExamples = () => {
       header: "Enrollment",
       accessor: "enrollment",
       sortable: true,
-      cell: (row: any) => `${row.enrollment}/${row.capacity}`,
+      cell: (row: CourseData) => `${row.enrollment}/${row.capacity}`,
       width: "100px",
     },
     {
       header: "Progress",
       accessor: "enrollment",
-      cell: (row: any) => {
+      cell: (row: CourseData) => {
         const percentage = (row.enrollment / row.capacity) * 100;
         return (
           <div className="ihub-progress-bar">
@@ -354,7 +387,7 @@ const IHubTableServerExamples = () => {
   ];
 
   // Event handlers
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: StudentData) => {
     console.log("Row clicked:", row);
   };
 
@@ -363,7 +396,7 @@ const IHubTableServerExamples = () => {
   };
 
   // Expanded row renderer
-  const renderExpandedStudentRow = (row: any) => (
+  const renderExpandedStudentRow = (row: StudentData) => (
     <div className="ihub-row-detail-content">
       <div className="ihub-detail-item">
         <div className="ihub-detail-label">Enrollment Date</div>

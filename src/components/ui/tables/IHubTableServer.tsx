@@ -12,7 +12,7 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import { ApiResponseType, DataResponseType, SearchParamsType, TableColumnType } from "@/types";
+import { ApiResponseType, SearchParamsType, TableColumnType } from "@/types";
 import { debounce } from "lodash";
 import { ServerPaginationInfoType, FetchParamsType } from "@/types";
 import { API_HOST_URL, getNestedValue, reqOptions } from "../../lib";
@@ -29,7 +29,8 @@ interface IHubTableServerPropsType<T> {
   // Core data
   columns: TableColumnType<T>[];
 
-  defaultData?: any[];
+  /** Default data to display before API fetch completes. Items should have an `id` field. */
+  defaultData?: T[];
 
   // API and fetching
   endpointPath: string;
@@ -132,7 +133,7 @@ interface IHubTableServerPropsType<T> {
  * ```
  * @prop {string} token - The token for authentication
  * @prop {TableColumnType<T>[]} columns - The columns of the table
- * @prop {any<T>[]} defaultData - The default data of the table
+ * @prop {T[]} defaultData - The default data to display before API fetch completes
  * @prop {string} endpointPath - The path to the API endpoint
  * @prop {Partial<FetchParamsType>} initialParams - The initial parameters for the API request
  * @prop {Record<string, any>} searchParams - External search parameters that trigger table refetch when changed
@@ -156,7 +157,15 @@ interface IHubTableServerPropsType<T> {
  *
  * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx
  */
-export const IHubTableServer = forwardRef<
+// Generic forwardRef wrapper to preserve type inference for consumers
+interface IHubTableServerComponent {
+  <T extends object>(
+    props: IHubTableServerPropsType<T> & { ref?: React.Ref<IHubTableServerRef> }
+  ): React.ReactNode;
+  displayName?: string;
+}
+
+export const IHubTableServer: IHubTableServerComponent = forwardRef<
   IHubTableServerRef,
   IHubTableServerPropsType<any>
 >(function IHubTableServerComponent<T extends object>(
@@ -233,25 +242,26 @@ export const IHubTableServer = forwardRef<
     []
   );
 
-  const defaultDataObj = {
+  const defaultDataLength = (defaultData || []).length;
+  const defaultDataObj: ApiResponseType<T> = {
     data: defaultData || [],
     pagination: {
-      totalCount: (defaultData || [])?.length,
-      currentPage: "",
+      totalCount: defaultDataLength,
+      currentPage: 1,
       perPage: 10,
-      totalPages: Math.ceil(((defaultData || [])?.length || 10) / 10),
+      totalPages: Math.ceil(defaultDataLength / 10) || 1,
     },
     links: {
-      next: "",
-      previous: "",
+      next: null,
+      previous: null,
     },
-  } as any;
+  };
 
   // Function to fetch data from your API
   const handleFetchData = useCallback(
     async (
       params: FetchParamsType
-    ): Promise<ApiResponseType<DataResponseType>> => {
+    ): Promise<ApiResponseType<T>> => {
       setLoading(true);
       try {
         if (!endpointPath) {
