@@ -1,6 +1,9 @@
 "use client";
 import { Check, Copy } from "lucide-react";
 import React, { useState, useMemo } from "react";
+import FilterObjects from "../forms/FilterObjects";
+import InputText from "../forms/InputText";
+import { FilterObjectsType } from "../../types";
 
 interface ComponentInfo {
   name: string;
@@ -1017,10 +1020,13 @@ const ComponentLists = () => {
     },
   ];
 
-  // Get unique categories
-  const categories = useMemo(() => {
-    const uniqueCategories = Array.from(new Set(components.map(component => component.category)));
-    return uniqueCategories.sort();
+  // Get unique categories as FilterObjectsType[]
+  const categoryOptions = useMemo((): FilterObjectsType[] => {
+    const uniqueCategories = Array.from(new Set(components.map(component => component.category))).sort();
+    return [
+      { id: "", title: "All Categories" },
+      ...uniqueCategories.map((cat) => ({ id: cat, title: cat })),
+    ];
   }, [components]);
 
   // Filter components based on search term and category
@@ -1085,34 +1091,27 @@ const ComponentLists = () => {
       {/* Search and Filter Section */}
       <div className="ihub-search-container">
         <div className="ihub-flex ihub-gap-3 ihub-mb-3">
-          <input
-            type="text"
-            placeholder="Search components by name, description, or category..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="ihub-search-input"
-            style={{ flex: 1 }}
-          />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="ihub-category-filter"
-            style={{ 
-              padding: "10px 15px",
-              border: "2px solid #e0e0e0",
-              borderRadius: "8px",
-              backgroundColor: "white",
-              fontSize: "14px",
-              minWidth: "160px"
-            }}
-          >
-            <option value="">All Categories</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+          <div style={{ flex: 1 }}>
+            <InputText
+              label="Search"
+              name="search"
+              placeholder="Search components by name, description, or category..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              activeLabel
+            />
+          </div>
+          <div className="ihub-mt-1 ihub-pl-3">
+          <FilterObjects
+            options={categoryOptions}
+            defaultValue={selectedCategory || ""}
+            name="category"
+            setValue={(option: FilterObjectsType) =>
+              setSelectedCategory(String(option.id))
+            }
+            defaultWidth="200px"
+            />
+          </div>
         </div>
         {(searchTerm || selectedCategory) && (
           <div className="ihub-search-results-info">
