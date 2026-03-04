@@ -161,11 +161,11 @@ interface IHubTableServerPropsType<T> {
 interface IHubTableServerComponent {
   <T extends object>(
     props: IHubTableServerPropsType<T> & { ref?: React.Ref<IHubTableServerRef> }
-  ): React.ReactNode;
+  ): React.ReactElement | null;
   displayName?: string;
 }
 
-export const IHubTableServer: IHubTableServerComponent = forwardRef<
+export const IHubTableServer = forwardRef<
   IHubTableServerRef,
   IHubTableServerPropsType<any>
 >(function IHubTableServerComponent<T extends object>(
@@ -920,7 +920,7 @@ export const IHubTableServer: IHubTableServerComponent = forwardRef<
       )}
     </div>
   );
-});
+}) as IHubTableServerComponent;
 
 // Set display name for better debugging
 IHubTableServer.displayName = "IHubTableServer";
