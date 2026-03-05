@@ -8,6 +8,7 @@ interface SearchFieldProps {
   delay?: number;
   className?: string;
   name?: string;
+  disableSearchParams?: boolean;
 }
 
 /**
@@ -21,6 +22,7 @@ interface SearchFieldProps {
  * @param delay - Debounce delay for search input
  * @param className - Additional class name
  * @param name - Name attribute for the input field
+ * @param disableSearchParams - When true, skip URL search param updates and only call setSearchValues
  * @returns
  */
 const SearchField: React.FC<SearchFieldProps> = ({
@@ -29,10 +31,13 @@ const SearchField: React.FC<SearchFieldProps> = ({
   delay = 400, // Default debounce delay
   className = "",
   name = "search",
+  disableSearchParams = false,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const defaultSearch = searchParams.get("search") || "";
+  const defaultSearch = disableSearchParams
+    ? ""
+    : searchParams.get("search") || "";
 
   // Debounce search input for optimization
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -43,16 +48,18 @@ const SearchField: React.FC<SearchFieldProps> = ({
       clearTimeout(debounceRef.current);
     }
     debounceRef.current = setTimeout(() => {
-      const query = new URLSearchParams(window.location.search);
-      query.set("search", value);
+      if (!disableSearchParams) {
+        const query = new URLSearchParams(window.location.search);
+        query.set("search", value);
 
-      const newUrl =
-        window.location.pathname +
-        "?" +
-        query.toString() +
-        window.location.hash;
+        const newUrl =
+          window.location.pathname +
+          "?" +
+          query.toString() +
+          window.location.hash;
 
-      router.replace(newUrl);
+        router.replace(newUrl);
+      }
       setSearchValues && setSearchValues(value);
     }, delay); // 400ms debounce delay
   };

@@ -25,6 +25,10 @@ yarn add react next
 |------|------|----------|---------|-------------|
 | `labels` | `string` | No | "Blog" | The label used in the search placeholder text |
 | `setSearchValues` | `(value: string) => void` | No | - | Callback function triggered when search value changes |
+| `delay` | `number` | No | 400 | Debounce delay in milliseconds |
+| `className` | `string` | No | "" | Additional CSS class names |
+| `name` | `string` | No | "search" | Name attribute for the input field |
+| `disableSearchParams` | `boolean` | No | false | When true, skip URL search param updates and only call `setSearchValues` |
 
 ## Usage
 
@@ -116,6 +120,22 @@ return (
   </>
 );
 ```
+
+### Without URL Params (Local-Only Search)
+
+```tsx
+const [query, setQuery] = useState('');
+
+return (
+  <SearchField
+    labels="items"
+    setSearchValues={setQuery}
+    disableSearchParams
+  />
+);
+```
+
+When `disableSearchParams` is true, the URL stays unchanged — only `setSearchValues` is called.
 
 ### Integration with API Calls
 

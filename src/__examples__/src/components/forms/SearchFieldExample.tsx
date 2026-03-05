@@ -93,11 +93,24 @@ const SearchFieldExample: React.FC = () => {
         <div className="ihub-example-card">
           <h3>Search with Custom Name</h3>
           <p>Search field with custom name attribute</p>
-          
+
           <SearchField
             labels="products"
             setSearchValues={handleSearch}
             name="product-search"
+            className="ihub-mb-20"
+          />
+        </div>
+
+        {/* Disabled Search Params */}
+        <div className="ihub-example-card">
+          <h3>Search without URL Params</h3>
+          <p>Search field that only calls the callback without updating URL search params</p>
+
+          <SearchField
+            labels="local items"
+            setSearchValues={handleSearch}
+            disableSearchParams
             className="ihub-mb-20"
           />
         </div>
@@ -128,6 +141,15 @@ const handleSearch = (query: string) => {
   setSearchValues={handleSearch}
   delay={800}
   className="custom-search"
+/>`}</code></pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Without URL Params</h3>
+          <pre><code>{`<SearchField
+  labels="local items"
+  setSearchValues={handleSearch}
+  disableSearchParams
 />`}</code></pre>
         </div>
       </div>

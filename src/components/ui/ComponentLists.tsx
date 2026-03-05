@@ -210,6 +210,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/SearchField.tsx",
       example_path: "docs/static-docs/components/SearchField.md",
+      visual_demo_url: "/components/forms/search-field",
     },
     {
       name: "SearchFieldDB",

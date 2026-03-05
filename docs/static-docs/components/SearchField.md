@@ -468,6 +468,7 @@ export default SearchFieldExamples;
 | `delay` | `number` | `400` | Debounce delay in milliseconds for search input |
 | `className` | `string` | `""` | Additional CSS class names |
 | `name` | `string` | `"search"` | Name attribute for the input field |
+| `disableSearchParams` | `boolean` | `false` | When true, skip URL search param updates and only call `setSearchValues` |
 
 ## 🎯 Key Features
 
@@ -516,6 +517,17 @@ const filteredResults = data.filter(item =>
 <SearchField
   labels="items"
   setSearchValues={setSearchTerm}
+/>
+```
+
+### Local-Only Search (No URL Params)
+```tsx
+const [query, setQuery] = useState("");
+
+<SearchField
+  labels="items"
+  setSearchValues={setQuery}
+  disableSearchParams
 />
 ```
 
