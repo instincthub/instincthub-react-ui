@@ -12,6 +12,7 @@ A modern and comprehensive date and time picker component that combines calendar
 - **Accessibility**: Full keyboard navigation and screen reader support
 - **Customization**: Configurable time steps, formats, and display options
 - **Responsive**: Works on desktop and mobile devices
+- **Portal Rendering**: Dropdown renders via `createPortal` to avoid clipping inside modals/overflow containers
 
 ## Installation
 
@@ -215,6 +216,7 @@ function MyComponent() {
 | `useSeparateFields` | `boolean` | `false` | Use separate input fields instead of single input |
 | `ariaLabel` | `string` | - | Accessibility label for screen readers |
 | `autoFocus` | `boolean` | `false` | Whether to focus the input on mount |
+| `maxWidth` | `number` | `600` | Maximum width of the picker input and dropdown in pixels |
 | `onFocus` | `(e: FocusEvent) => void` | - | Focus event handler |
 | `onBlur` | `(e: FocusEvent) => void` | - | Blur event handler |
 
@@ -299,7 +301,7 @@ The component uses CSS custom properties for theming:
 
 - `date-fns` - Date formatting and manipulation
 - `@mui/icons-material` - Calendar and time icons
-- `react` - React framework
+- `react` / `react-dom` - React framework (uses `createPortal`)
 
 ## TypeScript Support
 
@@ -321,6 +323,14 @@ View the live examples at: [https://ui.instincthub.com/components/forms/time-pic
 - [DateInputPicker](./DateInputPicker.md) - Date picker with calendar
 
 ## Changelog
+
+### v0.1.5
+- Added `maxWidth` prop to control the maximum width of input and dropdown (default: 600px)
+- Dropdown now renders via `createPortal` to `document.body` — no longer clipped by parent `overflow: hidden` or modals
+- Smart positioning: dropdown opens above or below based on available viewport space
+- Fixed `handleDateSelect` in datetime mode not calling `onChange` immediately
+- Fixed click-outside handler race condition when used inside parent modals
+- Mobile: dropdown centers on screen with `position: fixed`
 
 ### v0.1.4
 - Initial release of DateTimePicker component

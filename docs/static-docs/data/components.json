@@ -123,11 +123,17 @@
         "type": "boolean",
         "required": false,
         "description": "Whether the input is disabled"
+      },
+      {
+        "name": "maxWidth",
+        "type": "number",
+        "required": false,
+        "description": "Maximum width of the picker input and dropdown in pixels (default: 600)"
       }
     ],
     "examples": [
       "import { DateTimePicker } from '@instincthub/react-ui';\n\nconst [dateTime, setDateTime] = useState('');\n\n<DateTimePicker\n  label=\"Select Date and Time\"\n  value={dateTime}\n  onChange={(value) => setDateTime(value)}\n/>",
-      "import { DateTimePicker } from '@instincthub/react-ui';\n\n<DateTimePicker\n  label=\"Meeting Time\"\n  value={dateTime}\n  onChange={(value) => setDateTime(value)}\n  use12Hour={true}\n  required\n  minDate=\"2024-01-01\"\n  maxDate=\"2024-12-31\"\n  timeStep={15}\n/>"
+      "import { DateTimePicker } from '@instincthub/react-ui';\n\n<DateTimePicker\n  label=\"Meeting Time\"\n  value={dateTime}\n  onChange={(value) => setDateTime(value)}\n  use12Hour={true}\n  required\n  minDate=\"2024-01-01\"\n  maxDate=\"2024-12-31\"\n  timeStep={15}\n  maxWidth={500}\n/>"
     ],
     "example_path": "../components/DateTimePicker.md"
   },

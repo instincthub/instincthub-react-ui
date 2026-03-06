@@ -802,6 +802,8 @@ export interface DateTimePickerPropsType {
   useSeparateFields?: boolean;
   /** Input mode: datetime (default), date only, or time only */
   mode?: "datetime" | "date" | "time";
+  /** Maximum width of the picker dropdown in pixels (default: 600) */
+  maxWidth?: number;
 }
 
 // DateRangePicker Types and Props

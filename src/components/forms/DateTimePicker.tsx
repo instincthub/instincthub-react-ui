@@ -13,6 +13,7 @@ import React, {
   FocusEvent,
   useCallback,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   format,
   parse,
@@ -109,6 +110,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   onBlur,
   useSeparateFields = false,
   mode = "datetime",
+  maxWidth = 600,
 }) => {
   // Parse initial value
   const parseInitialValue = (val: string): Date | null => {
@@ -166,7 +168,9 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   const pickerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const separateFieldsRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
   // Update time states when selected date changes
   useEffect(() => {
@@ -177,6 +181,64 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
       setTempAmPm(selectedDate.getHours() >= 12 ? "PM" : "AM");
     }
   }, [selectedDate]);
+
+  // Calculate dropdown position for portal rendering
+  const updateDropdownPosition = useCallback(() => {
+    const triggerEl = useSeparateFields ? separateFieldsRef.current : containerRef.current;
+    if (!triggerEl) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      setDropdownStyle({
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        transform: 'translate(-50%, -50%)',
+        width: Math.min(window.innerWidth * 0.95, 400),
+        maxWidth,
+        maxHeight: '90vh',
+        marginTop: 0,
+        zIndex: 9999,
+      });
+      return;
+    }
+
+    const rect = triggerEl.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const spaceBelow = viewportHeight - rect.bottom;
+    const dropdownHeight = 450;
+    const openAbove = spaceBelow < dropdownHeight && rect.top > dropdownHeight;
+    const width = Math.min(Math.max(rect.width, 320), maxWidth);
+
+    setDropdownStyle({
+      position: 'fixed',
+      left: rect.left,
+      right: 'auto',
+      width,
+      maxWidth,
+      marginTop: 0,
+      ...(openAbove
+        ? { bottom: viewportHeight - rect.top + 4, top: 'auto' }
+        : { top: rect.bottom + 4, bottom: 'auto' }
+      ),
+      zIndex: 9999,
+    });
+  }, [useSeparateFields, maxWidth]);
+
+  // Update position on scroll/resize when picker is open
+  useEffect(() => {
+    if (!showPicker) return;
+    updateDropdownPosition();
+
+    window.addEventListener('scroll', updateDropdownPosition, true);
+    window.addEventListener('resize', updateDropdownPosition);
+    return () => {
+      window.removeEventListener('scroll', updateDropdownPosition, true);
+      window.removeEventListener('resize', updateDropdownPosition);
+    };
+  }, [showPicker, updateDropdownPosition]);
 
   // Mode-aware date/time processing helper
   const processDateTimeByMode = useCallback((date: Date): string => {
@@ -233,37 +295,33 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
     }
   }, [value, isInputFocused, formatDisplayValue]);
 
-  // Handle outside click
+  // Handle outside click (portal-aware)
   useEffect(() => {
+    if (!showPicker) return;
+
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node)
-      ) {
-        // For separate fields mode, check the separate fields container
-        if (useSeparateFields && separateFieldsRef.current) {
-          if (!separateFieldsRef.current.contains(event.target as Node)) {
-            setShowPicker(false);
-          }
-        }
-        // For single input mode, check the input element
-        else if (!useSeparateFields && inputRef.current) {
-          if (!inputRef.current.contains(event.target as Node)) {
-            setShowPicker(false);
-          }
-        }
-        // If neither ref is available, close the picker
-        else {
-          setShowPicker(false);
-        }
-      }
+      const target = event.target as Node;
+
+      // Check if click is inside the dropdown (rendered via portal)
+      if (pickerRef.current?.contains(target)) return;
+
+      // Check if click is inside the trigger area
+      if (useSeparateFields && separateFieldsRef.current?.contains(target)) return;
+      if (!useSeparateFields && containerRef.current?.contains(target)) return;
+
+      setShowPicker(false);
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    // Defer listener to avoid closing from the same click that opened
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+    }, 0);
+
     return () => {
+      clearTimeout(timeoutId);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [useSeparateFields]);
+  }, [showPicker, useSeparateFields]);
 
   // Validation functions
   const isDateDisabled = useCallback((date: Date): boolean => {
@@ -369,7 +427,10 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
 
       setSelectedDate(newDateTime);
       setCurrentMonth(newDateTime);
-      
+
+      // Notify parent immediately so value persists even without "Apply Time"
+      onChange?.(processDateTimeByMode(newDateTime));
+
       // Switch to time view after date selection for datetime mode
       if (mode === "datetime") {
         setActiveView("time");
@@ -855,7 +916,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   }, [selectedDate, useSeparateFields, use12Hour]);
 
   return (
-    <div className={`ihub-datetime-picker-wrapper ${className}`}>
+    <div className={`ihub-datetime-picker-wrapper ${className}`} style={{ maxWidth }}>
       <div className={`ihub-datetime-picker ${error ? "ihub-error" : ""}`}>
         <label
           className="ihub-datetime-label"
@@ -1042,7 +1103,7 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
           </div>
         ) : (
           /* Single input field */
-          <div className="ihub-datetime-input-container">
+          <div ref={containerRef} className="ihub-datetime-input-container">
             <input
               ref={inputRef}
               type="text"
@@ -1108,13 +1169,15 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
           </div>
         )}
 
-        {/* Picker dropdown */}
-        {showPicker && !disabled && (
+        {/* Picker dropdown - rendered via portal to work inside modals */}
+        {showPicker && !disabled && typeof document !== 'undefined' && createPortal(
           <div
             ref={pickerRef}
             className="ihub-datetime-picker-dropdown"
+            style={dropdownStyle}
             role="dialog"
             aria-label="Date and time picker"
+            onMouseDown={(e) => e.stopPropagation()}
           >
             {/* View tabs - only show relevant tabs based on mode */}
             {mode === "datetime" && (
@@ -1352,7 +1415,8 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                 </button>
               </div>
             )}
-          </div>
+          </div>,
+          document.body
         )}
       </div>
 
