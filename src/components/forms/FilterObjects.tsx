@@ -24,6 +24,7 @@ interface FilterObjectsProps {
   status?: number;
   upperCases?: boolean;
   error?: string;
+  className?: string;
 }
 
 /**
@@ -47,6 +48,13 @@ interface FilterObjectsProps {
  *   arrayProps={arrayProps}
  *   dataName="filterObjects"
  *   setCookies="filterObjects" // Optional
+ *   className="custom-class" // Optional
+ *   defaultWidth="400px" // Optional
+ *   required // Optional
+ *   err={hasError} // Optional
+ *   upperCases // Optional
+ *   status={isLoading ? 0 : 1} // Optional: 0 for loading/disabled, 1 for active
+ *   error={errorMessage} // Optional: error message to display
  * />
  * ```
  * Props interface for the FilterObjects component
@@ -129,7 +137,7 @@ const FilterObjects = (props: FilterObjectsProps) => {
   return (
     <>
       <div
-        className={`ihub-select ${props.err ? "ihub-form-err" : ""}`}
+        className={`ihub-select ${props.err ? "ihub-form-err" : ""}${props.className ? ` ${props.className}` : ""}`}
         style={{ width: props.defaultWidth || "300px" }}
       >
         <div

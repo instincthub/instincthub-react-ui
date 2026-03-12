@@ -506,12 +506,19 @@ interface SearchObjectsFromDBProps<T extends SearchObjectItemType = SearchObject
   
   /** Custom search API endpoint */
   searchUrl?: string;
-  
+
   /** Currently selected items */
   selected: T[];
-  
+
   /** Show validation error state */
   err?: boolean;
+
+  /**
+   * URL to fetch the initial default display list on mount and after search is cleared.
+   * When set, search results replace the list entirely (no merge with options),
+   * preventing duplicate key warnings when searchUrl and the initial data share the same source.
+   */
+  defaultUrl?: string;
 }
 ```
 
@@ -523,6 +530,30 @@ interface SearchObjectsFromDBProps<T extends SearchObjectItemType = SearchObject
 - **TypeScript Support**: Fully typed with generic support for custom data types
 - **Validation Support**: Built-in error states for form validation
 - **Responsive Design**: Works on desktop and mobile devices
+- **Duplicate-free Initial Load**: Use `defaultUrl` to fetch the initial list from the same API as `searchUrl` without merging results — eliminates React duplicate key warnings
+
+## `defaultUrl` vs `options`
+
+| Prop | Behavior |
+|------|----------|
+| `options` | Static array passed from parent; search results are merged with it (can cause duplicates if both come from the same API) |
+| `defaultUrl` | Fetched on mount; search results **replace** the list entirely (no merge) — use when `searchUrl` and the initial list share the same endpoint |
+
+```tsx
+// Pattern: same endpoint for initial load and search — use defaultUrl
+<SearchObjectsFromDB
+  label="Add to Group"
+  token={accessToken}
+  handle={companyHandle}
+  selected={selectedGroups}
+  setSelected={setSelectedGroups}
+  keyName="title"
+  placeholder="Search groups..."
+  defaultUrl={`/api/v1/leads/${handle}/groups/`}   // fetches initial list
+  searchUrl={`/api/v1/leads/${handle}/groups/`}    // appends ?search=query
+  limitSelect={0}
+/>
+```
 
 ## 🔗 Related Components
 

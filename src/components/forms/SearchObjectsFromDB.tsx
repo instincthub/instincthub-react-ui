@@ -26,6 +26,8 @@ interface SearchObjectsFromDBProps<
   selected: T[];
   err?: boolean;
   required?: boolean;
+  /** URL to fetch the initial default display list on mount and after search is cleared */
+  defaultUrl?: string;
 }
 
 /**
@@ -85,6 +87,8 @@ const flattenSelectedArray = <T extends SearchObjectItemType>(
  * @param {string} props.searchUrl - The search url for the API request
  * @param {T[]} props.selected - The selected for the API request
  * @param {boolean} props.err - The error for the API request
+ * @param {string} props.defaultUrl - URL to fetch the initial default display list on mount.
+ *   When set, search results replace the list entirely (no merge with options), preventing duplicates.
  */
 
 function SearchObjectsFromDB<
@@ -106,16 +110,48 @@ function SearchObjectsFromDB<
   searchUrl,
   err = false,
   required = false,
+  defaultUrl,
 }: SearchObjectsFromDBProps<T>): JSX.Element {
   const [input, setInput] = useState<string>("");
   const [data, setData] = useState<SearchObjectItemType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize data with options when they change
+  // Initialize data with options when they change (only when defaultUrl is not set)
   useEffect(() => {
-    setData(options || []);
-  }, [options]);
+    if (!defaultUrl) {
+      setData(options || []);
+    }
+  }, [options, defaultUrl]);
+
+  /**
+   * Fetches default display data from defaultUrl on mount and after search is cleared.
+   * Uses the same pagination format as handleSearch (expects { results: [...] }).
+   */
+  const fetchDefaultData = useCallback(async (): Promise<void> => {
+    if (!defaultUrl) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const requestOptions = reqOptions("GET", null, token);
+      const response = await fetch(defaultUrl, requestOptions);
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+      const newData = await response.json();
+      setData(newData.results || newData || []);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      console.error("SearchObjectsFromDB: Error fetching default data:", msg);
+      setData(options || []);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [defaultUrl, token, options]);
+
+  useEffect(() => {
+    if (defaultUrl) {
+      fetchDefaultData();
+    }
+  }, [defaultUrl, fetchDefaultData]);
 
   // Debug and warn about malformed data (but don't auto-fix to avoid infinite loops)
   useEffect(() => {
@@ -174,13 +210,16 @@ function SearchObjectsFromDB<
       }
 
       const newData = await response.json();
-      setData([...(newData.results || []), ...(options || [])]);
+      const searchResults = newData.results || [];
+      // If defaultUrl is set, show ONLY search results (no merge) to prevent duplicates.
+      // If only options are provided, merge search results with the static options list.
+      setData(defaultUrl ? searchResults : [...searchResults, ...(options || [])]);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
       console.error("Error fetching search results:", errorMessage);
       setError(errorMessage);
-      setData([...(options || [])]);
+      setData(defaultUrl ? [] : [...(options || [])]);
     } finally {
       setIsLoading(false);
     }
@@ -193,6 +232,8 @@ function SearchObjectsFromDB<
     handle,
     filterChannel,
     limitQuery,
+    defaultUrl,
+    options,
   ]);
 
   /**
@@ -214,9 +255,13 @@ function SearchObjectsFromDB<
    */
   const handleCancelSearch = useCallback((): void => {
     setInput("");
-    setData([...(options || [])]);
     setError(null);
-  }, []);
+    if (defaultUrl) {
+      fetchDefaultData();
+    } else {
+      setData([...(options || [])]);
+    }
+  }, [defaultUrl, fetchDefaultData, options]);
 
   /**
    * Determines if an item is selected

@@ -9,6 +9,7 @@ export default function SearchObjectsFromDBExample() {
     { id: 2, title: "Skill 2" },
   ];
   const [value, setValue] = useState<object[]>(defaultValues);
+  const [valueFromUrl, setValueFromUrl] = useState<object[]>([]);
 
   const defaultOptions = [
     { id: 1, title: "Skill 1" },
@@ -20,14 +21,30 @@ export default function SearchObjectsFromDBExample() {
   return (
     <section className="ihub-container">
       <h2 className="ihub-text-2xl ihub-font-bold">SearchObjectsFromDB</h2>
+
+      {/* Static options */}
       <SearchObjectsFromDB
-        label="Search Skills"
+        label="Search Skills (static options)"
         token={""}
         handle={"skills"}
         setSelected={setValue}
         selected={value}
         keyName="display_name"
         options={defaultOptions}
+      />
+
+      {/* defaultUrl: initial list fetched from API, search replaces list (no duplicates) */}
+      <SearchObjectsFromDB
+        label="Search Groups (defaultUrl — no duplicates)"
+        token={""}
+        handle={"demo"}
+        setSelected={setValueFromUrl}
+        selected={valueFromUrl}
+        keyName="title"
+        placeholder="Search groups by name..."
+        defaultUrl={"/api/v1/leads/demo/groups/"}
+        searchUrl={"/api/v1/leads/demo/groups/"}
+        limitSelect={0}
       />
 
       <Link
