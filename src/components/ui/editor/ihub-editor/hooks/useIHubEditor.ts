@@ -21,7 +21,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
-import { Extension } from "@tiptap/core";
+import { type AnyExtension, type Extensions } from "@tiptap/core";
 
 import { IHubEditorFeatures, DEFAULT_FEATURES } from "../types";
 import PullQuoteExtension from "../extensions/PullQuoteExtension";
@@ -38,7 +38,7 @@ interface UseIHubEditorOptions {
   readOnly?: boolean;
   onChange?: (html: string) => void;
   onBlur?: () => void;
-  additionalExtensions?: Extension[];
+  additionalExtensions?: Extensions;
   onSlashCommandStart?: (props: any) => void;
   onSlashCommandExit?: () => void;
 }
@@ -57,7 +57,7 @@ export default function useIHubEditor({
 }: UseIHubEditorOptions) {
   const features = { ...DEFAULT_FEATURES, ...featuresProp };
 
-  const extensions: Extension[] = [
+  const extensions: AnyExtension[] = [
     StarterKit.configure({
       dropcursor: false,
       codeBlock: false,
@@ -92,10 +92,10 @@ export default function useIHubEditor({
 
   if (features.tables) {
     extensions.push(
-      Table.configure({ resizable: true }) as any,
-      TableRow as any,
-      TableCell as any,
-      TableHeader as any
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableCell,
+      TableHeader
     );
   }
 
@@ -104,19 +104,19 @@ export default function useIHubEditor({
       CodeBlock.configure({
         exitOnTripleEnter: true,
         exitOnArrowDown: true,
-      }) as any
+      })
     );
   }
 
   if (features.taskLists) {
     extensions.push(
-      TaskList as any,
-      TaskItem.configure({ nested: true }) as any
+      TaskList,
+      TaskItem.configure({ nested: true })
     );
   }
 
   if (features.pullQuotes) {
-    extensions.push(PullQuoteExtension as any);
+    extensions.push(PullQuoteExtension);
   }
 
   if (features.mediaEmbeds) {
@@ -125,13 +125,13 @@ export default function useIHubEditor({
         HTMLAttributes: {
           class: "ihub-te-youtube",
         },
-      }) as any,
-      EmbedExtension as any
+      }),
+      EmbedExtension
     );
   }
 
   if (features.typography) {
-    extensions.push(Typography as any);
+    extensions.push(Typography);
   }
 
   if (features.focusMode) {
@@ -139,7 +139,7 @@ export default function useIHubEditor({
       Focus.configure({
         className: "ihub-te-has-focus",
         mode: "deepest",
-      }) as any
+      })
     );
   }
 
@@ -173,7 +173,7 @@ export default function useIHubEditor({
             };
           },
         },
-      }) as any
+      })
     );
   }
 

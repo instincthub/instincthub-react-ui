@@ -109,6 +109,7 @@
     "deploy": "pnpm rollup && npm publish --access public && vercel --prod"
   },
   "dependencies": {
+    "@tiptap/core": "^2.27.1",
     "@tiptap/extension-bubble-menu": "^2.27.1",
     "@tiptap/extension-character-count": "^2.11.5",
     "@tiptap/extension-code-block": "^2.11.5",
