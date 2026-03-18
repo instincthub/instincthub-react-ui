@@ -615,6 +615,15 @@ const ComponentLists = () => {
       example_path: "docs/static-docs/components/CustomTextEditor.md",
     },
     {
+      name: "IHubTextEditor",
+      description:
+        "Medium/Substack-style rich text editor with floating toolbar, slash commands, and image uploads",
+      category: "UI",
+      repo_path: "src/components/ui/editor/ihub-editor/IHubTextEditor.tsx",
+      example_path: "docs/static-docs/components/IHubTextEditor.md",
+      visual_demo_url: "/components/ui/ihub-text-editor",
+    },
+    {
       name: "ContentViewer",
       description: "Content viewer component",
       category: "UI",

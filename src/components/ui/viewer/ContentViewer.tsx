@@ -149,46 +149,17 @@ export default function ContentViewer({
     // Sanitize the content
     const sanitizedContent = DOMPurify.sanitize(processedContent, {
       USE_PROFILES: { html: true },
-      ADD_ATTR: ["target", "rel", "data-type", "data-checked"],
-      ADD_TAGS: ["iframe", "video", "audio", "source"],
+      ADD_ATTR: ["target", "rel", "data-type", "data-checked", "class"],
+      ADD_TAGS: ["iframe", "video", "audio", "source", "figure", "figcaption"],
     });
 
     // Create a temporary element to manipulate the DOM
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = sanitizedContent;
 
-    // Find all unordered lists that don't already have a class
-    const uls = tempDiv.querySelectorAll(
-      'ul:not([class]):not([data-type="taskList"])'
-    );
-    uls.forEach((ul, index) => {
-      // Apply different styles based on nesting level or position
-      const depth = getListDepth(ul);
-
-      if (depth === 0) {
-        // First level lists get standard styling
-        ul.classList.add("ihub-list-standard");
-      } else if (depth === 1) {
-        // Second level lists get circle styling
-        ul.classList.add("ihub-list-circle");
-      } else {
-        // Deeper nested lists get square styling
-        ul.classList.add("ihub-list-square");
-      }
-    });
-
-    // Find all ordered lists that don't already have a class
-    const ols = tempDiv.querySelectorAll("ol:not([class])");
-    ols.forEach((ol, index) => {
-      // Alternate between different styled ordered lists
-      const styleClass =
-        index % 3 === 0
-          ? "ihub-list-primary"
-          : index % 3 === 1
-          ? "ihub-list-secondary"
-          : "ihub-list-tertiary";
-      ol.classList.add(styleClass);
-    });
+    // Lists are styled by .ihub-content-viewer CSS with clean native markers.
+    // Only add fancy list classes if the content viewer has .ihub-style-list parent.
+    // For standard rich text content (from IHubTextEditor), native styling is preferred.
 
     // Apply additional Markdown-specific styling
     if (isContentMarkdown) {

@@ -1076,6 +1076,34 @@
     "example_path": "../components/CustomTextEditor.md"
   },
   {
+    "name": "IHubTextEditor",
+    "description": "Medium/Substack-style rich text editor with floating toolbar, slash commands, image uploads, and distraction-free writing",
+    "category": "UI",
+    "repo_path": "../../../src/components/ui/editor/ihub-editor/IHubTextEditor.tsx",
+    "type": "component",
+    "tags": ["ui", "editor", "rich-text", "tiptap", "medium-style"],
+    "props": [
+      { "name": "name", "type": "string", "required": false, "description": "Hidden input name for form submission" },
+      { "name": "label", "type": "string", "required": false, "description": "Label text above the editor" },
+      { "name": "content", "type": "string", "required": false, "description": "Initial HTML content" },
+      { "name": "placeholder", "type": "string", "required": false, "description": "Placeholder text (default: 'Tell your story...')" },
+      { "name": "onChange", "type": "(html: string) => void", "required": false, "description": "Callback when content changes" },
+      { "name": "onBlur", "type": "() => void", "required": false, "description": "Callback on editor blur" },
+      { "name": "required", "type": "boolean", "required": false, "description": "Whether the field is required" },
+      { "name": "charLimit", "type": "number", "required": false, "description": "Character limit (default: 50000)" },
+      { "name": "features", "type": "IHubEditorFeatures", "required": false, "description": "Toggle features: bubbleMenu, slashCommands, floatingAddButton, focusMode, imageUpload, mediaEmbeds, tables, codeBlocks, taskLists, pullQuotes, characterCount, typography" },
+      { "name": "onImageUpload", "type": "(file: File) => Promise<string>", "required": false, "description": "Callback for image upload, returns URL" },
+      { "name": "className", "type": "string", "required": false, "description": "Additional CSS class" },
+      { "name": "minHeight", "type": "string", "required": false, "description": "Min editor height (default: '400px')" },
+      { "name": "maxHeight", "type": "string", "required": false, "description": "Max editor height (default: '80vh')" },
+      { "name": "lastUpdated", "type": "string", "required": false, "description": "ISO date string for last updated display" },
+      { "name": "readOnly", "type": "boolean", "required": false, "description": "Disable editing" },
+      { "name": "extensions", "type": "Extension[]", "required": false, "description": "Additional tiptap extensions" }
+    ],
+    "examples": [],
+    "example_path": "../components/IHubTextEditor.md"
+  },
+  {
     "name": "ContentViewer",
     "description": "Content viewer component",
     "category": "UI",
