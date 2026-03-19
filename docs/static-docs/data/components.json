@@ -1105,12 +1105,20 @@
   },
   {
     "name": "ContentViewer",
-    "description": "Content viewer component",
+    "description": "Content viewer with Medium/Substack-quality typography for displaying IHubTextEditor HTML output. CSS-only option: wrap in .ihub-content-viewer class.",
     "category": "UI",
     "repo_path": "../../../src/components/ui/viewer/ContentViewer.tsx",
     "type": "component",
-    "tags": ["ui"],
-    "props": [],
+    "tags": ["ui", "content", "viewer", "rich-text", "display", "medium-style"],
+    "props": [
+      { "name": "content", "type": "string", "required": true, "description": "HTML or Markdown content to display" },
+      { "name": "title", "type": "string", "required": false, "description": "Title for PDF export (default: Document)" },
+      { "name": "showToolbar", "type": "boolean", "required": false, "description": "Show Print/PDF/Copy/Fullscreen toolbar" },
+      { "name": "isMarkdown", "type": "boolean", "required": false, "description": "Treat content as Markdown" },
+      { "name": "editable", "type": "boolean", "required": false, "description": "Make task checkboxes interactive" },
+      { "name": "onContentChange", "type": "(string) => void", "required": false, "description": "Callback when task checkboxes change" },
+      { "name": "className", "type": "string", "required": false, "description": "Additional CSS classes" }
+    ],
     "examples": [],
     "example_path": "../components/ContentViewer.md"
   },

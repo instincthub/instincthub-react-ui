@@ -157,7 +157,7 @@ const LibraryList = () => {
       category: "DOM Utilities",
       repo_path: "src/components/lib/loadScript.ts",
       example_path: "docs/static-docs/libs/loadScript.md",
-      visual_demo_url: "https://ui.instincthub.com/libs/examples/loadscript",
+      visual_demo_url: "/libs/examples/loadscript",
     },
 
     // Subscription Management
@@ -196,7 +196,7 @@ const LibraryList = () => {
       category: "Pricing & Finance",
       repo_path: "src/components/lib/paystack.ts",
       example_path: "docs/static-docs/libs/paystack.md",
-      visual_demo_url: "https://ui.instincthub.com/libs/examples/paystacks",
+      visual_demo_url: "/libs/examples/paystacks",
     },
 
     // Charts & Visualization
@@ -309,6 +309,7 @@ const LibraryList = () => {
       category: "Modal Systems",
       repo_path: "src/components/lib/modals/openConfirmDelete.ts",
       example_path: "docs/static-docs/libs/modals-openConfirmDelete.md",
+      visual_demo_url: "/libs/examples/modals",
     },
 
     // Modal submodules
@@ -319,6 +320,7 @@ const LibraryList = () => {
       category: "Confirmation Modals",
       repo_path: "src/components/lib/modals/modals.ts#L27",
       example_path: "docs/static-docs/libs/modals/openConfirmModal.md",
+      visual_demo_url: "/libs/examples/modals",
     },
     {
       name: "openToast",
@@ -327,6 +329,7 @@ const LibraryList = () => {
       category: "Notification Modals",
       repo_path: "src/components/lib/modals/modals.ts#L91",
       example_path: "docs/static-docs/libs/modals/openToast.md",
+      visual_demo_url: "/libs/examples/modals",
     },
     {
       name: "getUserEmailInputModal",
@@ -335,6 +338,7 @@ const LibraryList = () => {
       category: "Input Modals",
       repo_path: "src/components/lib/modals/modals.ts#L150",
       example_path: "docs/static-docs/libs/modals/getUserEmailInputModal.md",
+      visual_demo_url: "/libs/examples/modals",
     },
     {
       name: "openConfirmDelete",
@@ -343,6 +347,7 @@ const LibraryList = () => {
       category: "Confirmation Modals",
       repo_path: "src/components/lib/modals/openConfirmDelete.ts#L39",
       example_path: "docs/static-docs/libs/modals/openConfirmDelete.md",
+      visual_demo_url: "/libs/examples/modals",
     },
 
     // URL & Navigation

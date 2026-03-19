@@ -417,22 +417,20 @@ function openConfirmModal(message: string, flag?: boolean): Promise<boolean>
 ## 🎨 Visual Behavior
 
 ### Normal Confirmation (`flag: false`)
-- **Icon**: Question mark (blue)
-- **Styling**: Standard modal appearance
-- **Buttons**: "Cancel" and "Confirm"
+- **Banner**: Purple/Rhythm colored banner with "You are about to submit!" text
+- **Buttons**: "Cancel" and "Ok"
 - **Use Case**: Standard user confirmations
 
 ### Warning Confirmation (`flag: true`)
-- **Icon**: Exclamation triangle (warning color)
-- **Styling**: Enhanced warning appearance
-- **Buttons**: "Cancel" and "Confirm" with warning emphasis
+- **Banner**: Red/Danger colored banner with "Unexpected things will happen..." warning text
+- **Buttons**: "Cancel" and "Ok"
 - **Use Case**: Critical or irreversible actions
 
 ## 🔄 Modal Lifecycle
 
-1. **Creation**: Modal elements are dynamically created and added to DOM
-2. **Display**: Modal appears with backdrop and focus management
-3. **User Interaction**: User can confirm, cancel, click backdrop, or press Escape
+1. **Creation**: Modal elements are dynamically created using safe DOM methods
+2. **Display**: Modal appears with dark backdrop overlay
+3. **User Interaction**: User can click "Ok", "Cancel", close button, or click the backdrop
 4. **Resolution**: Promise resolves with boolean result
 5. **Cleanup**: Modal elements and event listeners are automatically removed
 
@@ -440,9 +438,8 @@ function openConfirmModal(message: string, flag?: boolean): Promise<boolean>
 
 - **Promise-based**: Clean async/await integration
 - **Automatic Cleanup**: DOM elements and event listeners are properly cleaned up
-- **Keyboard Support**: Escape key to cancel, Enter key to confirm
 - **Click Outside**: Clicking modal backdrop cancels the confirmation
-- **Focus Management**: Proper focus handling for accessibility
+- **Safe DOM**: Built with `createElement` (no innerHTML)
 - **Single Instance**: Only one confirmation can be open at a time
 
 ## 🛡️ Error Handling

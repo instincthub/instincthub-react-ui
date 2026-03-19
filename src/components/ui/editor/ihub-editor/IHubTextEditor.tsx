@@ -82,6 +82,13 @@ export default function IHubTextEditor({
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!editor || readOnly) return;
       const target = e.target as HTMLElement;
+
+      // Ignore clicks on bubble toolbar / link popover to preserve selection
+      const isBubbleToolbar = target.closest(
+        ".ihub-te-bubble-menu, .ihub-te-bubble-toolbar, .ihub-te-link-popover"
+      );
+      if (isBubbleToolbar) return;
+
       const isInsideContent = target.closest(".ihub-te-content");
 
       if (!isInsideContent) {

@@ -82,7 +82,13 @@ export default function useIHubEditor({
     Image,
     ImageWithCaption,
     Placeholder.configure({
-      placeholder,
+      placeholder: ({ node }) => {
+        if (node.type.name === "heading") {
+          return `Heading ${node.attrs.level}`;
+        }
+        return "Press '/' for commands";
+      },
+      showOnlyCurrent: true,
       emptyEditorClass: "ihub-te-empty",
     }),
     CharacterCount.configure({

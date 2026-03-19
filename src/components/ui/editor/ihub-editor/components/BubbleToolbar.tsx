@@ -26,6 +26,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
     setShowLinkPopover((prev) => !prev);
   }, []);
 
+  const preventFocusLoss = (e: React.MouseEvent) => e.preventDefault();
+
   const btnClass = (isActive: boolean) =>
     `ihub-te-bubble-btn${isActive ? " is-active" : ""}`;
 
@@ -49,7 +51,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
         <div className="ihub-te-bubble-toolbar">
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleBold().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleBold().run()}
             className={btnClass(editor.isActive("bold"))}
             title="Bold (⌘B)"
           >
@@ -57,7 +60,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleItalic().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleItalic().run()}
             className={btnClass(editor.isActive("italic"))}
             title="Italic (⌘I)"
           >
@@ -65,7 +69,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleUnderline().run()}
             className={btnClass(editor.isActive("underline"))}
             title="Underline (⌘U)"
           >
@@ -73,7 +78,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleStrike().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleStrike().run()}
             className={btnClass(editor.isActive("strike"))}
             title="Strikethrough"
           >
@@ -84,6 +90,7 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
 
           <button
             type="button"
+            onMouseDown={preventFocusLoss}
             onClick={toggleLink}
             className={btnClass(editor.isActive("link"))}
             title="Link (⌘K)"
@@ -95,8 +102,9 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
 
           <button
             type="button"
+            onMouseDown={preventFocusLoss}
             onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
+              editor.chain().toggleHeading({ level: 2 }).run()
             }
             className={btnClass(editor.isActive("heading", { level: 2 }))}
             title="Heading 2"
@@ -105,8 +113,9 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
+            onMouseDown={preventFocusLoss}
             onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
+              editor.chain().toggleHeading({ level: 3 }).run()
             }
             className={btnClass(editor.isActive("heading", { level: 3 }))}
             title="Heading 3"
@@ -118,7 +127,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
 
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleBlockquote().run()}
             className={btnClass(editor.isActive("blockquote"))}
             title="Quote"
           >
@@ -126,7 +136,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleCode().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleCode().run()}
             className={btnClass(editor.isActive("code"))}
             title="Inline Code"
           >
@@ -134,7 +145,8 @@ export default function BubbleToolbar({ editor }: BubbleToolbarProps) {
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            onMouseDown={preventFocusLoss}
+            onClick={() => editor.chain().toggleHighlight().run()}
             className={btnClass(editor.isActive("highlight"))}
             title="Highlight"
           >

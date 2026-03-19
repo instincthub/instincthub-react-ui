@@ -580,25 +580,25 @@ The modal includes comprehensive client-side validation:
 ## 🎨 Modal Features
 
 ### Visual Elements
-- **Header**: Displays the provided title
-- **Input Field**: Email input with validation styling
-- **Submit Button**: Disabled until valid email entered
-- **Cancel Button**: Allows user to exit without providing email
-- **Validation Feedback**: Real-time visual feedback
+- **Header**: "Enrol for {title}" heading
+- **Input Field**: Email input with real-time validation
+- **Proceed Button**: Disabled until a valid email is entered
+- **Close Button**: X icon in top corner to dismiss
+- **Validation Feedback**: Button enables/disables in real-time
 
 ### User Interactions
 - **Type to Validate**: Real-time validation as user types
-- **Submit**: Click submit or press Enter when email is valid
-- **Cancel**: Click cancel button or press Escape to close
+- **Submit**: Click "Proceed" when email is valid
+- **Close**: Click X icon to dismiss
 - **Click Outside**: Backdrop click cancels the modal
 
 ## 🔄 Modal Lifecycle
 
-1. **Creation**: Modal elements created and added to DOM
-2. **Display**: Modal appears with focus on email input
-3. **Validation**: Real-time validation as user types
-4. **Submission**: User submits valid email or cancels
-5. **Resolution**: Promise resolves with email or undefined
+1. **Creation**: Modal elements created using safe DOM methods
+2. **Display**: Modal appears with dark backdrop overlay
+3. **Validation**: Real-time email validation on input
+4. **Submission**: User clicks "Proceed" with valid email
+5. **Resolution**: Promise resolves with email string or `undefined`
 6. **Cleanup**: Modal elements and event listeners removed
 
 ## ⚠️ Important Features
@@ -606,8 +606,7 @@ The modal includes comprehensive client-side validation:
 - **Promise-based**: Clean async/await integration
 - **Built-in Validation**: No additional validation required
 - **Automatic Cleanup**: Proper DOM and event listener cleanup
-- **Keyboard Support**: Enter to submit, Escape to cancel
-- **Focus Management**: Automatic focus on input field
+- **Safe DOM**: Built with `createElement` (no innerHTML)
 - **Single Instance**: Only one email modal can be open at a time
 
 ## 🛡️ Best Practices

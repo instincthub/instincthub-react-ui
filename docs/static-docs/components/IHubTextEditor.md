@@ -29,7 +29,7 @@ import type { IHubTextEditorProps, IHubEditorFeatures } from "@instincthub/react
 | `name` | `string` | `"editor-content"` | Hidden input name for form submission |
 | `label` | `string` | — | Label text above the editor |
 | `content` | `string` | `""` | Initial HTML content |
-| `placeholder` | `string` | `"Tell your story..."` | Placeholder text |
+| `placeholder` | `string` | `"Tell your story..."` | Placeholder for empty editor (non-empty editors show "Press '/' for commands" on active empty lines) |
 | `onChange` | `(html: string) => void` | — | Callback when content changes |
 | `onBlur` | `() => void` | — | Callback on editor blur |
 | `required` | `boolean` | `false` | Whether the field is required |
@@ -160,6 +160,85 @@ All styles use the `.ihub-te-*` prefix. Key classes:
 - `.ihub-te-floating-btn` — "+" button
 - `.ihub-te-pull-quote` — Pull quote block
 - `.ihub-te-footer` — Word/char count bar
+
+## Displaying IHubTextEditor Content
+
+Content produced by `IHubTextEditor` is standard HTML. To display it with Medium/Substack-quality typography, use one of these approaches:
+
+### Option 1: ContentViewer Component (Recommended)
+
+The `ContentViewer` component from `@instincthub/react-ui` renders IHubTextEditor output with proper styling for all block types, including pull quotes, image captions, code blocks, tables, task lists, and more.
+
+```tsx
+import { ContentViewer } from "@instincthub/react-ui";
+
+<ContentViewer content={savedHtml} showToolbar={true} />
+```
+
+ContentViewer provides:
+- 720px max-width for optimal readability
+- Serif body font (Georgia) with 1.75 line-height
+- Clean native list markers (disc, decimal)
+- Dark code blocks with monospace font
+- Pull quote styling (`blockquote[data-type="pull-quote"]`)
+- Image + figcaption rendering
+- Responsive YouTube/embed display
+- Table formatting with header rows
+- Task list checkboxes
+- Highlight/mark styling
+- Full dark mode support
+
+### Option 2: CSS-Only (For Custom Backends / SSR)
+
+If you are rendering HTML from IHubTextEditor in a backend template (Django, Rails, etc.) or a non-React frontend, you can link the content-viewer CSS directly:
+
+```html
+<!-- From npm package -->
+<link rel="stylesheet" href="node_modules/@instincthub/react-ui/dist/src/assets/css/ui/content-viewer.css" />
+
+<!-- Or from CDN (after publish) -->
+<link rel="stylesheet" href="https://unpkg.com/@instincthub/react-ui/dist/src/assets/css/ui/content-viewer.css" />
+```
+
+Then wrap your HTML content in a container with the `ihub-content-viewer` class:
+
+```html
+<div class="ihub-content-viewer">
+  <!-- Paste the HTML output from IHubTextEditor here -->
+  <h2>Article Title</h2>
+  <p>Your content...</p>
+</div>
+```
+
+**CSS source:** [`src/assets/css/ui/content-viewer.css`](https://github.com/instincthub/instincthub-react-ui/blob/main/src/assets/css/ui/content-viewer.css)
+
+### HTML Block Types Reference
+
+IHubTextEditor produces these HTML structures. Ensure your display layer handles all of them:
+
+| Block | HTML Output |
+|-------|-------------|
+| Heading 1 | `<h1>...</h1>` |
+| Heading 2 | `<h2>...</h2>` |
+| Heading 3 | `<h3>...</h3>` |
+| Paragraph | `<p>...</p>` |
+| Bold | `<strong>...</strong>` |
+| Italic | `<em>...</em>` |
+| Underline | `<u>...</u>` |
+| Strikethrough | `<s>...</s>` |
+| Highlight | `<mark>...</mark>` |
+| Inline code | `<code>...</code>` |
+| Link | `<a href="...">...</a>` |
+| Bullet list | `<ul><li><p>...</p></li></ul>` |
+| Ordered list | `<ol><li><p>...</p></li></ol>` |
+| Task list | `<ul data-type="taskList"><li data-type="taskItem" data-checked="true/false">...</li></ul>` |
+| Blockquote | `<blockquote><p>...</p></blockquote>` |
+| Pull quote | `<blockquote data-type="pull-quote">...</blockquote>` |
+| Code block | `<pre><code>...</code></pre>` |
+| Table | `<table><tr><th>...</th></tr><tr><td>...</td></tr></table>` |
+| Image + caption | `<figure class="ihub-te-image-block"><img src="..." /><figcaption>...</figcaption></figure>` |
+| YouTube embed | `<div data-youtube-video><iframe src="..."></iframe></div>` |
+| Horizontal rule | `<hr />` |
 
 ## Comparison with CustomTextEditor
 

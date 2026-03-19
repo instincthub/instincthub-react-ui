@@ -461,22 +461,16 @@ function openToast(message?: string, status?: number): void
 ## 🎨 Visual Styling by Status Code
 
 ### Success Messages (200, 201)
-- **Icon**: ✅ Green checkmark
-- **Background**: Light green
-- **Border**: Green accent
-- **Auto-dismiss**: 10 seconds
+- **Icon**: Green checkmark circle
+- **Border**: Green left accent (`--ViridianGreen`)
+- **Progress bar**: Green countdown
+- **Auto-dismiss**: 8 seconds
 
-### Client Errors (400-499)
-- **Icon**: ⚠️ Warning triangle
-- **Background**: Light yellow/orange
-- **Border**: Warning accent
-- **Auto-dismiss**: 10 seconds
-
-### Server Errors (500+)
-- **Icon**: ❌ Red X or error symbol
-- **Background**: Light red
-- **Border**: Red accent
-- **Auto-dismiss**: 10 seconds
+### Error Messages (400+, 500+)
+- **Icon**: Red X circle
+- **Border**: Red left accent (`--Danger`)
+- **Progress bar**: Red countdown
+- **Auto-dismiss**: 8 seconds
 
 ## 📋 Default Messages
 
@@ -494,20 +488,23 @@ const defaults = {
 
 ## 🔄 Toast Lifecycle
 
-1. **Creation**: Toast element is dynamically created and styled
-2. **Display**: Toast appears with fade-in animation
-3. **Auto-dismiss**: Automatically removes after 10 seconds
-4. **Manual Close**: User can close with X button
-5. **Cleanup**: DOM element and timers are properly cleaned up
+1. **Creation**: Toast element is dynamically created using safe DOM methods
+2. **Display**: Toast slides in from the right with animation
+3. **Progress bar**: Countdown bar shows remaining time (8 seconds)
+4. **Auto-dismiss**: Automatically slides out after 8 seconds
+5. **Manual Close**: User can close with X button
+6. **Cleanup**: DOM element is removed after slide-out animation completes
 
 ## ⚠️ Important Features
 
-- **Auto-dismiss**: Automatically disappears after 10 seconds
+- **Auto-dismiss**: Automatically disappears after 8 seconds with progress bar
 - **Manual Close**: Click the X button to close immediately
 - **Non-blocking**: Doesn't prevent other UI interactions
-- **Stacking**: Multiple toasts can be displayed simultaneously
-- **Automatic Cleanup**: Properly removes DOM elements and timers
+- **Stacking**: Multiple toasts stack vertically (up to 5)
+- **Automatic Cleanup**: Properly removes DOM elements after animation
 - **Responsive**: Adapts to different screen sizes
+- **Dark Mode**: Supports `.DarkMode` class
+- **Safe DOM**: Built with `createElement` / `createElementNS` (no innerHTML)
 
 ## 🛡️ Best Practices
 

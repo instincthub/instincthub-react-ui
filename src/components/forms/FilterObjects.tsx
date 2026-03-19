@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { setCookie } from "../lib/helpFunction";
 import { FilterObjectsType } from "@/types";
-import ContentViewer from "../ui/viewer/ContentViewer";
 
 interface FilterObjectsProps {
   options: FilterObjectsType[] | [];
@@ -155,7 +154,7 @@ const FilterObjects = (props: FilterObjectsProps) => {
               data-name={props.dataName || props.name}
               readOnly
             />
-            <ContentViewer content={selected || "..."} showToolbar={false} />
+            <p dangerouslySetInnerHTML={{ __html: selected || "..." }} />
           </div>
           {props.label && (
             <label className="ihub-select__label">{props.label}</label>

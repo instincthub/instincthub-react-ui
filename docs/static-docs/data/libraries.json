@@ -301,27 +301,27 @@
       "name": "openConfirmModal",
       "description": "Promise-based confirmation dialogs with warning levels and custom messaging",
       "category": "Confirmation Modals",
-      "repo_path": "src/components/lib/modals/modals.ts#L27",
+      "repo_path": "src/components/lib/modals/modals.ts#L70",
       "example_path": "docs/static-docs/libs/modals/openConfirmModal.md",
-      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L27",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L70",
       "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openConfirmModal.md"
     },
     {
       "name": "openToast",
       "description": "Auto-dismissing toast notifications with status-based styling and positioning",
       "category": "Notification Modals",
-      "repo_path": "src/components/lib/modals/modals.ts#L91",
+      "repo_path": "src/components/lib/modals/modals.ts#L215",
       "example_path": "docs/static-docs/libs/modals/openToast.md",
-      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L91",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L215",
       "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/openToast.md"
     },
     {
       "name": "getUserEmailInputModal",
       "description": "Email collection modal with built-in validation and error handling",
       "category": "Input Modals",
-      "repo_path": "src/components/lib/modals/modals.ts#L150",
+      "repo_path": "src/components/lib/modals/modals.ts#L374",
       "example_path": "docs/static-docs/libs/modals/getUserEmailInputModal.md",
-      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L150",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/modals/modals.ts#L374",
       "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/modals/getUserEmailInputModal.md"
     },
     {
