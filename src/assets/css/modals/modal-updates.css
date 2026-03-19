@@ -207,3 +207,5 @@
   background-color: var(--DarkCyan);
   border-radius: 3px;
 }
+
+/* Dark mode handled by CSS variable swap (--White / --Gunmetal / --Gray) */

@@ -368,20 +368,7 @@
 .ihub-toast-container:nth-child(4 of .ihub-toast-container) { top: 216px; }
 .ihub-toast-container:nth-child(5 of .ihub-toast-container) { top: 280px; }
 
-/* Dark mode */
-.DarkMode .ihub-toast {
-  background-color: var(--Gunmetal, #2c3e50);
-  color: var(--White, #fff);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.DarkMode .ihub-toast-close {
-  color: var(--White, #fff);
-}
-
-.DarkMode .ihub-toast-close:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+/* Dark mode handled by CSS variable swap (--White / --Gunmetal) */
 
 /* Responsive */
 @media (max-width: 576px) {
