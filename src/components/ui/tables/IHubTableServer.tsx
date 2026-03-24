@@ -307,10 +307,7 @@ export const IHubTableServer = forwardRef<
           data: result.results,
           pagination: {
             totalCount: result.count,
-            currentPage: Math.floor(
-              parseInt(new URLSearchParams(result.next).get("offset") || "0") /
-                params.limit
-            ),
+            currentPage: params.page,
             perPage: params.limit,
             totalPages: Math.ceil(result.count / params.limit),
           },
