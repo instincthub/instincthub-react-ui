@@ -163,6 +163,9 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
   const [tempAmPm, setTempAmPm] = useState<"AM" | "PM">(
     selectedDate && selectedDate.getHours() >= 12 ? "PM" : "AM"
   );
+  const [hoursEditing, setHoursEditing] = useState<boolean>(false);
+  const [minutesEditing, setMinutesEditing] = useState<boolean>(false);
+  const [secondsEditing, setSecondsEditing] = useState<boolean>(false);
 
   // Refs
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -1275,14 +1278,31 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                     <input
                       type="text"
                       className="ihub-datetime-time-input"
-                      value={use12Hour ? (parseInt(tempHours) % 12 || 12).toString().padStart(2, "0") : tempHours}
+                      value={hoursEditing ? tempHours : (use12Hour ? (parseInt(tempHours) % 12 || 12).toString().padStart(2, "0") : tempHours)}
+                      onFocus={() => {
+                        setHoursEditing(true);
+                        if (use12Hour) {
+                          const display12 = (parseInt(tempHours) % 12 || 12).toString().padStart(2, "0");
+                          setTempHours(display12);
+                        }
+                      }}
+                      onBlur={() => {
+                        setHoursEditing(false);
+                        if (tempHours === "") setTempHours("00");
+                        else if (use12Hour) {
+                          let h = parseInt(tempHours) || 0;
+                          if (h > 12) h = 12;
+                          if (h < 1) h = 12;
+                          const h24 = tempAmPm === "PM" ? (h === 12 ? 12 : h + 12) : (h === 12 ? 0 : h);
+                          setTempHours(h24.toString().padStart(2, "0"));
+                        } else {
+                          setTempHours(tempHours.padStart(2, "0"));
+                        }
+                      }}
                       onChange={(e) => {
                         const val = e.target.value.replace(/\D/g, "").slice(0, 2);
-                        if (val === "") {
-                          setTempHours(val);
-                        } else if (use12Hour && parseInt(val) <= 12) {
-                          setTempHours(val);
-                        } else if (!use12Hour && parseInt(val) < 24) {
+                        const max = use12Hour ? 12 : 23;
+                        if (val === "" || parseInt(val) <= max) {
                           setTempHours(val);
                         }
                       }}
@@ -1300,6 +1320,12 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                       type="text"
                       className="ihub-datetime-time-input"
                       value={tempMinutes}
+                      onFocus={() => setMinutesEditing(true)}
+                      onBlur={() => {
+                        setMinutesEditing(false);
+                        if (tempMinutes === "") setTempMinutes("00");
+                        else setTempMinutes(tempMinutes.padStart(2, "0"));
+                      }}
                       onChange={(e) => {
                         const val = e.target.value.replace(/\D/g, "").slice(0, 2);
                         if (val === "" || parseInt(val) < 60) {
@@ -1321,6 +1347,12 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                           type="text"
                           className="ihub-datetime-time-input"
                           value={tempSeconds}
+                          onFocus={() => setSecondsEditing(true)}
+                          onBlur={() => {
+                            setSecondsEditing(false);
+                            if (tempSeconds === "") setTempSeconds("00");
+                            else setTempSeconds(tempSeconds.padStart(2, "0"));
+                          }}
                           onChange={(e) => {
                             const val = e.target.value.replace(/\D/g, "").slice(0, 2);
                             if (val === "" || parseInt(val) < 60) {
@@ -1371,11 +1403,25 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                           type="button"
                           className={`ihub-datetime-time-option ${isSelected ? "selected" : ""}`}
                           onClick={() => {
-                            setTempHours(option.hours.toString().padStart(2, "0"));
-                            setTempMinutes(option.minutes.toString().padStart(2, "0"));
+                            const h = option.hours;
+                            const m = option.minutes;
+
+                            setTempHours(h.toString().padStart(2, "0"));
+                            setTempMinutes(m.toString().padStart(2, "0"));
                             if (use12Hour) {
-                              setTempAmPm(option.hours >= 12 ? "PM" : "AM");
+                              setTempAmPm(h >= 12 ? "PM" : "AM");
                             }
+
+                            // Apply immediately and close picker
+                            let baseDate = selectedDate || new Date();
+                            let newDateTime = setHours(baseDate, h);
+                            newDateTime = setMinutes(newDateTime, m);
+                            newDateTime = setSeconds(newDateTime, 0);
+
+                            setSelectedDate(newDateTime);
+                            onChange?.(processDateTimeByMode(newDateTime));
+                            setShowPicker(false);
+                            setError(null);
                           }}
                         >
                           {option.display}
