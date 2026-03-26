@@ -1277,8 +1277,10 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                       className="ihub-datetime-time-input"
                       value={use12Hour ? (parseInt(tempHours) % 12 || 12).toString().padStart(2, "0") : tempHours}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, "");
-                        if (use12Hour && parseInt(val) <= 12) {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                        if (val === "") {
+                          setTempHours(val);
+                        } else if (use12Hour && parseInt(val) <= 12) {
                           setTempHours(val);
                         } else if (!use12Hour && parseInt(val) < 24) {
                           setTempHours(val);
@@ -1299,8 +1301,8 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                       className="ihub-datetime-time-input"
                       value={tempMinutes}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, "");
-                        if (parseInt(val) < 60) {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                        if (val === "" || parseInt(val) < 60) {
                           setTempMinutes(val);
                         }
                       }}
@@ -1320,8 +1322,8 @@ const DateTimePicker: React.FC<DateTimePickerPropsType> = ({
                           className="ihub-datetime-time-input"
                           value={tempSeconds}
                           onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, "");
-                            if (parseInt(val) < 60) {
+                            const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+                            if (val === "" || parseInt(val) < 60) {
                               setTempSeconds(val);
                             }
                           }}
