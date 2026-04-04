@@ -122,7 +122,7 @@ export default function PasswordField({
             placeholder={placeholder}
           />
 
-          <label htmlFor={name} className="ihub-text-label">
+          <label htmlFor={id || "password"} className="ihub-text-label">
             {label}
             {required && <span className="ihub-required">*</span>}
           </label>

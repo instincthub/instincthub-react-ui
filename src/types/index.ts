@@ -178,6 +178,19 @@ export interface FileUploaderType {
   ) => void;
   /** Additional CSS class names */
   className?: string;
+
+  // ── DB + S3 lifecycle props (optional, enable save/delete) ──
+
+  /** API endpoint to save media record after S3 upload (POST). If set, saves to DB automatically. */
+  saveEndpoint?: string;
+  /** API endpoint prefix for deleting media record (DELETE {deleteEndpoint}/{id}/). If set, enables DB delete on remove. */
+  deleteEndpoint?: string;
+  /** Auth token for API calls (used with reqOptions for saveEndpoint/deleteEndpoint). */
+  token?: string | null;
+  /** If true, delete file from S3 when user removes it. Requires the file_url to extract the S3 key. Default: false. */
+  enableS3Delete?: boolean;
+  /** Callback when a file is removed (after DB + S3 delete). Receives the S3UploadResponseType of the removed file. */
+  onRemove?: (response: S3UploadResponseType) => void;
 }
 
 export interface FetchDataType {

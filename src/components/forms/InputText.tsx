@@ -175,7 +175,7 @@ const InputText: React.FC<InputTextProps> = ({
     >
       <input
         type={type}
-        id={id}
+        id={id || name}
         name={name}
         value={inputValue}
         className="ihub-input"
@@ -187,7 +187,7 @@ const InputText: React.FC<InputTextProps> = ({
         onChange={handleChange}
         onBlur={onBlur}
       />
-      <label htmlFor={name} className="ihub-text-label">
+      <label htmlFor={id || name} className="ihub-text-label">
         {label}
         {required && <span className="ihub-required">*</span>}
       </label>

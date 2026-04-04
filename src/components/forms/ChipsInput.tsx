@@ -328,6 +328,7 @@ const ChipsInput: React.FC<ChipsInputProps> = ({
         <input
           ref={inputRef}
           type="text"
+          id={name}
           className={`ihub-chips-input ${inputClassName}`}
           placeholder={value.length === 0 ? placeholder : ""}
           value={inputValue}
