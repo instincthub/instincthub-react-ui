@@ -107,7 +107,7 @@ export * from "./components/ui/charts";
 
 // Theme components
 export { default as ChangeStyleVariable } from "./components/theme/ChangeStyleVariable";
-export { default as DarkModeProvider } from "./components/theme/DarkModeProvider";
+export { default as DarkModeProvider, useTheme } from "./components/theme/DarkModeProvider";
 export { default as LoadingAnimate } from "./components/theme/LoadingAnimate";
 export { default as SessionProviders } from "./components/theme/SessionProviders";
 export { default as SessionExpiresLogout } from "./components/theme/signout/SessionExpiresLogout";

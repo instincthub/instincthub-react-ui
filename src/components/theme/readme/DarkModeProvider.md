@@ -59,37 +59,35 @@ function App() {
 }
 ```
 
-## Theme Management Functions
+## useTheme Hook
 
-To change themes programmatically, you can use these helper functions:
+Use the `useTheme` hook in any child component to read and change the current theme.
 
 ```tsx
-// Add these functions where needed
-function setTheme(theme: "DarkMode" | "LightMode" | "Device") {
-  localStorage.setItem("theme", theme);
+import { useTheme } from "@instincthub/react-ui";
 
-  if (theme === "Device") {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    document.documentElement.classList.remove("DarkMode", "LightMode");
-    document.documentElement.classList.add(
-      prefersDark ? "DarkMode" : "LightMode"
-    );
-  } else {
-    document.documentElement.classList.remove("DarkMode", "LightMode");
-    document.documentElement.classList.add(theme);
-  }
-}
+function ThemeSwitcher() {
+  const { theme, setTheme } = useTheme();
 
-function toggleTheme() {
-  const currentTheme = document.documentElement.classList.contains("DarkMode")
-    ? "DarkMode"
-    : "LightMode";
-
-  setTheme(currentTheme === "DarkMode" ? "LightMode" : "DarkMode");
+  return (
+    <div>
+      <p>Current theme: {theme}</p>
+      <button onClick={() => setTheme("LightMode")}>Light</button>
+      <button onClick={() => setTheme("DarkMode")}>Dark</button>
+      <button onClick={() => setTheme("Device")}>System</button>
+    </div>
+  );
 }
 ```
+
+**Note**: `useTheme` must be called inside a component wrapped by `DarkModeProvider` (or `ReactClientProviders`, which includes it).
+
+### Return Value
+
+| Property   | Type                         | Description                |
+| ---------- | ---------------------------- | -------------------------- |
+| `theme`    | `"DarkMode" \| "LightMode" \| "Device"` | Current theme setting      |
+| `setTheme` | `(theme: Theme) => void`     | Function to change theme   |
 
 ## Implementation Notes
 

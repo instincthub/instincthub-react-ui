@@ -88,6 +88,9 @@
   height: 0;
   font-style: normal;
   font-weight: 400;
+  position: relative;
+  left: 47px;
+  top: -2px;
 }
 
 /* Slightly different style when entire editor is empty */
