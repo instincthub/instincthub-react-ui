@@ -302,6 +302,11 @@ export const IHubTableServer = forwardRef<
         const response = await fetch(url, options);
         const result = await response.json();
 
+        if (!response.ok) {
+          const message = result.detail || result.error || "Failed to fetch data";
+          throw new Error(message);
+        }
+
         // Transform API response to match component's expected format
         return {
           data: result.results,
@@ -560,7 +565,7 @@ export const IHubTableServer = forwardRef<
       <div className="ihub-data-list-container">
         {title && <h2>{title}</h2>}
         <div className="ihub-error-state">
-          <p>Error loading data. Please try again.</p>
+          <p>{error.message || "Error loading data. Please try again."}</p>
           <button className="ihub-important-btn" onClick={handleRefresh}>
             Retry
           </button>

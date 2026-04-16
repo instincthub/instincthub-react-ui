@@ -62,6 +62,10 @@ export interface TableProps<T> {
   };
   refreshable?: boolean;
   onRefresh?: () => Promise<void>;
+
+  /** Error message to display (e.g. from API response `detail` or `error` key) */
+  error?: string | null;
+
   showRowNumbers?: boolean;
   rowNumberStartFrom?: number;
 }
@@ -132,6 +136,7 @@ export interface TableProps<T> {
  * @prop {object} exportOptions - The options for exporting the table
  * @prop {boolean} refreshable - Whether to allow refreshing the table
  * @prop {function} onRefresh - The function to call when the table is refreshed
+ * @prop {string} error - Error message to display (e.g. from API response detail or error key)
  * @prop {boolean} showRowNumbers - Whether to show row numbers for each record
  * @prop {number} rowNumberStartFrom - The starting number for row numbering (defaults to 1)
  *
@@ -166,6 +171,7 @@ export const IHubTable = <T extends object>({
   exportOptions,
   refreshable = false,
   onRefresh,
+  error,
   showRowNumbers = false,
   rowNumberStartFrom = 1,
 }: TableProps<T>): JSX.Element => {
@@ -528,6 +534,23 @@ export const IHubTable = <T extends object>({
         {title && <h2>{title}</h2>}
         <div className="ihub-loading-state">
           <p>Loading data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error && !isLoading) {
+    return (
+      <div className="ihub-data-list-container">
+        {title && <h2>{title}</h2>}
+        <div className="ihub-error-state">
+          <p>{error}</p>
+          {refreshable && onRefresh && (
+            <button className="ihub-important-btn" onClick={handleRefresh}>
+              Retry
+            </button>
+          )}
         </div>
       </div>
     );
