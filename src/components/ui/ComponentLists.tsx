@@ -647,6 +647,15 @@ const ComponentLists = () => {
       example_path: "docs/static-docs/components/CodeDisplay.md",
     },
     {
+      name: "DangerousRenderer",
+      description:
+        "Safe-by-default renderer for untrusted HTML/Markdown — DOMPurify sanitization, link hardening, DoS guards, and optional custom wrapper via children.",
+      category: "UI",
+      repo_path: "src/components/ui/viewer/DangerousRenderer.tsx",
+      example_path: "docs/static-docs/components/DangerousRenderer.md",
+      visual_demo_url: "/components/ui/dangerous-renderer",
+    },
+    {
       name: "IHubTable",
       description: "InstinctHub table component",
       category: "UI",

@@ -85,6 +85,8 @@ export type { IHubTextEditorProps, IHubEditorFeatures } from "./components/ui/ed
 export { default as ContentViewer } from "./components/ui/viewer/ContentViewer";
 export { default as ContentViewOrEdit } from "./components/ui/viewer/ContentViewOrEdit";
 export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";
+export { default as DangerousRenderer } from "./components/ui/viewer/DangerousRenderer";
+export type { DangerousRendererProps } from "./components/ui/viewer/DangerousRenderer";
 export { default as IHubTable } from "./components/ui/tables/IHubTable";
 export { default as IHubTableServer } from "./components/ui/tables/IHubTableServer";
 export type { IHubTableServerRef } from "./components/ui/tables/IHubTableServer";

@@ -2,6 +2,8 @@ export { default as CustomTextEditor } from "./editor/CustomTextEditor";
 export { default as ContentViewer } from "./viewer/ContentViewer";
 export { default as ContentViewOrEdit } from "./viewer/ContentViewOrEdit";
 export { default as CodeDisplay } from "./viewer/CodeDisplay";
+export { default as DangerousRenderer } from "./viewer/DangerousRenderer";
+export type { DangerousRendererProps } from "./viewer/DangerousRenderer";
 export { default as IHubTable } from "./tables/IHubTable";
 export { default as IHubTableServer } from "./tables/IHubTableServer";
 export { default as OrDivider } from "./OrDivider";
