@@ -1147,6 +1147,17 @@
     "example_path": "../components/CodeDisplay.md"
   },
   {
+    "name": "DangerousRenderer",
+    "description": "Safe-by-default renderer for untrusted HTML/Markdown. Sanitizes via DOMPurify, hardens links, caps content length, and supports custom wrappers via children or the `as` prop.",
+    "category": "UI",
+    "repo_path": "../../../src/components/ui/viewer/DangerousRenderer.tsx",
+    "type": "component",
+    "tags": ["ui", "html", "markdown", "sanitization", "security", "xss", "dompurify"],
+    "props": [],
+    "examples": [],
+    "example_path": "../components/DangerousRenderer.md"
+  },
+  {
     "name": "IHubTable",
     "description": "InstinctHub table component",
     "category": "UI",
