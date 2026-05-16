@@ -42,7 +42,7 @@ function hello() {
 \`\`\`
 `;
 
-const MODES = ["html", "markdown", "custom-wrapper", "locked-down"] as const;
+const MODES = ["html", "markdown", "custom-wrapper", "locked-down", "truncated"] as const;
 type Mode = (typeof MODES)[number];
 
 const MODE_LABELS: Record<Mode, string> = {
@@ -50,10 +50,12 @@ const MODE_LABELS: Record<Mode, string> = {
   markdown: "Markdown",
   "custom-wrapper": "Custom wrapper (children)",
   "locked-down": "Locked-down allowlist",
+  truncated: "Truncated",
 };
 
 export default function DangerousRendererExample() {
   const [mode, setMode] = useState<Mode>("html");
+  const [truncateAt, setTruncateAt] = useState(200);
   const [log, setLog] = useState<
     Array<{ kind: "sanitize" | "error"; message: string; at: string }>
   >([]);
@@ -75,7 +77,8 @@ export default function DangerousRendererExample() {
           <p style={{ maxWidth: 720 }}>
             Safe-by-default renderer for untrusted HTML / Markdown. Switch modes
             below to see DOMPurify sanitization, markdown parsing, the custom
-            wrapper via <code>children</code>, and a locked-down allowlist.
+            wrapper via <code>children</code>, a locked-down allowlist, and
+            word-boundary truncation via the <code>truncate</code> prop.
           </p>
         </div>
       </header>
@@ -172,6 +175,36 @@ export default function DangerousRendererExample() {
                 })
               }
             />
+          )}
+
+          {mode === "truncated" && (
+            <>
+              <div style={{ marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <label htmlFor="truncate-range" style={{ fontSize: 14, whiteSpace: "nowrap" }}>
+                  Truncate at: <strong>{truncateAt}</strong> chars
+                </label>
+                <input
+                  id="truncate-range"
+                  type="range"
+                  min={50}
+                  max={600}
+                  value={truncateAt}
+                  onChange={(e) => setTruncateAt(Number(e.target.value))}
+                  style={{ flex: 1 }}
+                />
+              </div>
+              <DangerousRenderer
+                content={UNTRUSTED_MARKDOWN}
+                isMarkdown
+                truncate={truncateAt}
+                onSanitize={({ sanitized }) =>
+                  pushLog({
+                    kind: "sanitize",
+                    message: `Truncated to ${truncateAt} chars — rendered ${sanitized.length} chars of HTML`,
+                  })
+                }
+              />
+            </>
           )}
         </div>
 

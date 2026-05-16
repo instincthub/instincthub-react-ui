@@ -53,6 +53,12 @@ export interface DangerousRendererProps {
    * comes from a fully trusted source. Logs a warning in development.
    */
   trusted?: boolean;
+  /**
+   * Maximum number of characters to display. When set, content is truncated
+   * at the nearest word boundary and an ellipsis is appended. Renders the
+   * full content when omitted.
+   */
+  truncate?: number;
   /** Node rendered when `content` is empty after processing. */
   fallback?: React.ReactNode;
   /** If true, renders `loadingComponent` instead of the content. */
@@ -119,6 +125,7 @@ export default function DangerousRenderer({
   noReferrer = true,
   openLinksInNewTab = true,
   maxLength = DEFAULT_MAX_LENGTH,
+  truncate,
   trusted = false,
   fallback = null,
   loading = false,
@@ -194,7 +201,12 @@ export default function DangerousRenderer({
           );
         }
 
-        let processed = isMarkdown ? await Promise.resolve(marked.parse(content)) : content;
+        const truncated =
+          truncate && content.length > truncate
+            ? content.slice(0, content.lastIndexOf(" ", truncate) || truncate) + "…"
+            : content;
+
+        let processed = isMarkdown ? await Promise.resolve(marked.parse(truncated)) : truncated;
 
         if (escapeCodeBlocks && typeof processed === "string") {
           processed = escapeCodeTagContent(processed);
@@ -234,7 +246,7 @@ export default function DangerousRenderer({
     return () => {
       cancelled = true;
     };
-  }, [content, isMarkdown, escapeCodeBlocks, trusted, maxLength, sanitizeConfig]);
+  }, [content, isMarkdown, escapeCodeBlocks, trusted, maxLength, truncate, sanitizeConfig]);
 
   if (loading) {
     return <>{loadingComponent}</>;

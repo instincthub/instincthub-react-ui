@@ -31,6 +31,7 @@ Safe-by-default renderer for untrusted HTML or Markdown. Wraps React's raw HTML 
 | `escapeCodeBlocks` | `boolean` | No | `true` | Escape `<code>` contents so HTML entities render literally. |
 | `noReferrer` | `boolean` | No | `true` | Add `rel="noopener noreferrer"` to anchor tags. |
 | `openLinksInNewTab` | `boolean` | No | `true` | Force external `http(s)` links to open in a new tab. |
+| `truncate` | `number` | No | - | Maximum characters to display. Clips at the nearest word boundary and appends `…`. Omit to render the full content. |
 | `maxLength` | `number` | No | `1_000_000` | Hard cap on `content` length; exceeds → `onError`. |
 | `trusted` | `boolean` | No | `false` | Bypass sanitization. **Use only with fully trusted content.** Warns in dev. |
 | `fallback` | `ReactNode` | No | `null` | Rendered when processed HTML is empty. |
@@ -47,6 +48,7 @@ Safe-by-default renderer for untrusted HTML or Markdown. Wraps React's raw HTML 
 
 ## 🌟 Features
 
+- **Word-boundary truncation** — `truncate` clips at the nearest space and appends `…`; full content renders when omitted.
 - **Safe by default** — DOMPurify sanitization on every render.
 - **Markdown support** — `isMarkdown` runs content through `marked` before sanitization.
 - **Link hardening** — `rel="noopener noreferrer"` and `target="_blank"` for external links.
@@ -95,6 +97,14 @@ import { DangerousRenderer } from "@instincthub/react-ui";
   onError={(err) => logger.error(err)}
 />
 ```
+
+### Truncated preview
+
+```tsx
+<DangerousRenderer content={longMarkdown} isMarkdown truncate={200} />
+```
+
+Clips `longMarkdown` at the nearest word boundary before the 200-character mark and appends `…`. Markdown is then parsed and sanitized on the shortened string.
 
 ### Trusted bypass (use with care)
 
