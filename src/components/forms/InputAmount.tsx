@@ -106,11 +106,9 @@ const InputAmount: React.FC<InputAmountProps> = ({
     if (typeof value === "string" && decimalPart) {
       return formattedValue + decimalPart;
     } else if (typeof value === "number") {
-      // For numbers, use fixed decimal places
-      return (
-        formattedValue +
-        numericValue.toString().substring(numericValue.toString().indexOf("."))
-      );
+      const str = numericValue.toString();
+      const dotIndex = str.indexOf(".");
+      return formattedValue + (dotIndex !== -1 ? str.substring(dotIndex) : "");
     }
 
     return formattedValue;

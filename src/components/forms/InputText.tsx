@@ -139,20 +139,13 @@ const InputText: React.FC<InputTextProps> = ({
   id,
   activeLabel = false,
 }) => {
-  const [inputValue, setInputValue] = useState<string>();
-  const [hasValue, setHasValue] = useState<boolean>(activeLabel);
+  const [inputValue, setInputValue] = useState<string>(value ?? "");
+  const [hasValue, setHasValue] = useState<boolean>(activeLabel || !!value);
 
   useEffect(() => {
-    if (activeLabel) {
-      setHasValue(true);
-    } else {
-      setHasValue(!!value);
-    }
-
-    if (value !== inputValue) {
-      setInputValue(value);
-    }
-  }, [value]);
+    setInputValue(value ?? "");
+    setHasValue(activeLabel || !!value);
+  }, [value, activeLabel]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setHasValue(!!e.target.value);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 
 interface InputNumberProps {
   id?: string;
@@ -65,12 +65,23 @@ const InputNumber = ({
   error,
   note,
 }: InputNumberProps) => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const initialValue =
+    value !== undefined
+      ? value.toString()
+      : defaultValue !== undefined
+      ? defaultValue.toString()
+      : "";
+  const [inputValue, setInputValue] = useState<string>(initialValue);
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [hasValue, setHasValue] = useState<boolean>(false);
+  const [hasValue, setHasValue] = useState<boolean>(initialValue !== "");
+  const userEditingRef = useRef(false);
 
-  // Initialize input value from props
+  // Sync external value changes (e.g. parent reset), but skip echo-back from user edits
   useEffect(() => {
+    if (userEditingRef.current) {
+      userEditingRef.current = false;
+      return;
+    }
     if (value !== undefined) {
       setInputValue(value.toString());
       setHasValue(true);
@@ -91,6 +102,7 @@ const InputNumber = ({
 
       // Call onChange with parsed number or null if empty
       if (onChange) {
+        userEditingRef.current = true;
         const parsedValue = newValue === "" ? null : parseFloat(newValue);
         onChange(parsedValue);
       }
@@ -113,6 +125,7 @@ const InputNumber = ({
     setHasValue(true);
 
     if (onChange) {
+      userEditingRef.current = true;
       onChange(newValue);
     }
   };
@@ -133,6 +146,7 @@ const InputNumber = ({
     setHasValue(true);
 
     if (onChange) {
+      userEditingRef.current = true;
       onChange(newValue);
     }
   };
