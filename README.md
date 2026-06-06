@@ -1,6 +1,6 @@
 # InstinctHub React UI
 
-A comprehensive React component library with 125+ components for building modern web applications.
+A comprehensive React component library with 130+ components for building modern web applications.
 
 ## 🚀 Quick Start
 
@@ -41,21 +41,18 @@ To use the `@instincthub/react-ui` package, another project needs to install the
 `@instincthub/react-ui` has several peer dependencies that need to be installed separately:
 
 ```sh
-npm install @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
-
+npm install @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
 ```
 
 Or using yarn:
 
 ```sh
-yarn add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
-```
+yarn add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
 
 Or using pnmpm:
 
 ```sh
-pnpm add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16 recharts@^2.15.3
-```
+pnpm add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
 
 ### Step 2: Install the Package
 
@@ -104,6 +101,24 @@ To unlink:
 ```sh
 npm unlink @instincthub/react-ui
 ```
+
+## Available Scripts
+
+<!-- AUTO-GENERATED from package.json scripts -->
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the example Next.js app with hot reload |
+| `npm run build` | Build the example Next.js app |
+| `npm run start` | Start the built example app |
+| `npm run rollup` | Build the library for distribution |
+| `npm run link-ui` | Rebuild and `npm link` for local development (macOS/Linux) |
+| `npm run link-ui-win` | Rebuild and `npm link` for local development (Windows) |
+| `npm run unlink-ui-linux` | Unlink the package (macOS/Linux) |
+| `npm run yalc-link-ui` | Rebuild and publish to local yalc store |
+| `npm run yalc-link-ui-win` | Rebuild and publish to local yalc store (Windows) |
+| `npm run yalc-update-ui` | Rebuild and push updates to all yalc consumers |
+| `npm run deploy` | Build + publish to npm + deploy to Vercel |
+<!-- END AUTO-GENERATED -->
 
 ## Core Features
 
@@ -342,7 +357,7 @@ This package works seamlessly with Next.js applications. For optimal performance
 
 ```jsx
 // In your _app.js or layout.js
-import "@instincthub/react-ui/asssets/css/styles.css"; // Import styles once at the application root
+import "@instincthub/react-ui/assets/css/styles.css"; // Import styles once at the application root
 ```
 
 ## TypeScript Support
