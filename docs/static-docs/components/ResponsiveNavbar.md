@@ -350,8 +350,8 @@ const ResponsiveNavbarExamples = () => {
 
       case "custom-dropdown":
         const renderCustomDropdown = ({ user, closeDropdown }: DropdownRenderProps) => (
-          // IMPORTANT: 'ihub-user-dropdown' class prevents click-outside closing
-          <div className="ihub-user-dropdown" style={{
+          // No ihub-user-dropdown needed — the outer wrapper already carries it.
+          <div style={{
             padding: "1rem",
             backgroundColor: "var(--bg-secondary)",
             borderRadius: "8px",
@@ -931,7 +931,7 @@ export default ResponsiveNavbarExamples;
 | `hideBottomBanner` | `boolean` | `false` | Hide the bottom banner |
 | **`userDropdownOpen`** | `boolean` | `undefined` | **NEW: Controlled dropdown state** |
 | **`onUserDropdownToggle`** | `(isOpen: boolean) => void` | `undefined` | **NEW: Callback when dropdown toggles** |
-| **`renderUserDropdown`** | `(props: DropdownRenderProps) => ReactNode` | `undefined` | **NEW: Custom dropdown renderer** |
+| **`renderUserDropdown`** | `(props: DropdownRenderProps) => ReactNode` | `undefined` | **Custom dropdown renderer. Return value is rendered directly with no wrapper div. Return `null` to suppress the built-in panel entirely.** |
 
 ### Type Definitions
 
@@ -969,26 +969,20 @@ interface DropdownRenderProps {
 }
 ```
 
-### 🎯 Important: Click-Outside Behavior
+### 🎯 Click-Outside Behavior
 
-When implementing custom dropdown content with `renderUserDropdown`, you **MUST** wrap your content in a container with the `ihub-user-dropdown` class. This class is used by the component's click-outside detection mechanism to determine whether clicks should close the dropdown.
-
-**Without this class, clicks inside your custom dropdown will close it immediately!**
+The outer `ihub-user-dropdown` div is always rendered by the component and contains both the profile button and the dropdown panel. Click-outside detection targets this class, so **you do not need to add `ihub-user-dropdown` to your custom content** — it is already present on the ancestor element.
 
 ```tsx
-// ✅ CORRECT - Dropdown stays open when clicking inside
+// ✅ CORRECT - custom content rendered directly inside the outer ihub-user-dropdown div
 const renderCustomDropdown = ({ user, closeDropdown }) => (
-  <div className="ihub-user-dropdown custom-styles">
+  <div className="my-custom-dropdown">
     {/* Your custom content */}
   </div>
 );
 
-// ❌ INCORRECT - Dropdown closes when clicking inside
-const renderCustomDropdown = ({ user, closeDropdown }) => (
-  <div className="custom-dropdown"> {/* Missing ihub-user-dropdown class */}
-    {/* Your custom content */}
-  </div>
-);
+// ✅ ALSO VALID - return null to suppress the panel entirely
+const renderCustomDropdown = () => null;
 ```
 
 ### Usage Examples
@@ -1019,9 +1013,10 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
 
 #### Custom Dropdown Content
 ```tsx
+// No need to add ihub-user-dropdown — the outer wrapper already carries that class.
+// Return null to suppress the panel entirely.
 const renderCustomDropdown = ({ user, closeDropdown }) => (
-  // IMPORTANT: Include 'ihub-user-dropdown' class to prevent click-outside closing
-  <div className="ihub-user-dropdown custom-dropdown">
+  <div className="my-custom-dropdown">
     <h3>Welcome, {user.name}!</h3>
     <button onClick={() => handleAction(closeDropdown)}>
       Custom Action
@@ -1040,6 +1035,17 @@ const renderCustomDropdown = ({ user, closeDropdown }) => (
 />
 ```
 
+#### Suppress the built-in panel
+```tsx
+// renderUserDropdown returning null hides the dropdown panel completely.
+<ResponsiveNavbar
+  session={session}
+  logoSrc="/logo.png"
+  navLinks={navLinks}
+  renderUserDropdown={() => null}
+/>
+```
+
 #### Combined Controlled + Custom
 ```tsx
 <ResponsiveNavbar
@@ -1049,8 +1055,7 @@ const renderCustomDropdown = ({ user, closeDropdown }) => (
   userDropdownOpen={dropdownOpen}
   onUserDropdownToggle={setDropdownOpen}
   renderUserDropdown={({ user, closeDropdown }) => (
-    // Ensure CustomDropdown component includes 'ihub-user-dropdown' class
-    <CustomDropdown className="ihub-user-dropdown" user={user} onClose={closeDropdown} />
+    <CustomDropdown user={user} onClose={closeDropdown} />
   )}
 />
 ```
@@ -1059,13 +1064,7 @@ const renderCustomDropdown = ({ user, closeDropdown }) => (
 
 ### Click-Outside Detection for Custom Dropdowns
 
-The ResponsiveNavbar component implements click-outside detection to automatically close dropdowns when users click elsewhere on the page. This is handled through a class-based detection system:
-
-1. **Default Behavior**: The component checks if clicks occur outside elements with the `ihub-user-dropdown` class
-2. **For Custom Dropdowns**: You MUST include the `ihub-user-dropdown` class on your root container
-3. **Consequence of Missing Class**: Without this class, any click inside your custom dropdown will close it immediately
-
-#### How It Works
+The component wraps both the profile trigger and the dropdown panel in a permanent `<div className="ihub-user-dropdown">`. The click-outside handler closes the dropdown only when a click lands outside that div:
 
 ```javascript
 // Internal click detection logic (simplified)
@@ -1074,31 +1073,28 @@ if (userDropdownOpen && !target.closest(".ihub-user-dropdown")) {
 }
 ```
 
+Because the outer `ihub-user-dropdown` div is always present, **custom content rendered via `renderUserDropdown` is already inside it** — you do not need to add that class yourself.
+
 #### Common Pitfalls and Solutions
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Dropdown closes when clicking inside | Missing `ihub-user-dropdown` class | Add the class to your container |
-| Dropdown doesn't close on outside click | Class applied to wrong element | Apply class to the root dropdown container |
-| Custom styles not applying | Class order matters | Use `className="ihub-user-dropdown custom-class"` |
+| Dropdown closes when clicking inside | Custom root element placed outside the `ihub-user-dropdown` ancestor | Ensure your render function returns content that stays inside the component tree |
+| Panel still visible after returning `null` | Stale `isOpen` state | `null` suppresses the panel but the outer `ihub-user-dropdown` div and profile trigger remain |
 
 #### Best Practices
 
-1. **Always include the class** when using `renderUserDropdown`:
+1. **Return `null` to suppress the panel** — use this when you want the profile avatar/name trigger but no dropdown content:
    ```tsx
-   <div className="ihub-user-dropdown my-custom-dropdown">
+   renderUserDropdown={() => null}
    ```
 
-2. **Apply to the root container** of your custom dropdown, not child elements
-
-3. **Combine with your custom classes** for styling:
+2. **Style your container freely** — no need to mirror the built-in class:
    ```tsx
-   <div className="ihub-user-dropdown custom-dropdown-styles">
+   renderUserDropdown={() => <div className="my-dropdown">{...}</div>}
    ```
 
-4. **Test click behavior** after implementation to ensure proper functionality
-
-5. **Use the provided helper functions** (`closeDropdown`) for programmatic closing when needed
+3. **Use the provided helper functions** (`closeDropdown`, `toggleDropdown`) for programmatic closing when needed
 
 ### State Management Considerations
 

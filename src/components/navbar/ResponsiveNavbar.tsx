@@ -35,6 +35,8 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 * @param {React.ReactNode | JSX.Element | null} bottomBanner - The bottom banner
 * @param {boolean} hideTopBanner - Whether to hide the top banner
 * @param {boolean} hideBottomBanner - Whether to hide the bottom banner
+* @remarks `renderUserDropdown` — when provided, its return value is rendered directly with no
+*   wrapper div. Returning null completely suppresses the built-in panel.
 * */
 const ResponsiveNavbar = ({
   session,
@@ -377,17 +379,16 @@ const ResponsiveNavbar = ({
                   </div>
 
                   {userDropdownOpen && (
-                    <div className="ihub-dropdown ihub-user-menu-dropdown">
-                      {renderUserDropdown ? (
-                        // Custom dropdown content
-                        renderUserDropdown({
-                          user,
-                          isOpen: userDropdownOpen,
-                          toggleDropdown: toggleUserDropdown,
-                          closeDropdown: closeUserDropdown,
-                        } as DropdownRenderProps)
-                      ) : (
-                        // Default dropdown content
+                    renderUserDropdown ? (
+                      // Custom renderer — return null to suppress the panel entirely.
+                      renderUserDropdown({
+                        user,
+                        isOpen: userDropdownOpen,
+                        toggleDropdown: toggleUserDropdown,
+                        closeDropdown: closeUserDropdown,
+                      } as DropdownRenderProps)
+                    ) : (
+                      <div className="ihub-dropdown ihub-user-menu-dropdown">
                         <>
                           {userAreaLinks.map((link, index) => (
                             <div key={index} className="ihub-dropdown-item-wrapper">
@@ -481,8 +482,8 @@ const ResponsiveNavbar = ({
                             </button>
                           )}
                         </>
-                      )}
-                    </div>
+                      </div>
+                    )
                   )}
                 </div>
               ) : (
