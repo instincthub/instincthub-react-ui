@@ -1,0 +1,208 @@
+/* ── S3MultiUploader ── */
+
+.s3mu-root { width: 100%; }
+
+.s3mu-root.s3mu-disabled { opacity: 0.55; pointer-events: none; }
+
+.s3mu-dropzone {
+  border: 2px dashed var(--borderDefault, #e5e7eb);
+  border-radius: 10px;
+  padding: 28px 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--OpacityBackground, #f4f4f480);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.s3mu-dropzone:hover,
+.s3mu-dropzone.dragging {
+  border-color: var(--DarkCyan, #00838f);
+  background: rgba(0, 131, 143, 0.03);
+}
+
+.s3mu-drop-icon {
+  color: var(--DarkCyan, #00838f);
+  margin-bottom: 8px;
+  display: flex;
+}
+
+.s3mu-drop-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--Gunmetal, #2c333a);
+  margin: 0 0 4px;
+}
+
+.s3mu-drop-hint {
+  font-size: 12px;
+  color: var(--Rhythm, #69779b);
+  margin: 2px 0 0;
+}
+
+.s3mu-maxfiles-badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--DarkCyan, #00838f);
+  background: rgba(0, 131, 143, 0.08);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+/* Queue list */
+.s3mu-queue {
+  margin-top: 12px;
+  border: 1px solid var(--borderDefault, #e5e7eb);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.s3mu-queue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--Gray, #f4f4f4);
+  border-bottom: 1px solid var(--borderDefault, #e5e7eb);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--Rhythm, #69779b);
+}
+
+.s3mu-clear-btn {
+  font-size: 11px;
+  color: var(--DarkCyan, #00838f);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+/* Queue filter search */
+.s3mu-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 14px 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--borderDefault, #e5e7eb);
+  border-radius: 6px;
+  background: var(--White, #fff);
+  color: var(--Rhythm, #69779b);
+}
+
+.s3mu-filter input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  background: transparent;
+  color: var(--Gunmetal, #2c333a);
+}
+
+/* Queue item */
+.s3mu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--borderDefault, #e5e7eb);
+  background: var(--White, #fff);
+}
+
+.s3mu-item:last-child { border-bottom: none; }
+
+.s3mu-item--complete .s3mu-item-icon { color: var(--CaribbeanGreen, #00c5a2); }
+.s3mu-item--error    .s3mu-item-icon { color: var(--Danger, #ea5f5e); }
+.s3mu-item--uploading .s3mu-item-icon { color: var(--DarkCyan, #00838f); }
+.s3mu-item--queued   .s3mu-item-icon { color: var(--Rhythm, #69779b); }
+
+.s3mu-queued-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--Rhythm, #69779b);
+  opacity: 0.4;
+}
+
+.s3mu-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.s3mu-item-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.s3mu-item-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--Gunmetal, #2c333a);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s3mu-item-size {
+  font-size: 11px;
+  color: var(--Rhythm, #69779b);
+  flex-shrink: 0;
+}
+
+/* Per-file progress bar */
+.s3mu-bar-wrap {
+  height: 4px;
+  background: var(--Gray, #e5e7eb);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.s3mu-bar-fill {
+  height: 100%;
+  background: var(--DarkCyan, #00838f);
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}
+
+.s3mu-item--complete .s3mu-bar-fill { background: var(--CaribbeanGreen, #00c5a2); }
+.s3mu-item--error    .s3mu-bar-fill { background: var(--Danger, #ea5f5e); }
+
+.s3mu-item-pct {
+  font-size: 11px;
+  color: var(--Rhythm, #69779b);
+  margin-top: 2px;
+  display: block;
+}
+
+.s3mu-item-err {
+  font-size: 11px;
+  color: var(--Danger, #ea5f5e);
+  margin-top: 2px;
+  display: block;
+}
+
+.s3mu-item-remove {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--Rhythm, #69779b);
+  border-radius: 4px;
+}
+
+.s3mu-item-remove:hover {
+  background: rgba(234, 95, 94, 0.1);
+  color: var(--Danger, #ea5f5e);
+}

@@ -193,6 +193,48 @@ export interface FileUploaderType {
   onRemove?: (response: S3UploadResponseType) => void;
 }
 
+/**
+ * Props for the S3MultiUploader component — multi-file queue uploader
+ * that uploads directly to S3 with per-file progress tracking.
+ */
+export interface S3MultiUploaderProps {
+  /** Accepted MIME types / extensions (e.g. "image/*", "video/*", ".pdf,.docx") */
+  accepts: string;
+  /** Maximum file size per file in bytes (default: 524 288 000 = 500 MB) */
+  maxFileSizeBytes?: number;
+  /**
+   * Maximum number of files that can be enqueued per batch.
+   * Surplus files are silently dropped and a warning toast is shown.
+   * Omit (or set to 0) for unlimited.
+   */
+  maxFiles?: number;
+  /**
+   * Number of files uploaded simultaneously (default: 1 = sequential).
+   * Clamped to 1–4.
+   */
+  concurrency?: number;
+  /** S3 username prefix used in the generated object key */
+  username: string;
+  /** S3 folder prefix (e.g. process.env.NEXT_PUBLIC_AWS_LOCATION) */
+  location: string;
+  /** CDN base URL prepended to the key in the response (e.g. process.env.NEXT_PUBLIC_VIDEO_URL) */
+  cdnBase: string;
+  /** Dropzone label text */
+  label?: string;
+  /** Dropzone hint text (shown below the label) */
+  hint?: string;
+  /** Called after each file is successfully uploaded to S3 */
+  onFileComplete: (response: S3UploadResponseType) => void;
+  /** Called when every item in the current batch reaches a terminal state (complete or error) */
+  onQueueComplete?: () => void;
+  /** Called when a file fails to upload */
+  onError?: (fileName: string, error: string) => void;
+  /** Disable the dropzone and file input */
+  disabled?: boolean;
+  /** Additional CSS class for the root element */
+  className?: string;
+}
+
 export interface FetchDataType {
   page: string;
   token: string | null;

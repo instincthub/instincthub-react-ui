@@ -321,6 +321,14 @@ const ComponentLists = () => {
       example_path: "docs/static-docs/components/IhubFileUploader.md",
     },
     {
+      name: "S3MultiUploader",
+      description: "Multi-file queue uploader with per-file progress bars and direct S3 multipart upload via @aws-sdk/lib-storage",
+      category: "Forms",
+      repo_path: "src/components/forms/uploads/S3MultiUploader.tsx",
+      example_path: "docs/static-docs/components/S3MultiUploader.md",
+      visual_demo_url: "/components/ui/s3-multi-uploader",
+    },
+    {
       name: "ActionCallbackDropdown",
       description: "Action callback dropdown component",
       category: "Forms",

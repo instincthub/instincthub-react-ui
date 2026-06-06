@@ -1725,5 +1725,16 @@
     "props": [],
     "examples": [],
     "example_path": "../components/Paystack.md"
+  },
+  {
+    "name": "S3MultiUploader",
+    "description": "Multi-file queue uploader with per-file progress bars and direct S3 multipart upload via @aws-sdk/lib-storage",
+    "category": "Forms",
+    "repo_path": "../../../src/components/forms/uploads/S3MultiUploader.tsx",
+    "type": "component",
+    "tags": ["forms", "upload", "s3", "file"],
+    "props": [],
+    "examples": [],
+    "example_path": "../components/S3MultiUploader.md"
   }
 ]

@@ -52,3 +52,4 @@ export { default as TimePicker } from "./TimePicker";
 // Upload components
 export { default as FileUploader } from "./uploads/FileUploader";
 export { default as IhubFileUploader } from "./uploads/IhubFileUploader";
+export { default as S3MultiUploader } from "./uploads/S3MultiUploader";
