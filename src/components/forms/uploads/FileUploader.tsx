@@ -141,6 +141,12 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
       const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "";
       const fullKey = `${keyLocation}/${prefixUniqueKey}`;
 
+      // Convert File to Uint8Array — browser File/Blob streams cause
+      // "readableStream.getReader is not a function" in the AWS SDK's
+      // Next.js bundle because of stream API polyfill mismatches.
+      const arrayBuffer = await fileToUpload.arrayBuffer();
+      const fileBody = new Uint8Array(arrayBuffer);
+
       // Decide between single-part and multipart upload based on file size
       const FILE_SIZE_THRESHOLD = 100 * 1024 * 1024; // 100 MB threshold
 
@@ -153,7 +159,7 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
         const putCommand = new PutObjectCommand({
           Bucket: bucketName,
           Key: fullKey,
-          Body: fileToUpload,
+          Body: fileBody,
           ContentType: fileToUpload.type,
           ACL: "public-read",
         });
@@ -168,22 +174,19 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
         setUploadPercentage(100);
       } else {
         // For larger files, use multipart upload
-        // 1. Initiate multipart upload
         const { Upload } = await import("@aws-sdk/lib-storage");
 
-        // Create uploader with proper progress tracking
         const upload = new Upload({
           client: s3Client,
           params: {
             Bucket: bucketName,
             Key: fullKey,
-            Body: fileToUpload,
+            Body: fileBody,
             ContentType: fileToUpload.type,
             ACL: "public-read",
           },
         });
 
-        // Add progress tracking
         upload.on("httpUploadProgress", (progress: any) => {
           const percentage = Math.round(
             (progress.loaded / progress.total) * 100
@@ -191,7 +194,6 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
           setUploadPercentage(percentage);
         });
 
-        // Execute the upload
         await upload.done();
       }
 
@@ -225,37 +227,58 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
     }
   };
 
+  const ProgressBar = ({ percentage }: { percentage: number }) => (
+    <div
+      className="ihub-progress"
+      style={{
+        width: "100%",
+        height: "8px",
+        background: "var(--Gray, #e5e7eb)",
+        borderRadius: "4px",
+        overflow: "hidden",
+        margin: "8px 0",
+      }}
+    >
+      <div
+        className="ihub-progress-bar"
+        style={{
+          width: `${percentage}%`,
+          height: "100%",
+          background: "var(--DarkCyan, #00838f)",
+          borderRadius: "4px",
+          transition: "width 0.3s ease",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "10px",
+          color: "#fff",
+          fontWeight: 600,
+          minWidth: percentage > 10 ? "auto" : 0,
+        }}
+      >
+        {percentage > 10 ? `${percentage}%` : ""}
+      </div>
+    </div>
+  );
+
   // Custom progress bar template
-  const progressBarTemplate = () => {
+  const progressBarTemplate = () => (
+    <div>
+      <ProgressBar percentage={uploadPercentage} />
+      <p style={{ fontSize: "12px", color: "var(--Rhythm, #69779b)", margin: "4px 0 0" }}>
+        Uploading… {uploadPercentage}%
+      </p>
+    </div>
+  );
+
+  // Item template — just shows the filename; progress is handled by progressBarTemplate
+  const handleItemTemplate = (file: any) => {
+    const name = file?.name || file?.objectURL?.split("/").pop() || "File";
     return (
-      <div className="ihub-progress">
-        <div
-          className="ihub-progress-bar"
-          style={{ width: `${uploadPercentage}%` }}
-        >
-          {uploadPercentage}%
-        </div>
+      <div style={{ fontSize: "12px", color: "var(--Rhythm, #69779b)", padding: "4px 0" }}>
+        {name}
       </div>
     );
-  };
-
-  // Custom item template
-  const handleItemTemplate = () => {
-    if (uploadPercentage && uploadPercentage < 100) {
-      return (
-        <div className="ihub-progress">
-          <div
-            className="ihub-progress-bar"
-            style={{ width: `${uploadPercentage}%` }}
-          >
-            {uploadPercentage}%
-          </div>
-        </div>
-      );
-    } else if (uploadPercentage === 100) {
-      return <p>Processing...</p>;
-    }
-    return null;
   };
 
   // Convert acceptedFileTypes to accept format

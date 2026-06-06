@@ -4,8 +4,8 @@
 }
 .p-button:enabled:hover,
 .p-button:not(button):not(a):not(.p-disabled):hover {
-  background: var(--Gunmetal);
-  border-color: var(--Gunmetal);
+  background: var(--OpacityBackground);
+  border-color: var(--OpacityBackground);
 }
 
 .p-button:focus {
@@ -162,8 +162,8 @@
 
 .p-button:enabled:hover,
 .p-button:not(button):not(a):not(.p-disabled):hover {
-  background: var(--Gunmetal);
-  border-color: var(--Gunmetal);
+  background: var(--OpacityBackground);
+  border-color: var(--OpacityBackground);
 }
 
 .p-inputtext:enabled:hover {
@@ -364,4 +364,8 @@
 }
 .p-tabview .p-tabview-nav {
   border: none;
+}
+
+.p-fileupload .p-fileupload-buttonbar {
+  background: var(--FadeGlass);
 }
