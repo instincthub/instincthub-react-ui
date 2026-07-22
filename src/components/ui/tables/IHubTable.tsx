@@ -493,6 +493,7 @@ export const IHubTable = <T extends object>({
           title,
           showRowNumbers,
           rowNumberStartFrom,
+          fields: options.fields,
           allFields: options.allFields,
         });
 

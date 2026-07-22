@@ -862,16 +862,34 @@ matches the current search, filters and sorting — not just the visible page.
   enableExport={true}
   exportOptions={{
     csv: true,
-    excel: true,      // writes a real .xlsx via `xlsx`
-    pdf: true,        // requires the `jspdf` peer dependency
+    excel: true,     // writes a real .xlsx via `xlsx`
+    pdf: true,       // requires the `jspdf` peer dependency
     fileName: "group-members",
-    allFields: false, // true = export every field of the raw API record
-    batchSize: 100,   // rows fetched per request while collecting data
-    maxRows: 5000,    // hard cap; a toast warns when it is hit
+    fields: "both",  // default — see below
+    batchSize: 100,  // rows fetched per request while collecting data
+    maxRows: 5000,   // hard cap; a toast warns when it is hit
   }}
   columns={columns}
 />
 ```
+
+### `fields` — how much of each record is written
+
+| Value | Contents |
+|-------|----------|
+| `"both"` *(default)* | The visible columns with their friendly headers, then every raw field those columns don't already cover |
+| `"columns"` | Only the visible columns |
+| `"all"` | Only the raw record, flattened to `parent.child` headers |
+
+So a table showing Name / Email / Status still exports `mobile`, `lead_source`,
+`custom_fields.lms_score` and the rest of the API payload by default — nothing in
+the response is lost just because it wasn't given a column.
+
+PDF is the exception: it falls back to `"columns"` unless you set `fields`
+explicitly, because a printable page can't fit a full record.
+
+The older `allFields` boolean still works — `true` maps to `"all"`, `false` to
+`"columns"`.
 
 ### What ends up in each cell
 
@@ -908,12 +926,11 @@ const columns: TableColumnType<MemberType>[] = [
 ];
 ```
 
-### Exporting the full record
+### Raw-only exports
 
-When the visible columns are a subset of what the API returns, set
-`allFields: true`. Each record is flattened to `parent.child` headers, so
-`custom_fields.lms_score`, `email`, `mobile` and the rest of the payload are all
-included without declaring extra columns.
+Use `fields: "all"` when the friendly column headers aren't wanted at all — for
+re-import or data pipelines, where stable `parent.child` keys matter more than
+readable labels.
 
 ## 🔗 Related Components
 

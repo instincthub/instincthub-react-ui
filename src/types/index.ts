@@ -156,6 +156,7 @@ export interface PresignedUploadResult {
  * Response interface for S3 uploads
  */
 export interface S3UploadResponseType {
+  bucket?: string;
   title: string;
   key: string;
   content_type: string;
@@ -340,8 +341,18 @@ export interface TableExportOptionsType {
   /** File name without extension. Defaults to "table-export". */
   fileName?: string;
   /**
-   * Export every leaf field of each raw record instead of only the visible
-   * columns — nested objects are flattened to `parent.child` headers.
+   * Which fields the file contains. Defaults to `"both"`.
+   * - `"columns"` — only the table's visible columns
+   * - `"all"` — only the raw record, flattened to `parent.child` headers
+   * - `"both"` — the visible columns, then every raw field they don't cover
+   *
+   * PDF exports fall back to `"columns"` unless this is set explicitly, since a
+   * printable page can't fit a full record.
+   */
+  fields?: "columns" | "all" | "both";
+  /**
+   * Shorthand kept for backwards compatibility.
+   * `true` is the same as `fields: "all"`, `false` the same as `fields: "columns"`.
    */
   allFields?: boolean;
   /** Rows fetched per request while collecting the full dataset. Default 100. */

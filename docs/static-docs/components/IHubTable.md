@@ -1188,14 +1188,26 @@ Passing `exportOptions` renders the CSV / Excel / PDF buttons. Exports cover the
   data={data}
   exportOptions={{
     csv: true,
-    excel: true,      // writes a real .xlsx via `xlsx`
-    pdf: true,        // requires the `jspdf` peer dependency
+    excel: true,    // writes a real .xlsx via `xlsx`
+    pdf: true,      // requires the `jspdf` peer dependency
     fileName: "students",
-    allFields: false, // true = export every field of the raw record
-    maxRows: 5000,    // hard cap; a toast warns when it is hit
+    fields: "both", // default — see below
+    maxRows: 5000,  // hard cap; a toast warns when it is hit
   }}
 />
 ```
+
+### `fields` — how much of each record is written
+
+| Value | Contents |
+|-------|----------|
+| `"both"` *(default)* | The visible columns with their friendly headers, then every raw field those columns don't already cover |
+| `"columns"` | Only the visible columns |
+| `"all"` | Only the raw record, flattened to `parent.child` headers |
+
+PDF falls back to `"columns"` unless `fields` is set explicitly, since a printable
+page can't fit a full record. The older `allFields` boolean still works — `true`
+maps to `"all"`, `false` to `"columns"`.
 
 ### What ends up in each cell
 
@@ -1229,8 +1241,8 @@ const columns: TableColumnType<StudentType>[] = [
 ];
 ```
 
-Set `allFields: true` to flatten each record to `parent.child` headers when the
-visible columns are only a subset of the data.
+Use `fields: "all"` for raw-only files (re-import, data pipelines) where stable
+`parent.child` keys matter more than readable labels.
 
 ## 🔗 Related Components
 

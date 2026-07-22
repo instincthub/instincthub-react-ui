@@ -474,6 +474,7 @@ export const IHubTableServer = forwardRef<
           title,
           showRowNumbers,
           rowNumberStartFrom,
+          fields: options.fields,
           allFields: options.allFields,
         });
 
