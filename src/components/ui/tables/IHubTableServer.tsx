@@ -12,10 +12,21 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import { ApiResponseType, SearchParamsType, TableColumnType } from "@/types";
+import {
+  ApiResponseType,
+  SearchParamsType,
+  TableColumnType,
+  TableExportOptionsType,
+} from "@/types";
 import { debounce } from "lodash";
 import { ServerPaginationInfoType, FetchParamsType } from "@/types";
 import { API_HOST_URL, getNestedValue, reqOptions } from "../../lib";
+import { openToast } from "../../lib/modals/modals";
+import {
+  exportTableData,
+  resolveExportOptions,
+  TableExportFormatType,
+} from "./utils/tableExport";
 
 // Ref type for exposing table methods
 export interface IHubTableServerRef {
@@ -54,12 +65,7 @@ interface IHubTableServerPropsType<T> {
   searchDebounceMs?: number;
   enableSorting?: boolean;
   enableExport?: boolean;
-  exportOptions?: {
-    csv?: boolean;
-    excel?: boolean;
-    pdf?: boolean;
-    fileName?: string;
-  };
+  exportOptions?: TableExportOptionsType;
 
   // Options
   rowsPerPageOptions?: number[];
@@ -141,7 +147,9 @@ interface IHubTableServerPropsType<T> {
  * @prop {boolean} showSearch - Whether to show the search input
  * @prop {boolean} enableSorting - Whether to enable sorting
  * @prop {boolean} enableExport - Whether to enable export
- * @prop {Object} exportOptions - The options for the export
+ * @prop {TableExportOptionsType} exportOptions - Export settings: which buttons to
+ *   show (csv/excel/pdf), fileName, allFields (export the whole record), batchSize
+ *   and maxRows. Exports cover every page matching the current filters.
  * @prop {number[]} rowsPerPageOptions - The options for the rows per page
  * @prop {number} defaultRowsPerPage - The default rows per page
  * @prop {Function} onRowClick - The callback for the row click
@@ -405,74 +413,97 @@ export const IHubTableServer = forwardRef<
     [handleRefresh]
   );
 
+  // Fetch every page the current filters match, up to `maxRows`.
+  const fetchAllExportRows = useCallback(
+    async (batchSize: number, maxRows: number): Promise<T[]> => {
+      const collected: T[] = [];
+      let page = 1;
+      let totalCount = Infinity;
+
+      while (collected.length < Math.min(totalCount, maxRows)) {
+        const response = await handleFetchData({
+          ...params,
+          page,
+          limit: batchSize,
+        });
+
+        const adapted = dataAdapter ? dataAdapter(response) : response;
+        const pageRows = (adapted?.data as T[]) || [];
+
+        collected.push(...pageRows);
+
+        if (adapted?.pagination?.totalCount !== undefined) {
+          totalCount = adapted.pagination.totalCount;
+        }
+
+        // Stop when the page isn't full — either the data ran out or the server
+        // ignored our limit and returned everything at once.
+        if (pageRows.length !== batchSize) break;
+
+        page += 1;
+      }
+
+      return collected.slice(0, maxRows);
+    },
+    [params, dataAdapter, handleFetchData]
+  );
+
   // Handle data export
   const handleExport = useCallback(
-    async (type: "csv" | "excel" | "pdf") => {
+    async (type: TableExportFormatType) => {
       if (!enableExport) return;
 
+      const options = resolveExportOptions(exportOptions);
+      const { batchSize, maxRows } = options;
+
       try {
-        // Fetch all data for export (without pagination)
         setLoading(true);
-        const exportParams: FetchParamsType = {
-          ...params,
-          page: 1,
-          limit: 1000, // Request more data for export
-          export: type,
-        };
 
-        const response = await handleFetchData(exportParams);
-        if (response) {
-          const exportData = dataAdapter
-            ? dataAdapter(response).data
-            : response.data;
+        const exportData = await fetchAllExportRows(batchSize, maxRows);
 
-          const fileName = exportOptions.fileName || "table-export";
+        if (!exportData.length) {
+          openToast("There is no data to export.", 400);
+          return;
+        }
 
-          // Simple CSV export example
-          if (type === "csv") {
-            const headers = [
-              ...(showRowNumbers ? ["#"] : []),
-              ...columns
-                .filter((col) => typeof col.accessor === "string")
-                .map((col) => col.header)
-            ];
+        await exportTableData<T>({
+          data: exportData,
+          columns,
+          format: type,
+          fileName: options.fileName,
+          title,
+          showRowNumbers,
+          rowNumberStartFrom,
+          allFields: options.allFields,
+        });
 
-            const csvData = exportData.map((row: any, index: number) => {
-              const rowData = [
-                ...(showRowNumbers ? [String(index + rowNumberStartFrom)] : []),
-                ...columns
-                  .filter((col) => typeof col.accessor === "string")
-                  .map((col) => {
-                    const accessor = col.accessor as keyof T;
-                    return String(row[accessor] ?? "");
-                  })
-              ];
-              return rowData.join(",");
-            });
-
-            const csv = [headers.join(","), ...csvData].join("\n");
-
-            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-
-            link.setAttribute("href", url);
-            link.setAttribute("download", `${fileName}.csv`);
-            link.style.visibility = "hidden";
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
+        if (exportData.length >= maxRows) {
+          openToast(
+            `Export capped at ${maxRows} rows. Increase exportOptions.maxRows for more.`,
+            400
+          );
         }
       } catch (error) {
         console.error("Export error:", error);
+        openToast(
+          error instanceof Error ? error.message : "Export failed. Try again.",
+          400
+        );
         if (onFetchError) onFetchError(error);
       } finally {
         setLoading(false);
       }
     },
-    [columns, params, enableExport, exportOptions, dataAdapter, onFetchError]
+    [
+      columns,
+      enableExport,
+      exportOptions,
+      fetchAllExportRows,
+      onFetchError,
+      rowNumberStartFrom,
+      showRowNumbers,
+      title,
+    ]
   );
 
   // Toggle row expansion

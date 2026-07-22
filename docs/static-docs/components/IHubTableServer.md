@@ -852,6 +852,69 @@ GET /api/students?limit=10&offset=0&ordering=name&search=john&department=Compute
 export default IHubTableServerExamples;
 ```
 
+## 📤 Exporting Data
+
+`enableExport` renders CSV / Excel / PDF buttons. Exports fetch **every page** that
+matches the current search, filters and sorting — not just the visible page.
+
+```tsx
+<IHubTableServer
+  enableExport={true}
+  exportOptions={{
+    csv: true,
+    excel: true,      // writes a real .xlsx via `xlsx`
+    pdf: true,        // requires the `jspdf` peer dependency
+    fileName: "group-members",
+    allFields: false, // true = export every field of the raw API record
+    batchSize: 100,   // rows fetched per request while collecting data
+    maxRows: 5000,    // hard cap; a toast warns when it is hit
+  }}
+  columns={columns}
+/>
+```
+
+### What ends up in each cell
+
+Every column is exported (the old implementation silently dropped columns whose
+`accessor` was a function). Values resolve in this order:
+
+1. `column.exportValue(row, index)` — explicit override, always wins.
+2. String `accessor`, including dotted paths (`custom_fields.lms_score`), falling
+   back to `cell(row)` when the raw value is empty.
+3. Function `accessor` — the returned node is flattened to its text.
+4. `cell(row)` — flattened to its text.
+
+Objects reduce to a label field (`title`, `name`, `email`, …) and arrays join with
+` | `, so `groups: [{title: "Students"}, …]` exports as `Students | …`.
+
+```tsx
+const columns: TableColumnType<MemberType>[] = [
+  {
+    header: "Name",
+    accessor: (row) => `${row.first_name} ${row.last_name}`,
+  },
+  { header: "LMS Score", accessor: "custom_fields.lms_score" },
+  {
+    header: "Verified",
+    accessor: "verified",
+    exportValue: (row) => (row.verified ? "Yes" : "No"),
+  },
+  {
+    header: "Actions",
+    accessor: "id",
+    exportable: false, // keep UI-only columns out of the file
+    cell: (row) => <Action id={row.id} />,
+  },
+];
+```
+
+### Exporting the full record
+
+When the visible columns are a subset of what the API returns, set
+`allFields: true`. Each record is flattened to `parent.child` headers, so
+`custom_fields.lms_score`, `email`, `mobile` and the rest of the payload are all
+included without declaring extra columns.
+
 ## 🔗 Related Components
 
 - [IHubTable](./IHubTable.md) - Client-side table component

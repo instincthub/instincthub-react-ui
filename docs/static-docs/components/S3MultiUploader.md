@@ -2,22 +2,25 @@
 
 **Category:** Forms | **Type:** component
 
-Multi-file queue uploader with per-file progress bars. Uploads directly to S3 using `@aws-sdk/lib-storage` (multipart, real progress events). Files are processed sequentially by default; set `concurrency` > 1 for parallel uploads. Shows a live queue with queued / uploading / complete / error states and a filter input when the queue has 5+ files.
+Multi-file queue uploader with per-file progress bars. Uploads files directly to S3 (or any S3-compatible store) using **server-issued presigned PUT URLs** — AWS credentials never reach the browser. The consuming app supplies a `getPresignedUrl` callback that calls its own server endpoint; the component handles the queue, progress tracking, concurrency, and UI state.
 
 ## 🏷️ Tags
 
-`forms`, `upload`, `s3`, `file`, `multipart`, `queue`
+`forms`, `upload`, `s3`, `file`, `multipart`, `queue`, `presigned`
 
-## Requirements
+## Security model
 
-Set these environment variables in your `.env.local`:
+```
+Browser → POST /api/upload/presign → Server validates auth + MIME + size → presigned PUT URL (60 s)
+Browser → PUT <presigned URL> → S3 (with progress via XHR)
+```
 
-```env
-NEXT_PUBLIC_AWS_REGION=us-east-1
-NEXT_PUBLIC_AWS_S3_ENDPOINT_URL=https://s3.amazonaws.com
-NEXT_PUBLIC_AWS_ACCESS_KEY_ID=your-key-id
-NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY=your-secret-key
-NEXT_PUBLIC_AWS_BUCKET_NAME=your-bucket
+The server controls the object key, content type, and size policy. The client cannot override any of these.
+
+## Installation
+
+```bash
+import "@instincthub/react-ui/assets/css/forms/s3-multi-uploader.css";
 ```
 
 ## Basic Usage
@@ -29,12 +32,17 @@ function MediaUpload() {
   return (
     <S3MultiUploader
       accepts="image/*,video/*"
-      username={session.user.username}
-      location={process.env.NEXT_PUBLIC_AWS_LOCATION}
-      cdnBase={process.env.NEXT_PUBLIC_VIDEO_URL}
+      getPresignedUrl={async (file) => {
+        const res = await fetch("/api/upload/presign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: file.name, type: file.type, size: file.size }),
+        });
+        if (!res.ok) throw new Error("Failed to get upload URL");
+        return res.json(); // { url, key, cdnUrl, contentType }
+      }}
       onFileComplete={(response) => {
-        console.log("Uploaded:", response.location);
-        saveToDatabase(response);
+        saveToDatabase(response.key, response.location);
       }}
     />
   );
@@ -45,63 +53,112 @@ function MediaUpload() {
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `accepts` | `string` | Yes | — | MIME types / extensions (e.g. `"image/*"`, `".pdf,.docx"`) |
-| `username` | `string` | Yes | — | Prefix used in the generated S3 object key |
-| `location` | `string` | Yes | — | S3 folder prefix (e.g. `"uploads/images"`) |
-| `cdnBase` | `string` | Yes | — | CDN base URL prepended to the key in the response |
+| `accepts` | `string` | Yes | — | MIME types / extensions (e.g. `"image/*"`, `".pdf,.docx"`). Client-side hint only — enforce on the server. |
+| `getPresignedUrl` | `(file: File) => Promise<PresignedUploadResult>` | Yes | — | Async function that calls your server to get a short-lived presigned PUT URL. |
 | `onFileComplete` | `(response: S3UploadResponseType) => void` | Yes | — | Called after each file is successfully uploaded |
-| `maxFileSizeBytes` | `number` | No | `524_288_000` (500 MB) | Max size per file in bytes |
+| `maxFileSizeBytes` | `number` | No | `524_288_000` | Max size per file in bytes — client hint only; enforce via presigned POST policy |
 | `maxFiles` | `number` | No | unlimited | Max files per batch; surplus files are dropped with a toast |
 | `concurrency` | `number` | No | `1` | Simultaneous uploads (clamped to 1–4) |
-| `label` | `string` | No | `"Drop files here or click to browse"` | Dropzone label text |
-| `hint` | `string` | No | — | Secondary hint shown below the label |
-| `onQueueComplete` | `() => void` | No | — | Called when every file in the batch is terminal |
-| `onError` | `(fileName: string, error: string) => void` | No | — | Called when a file fails to upload |
-| `disabled` | `boolean` | No | `false` | Disables the dropzone and file input |
-| `className` | `string` | No | — | Additional CSS class on the root element |
+| `label` | `string` | No | `"Drop files here or click to browse"` | Dropzone label |
+| `hint` | `string` | No | — | Secondary hint below the label |
+| `onQueueComplete` | `() => void` | No | — | Called when every file in the batch is in a terminal state |
+| `onError` | `(fileName: string, error: string) => void` | No | — | Called when a file fails |
+| `disabled` | `boolean` | No | `false` | Disables the dropzone |
+| `className` | `string` | No | — | Extra CSS class on the root element |
 
-## `S3UploadResponseType`
+## Types
+
+### `PresignedUploadResult`
+
+Returned by `getPresignedUrl` — generated server-side:
+
+```ts
+interface PresignedUploadResult {
+  url: string;         // Short-lived presigned PUT URL (≤ 60 s)
+  key: string;         // S3 object key assigned by the server
+  cdnUrl: string;      // Full CDN URL for the uploaded file
+  contentType: string; // Server-validated Content-Type (from allowlist, not file.type)
+}
+```
+
+### `S3UploadResponseType`
+
+Passed to `onFileComplete`:
 
 ```ts
 interface S3UploadResponseType {
-  bucket: string;       // S3 bucket name
   title: string;        // Original file name
-  key: string;          // S3 object key (without CDN base)
+  key: string;          // S3 object key
   content_type: string; // MIME type
   size: number;         // File size in bytes
-  location: string;     // Full CDN URL (cdnBase + key)
+  location: string;     // Full CDN URL
+}
+```
+
+## Server endpoint example (Next.js)
+
+```ts
+// app/api/upload/presign/route.ts
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getServerSession } from "next-auth";
+
+const ALLOWED_MIME: Record<string, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  pdf: "application/pdf",
+  mp4: "video/mp4",
+};
+
+export async function POST(req: Request) {
+  const session = await getServerSession();
+  if (!session) return new Response("Unauthorized", { status: 401 });
+
+  const { name, size } = await req.json();
+
+  if (size > 500 * 1024 * 1024)
+    return new Response("File too large", { status: 413 });
+
+  const ext = name.split(".").pop()?.toLowerCase() ?? "";
+  const contentType = ALLOWED_MIME[ext];
+  if (!contentType)
+    return new Response("File type not allowed", { status: 415 });
+
+  const key = `uploads/${session.user.id}/${crypto.randomUUID()}.${ext}`;
+
+  const client = new S3Client({ region: process.env.AWS_REGION });
+  const url = await getSignedUrl(
+    client,
+    new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+      ContentType: contentType,
+    }),
+    { expiresIn: 60 }
+  );
+
+  return Response.json({
+    url,
+    key,
+    cdnUrl: `${process.env.CDN_BASE}/${key}`,
+    contentType,
+  });
 }
 ```
 
 ## Examples
 
-### Image upload with file limit
-
-```tsx
-<S3MultiUploader
-  accepts="image/*"
-  maxFiles={10}
-  maxFileSizeBytes={10 * 1024 * 1024}
-  username="john-doe"
-  location="uploads/avatars"
-  cdnBase="https://cdn.example.com/"
-  label="Upload profile images"
-  hint="PNG, JPG, WEBP — up to 10 MB each"
-  onFileComplete={(res) => saveImage(res)}
-  onQueueComplete={() => toast("All images uploaded!")}
-/>
-```
-
-### Parallel video upload
+### Parallel video upload with file limit
 
 ```tsx
 <S3MultiUploader
   accepts="video/*"
   concurrency={2}
+  maxFiles={5}
   maxFileSizeBytes={500 * 1024 * 1024}
-  username={user.username}
-  location="courses/videos"
-  cdnBase={process.env.NEXT_PUBLIC_VIDEO_URL}
+  getPresignedUrl={getPresignedUrl}
   hint="MP4, MOV — up to 500 MB each"
   onFileComplete={(res) => attachVideoToLesson(res)}
   onError={(name, err) => console.error(`${name}: ${err}`)}
@@ -114,9 +171,7 @@ interface S3UploadResponseType {
 <S3MultiUploader
   accepts="*/*"
   disabled
-  username="user"
-  location="uploads"
-  cdnBase="https://cdn.example.com/"
+  getPresignedUrl={getPresignedUrl}
   label="Upload disabled during processing"
   onFileComplete={() => {}}
 />

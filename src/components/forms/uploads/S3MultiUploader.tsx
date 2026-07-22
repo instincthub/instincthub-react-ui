@@ -1,9 +1,6 @@
 "use client";
 
 import React, { useState, useRef, useCallback, DragEvent, ChangeEvent } from "react";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
-import { IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
 import { openToast } from "../../lib/modals/modals";
 import { S3MultiUploaderProps, S3UploadResponseType } from "@/types";
 
@@ -71,24 +68,66 @@ const XIcon = ({ size = 13 }: { size?: number }) => (
 );
 
 /**
+ * Upload a single file to a presigned PUT URL, reporting progress via XHR.
+ * The server is responsible for issuing the URL with appropriate constraints
+ * (Content-Type, Content-Length-Range, expiry, scoped key).
+ */
+function uploadToPresignedUrl(
+  url: string,
+  file: File,
+  contentType: string,
+  onProgress: (pct: number) => void
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve();
+      } else {
+        reject(new Error(`Upload failed: HTTP ${xhr.status}`));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error("Network error during upload"));
+    xhr.ontimeout = () => reject(new Error("Upload timed out"));
+
+    xhr.open("PUT", url);
+    // Use the server-validated content type — never trust file.type alone.
+    xhr.setRequestHeader("Content-Type", contentType);
+    xhr.send(file);
+  });
+}
+
+/**
  * S3MultiUploader — multi-file queue uploader with per-file progress.
  *
- * Uploads directly to S3 using `@aws-sdk/lib-storage` (multipart, real progress).
- * Files are processed sequentially by default; set `concurrency` > 1 for parallel uploads.
+ * Security model: this component never touches AWS credentials. It calls
+ * `getPresignedUrl(file)` — a consumer-supplied async function that must
+ * hit a server endpoint. The server validates the request (auth, MIME,
+ * size, location) and returns a short-lived presigned PUT URL together
+ * with the resolved object key and CDN URL.
  *
- * Required env vars (NEXT_PUBLIC_*):
- *   AWS_REGION, AWS_S3_ENDPOINT_URL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME
+ * Example server route (Next.js API):
  *
- * CSS: import "@instincthub/react-ui/dist/s3-multi-uploader.css" (or equivalent path)
+ *   POST /api/upload/presign
+ *   Body: { name, type, size }
+ *   → { url, key, cdnUrl }  (url = S3 presigned PUT, expires in 60s)
+ *
+ * CSS: import "@instincthub/react-ui/assets/css/forms/s3-multi-uploader.css"
  */
 export default function S3MultiUploader({
   accepts,
   maxFileSizeBytes = 524_288_000,
   maxFiles,
   concurrency = 1,
-  username,
-  location,
-  cdnBase,
+  getPresignedUrl,
   label = "Drop files here or click to browse",
   hint,
   onFileComplete,
@@ -102,9 +141,7 @@ export default function S3MultiUploader({
   const [queueFilter, setQueueFilter] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Semaphore: number of uploads currently in flight
   const inFlight = useRef(0);
-  // Queue ref so the runner always sees current state
   const queueRef = useRef<QueueItem[]>([]);
   queueRef.current = queue;
 
@@ -120,54 +157,20 @@ export default function S3MultiUploader({
     async (item: QueueItem) => {
       updateItem(item.id, { status: "uploading", progress: 0 });
 
-      const s3 = new S3Client({
-        region: process.env.NEXT_PUBLIC_AWS_REGION,
-        endpoint: process.env.NEXT_PUBLIC_AWS_S3_ENDPOINT_URL,
-        credentials: {
-          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || "",
-          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-        },
-      });
-
-      const timestamp = new Date().toISOString();
-      const slug = slugifyFileName(`${username}-${timestamp}-${item.file.name}`);
-      const prefixedKey = IN_DEV_MODE ? `test-env__${slug}` : slug;
-      const fullKey = `${location}/${prefixedKey}`;
-      const bucket = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "";
-
       try {
-        const buffer = await item.file.arrayBuffer();
-        const body = new Uint8Array(buffer);
+        // Server validates auth, MIME, size, and path — returns a scoped, short-lived URL.
+        const { url, key, cdnUrl, contentType } = await getPresignedUrl(item.file);
 
-        const uploader = new Upload({
-          client: s3,
-          partSize: 5 * 1024 * 1024,
-          queueSize: 2,
-          params: {
-            Bucket: bucket,
-            Key: fullKey,
-            Body: body,
-            ContentType: item.file.type,
-            ACL: "public-read",
-          },
+        await uploadToPresignedUrl(url, item.file, contentType, (pct) => {
+          updateItem(item.id, { progress: pct });
         });
-
-        uploader.on("httpUploadProgress", (progress) => {
-          if (progress.total) {
-            const pct = Math.round((progress.loaded! / progress.total) * 100);
-            updateItem(item.id, { progress: pct });
-          }
-        });
-
-        await uploader.done();
 
         const response: S3UploadResponseType = {
-          bucket,
           title: item.file.name,
-          key: prefixedKey,
-          content_type: item.file.type,
+          key,
+          content_type: contentType,
           size: item.file.size,
-          location: `${cdnBase}${prefixedKey}`,
+          location: cdnUrl,
         };
 
         updateItem(item.id, { status: "complete", progress: 100 });
@@ -178,16 +181,14 @@ export default function S3MultiUploader({
         onError?.(item.file.name, msg);
       }
     },
-    [username, location, cdnBase, updateItem, onFileComplete, onError]
+    [getPresignedUrl, updateItem, onFileComplete, onError]
   );
 
-  /** Pick the next queued item and upload it, respecting concurrency. */
   const tick = useCallback(async () => {
     if (inFlight.current >= clampedConcurrency) return;
 
     const next = queueRef.current.find((i) => i.status === "queued");
     if (!next) {
-      // All items terminal — fire onQueueComplete if nothing is still uploading
       if (inFlight.current === 0 && queueRef.current.length > 0) {
         const allDone = queueRef.current.every(
           (i) => i.status === "complete" || i.status === "error"
@@ -201,7 +202,6 @@ export default function S3MultiUploader({
     await uploadOne(next);
     inFlight.current -= 1;
 
-    // Continue draining
     tick();
   }, [clampedConcurrency, uploadOne, onQueueComplete]);
 
@@ -237,7 +237,6 @@ export default function S3MultiUploader({
       setQueue((prev) => {
         const next = [...prev, ...newItems];
         queueRef.current = next;
-        // Kick off as many upload slots as concurrency allows
         for (let i = 0; i < clampedConcurrency; i++) setTimeout(tick, 0);
         return next;
       });
@@ -347,7 +346,6 @@ export default function S3MultiUploader({
               key={item.id}
               className={`s3mu-item s3mu-item--${item.status}`}
             >
-              {/* Status icon */}
               <div className="s3mu-item-icon">
                 {item.status === "complete" && <CheckIcon />}
                 {item.status === "error" && <AlertIcon />}
@@ -355,7 +353,6 @@ export default function S3MultiUploader({
                 {item.status === "queued" && <div className="s3mu-queued-dot" />}
               </div>
 
-              {/* File info + progress */}
               <div className="s3mu-item-body">
                 <div className="s3mu-item-name-row">
                   <span className="s3mu-item-name" title={item.file.name}>
@@ -388,7 +385,6 @@ export default function S3MultiUploader({
                 )}
               </div>
 
-              {/* Remove (not while uploading) */}
               {item.status !== "uploading" && (
                 <button
                   type="button"

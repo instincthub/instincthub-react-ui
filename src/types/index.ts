@@ -125,10 +125,28 @@ export interface SearchParamsPageProps {
 }
 
 /**
+ * Returned by the consumer's `getPresignedUrl` function.
+ * The server generates this — never expose AWS credentials to the browser.
+ */
+export interface PresignedUploadResult {
+  /** Short-lived presigned PUT URL (S3 or compatible). Expires in ≤ 60 s. */
+  url: string;
+  /** S3 object key assigned by the server (used for DB records). */
+  key: string;
+  /** Full public/CDN URL for the uploaded file. */
+  cdnUrl: string;
+  /**
+   * Server-validated Content-Type to use for the PUT request.
+   * The server must derive this from an allowlist — never use the raw
+   * browser File.type value here.
+   */
+  contentType: string;
+}
+
+/**
  * Response interface for S3 uploads
  */
 export interface S3UploadResponseType {
-  bucket: string;
   title: string;
   key: string;
   content_type: string;
@@ -195,12 +213,17 @@ export interface FileUploaderType {
 
 /**
  * Props for the S3MultiUploader component — multi-file queue uploader
- * that uploads directly to S3 with per-file progress tracking.
+ * with per-file progress tracking via server-issued presigned URLs.
+ *
+ * Security model: this component never touches AWS credentials.
+ * Supply a `getPresignedUrl` function that calls your server endpoint.
+ * The server validates auth, MIME type, size, and storage path, then
+ * returns a short-lived presigned PUT URL.
  */
 export interface S3MultiUploaderProps {
-  /** Accepted MIME types / extensions (e.g. "image/*", "video/*", ".pdf,.docx") */
+  /** Accepted MIME types / extensions (e.g. "image/*", "video/*", ".pdf,.docx"). Client-side hint only — enforce server-side too. */
   accepts: string;
-  /** Maximum file size per file in bytes (default: 524 288 000 = 500 MB) */
+  /** Maximum file size per file in bytes (default: 524 288 000 = 500 MB). Client-side hint only — enforce via presigned URL policy. */
   maxFileSizeBytes?: number;
   /**
    * Maximum number of files that can be enqueued per batch.
@@ -213,17 +236,29 @@ export interface S3MultiUploaderProps {
    * Clamped to 1–4.
    */
   concurrency?: number;
-  /** S3 username prefix used in the generated object key */
-  username: string;
-  /** S3 folder prefix (e.g. process.env.NEXT_PUBLIC_AWS_LOCATION) */
-  location: string;
-  /** CDN base URL prepended to the key in the response (e.g. process.env.NEXT_PUBLIC_VIDEO_URL) */
-  cdnBase: string;
+  /**
+   * Called before each file upload. Must call a server endpoint that
+   * authenticates the user, validates the file metadata, and returns a
+   * short-lived presigned PUT URL together with the resolved storage key
+   * and CDN URL. Never derive or cache presigned URLs on the client.
+   *
+   * @example
+   * getPresignedUrl={async (file) => {
+   *   const res = await fetch("/api/upload/presign", {
+   *     method: "POST",
+   *     headers: { "Content-Type": "application/json" },
+   *     body: JSON.stringify({ name: file.name, type: file.type, size: file.size }),
+   *   });
+   *   if (!res.ok) throw new Error("Failed to get upload URL");
+   *   return res.json(); // { url, key, cdnUrl, contentType }
+   * }}
+   */
+  getPresignedUrl: (file: File) => Promise<PresignedUploadResult>;
   /** Dropzone label text */
   label?: string;
   /** Dropzone hint text (shown below the label) */
   hint?: string;
-  /** Called after each file is successfully uploaded to S3 */
+  /** Called after each file is successfully uploaded */
   onFileComplete: (response: S3UploadResponseType) => void;
   /** Called when every item in the current batch reaches a terminal state (complete or error) */
   onQueueComplete?: () => void;
@@ -279,6 +314,31 @@ export interface TableColumnType<T> {
   width?: string;
   cell?: (row: T) => React.ReactNode;
   tooltip?: boolean;
+  /**
+   * Exact value to write when exporting this column (CSV/Excel/PDF).
+   * Use it when the rendered cell can't be flattened to useful text.
+   */
+  exportValue?: (row: T, index?: number) => unknown;
+  /** Set to `false` to leave the column out of exports (e.g. an actions column). */
+  exportable?: boolean;
+}
+
+/** Options controlling the export buttons and generated files. */
+export interface TableExportOptionsType {
+  csv?: boolean;
+  excel?: boolean;
+  pdf?: boolean;
+  /** File name without extension. Defaults to "table-export". */
+  fileName?: string;
+  /**
+   * Export every leaf field of each raw record instead of only the visible
+   * columns — nested objects are flattened to `parent.child` headers.
+   */
+  allFields?: boolean;
+  /** Rows fetched per request while collecting the full dataset. Default 100. */
+  batchSize?: number;
+  /** Hard cap on exported rows. Default 5000. */
+  maxRows?: number;
 }
 
 // IHubTableServer Props

@@ -78,7 +78,7 @@ export { default as SideNavbar } from "./components/navbar/SideNavbar";
 export { default as FileUploader } from "./components/forms/uploads/FileUploader";
 export { default as IhubFileUploader } from "./components/forms/uploads/IhubFileUploader";
 export { default as S3MultiUploader } from "./components/forms/uploads/S3MultiUploader";
-export type { S3UploadResponseType, S3MultiUploaderProps } from "./types";
+export type { S3UploadResponseType, S3MultiUploaderProps, PresignedUploadResult } from "./types";
 
 // UI Components
 export { default as CustomTextEditor } from "./components/ui/editor/CustomTextEditor";

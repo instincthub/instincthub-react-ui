@@ -17,7 +17,13 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import UnfoldLessOutlinedIcon from "@mui/icons-material/UnfoldLessOutlined";
-import { TableColumnType } from "@/types";
+import { TableColumnType, TableExportOptionsType } from "@/types";
+import { openToast } from "../../lib/modals/modals";
+import {
+  exportTableData,
+  resolveExportOptions,
+  TableExportFormatType,
+} from "./utils/tableExport";
 
 export interface FilterState {
   [key: string]: string | string[] | null;
@@ -54,12 +60,7 @@ export interface TableProps<T> {
   onSelectionChange?: (selectedRows: T[]) => void;
   expandable?: boolean;
   renderExpandedRow?: (row: T) => React.ReactNode;
-  exportOptions?: {
-    csv?: boolean;
-    excel?: boolean;
-    pdf?: boolean;
-    fileName?: string;
-  };
+  exportOptions?: TableExportOptionsType;
   refreshable?: boolean;
   onRefresh?: () => Promise<void>;
 
@@ -133,7 +134,9 @@ export interface TableProps<T> {
  * @prop {function} onSelectionChange - The function to call when selection changes
  * @prop {boolean} expandable - Whether to allow row expansion
  * @prop {function} renderExpandedRow - The function to call to render the expanded row
- * @prop {object} exportOptions - The options for exporting the table
+ * @prop {TableExportOptionsType} exportOptions - Export settings: which buttons to
+ *   show (csv/excel/pdf), fileName, allFields (export the whole record) and maxRows.
+ *   Exports cover the filtered + sorted data, not just the current page.
  * @prop {boolean} refreshable - Whether to allow refreshing the table
  * @prop {function} onRefresh - The function to call when the table is refreshed
  * @prop {string} error - Error message to display (e.g. from API response detail or error key)
@@ -409,57 +412,6 @@ export const IHubTable = <T extends object>({
     }
   }, [onRefresh]);
 
-  // Handle data export
-  const handleExport = useCallback(
-    (type: "csv" | "excel" | "pdf") => {
-      if (!exportOptions) return;
-
-      const fileName = exportOptions.fileName || "table-export";
-
-      // Simple CSV export example
-      if (type === "csv") {
-        const headers = [
-          ...(showRowNumbers ? ["#"] : []),
-          ...columns
-            .filter((col) => typeof col.accessor === "string")
-            .map((col) => col.header),
-        ];
-
-        const csvData = data.map((row, index) => {
-          const rowData = [
-            ...(showRowNumbers ? [String(index + rowNumberStartFrom)] : []),
-            ...columns
-              .filter((col) => typeof col.accessor === "string")
-              .map((col) => {
-                const accessor = col.accessor as keyof T;
-                return String(row[accessor] ?? "");
-              }),
-          ];
-          return rowData.join(",");
-        });
-
-        const csv = [headers.join(","), ...csvData].join("\n");
-
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-
-        link.setAttribute("href", url);
-        link.setAttribute("download", `${fileName}.csv`);
-        link.style.visibility = "hidden";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
-      // For Excel and PDF, you would typically use libraries like:
-      // - xlsx for Excel export
-      // - jspdf for PDF export
-    },
-    [columns, data, exportOptions]
-  );
-
   // Filter data based on search term and column filters
   const filteredData = useMemo(() => {
     let result = data;
@@ -515,6 +467,58 @@ export const IHubTable = <T extends object>({
     const startIndex = (currentPage - 1) * rowsPerPage;
     return sortedData.slice(startIndex, startIndex + rowsPerPage);
   }, [sortedData, pagination, currentPage, rowsPerPage]);
+
+  /**
+   * Handle data export.
+   * Exports the filtered + sorted view (not just the current page) and keeps
+   * every column, including those with function accessors or custom cells.
+   */
+  const handleExport = useCallback(
+    async (type: TableExportFormatType) => {
+      if (!exportOptions) return;
+
+      const options = resolveExportOptions(exportOptions);
+
+      if (!sortedData.length) {
+        openToast("There is no data to export.", 400);
+        return;
+      }
+
+      try {
+        await exportTableData<T>({
+          data: sortedData.slice(0, options.maxRows),
+          columns,
+          format: type,
+          fileName: options.fileName,
+          title,
+          showRowNumbers,
+          rowNumberStartFrom,
+          allFields: options.allFields,
+        });
+
+        if (sortedData.length > options.maxRows) {
+          openToast(
+            `Export capped at ${options.maxRows} rows. Increase exportOptions.maxRows for more.`,
+            400
+          );
+        }
+      } catch (error) {
+        console.error("Export error:", error);
+        openToast(
+          error instanceof Error ? error.message : "Export failed. Try again.",
+          400
+        );
+      }
+    },
+    [
+      columns,
+      exportOptions,
+      rowNumberStartFrom,
+      showRowNumbers,
+      sortedData,
+      title,
+    ]
+  );
 
   // Calculate total pages
   const totalPages = useMemo(
