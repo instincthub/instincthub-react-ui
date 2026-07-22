@@ -85,6 +85,8 @@ export default function ProgramCoursesPage() {
     },
     {
       header: "Actions",
+      // UI-only column: keep the buttons out of CSV/Excel/PDF exports
+      exportable: false,
       cell: (row: ProgramCourseData) => (
         <div className="ihub-item-actions">
           <p
@@ -170,6 +172,8 @@ export default function ProgramCoursesPage() {
     },
     {
       header: "Actions",
+      // UI-only column: keep the dropdown out of CSV/Excel/PDF exports
+      exportable: false,
       cell: (row: InvoiceData) => (
         <Action
           label="Actions"
@@ -291,7 +295,9 @@ export default function ProgramCoursesPage() {
         exportOptions={{
           csv: true,
           excel: true,
+          pdf: true,
           fileName: "program-courses-export",
+          maxRows: 5000,
         }}
         onRowClick={handleRowClick}
         expandable={true}

@@ -46,6 +46,15 @@
       "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/helpFunction/isValidEmail.md"
     },
     {
+      "name": "phoneUtils",
+      "description": "Parse, normalise and validate international phone numbers - dial code detection, E.164 output and country search",
+      "category": "Validation Functions",
+      "repo_path": "src/components/lib/phoneUtils.ts",
+      "example_path": "docs/static-docs/libs/phoneUtils.md",
+      "github_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/src/components/lib/phoneUtils.ts",
+      "docs_url": "https://github.com/instincthub/instincthub-react-ui/blob/main/docs/static-docs/libs/phoneUtils.md"
+    },
+    {
       "name": "formatNumberWithCommas",
       "description": "Format numbers with thousands separators for better readability",
       "category": "Number & Data Formatting",
@@ -469,8 +478,8 @@
   ],
   "metadata": {
     "version": "1.0.0",
-    "lastUpdated": "2025-08-02",
-    "totalLibraries": 47,
+    "lastUpdated": "2026-07-22",
+    "totalLibraries": 50,
     "description": "Comprehensive utility functions and libraries for the InstinctHub React UI package",
     "baseGithubUrl": "https://github.com/instincthub/instincthub-react-ui/blob/main/"
   }

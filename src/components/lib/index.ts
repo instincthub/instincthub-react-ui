@@ -19,6 +19,7 @@ export { default as getPriceObjects } from "./getPriceObjects";
 export {default as convertArrayToObject} from "./convertArrayToObject";
 export {default as loadScript} from "./loadScript";
 export * from "./format";
+export * from "./phoneUtils";
 export * from "./helpFunction";
 export * from "./oauth_json";
 export * from "./paystack";

@@ -170,7 +170,8 @@ const ComponentLists = () => {
     },
     {
       name: "PhoneNumberInput",
-      description: "Phone number input with formatting",
+      description:
+        "Phone number input with searchable country picker, paste detection and E.164 output",
       category: "Forms",
       repo_path: "src/components/forms/PhoneNumberInput.tsx",
       example_path: "docs/static-docs/components/PhoneNumberInput.md",
@@ -665,14 +666,16 @@ const ComponentLists = () => {
     },
     {
       name: "IHubTable",
-      description: "InstinctHub table component",
+      description:
+        "InstinctHub client-side table with search, sort, filter, pagination and CSV/Excel/PDF export",
       category: "UI",
       repo_path: "src/components/ui/tables/IHubTable.tsx",
       example_path: "docs/static-docs/components/IHubTable.md",
     },
     {
       name: "IHubTableServer",
-      description: "InstinctHub server table component",
+      description:
+        "InstinctHub server-side table with API pagination, search, sorting and full-dataset CSV/Excel/PDF export",
       category: "UI",
       repo_path: "src/components/ui/tables/IHubTableServer.tsx",
       example_path: "docs/static-docs/components/IHubTableServer.md",

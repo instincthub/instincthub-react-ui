@@ -2,746 +2,237 @@
 
 **Category:** Forms | **Type:** component
 
-Phone number input with international country code selection and formatting
+Phone number input with a searchable country picker, paste-aware country code detection, and a value object that always carries the dial code.
 
 ## 🏷️ Tags
 
-`forms`, `input`, `phone`, `international`, `validation`
+`forms`, `input`, `phone`, `international`, `country-code`, `validation`
+
+## 🚀 Quick Start
 
 ```tsx
 "use client";
 import React, { useState } from "react";
-import { PhoneNumberInput, SubmitButton } from "@instincthub/react-ui";
-import { openToast } from "@instincthub/react-ui/lib";
+import { PhoneNumberInput, PhoneNumberValueType } from "@instincthub/react-ui";
 
-/**
- * Example component demonstrating various ways to use the PhoneNumberInput
- */
-const PhoneNumberInputExamples = () => {
-  // Basic phone input state
-  const [basicPhone, setBasicPhone] = useState({
-    mobile: "",
-    phone_code: "234"
-  });
-
-  // Contact form state
-  const [contactForm, setContactForm] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    phone_code: "1",
-    message: ""
-  });
-
-  // Registration form state
-  const [registrationForm, setRegistrationForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobile: "",
-    phone_code: "44",
-    password: "",
-    confirmPassword: ""
-  });
-
-  // Business contact form state
-  const [businessForm, setBusinessForm] = useState({
-    companyName: "",
-    contactPerson: "",
-    businessPhone: "",
-    phone_code: "61",
-    alternatePhone: "",
-    alternate_phone_code: "61",
-    email: "",
-    website: ""
-  });
-
-  // Verification form state
-  const [verificationForm, setVerificationForm] = useState({
-    mobile: "",
-    phone_code: "91",
-    verificationCode: "",
-    isVerified: false
-  });
-
-  const [submitStatus, setSubmitStatus] = useState(1);
-
-  // Handle input changes for different forms
-  const handleBasicPhoneChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setBasicPhone(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleContactFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setContactForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleRegistrationFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setRegistrationForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleBusinessFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setBusinessForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleVerificationFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setVerificationForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Submit handlers
-  const handleBasicSubmit = () => {
-    console.log("Basic phone data:", basicPhone);
-    openToast(`Phone number submitted: +${basicPhone.phone_code} ${basicPhone.mobile}`);
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitStatus(2);
-    
-    setTimeout(() => {
-      console.log("Contact form data:", contactForm);
-      openToast("Contact form submitted successfully!");
-      setSubmitStatus(1);
-    }, 2000);
-  };
-
-  const handleRegistrationSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitStatus(2);
-    
-    setTimeout(() => {
-      console.log("Registration form data:", registrationForm);
-      openToast("Registration submitted successfully!");
-      setSubmitStatus(1);
-    }, 2000);
-  };
-
-  const handleBusinessSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitStatus(2);
-    
-    setTimeout(() => {
-      console.log("Business form data:", businessForm);
-      openToast("Business contact submitted successfully!");
-      setSubmitStatus(1);
-    }, 2000);
-  };
-
-  const handleVerificationSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitStatus(2);
-    
-    setTimeout(() => {
-      console.log("Verification data:", verificationForm);
-      setVerificationForm(prev => ({ ...prev, isVerified: true }));
-      openToast("Phone number verified successfully!");
-      setSubmitStatus(1);
-    }, 2000);
-  };
-
-  const sendVerificationCode = () => {
-    if (!verificationForm.mobile) {
-      openToast("Please enter a phone number first");
-      return;
-    }
-    openToast(`Verification code sent to +${verificationForm.phone_code} ${verificationForm.mobile}`);
-  };
+const Example = () => {
+  const [phone, setPhone] = useState<PhoneNumberValueType | null>(null);
 
   return (
-    <div className="ihub-container ihub-mt-5">
-      <h1>PhoneNumberInput Examples</h1>
-
-      {/* Basic Phone Number Input */}
-      <section className="ihub-mb-5">
-        <h2>1. Basic Phone Number Input</h2>
-        <p>Simple phone number input with default country code (Nigeria +234)</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <h3>Basic Usage</h3>
-          <PhoneNumberInput
-            phoneCode="234"
-            defaultValues={{ mobile: basicPhone.mobile }}
-            names="mobile"
-            inputEvent={handleBasicPhoneChange}
-          />
-          
-          <div className="ihub-mt-3">
-            <button 
-              className="ihub-primary-btn"
-              onClick={handleBasicSubmit}
-              disabled={!basicPhone.mobile}
-            >
-              Submit Phone Number
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Form */}
-      <section className="ihub-mb-5">
-        <h2>2. Contact Form with Phone Input</h2>
-        <p>Complete contact form with international phone number support</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <form onSubmit={handleContactSubmit}>
-            <div className="ihub-row">
-              <div className="ihub-col-md-6">
-                <label htmlFor="contact-name" className="ihub-form-label">
-                  Full Name *
-                </label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  name="name"
-                  value={contactForm.name}
-                  onChange={handleContactFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <label htmlFor="contact-email" className="ihub-form-label">
-                  Email Address *
-                </label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  name="email"
-                  value={contactForm.email}
-                  onChange={handleContactFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="ihub-mt-3">
-              <label className="ihub-form-label">Phone Number *</label>
-              <PhoneNumberInput
-                phoneCode="1"
-                defaultValues={{ mobile: contactForm.mobile }}
-                names="mobile"
-                inputEvent={handleContactFormChange}
-              />
-            </div>
-
-            <div className="ihub-mt-3">
-              <label htmlFor="contact-message" className="ihub-form-label">
-                Message
-              </label>
-              <textarea
-                id="contact-message"
-                name="message"
-                value={contactForm.message}
-                onChange={handleContactFormChange}
-                className="ihub-input"
-                rows={4}
-                placeholder="Your message here..."
-              />
-            </div>
-
-            <div className="ihub-mt-4">
-              <SubmitButton
-                type="submit"
-                label="Send Message"
-                status={submitStatus}
-                disabled={!contactForm.name || !contactForm.email || !contactForm.mobile}
-              />
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* User Registration Form */}
-      <section className="ihub-mb-5">
-        <h2>3. User Registration Form</h2>
-        <p>Registration form with phone number validation for account creation</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <form onSubmit={handleRegistrationSubmit}>
-            <div className="ihub-row">
-              <div className="ihub-col-md-6">
-                <label htmlFor="reg-firstName" className="ihub-form-label">
-                  First Name *
-                </label>
-                <input
-                  id="reg-firstName"
-                  type="text"
-                  name="firstName"
-                  value={registrationForm.firstName}
-                  onChange={handleRegistrationFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <label htmlFor="reg-lastName" className="ihub-form-label">
-                  Last Name *
-                </label>
-                <input
-                  id="reg-lastName"
-                  type="text"
-                  name="lastName"
-                  value={registrationForm.lastName}
-                  onChange={handleRegistrationFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="ihub-mt-3">
-              <label htmlFor="reg-email" className="ihub-form-label">
-                Email Address *
-              </label>
-              <input
-                id="reg-email"
-                type="email"
-                name="email"
-                value={registrationForm.email}
-                onChange={handleRegistrationFormChange}
-                className="ihub-input"
-                required
-              />
-            </div>
-
-            <div className="ihub-mt-3">
-              <label className="ihub-form-label">Mobile Number * (UK +44)</label>
-              <PhoneNumberInput
-                phoneCode="44"
-                defaultValues={{ mobile: registrationForm.mobile }}
-                names="mobile"
-                inputEvent={handleRegistrationFormChange}
-              />
-              <small className="ihub-text-muted">
-                We'll use this number for account verification and important notifications
-              </small>
-            </div>
-
-            <div className="ihub-row ihub-mt-3">
-              <div className="ihub-col-md-6">
-                <label htmlFor="reg-password" className="ihub-form-label">
-                  Password *
-                </label>
-                <input
-                  id="reg-password"
-                  type="password"
-                  name="password"
-                  value={registrationForm.password}
-                  onChange={handleRegistrationFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <label htmlFor="reg-confirmPassword" className="ihub-form-label">
-                  Confirm Password *
-                </label>
-                <input
-                  id="reg-confirmPassword"
-                  type="password"
-                  name="confirmPassword"
-                  value={registrationForm.confirmPassword}
-                  onChange={handleRegistrationFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="ihub-mt-4">
-              <SubmitButton
-                type="submit"
-                label="Create Account"
-                status={submitStatus}
-                disabled={
-                  !registrationForm.firstName || 
-                  !registrationForm.lastName || 
-                  !registrationForm.email || 
-                  !registrationForm.mobile ||
-                  !registrationForm.password ||
-                  registrationForm.password !== registrationForm.confirmPassword
-                }
-              />
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* Business Contact Form */}
-      <section className="ihub-mb-5">
-        <h2>4. Business Contact Form</h2>
-        <p>Business form with multiple phone numbers for different purposes</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <form onSubmit={handleBusinessSubmit}>
-            <div className="ihub-row">
-              <div className="ihub-col-md-6">
-                <label htmlFor="business-company" className="ihub-form-label">
-                  Company Name *
-                </label>
-                <input
-                  id="business-company"
-                  type="text"
-                  name="companyName"
-                  value={businessForm.companyName}
-                  onChange={handleBusinessFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <label htmlFor="business-contact" className="ihub-form-label">
-                  Contact Person *
-                </label>
-                <input
-                  id="business-contact"
-                  type="text"
-                  name="contactPerson"
-                  value={businessForm.contactPerson}
-                  onChange={handleBusinessFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="ihub-mt-3">
-              <label className="ihub-form-label">Primary Business Phone * (Australia +61)</label>
-              <PhoneNumberInput
-                phoneCode="61"
-                defaultValues={{ mobile: businessForm.businessPhone }}
-                names="businessPhone"
-                inputEvent={handleBusinessFormChange}
-              />
-            </div>
-
-            <div className="ihub-mt-3">
-              <label className="ihub-form-label">Alternate Phone Number</label>
-              <PhoneNumberInput
-                phoneCode="61"
-                defaultValues={{ mobile: businessForm.alternatePhone }}
-                names="alternatePhone"
-                inputEvent={handleBusinessFormChange}
-              />
-              <small className="ihub-text-muted">
-                Optional secondary contact number
-              </small>
-            </div>
-
-            <div className="ihub-row ihub-mt-3">
-              <div className="ihub-col-md-6">
-                <label htmlFor="business-email" className="ihub-form-label">
-                  Business Email *
-                </label>
-                <input
-                  id="business-email"
-                  type="email"
-                  name="email"
-                  value={businessForm.email}
-                  onChange={handleBusinessFormChange}
-                  className="ihub-input"
-                  required
-                />
-              </div>
-              
-              <div className="ihub-col-md-6">
-                <label htmlFor="business-website" className="ihub-form-label">
-                  Website
-                </label>
-                <input
-                  id="business-website"
-                  type="url"
-                  name="website"
-                  value={businessForm.website}
-                  onChange={handleBusinessFormChange}
-                  className="ihub-input"
-                  placeholder="https://www.example.com"
-                />
-              </div>
-            </div>
-
-            <div className="ihub-mt-4">
-              <SubmitButton
-                type="submit"
-                label="Submit Business Information"
-                status={submitStatus}
-                disabled={
-                  !businessForm.companyName || 
-                  !businessForm.contactPerson || 
-                  !businessForm.businessPhone || 
-                  !businessForm.email
-                }
-              />
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* Phone Verification */}
-      <section className="ihub-mb-5">
-        <h2>5. Phone Number Verification</h2>
-        <p>Two-step phone verification process with OTP</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <form onSubmit={handleVerificationSubmit}>
-            <div className="ihub-mt-3">
-              <label className="ihub-form-label">Phone Number to Verify * (India +91)</label>
-              <PhoneNumberInput
-                phoneCode="91"
-                defaultValues={{ mobile: verificationForm.mobile }}
-                names="mobile"
-                inputEvent={handleVerificationFormChange}
-              />
-            </div>
-
-            <div className="ihub-mt-3">
-              <button
-                type="button"
-                className="ihub-outlined-btn"
-                onClick={sendVerificationCode}
-                disabled={!verificationForm.mobile}
-              >
-                Send Verification Code
-              </button>
-            </div>
-
-            <div className="ihub-mt-3">
-              <label htmlFor="verification-code" className="ihub-form-label">
-                Verification Code
-              </label>
-              <input
-                id="verification-code"
-                type="text"
-                name="verificationCode"
-                value={verificationForm.verificationCode}
-                onChange={handleVerificationFormChange}
-                className="ihub-input"
-                placeholder="Enter 6-digit code"
-                maxLength={6}
-              />
-            </div>
-
-            {verificationForm.isVerified && (
-              <div className="ihub-alert ihub-alert-success ihub-mt-3">
-                ✅ Phone number verified successfully!
-              </div>
-            )}
-
-            <div className="ihub-mt-4">
-              <SubmitButton
-                type="submit"
-                label="Verify Phone Number"
-                status={submitStatus}
-                disabled={!verificationForm.mobile || !verificationForm.verificationCode}
-              />
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* International Examples */}
-      <section className="ihub-mb-5">
-        <h2>6. International Phone Numbers</h2>
-        <p>Examples with different default country codes</p>
-        
-        <div className="ihub-row">
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>United States (+1)</h4>
-              <PhoneNumberInput
-                phoneCode="1"
-                defaultValues={{ mobile: "" }}
-                names="us_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>United Kingdom (+44)</h4>
-              <PhoneNumberInput
-                phoneCode="44"
-                defaultValues={{ mobile: "" }}
-                names="uk_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>Germany (+49)</h4>
-              <PhoneNumberInput
-                phoneCode="49"
-                defaultValues={{ mobile: "" }}
-                names="de_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="ihub-row ihub-mt-3">
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>Canada (+1)</h4>
-              <PhoneNumberInput
-                phoneCode="1"
-                defaultValues={{ mobile: "" }}
-                names="ca_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>Japan (+81)</h4>
-              <PhoneNumberInput
-                phoneCode="81"
-                defaultValues={{ mobile: "" }}
-                names="jp_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-          
-          <div className="ihub-col-md-4">
-            <div className="ihub-card ihub-p-3">
-              <h4>Brazil (+55)</h4>
-              <PhoneNumberInput
-                phoneCode="55"
-                defaultValues={{ mobile: "" }}
-                names="br_phone"
-                inputEvent={() => {}}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pre-filled Example */}
-      <section className="ihub-mb-5">
-        <h2>7. Pre-filled Phone Number</h2>
-        <p>Phone input with existing data for editing</p>
-        
-        <div className="ihub-card ihub-p-4">
-          <h4>Edit Profile Phone Number</h4>
-          <PhoneNumberInput
-            phoneCode="234"
-            defaultValues={{ mobile: "8012345678" }}
-            names="profile_phone"
-            inputEvent={(e) => console.log("Profile phone changed:", e.target.value)}
-          />
-          
-          <div className="ihub-mt-3">
-            <button className="ihub-success-btn">
-              Update Phone Number
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
+    <PhoneNumberInput
+      label="Phone number"
+      names="mobile"
+      preferredCountries={["NG", "GB", "US"]}
+      onChange={setPhone}
+    />
   );
 };
+```
 
-export default PhoneNumberInputExamples;
+`onChange` receives:
+
+```ts
+{
+  phoneCode: "+234",              // display form of the dial code
+  dialCode: "234",                // digits only
+  nationalNumber: "8031234567",   // no dial code, no trunk "0"
+  e164: "+2348031234567",         // store this
+  formatted: "+234 803 123 4567", // human readable
+  isoCode: "NG",
+  countryName: "Nigeria",
+  flag: "🇳🇬",
+  isValid: true,
+}
+```
+
+## 🔍 Searching for a country
+
+The picker opens on click, on `Enter`, on `Space` or on `ArrowDown`. The search box matches on:
+
+| You type | Matches |
+|----------|---------|
+| `nigeria` | Country name (exact match ranks first) |
+| `niger` | Any country whose name contains it |
+| `ng` | ISO code |
+| `234` | Dial code |
+| `+234` | Dial code (the `+` is ignored) |
+
+Keyboard: `ArrowUp` / `ArrowDown` to move, `Home` / `End` to jump, `Enter` to select, `Escape` to close.
+
+## 📋 Pasting a number
+
+Paste is intercepted so the browser cannot truncate it, and the country code is extracted when present.
+
+| Pasted | Country | National number |
+|--------|---------|-----------------|
+| `+234 803 123 4567` | Nigeria | `8031234567` |
+| `+2348031234567` | Nigeria | `8031234567` |
+| `2348031234567` | Nigeria | `8031234567` |
+| `002348031234567` | Nigeria | `8031234567` |
+| `+1 (212) 555-1234` | United States | `2125551234` |
+| `+1 242 555 1234` | Bahamas | `5551234` |
+| `08031234567` | unchanged | `8031234567` |
+| `8031234567` | unchanged | `8031234567` |
+
+Matching is longest-prefix, so `+1242…` resolves to the Bahamas rather than the United States. When several countries share a dial code, the currently selected one wins — pasting `+1 514 555 1234` while Canada is selected keeps Canada.
+
+A number without a `+` is only split when it starts with the selected country's dial code, or when it is longer than any plausible national number (11 digits). This keeps a US number like `2125551234` from being read as Morocco (`+212`).
+
+## 💾 Getting the country code into your database
+
+Three options, in order of preference.
+
+### 1. `onChange` (recommended)
+
+```tsx
+const [formData, setFormData] = useState({});
+
+<PhoneNumberInput
+  names="mobile"
+  onChange={(value) =>
+    setFormData((prev) => ({
+      ...prev,
+      phone_code: value.phoneCode,
+      mobile: value.nationalNumber,
+      phone_e164: value.e164,
+    }))
+  }
+/>
+```
+
+### 2. `setFormData`
+
+Writes `names` and `phoneCodeName` straight into a form state object.
+
+```tsx
+const [formData, setFormData] = useState({});
+
+<PhoneNumberInput
+  names="mobile"
+  phoneCodeName="phone_code"
+  defaultValues={formData}
+  setFormData={setFormData}
+/>
+
+// formData = { mobile: "8031234567", phone_code: "+234" }
+```
+
+### 3. `inputEvent` (legacy)
+
+Fires with `{ target: { name, value } }` for **both** fields, and once on mount so `phone_code` is present even when the picker is never opened.
+
+```tsx
+const handleInputChange = (event) => {
+  const { name, value } = event.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+};
+
+<PhoneNumberInput
+  phoneCode="+234"
+  defaultValues={formData}
+  names="mobile"
+  inputEvent={handleInputChange}
+/>
+```
+
+> The dial code arrives under the name given by `phoneCodeName` (default `phone_code`), not `phoneCode`.
+
+A hidden `<input name={phoneCodeName}>` is also rendered, so a native (non-React) form submit carries the country code.
+
+## 🔄 Loading a stored number
+
+`defaultValues.mobile` is parsed, so a value stored as E.164 is split back into the picker and the field. Late-arriving props (an API response after first paint) re-hydrate the field.
+
+```tsx
+const [record, setRecord] = useState({});
+
+useEffect(() => {
+  fetchUser().then((user) => setRecord({ mobile: user.phone })); // "+447911123456"
+}, []);
+
+<PhoneNumberInput names="mobile" defaultValues={record} />
+// -> United Kingdom selected, field shows 7911123456
 ```
 
 ## 📋 Component Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `phoneCode` | `string` | `"234"` | Default country phone code |
-| `defaultValues` | `{ mobile?: string, [key: string]: any }` | `{}` | Default values including mobile number |
-| `names` | `string` | - | Name attribute for the phone input field |
-| `inputEvent` | `(event: React.ChangeEvent<HTMLInputElement \| HTMLSelectElement>) => void` | - | Callback function for input change events |
+| `phoneCode` | `string` | `"234"` | Initial dial code. Accepts `"234"`, `"+234"`, `"+1-242"` or an ISO code like `"NG"` |
+| `defaultValues` | `{ mobile?: string; phone_code?: string; [key: string]: any }` | `{}` | Initial values. `mobile` may include a dial code |
+| `names` | `string` | `"mobile"` | Name of the national number field |
+| `phoneCodeName` | `string` | `"phone_code"` | Name of the dial code field |
+| `label` | `string` | - | Field label |
+| `placeholder` | `string` | `"Enter phone number"` | Number input placeholder |
+| `searchPlaceholder` | `string` | `"Search country or code"` | Country search placeholder |
+| `noOptionsMessage` | `string` | `"No country found"` | Shown when the search returns nothing |
+| `note` | `string` | - | Helper text below the field |
+| `required` | `boolean` | `false` | Marks the number input required |
+| `disabled` | `boolean` | `false` | Disables the picker and the input |
+| `id` | `string` | `ihub-phone-{names}` | Input id, linked to the label |
+| `className` | `string` | `""` | Extra class on the wrapper |
+| `showPreview` | `boolean` | `true` | Show the `+234 803 123 4567` preview line |
+| `preferredCountries` | `string[]` | - | ISO codes pinned to the top of the list |
+| `emitOnMount` | `boolean` | `true` | Emit the initial value once on mount |
+| `onChange` | `(value: PhoneNumberValueType) => void` | - | Preferred callback |
+| `setFormData` | `React.Dispatch<React.SetStateAction<any>>` | - | Writes both fields into form state |
+| `inputEvent` | `(event: React.ChangeEvent<HTMLInputElement \| HTMLSelectElement>) => void` | - | Legacy callback |
 
-## 🎨 Features
+## ✅ Validation
 
-- **International Support**: Country selection with flags and phone codes
-- **Real-time Formatting**: Displays formatted phone number as you type
-- **Validation Ready**: Easy integration with form validation
-- **Customizable**: Configurable default country and values
-- **Responsive Design**: Works on all screen sizes
-- **Accessibility**: Proper labels and semantic HTML
+`isValid` is true when the national number has between 4 digits and `15 - dialCode.length` digits (the E.164 ceiling). The field shows an inline error after blur when a number is present but invalid.
 
-## 💡 Usage Tips
-
-### Form Integration
 ```tsx
-const [formData, setFormData] = useState({
-  mobile: "",
-  phone_code: "1"
-});
-
-const handlePhoneChange = (e) => {
-  const { name, value } = e.target;
-  setFormData(prev => ({
-    ...prev,
-    [name]: value
-  }));
-};
-
 <PhoneNumberInput
-  phoneCode={formData.phone_code}
-  defaultValues={{ mobile: formData.mobile }}
   names="mobile"
-  inputEvent={handlePhoneChange}
+  required
+  onChange={(value) => {
+    setPhone(value);
+    setCanSubmit(value.isValid);
+  }}
 />
 ```
 
-### Validation Example
-```tsx
-const validatePhoneNumber = (phone, countryCode) => {
-  // Basic validation - you can implement more sophisticated validation
-  const phoneRegex = /^\d{7,15}$/;
-  return phoneRegex.test(phone);
-};
+Input is capped by digit count rather than character count, so separators you type or paste never eat into the allowance.
 
-const isValid = validatePhoneNumber(phoneNumber, selectedCountryCode);
+## 🧰 Related utilities
+
+Exported from `@instincthub/react-ui/lib` if you need to parse phone numbers outside the component:
+
+```ts
+import {
+  parsePhoneNumber,
+  buildPhoneValue,
+  resolveCountry,
+  searchCountries,
+  normalizeDialCode,
+  formatNationalNumber,
+  maxNationalDigits,
+  PHONE_COUNTRIES,
+} from "@instincthub/react-ui/lib";
+
+resolveCountry("+234");                       // Nigeria
+parsePhoneNumber("+2348031234567");           // { country: NG, nationalNumber: "8031234567", ... }
+buildPhoneValue(resolveCountry("NG"), "8031234567").e164;  // "+2348031234567"
+normalizeDialCode("+1-242");                  // "1242"
 ```
 
-### Common Country Codes
-- **United States/Canada**: `"1"`
-- **United Kingdom**: `"44"`
-- **Nigeria**: `"234"`
-- **India**: `"91"`
-- **Germany**: `"49"`
-- **Australia**: `"61"`
-- **Japan**: `"81"`
-- **Brazil**: `"55"`
+`normalizeDialCode` exists because the country dataset stores `phonecode` inconsistently — `"234"`, `"+1-242"`, `"0055"` and `"+1-787 and 1-939"` all appear. Always compare against `dialCode`, never the raw `phonecode`.
+
+## 🎨 Features
+
+- **Searchable country picker**: 250 countries filtered by name, ISO code or dial code
+- **Paste parsing**: extracts the country code from any pasted format, without truncating
+- **Country code always emitted**: including once on mount, plus a hidden field for native submits
+- **Keyboard accessible**: full arrow/Enter/Escape navigation, `role="listbox"` semantics
+- **Correct for shared dial codes**: options are keyed by ISO code, so US and Canada are distinct
+- **E.164 aware**: per-country digit limits and validity
+- **Theme aware**: uses CSS variables, so dark mode works out of the box
 
 ## 🔗 Related Components
 
 - [InputText](./InputText.md) - Basic text input field
 - [InputNumber](./InputNumber.md) - Numeric input field
 - [CountryInput](./CountryInput.md) - Country selection input
-- [TextField](./TextField.md) - Enhanced text field with validation
+- [Dropdown](./Dropdown.md) - Generic searchable single/multi select
 - [SubmitButton](./SubmitButton.md) - Form submission button
-

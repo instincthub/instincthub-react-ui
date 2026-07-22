@@ -1,115 +1,199 @@
 "use client";
 
-import React, { useState } from "react";
-import { PhoneNumberInput, SubmitButton } from "../../../../index";
+import React, { useEffect, useState } from "react";
+import {
+  PhoneNumberInput,
+  PhoneNumberValueType,
+  SubmitButton,
+} from "../../../../index";
 
 const PhoneNumberInputExample: React.FC = () => {
-  const [formData1, setFormData1] = useState({ mobile: "" });
-  const [formData2, setFormData2] = useState({ mobile: "", phoneCode: "+1" });
-  const [formData3, setFormData3] = useState({ mobile: "", phoneCode: "+44" });
+  // The value shape the component emits — store `e164` (or phone_code +
+  // mobile) in your database.
+  const [basic, setBasic] = useState<PhoneNumberValueType | null>(null);
+  const [preferred, setPreferred] = useState<PhoneNumberValueType | null>(null);
+
+  // Legacy `inputEvent` API: the dial code arrives as `phone_code`.
+  const [formData, setFormData] = useState<Record<string, string>>({
+    mobile: "",
+    phone_code: "",
+  });
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Simulates a record loaded from an API after first paint.
+  const [loaded, setLoaded] = useState<{ mobile?: string }>({});
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setLoaded({ mobile: "+447911123456" }),
+      1200
+    );
+    return () => clearTimeout(timer);
+  }, []);
+
   const [submitStatus, setSubmitStatus] = useState(1);
+  const [submitted, setSubmitted] = useState<Record<string, any> | null>(null);
 
-  const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData1(prev => ({ ...prev, [name]: value }));
-  };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitStatus(2);
 
-  const handleInputChange2 = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData2(prev => ({ ...prev, [name]: value }));
-  };
+    // Everything the API needs, including the country code.
+    const payload = {
+      phone_code: basic?.phoneCode ?? "",
+      mobile: basic?.nationalNumber ?? "",
+      phone_e164: basic?.e164 ?? "",
+      country: basic?.isoCode ?? "",
+    };
 
-  const handleInputChange3 = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setFormData3(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (formData: any) => {
-    setSubmitStatus(2); // Loading
-    console.log("Form submitted with data:", formData);
-    
-    // Simulate API call
     setTimeout(() => {
-      setSubmitStatus(1); // Success
-      console.log("Phone number saved:", formData.mobile);
-    }, 1000);
+      setSubmitStatus(1);
+      setSubmitted(payload);
+    }, 600);
   };
 
   return (
     <div className="ihub-container ihub-mt-10">
       <div className="ihub-page-header">
         <h1>PhoneNumberInput Examples</h1>
-        <p>Phone number input component with country code support and validation</p>
+        <p>
+          Searchable country picker, paste-aware parsing, and a value object
+          that always carries the country code.
+        </p>
       </div>
 
       <div className="ihub-examples-grid">
-        {/* Basic Phone Input */}
+        {/* Basic usage with the onChange value object */}
         <div className="ihub-example-card">
-          <h3>Basic Phone Number Input</h3>
-          <p>Simple phone number input with default settings</p>
-          
+          <h3>Basic usage</h3>
+          <p>
+            Open the picker and search by country name (<code>nigeria</code>),
+            ISO code (<code>ng</code>) or dial code (<code>234</code> /{" "}
+            <code>+234</code>).
+          </p>
+
           <PhoneNumberInput
-            defaultValues={formData1}
+            label="Phone number"
             names="mobile"
-            inputEvent={handleInputChange1}
+            onChange={setBasic}
           />
-          
+
           <div className="ihub-input-result">
-            <p><strong>Current Value:</strong> {formData1.mobile || "No number entered"}</p>
+            <p>
+              <strong>phone_code:</strong> {basic?.phoneCode || "—"}
+            </p>
+            <p>
+              <strong>mobile:</strong> {basic?.nationalNumber || "—"}
+            </p>
+            <p>
+              <strong>e164 (store this):</strong> {basic?.e164 || "—"}
+            </p>
+            <p>
+              <strong>valid:</strong> {basic?.isValid ? "yes" : "no"}
+            </p>
           </div>
         </div>
 
-        {/* Phone Input with Country Code */}
+        {/* Paste handling */}
         <div className="ihub-example-card">
-          <h3>Phone Input with Country Code</h3>
-          <p>Phone number input with predefined country code</p>
-          
+          <h3>Paste a full international number</h3>
+          <p>
+            Try pasting any of these — the country is detected and no digits
+            are dropped:
+          </p>
+          <ul>
+            <li>
+              <code>+234 803 123 4567</code>
+            </li>
+            <li>
+              <code>2348031234567</code> (no plus)
+            </li>
+            <li>
+              <code>002348031234567</code> (IDD prefix)
+            </li>
+            <li>
+              <code>+1 (212) 555-1234</code>
+            </li>
+            <li>
+              <code>08031234567</code> (trunk zero is stripped)
+            </li>
+          </ul>
+
           <PhoneNumberInput
-            phoneCode="+1"
-            defaultValues={formData2}
+            label="Paste here"
             names="mobile"
-            inputEvent={handleInputChange2}
+            preferredCountries={["NG", "GB", "US"]}
+            onChange={setPreferred}
+            note="Nigeria, United Kingdom and United States are pinned to the top."
           />
-          
+
           <div className="ihub-input-result">
-            <p><strong>Phone Code:</strong> {formData2.phoneCode || "+1"}</p>
-            <p><strong>Mobile Number:</strong> {formData2.mobile || "No number entered"}</p>
-            <p><strong>Full Number:</strong> {formData2.phoneCode || "+1"} {formData2.mobile}</p>
+            <p>
+              <strong>Detected:</strong> {preferred?.flag}{" "}
+              {preferred?.countryName || "—"}
+            </p>
+            <p>
+              <strong>Result:</strong> {preferred?.formatted || "—"}
+            </p>
           </div>
         </div>
 
-        {/* Phone Input with UK Country Code */}
+        {/* Legacy inputEvent API */}
         <div className="ihub-example-card">
-          <h3>Phone Input with UK Country Code</h3>
-          <p>Phone number input with UK (+44) country code</p>
-          
+          <h3>Legacy inputEvent API</h3>
+          <p>
+            <code>inputEvent</code> fires for both fields, and once on mount so{" "}
+            <code>phone_code</code> is present even if the picker is never
+            opened.
+          </p>
+
           <PhoneNumberInput
             phoneCode="+44"
-            defaultValues={formData3}
+            defaultValues={formData}
             names="mobile"
-            inputEvent={handleInputChange3}
+            inputEvent={handleInputChange}
           />
-          
+
           <div className="ihub-input-result">
-            <p><strong>Phone Code:</strong> {formData3.phoneCode || "+44"}</p>
-            <p><strong>Mobile Number:</strong> {formData3.mobile || "No number entered"}</p>
-            <p><strong>Full Number:</strong> {formData3.phoneCode || "+44"} {formData3.mobile}</p>
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
           </div>
         </div>
 
-        {/* Form Submission Example */}
+        {/* Async defaults */}
         <div className="ihub-example-card">
-          <h3>Form with Phone Number</h3>
-          <p>Complete form with phone number submission</p>
-          
-          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(formData1); }}>
+          <h3>Values loaded from an API</h3>
+          <p>
+            A stored <code>+447911123456</code> arrives after ~1.2s and is split
+            back into country and national number.
+          </p>
+
+          <PhoneNumberInput
+            label="Stored number"
+            names="mobile"
+            defaultValues={loaded}
+          />
+        </div>
+
+        {/* Form submission */}
+        <div className="ihub-example-card">
+          <h3>Form submission</h3>
+          <p>
+            A hidden <code>phone_code</code> field is rendered, so native form
+            submits carry the country code too.
+          </p>
+
+          <form onSubmit={handleSubmit}>
             <PhoneNumberInput
-              phoneCode="+1"
-              defaultValues={formData1}
+              label="Contact number"
               names="mobile"
-              inputEvent={handleInputChange1}
+              required
+              onChange={setBasic}
             />
-            
+
             <div className="ihub-form-actions">
               <SubmitButton
                 label="Submit Phone Number"
@@ -118,113 +202,93 @@ const PhoneNumberInputExample: React.FC = () => {
               />
             </div>
           </form>
-          
-          <div className="ihub-form-result">
-            {formData1.mobile && (
-              <p><strong>Ready to submit:</strong> +1 {formData1.mobile}</p>
-            )}
-          </div>
+
+          {submitted && (
+            <div className="ihub-form-result">
+              <p>
+                <strong>Payload sent:</strong>
+              </p>
+              <pre>{JSON.stringify(submitted, null, 2)}</pre>
+            </div>
+          )}
         </div>
 
-        {/* Multiple Phone Numbers */}
+        {/* Disabled */}
         <div className="ihub-example-card">
-          <h3>Multiple Phone Number Inputs</h3>
-          <p>Form with multiple phone number fields</p>
-          
-          <div className="ihub-multiple-phones">
-            <div className="ihub-phone-group">
-              <h5>Primary Phone (US)</h5>
-              <PhoneNumberInput
-                phoneCode="+1"
-                defaultValues={formData1}
-                names="mobile"
-                inputEvent={handleInputChange1}
-              />
-            </div>
-            
-            <div className="ihub-phone-group">
-              <h5>Secondary Phone (UK)</h5>
-              <PhoneNumberInput
-                phoneCode="+44"
-                defaultValues={formData2}
-                names="mobile"
-                inputEvent={handleInputChange2}
-              />
-            </div>
-            
-            <div className="ihub-phone-group">
-              <h5>Emergency Phone (Default)</h5>
-              <PhoneNumberInput
-                defaultValues={formData3}
-                names="mobile"
-                inputEvent={handleInputChange3}
-              />
-            </div>
-          </div>
-          
-          <div className="ihub-phones-summary">
-            <h5>Phone Numbers Summary:</h5>
-            <ul>
-              <li>Primary: +1 {formData1.mobile || "Not set"}</li>
-              <li>Secondary: +44 {formData2.mobile || "Not set"}</li>
-              <li>Emergency: {formData3.mobile || "Not set"}</li>
-            </ul>
-          </div>
+          <h3>Disabled</h3>
+          <PhoneNumberInput
+            label="Read only"
+            names="mobile"
+            phoneCode="+234"
+            defaultValues={{ mobile: "8031234567" }}
+            disabled
+          />
         </div>
       </div>
 
       <div className="ihub-code-examples">
         <h2>Code Examples</h2>
-        
+
         <div className="ihub-code-section">
-          <h3>Basic Usage</h3>
-          <pre><code>{`import { PhoneNumberInput } from '@instincthub/react-ui';
+          <h3>Recommended: the onChange value object</h3>
+          <pre>
+            <code>{`import { PhoneNumberInput } from "@instincthub/react-ui";
 
-const [formData, setFormData] = useState({ mobile: "" });
+const [phone, setPhone] = useState(null);
 
-const handleInputChange = (event) => {
+<PhoneNumberInput
+  label="Phone number"
+  names="mobile"
+  preferredCountries={["NG", "GB", "US"]}
+  onChange={(value) => setPhone(value)}
+/>
+
+// value = {
+//   phoneCode: "+234",
+//   dialCode: "234",
+//   nationalNumber: "8031234567",
+//   e164: "+2348031234567",
+//   formatted: "+234 803 123 4567",
+//   isoCode: "NG",
+//   countryName: "Nigeria",
+//   isValid: true,
+// }`}</code>
+          </pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Writing straight into form state</h3>
+          <pre>
+            <code>{`const [formData, setFormData] = useState({});
+
+<PhoneNumberInput
+  names="mobile"
+  phoneCodeName="phone_code"
+  defaultValues={formData}
+  setFormData={setFormData}
+/>
+
+// formData = { mobile: "8031234567", phone_code: "+234" }`}</code>
+          </pre>
+        </div>
+
+        <div className="ihub-code-section">
+          <h3>Legacy inputEvent</h3>
+          <pre>
+            <code>{`const handleInputChange = (event) => {
   const { name, value } = event.target;
-  setFormData(prev => ({ ...prev, [name]: value }));
+  setFormData((prev) => ({ ...prev, [name]: value }));
 };
 
 <PhoneNumberInput
+  phoneCode="+234"
   defaultValues={formData}
   names="mobile"
   inputEvent={handleInputChange}
-/>`}</code></pre>
-        </div>
+/>
 
-        <div className="ihub-code-section">
-          <h3>With Country Code</h3>
-          <pre><code>{`<PhoneNumberInput
-  phoneCode="+1"
-  defaultValues={formData}
-  names="mobile"
-  inputEvent={handleInputChange}
-/>`}</code></pre>
-        </div>
-
-        <div className="ihub-code-section">
-          <h3>Form Integration</h3>
-          <pre><code>{`const [formData, setFormData] = useState({ 
-  mobile: "",
-  phoneCode: "+1" 
-});
-
-const handleInputChange = (event) => {
-  const { name, value } = event.target;
-  setFormData(prev => ({ ...prev, [name]: value }));
-};
-
-<form onSubmit={handleSubmit}>
-  <PhoneNumberInput
-    phoneCode={formData.phoneCode}
-    defaultValues={formData}
-    names="mobile"
-    inputEvent={handleInputChange}
-  />
-  <button type="submit">Submit</button>
-</form>`}</code></pre>
+// Fires for "phone_code" and "mobile", including once on mount.`}</code>
+          </pre>
         </div>
       </div>
     </div>

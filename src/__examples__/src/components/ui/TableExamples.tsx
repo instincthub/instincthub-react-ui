@@ -148,6 +148,8 @@ const EnhancedTableExample: React.FC = () => {
     },
     {
       header: "Actions",
+      // UI-only column: keep the buttons out of CSV/Excel/PDF exports
+      exportable: false,
       accessor: (row) => (
         <div className="ihub-item-actions">
           <p

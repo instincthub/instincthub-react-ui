@@ -64,6 +64,14 @@ const LibraryList = () => {
       example_path: "docs/static-docs/libs/helpFunction/isValidEmail.md",
     },
     {
+      name: "phoneUtils",
+      description:
+        "Parse, normalise and validate international phone numbers — dial code detection, E.164 output and country search",
+      category: "Validation Functions",
+      repo_path: "src/components/lib/phoneUtils.ts",
+      example_path: "docs/static-docs/libs/phoneUtils.md",
+    },
+    {
       name: "formatNumberWithCommas",
       description:
         "Format numbers with thousands separators for better readability",

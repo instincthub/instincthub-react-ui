@@ -1177,6 +1177,61 @@ const TableExamples = () => {
 export default TableExamples;
 ```
 
+## 📤 Exporting Data
+
+Passing `exportOptions` renders the CSV / Excel / PDF buttons. Exports cover the
+**filtered and sorted** rows, not just the page currently on screen.
+
+```tsx
+<IHubTable
+  columns={columns}
+  data={data}
+  exportOptions={{
+    csv: true,
+    excel: true,      // writes a real .xlsx via `xlsx`
+    pdf: true,        // requires the `jspdf` peer dependency
+    fileName: "students",
+    allFields: false, // true = export every field of the raw record
+    maxRows: 5000,    // hard cap; a toast warns when it is hit
+  }}
+/>
+```
+
+### What ends up in each cell
+
+Every column is exported — including ones with function accessors, which earlier
+versions dropped. Values resolve in this order:
+
+1. `column.exportValue(row, index)` — explicit override, always wins.
+2. String `accessor`, including dotted paths (`custom_fields.lms_score`), falling
+   back to `cell(row)` when the raw value is empty.
+3. Function `accessor` — the returned node is flattened to its text.
+4. `cell(row)` — flattened to its text.
+
+Objects reduce to a label field (`title`, `name`, `email`, …) and arrays join with
+` | `, so `groups: [{title: "Students"}, …]` exports as `Students | …`.
+
+```tsx
+const columns: TableColumnType<StudentType>[] = [
+  { header: "Name", accessor: (row) => `${row.first_name} ${row.last_name}` },
+  { header: "LMS Score", accessor: "custom_fields.lms_score" },
+  {
+    header: "Verified",
+    accessor: "verified",
+    exportValue: (row) => (row.verified ? "Yes" : "No"),
+  },
+  {
+    header: "Actions",
+    accessor: "id",
+    exportable: false, // keep UI-only columns out of the file
+    cell: (row) => <Action id={row.id} />,
+  },
+];
+```
+
+Set `allFields: true` to flatten each record to `parent.child` headers when the
+visible columns are only a subset of the data.
+
 ## 🔗 Related Components
 
 - [CustomTextEditor](./CustomTextEditor.md) - Custom text editor component

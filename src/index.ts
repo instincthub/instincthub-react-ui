@@ -25,6 +25,12 @@ export { default as ReactClientProviders } from "./components/auth/ReactClientPr
 
 // Correcting incorrect assignments
 export { default as PhoneNumberInput } from "./components/forms/PhoneNumberInput";
+export type { PhoneNumberInputPropsType } from "./components/forms/PhoneNumberInput";
+export type {
+  PhoneNumberValueType,
+  PhoneCountryType,
+  ParsedPhoneNumberType,
+} from "./components/lib/phoneUtils";
 export { default as RadioField } from "./components/forms/RadioField";
 export { default as RadioSimple } from "./components/forms/RadioSimple";
 export { default as ReactTimeAgo } from "./components/forms/ReactTimeAgo"; // Ensure this exists

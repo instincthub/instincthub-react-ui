@@ -37,11 +37,20 @@ export interface DateInputProps {
   disabled?: boolean;
 }
 
+export type {
+  PhoneCountryType,
+  PhoneNumberValueType,
+  ParsedPhoneNumberType,
+} from "../components/lib/phoneUtils";
+
+export type { PhoneNumberInputPropsType } from "../components/forms/PhoneNumberInput";
+
+/** @deprecated Use `PhoneNumberInputPropsType`. */
 export interface PhoneNumberInputProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  names?: string;
+  phoneCode?: string;
+  defaultValues?: { mobile?: string; phone_code?: string; [key: string]: any };
   required?: boolean;
   disabled?: boolean;
 }

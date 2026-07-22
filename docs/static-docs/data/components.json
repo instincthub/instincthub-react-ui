@@ -328,11 +328,11 @@
   },
   {
     "name": "PhoneNumberInput",
-    "description": "Phone number input with formatting",
+    "description": "Phone number input with searchable country picker, paste detection and E.164 output",
     "category": "Forms",
     "repo_path": "../../../src/components/forms/PhoneNumberInput.tsx",
     "type": "component",
-    "tags": ["forms", "input", "form"],
+    "tags": ["forms", "input", "phone", "international", "country-code", "validation"],
     "props": [],
     "examples": [],
     "example_path": "../components/PhoneNumberInput.md"

@@ -871,6 +871,19 @@
 /* PhoneNumberInput Component Styles */
 .ihub-react-phone-input {
   margin-top: 30px;
+  position: relative;
+  font-family: var(--Nunito);
+}
+
+.ihub-react-phone-input .ihub-phone-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-phone-label .ihub-required {
+  color: var(--Danger);
 }
 
 .ihub-react-phone-input .ihub-make-bold {
@@ -881,32 +894,61 @@
   color: var(--Gunmetal);
 }
 
+.ihub-react-phone-input .ihub-phone-field {
+  position: relative;
+}
+
 .ihub-react-phone-input .ihub-target-phone {
   display: flex;
+  align-items: stretch;
   border: 1px solid #d8d8d8;
   border-radius: 5px;
   overflow: hidden;
+  background-color: var(--White);
 }
 
-.ihub-react-phone-input .ihub-country-select {
-  border: 0;
-  display: inline-block;
+/* Country trigger button */
+.ihub-react-phone-input .ihub-country-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
   height: 50px;
-  width: 20%;
-  padding-left: 5px;
-  border-radius: 5px;
-  font-family: var(--Nunito);
+  padding: 0 8px 0 12px;
+  border: 0;
+  border-right: 1px solid #d8d8d8;
   background-color: var(--White);
   color: var(--Gunmetal);
+  font-family: var(--Nunito);
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ihub-react-phone-input .ihub-country-trigger:hover:not(:disabled) {
+  background-color: var(--OpacityBackground);
+}
+
+.ihub-react-phone-input .ihub-country-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.ihub-react-phone-input .ihub-c-caret {
+  font-size: 18px !important;
+  opacity: 0.6;
 }
 
 .ihub-react-phone-input .ihub-phone-input {
   border: 0;
-  border-radius: 5px;
+  border-radius: 0;
   padding-left: 10px;
   height: 50px;
-  width: 80%;
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   font-family: var(--Nunito);
+  background-color: var(--White);
   color: var(--Gunmetal);
 }
 
@@ -918,14 +960,124 @@
   font-weight: 500;
 }
 
-/* Focus states */
-.ihub-react-phone-input .ihub-country-select:focus,
+/* Searchable country dropdown */
+.ihub-react-phone-input .ihub-country-dropdown {
+  position: absolute;
+  z-index: var(--z-popup);
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  min-width: 260px;
+  max-width: 360px;
+  background-color: var(--White);
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  box-shadow: var(--lightShadow);
+  overflow: hidden;
+}
+
+.ihub-react-phone-input .ihub-country-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.ihub-react-phone-input .ihub-country-search-icon {
+  font-size: 18px !important;
+  opacity: 0.6;
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-country-search {
+  border: 0;
+  outline: none;
+  width: 100%;
+  height: 28px;
+  font-family: var(--Nunito);
+  font-size: 14px;
+  background-color: transparent;
+  color: var(--Gunmetal);
+}
+
+.ihub-react-phone-input .ihub-country-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ihub-react-phone-input .ihub-country-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--Gunmetal);
+  cursor: pointer;
+}
+
+.ihub-react-phone-input .ihub-country-option .ihub-c-name {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ihub-react-phone-input .ihub-country-option .ihub-c-code {
+  flex: 0 0 auto;
+  opacity: 0.7;
+}
+
+.ihub-react-phone-input .ihub-country-highlighted {
+  background-color: var(--OpacityBackground);
+}
+
+.ihub-react-phone-input .ihub-country-selected {
+  color: var(--DarkCyan);
+  font-weight: 600;
+}
+
+.ihub-react-phone-input .ihub-country-empty {
+  padding: 14px 12px;
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--Gunmetal);
+  opacity: 0.7;
+}
+
+.ihub-react-phone-input .ihub-phone-note {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--Gunmetal);
+  opacity: 0.7;
+}
+
+.ihub-react-phone-input .ihub-phone-error {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--Danger);
+}
+
+/* States */
+.ihub-react-phone-input .ihub-country-trigger:focus,
 .ihub-react-phone-input .ihub-phone-input:focus {
   outline: none;
 }
 
 .ihub-react-phone-input .ihub-target-phone:focus-within {
   border-color: var(--DarkCyan);
+}
+
+.ihub-react-phone-input .ihub-target-phone.ihub-phone-invalid {
+  border-color: var(--Danger);
+}
+
+.ihub-react-phone-input .ihub-target-phone.ihub-phone-disabled {
+  background-color: var(--OpacityBackground);
 }
 
 /* RadioField Component Styles */
