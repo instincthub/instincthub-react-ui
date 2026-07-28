@@ -13,6 +13,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 
+import {
+  copyTextToClipboard,
+  enhanceCodeBlocks,
+  resolveCodeCopyTarget,
+  showCopiedFeedback,
+} from "./codeCopyEnhancer";
+
 interface ContentViewerProps {
   content: string;
   title?: string;
@@ -24,6 +31,9 @@ interface ContentViewerProps {
   showToolbar?: boolean;
   showEditBtn?: boolean;
   isMarkdown?: boolean; // New prop to indicate if content is Markdown
+  enableCodeCopy?: boolean; // Show a copy button on fenced code blocks
+  enableInlineCodeCopy?: boolean; // Allow inline `code` snippets to be copied on click
+  showCodeLineNumbers?: boolean; // Draw a line-number gutter on multi-line code blocks
 }
 
 /**
@@ -44,6 +54,9 @@ interface ContentViewerProps {
  * @param {boolean} showToolbar - Whether to show the toolbar
  * @param {boolean} showEditBtn - Whether to show the edit button
  * @param {boolean} isMarkdown - Whether the content is Markdown
+ * @param {boolean} enableCodeCopy - Whether code blocks get a copy button
+ * @param {boolean} enableInlineCodeCopy - Whether inline code can be clicked to copy
+ * @param {boolean} showCodeLineNumbers - Whether multi-line code blocks get a line-number gutter
  */
 export default function ContentViewer({
   content,
@@ -56,6 +69,9 @@ export default function ContentViewer({
   showToolbar = true,
   showEditBtn = false,
   isMarkdown = false, // Default to false for backward compatibility
+  enableCodeCopy = true,
+  enableInlineCodeCopy = true,
+  showCodeLineNumbers = true,
 }: ContentViewerProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState("");
@@ -194,6 +210,13 @@ export default function ContentViewer({
       });
     }
 
+    // Add copy affordances to code blocks and inline snippets
+    enhanceCodeBlocks(tempDiv, {
+      enableBlockCopy: enableCodeCopy,
+      enableInlineCopy: enableInlineCodeCopy,
+      showLineNumbers: showCodeLineNumbers,
+    });
+
     setHtml(tempDiv.innerHTML);
 
     return tempDiv.innerHTML;
@@ -218,7 +241,13 @@ export default function ContentViewer({
   useEffect(() => {
     if (!content) return;
     processHtml(content);
-  }, [content, isMarkdown]);
+  }, [
+    content,
+    isMarkdown,
+    enableCodeCopy,
+    enableInlineCodeCopy,
+    showCodeLineNumbers,
+  ]);
 
   // Handle task item checkbox clicks
   const handleClick = useCallback(
@@ -248,13 +277,67 @@ export default function ContentViewer({
     [editable, onContentChange]
   );
 
+  // Copy code blocks / inline snippets through delegation on the rendered HTML
+  const copyTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const handleCodeCopy = useCallback(async (e: Event) => {
+    const target = resolveCodeCopyTarget(e.target);
+    if (!target) return;
+
+    e.preventDefault();
+
+    const copied = await copyTextToClipboard(target.text);
+    if (!copied) {
+      showNotification("Failed to copy code", "error");
+      return;
+    }
+
+    // Keep the pending-timer list bounded — only recent resets can still fire
+    copyTimersRef.current = [
+      ...copyTimersRef.current.slice(-9),
+      showCopiedFeedback(target),
+    ];
+
+    // Block buttons show their own "Copied!" label, inline snippets do not
+    if (target.kind === "inline") {
+      showNotification("Code copied to clipboard!", "success");
+    }
+  }, []);
+
+  const handleCodeCopyKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+
+      const target = resolveCodeCopyTarget(e.target);
+      // Native buttons already translate Enter/Space into a click
+      if (!target || target.element.tagName === "BUTTON") return;
+
+      handleCodeCopy(e);
+    },
+    [handleCodeCopy]
+  );
+
   useEffect(() => {
     const container = contentRef.current;
-    if (container) {
-      container.addEventListener("click", handleClick);
-      return () => container.removeEventListener("click", handleClick);
-    }
-  }, [handleClick]);
+    if (!container) return;
+
+    container.addEventListener("click", handleClick);
+    container.addEventListener("click", handleCodeCopy);
+    container.addEventListener("keydown", handleCodeCopyKeyDown);
+
+    return () => {
+      container.removeEventListener("click", handleClick);
+      container.removeEventListener("click", handleCodeCopy);
+      container.removeEventListener("keydown", handleCodeCopyKeyDown);
+    };
+  }, [handleClick, handleCodeCopy, handleCodeCopyKeyDown]);
+
+  // Drop pending "Copied!" resets when the viewer unmounts
+  useEffect(() => {
+    return () => {
+      copyTimersRef.current.forEach((timer) => clearTimeout(timer));
+    };
+  }, []);
 
   // Print handler
   const handlePrint = () => {
@@ -359,21 +442,23 @@ export default function ContentViewer({
 
   // Copy content to clipboard
   const handleCopy = async () => {
-    try {
-      if (contentRef.current) {
-        // Get plain text version for clipboard
-        const textContent = contentRef.current.innerText;
+    if (!contentRef.current) return;
 
-        // For rich text copying, you could use:
-        // const htmlContent = contentRef.current.innerHTML;
+    // Read the plain text without the code toolbars ("javascript Copy") leaking
+    // in. innerText needs a rendered node, so hide them for the read instead of
+    // cloning — this happens within a single frame, so nothing flickers.
+    const toolbars = Array.from(
+      contentRef.current.querySelectorAll<HTMLElement>(".ihub-code-block-toolbar")
+    );
+    toolbars.forEach((toolbar) => (toolbar.hidden = true));
+    const textContent = contentRef.current.innerText;
+    toolbars.forEach((toolbar) => (toolbar.hidden = false));
 
-        await navigator.clipboard.writeText(textContent);
-        showNotification("Content copied to clipboard!", "success");
-      }
-    } catch (error) {
-      console.error("Failed to copy content:", error);
-      showNotification("Failed to copy content", "error");
-    }
+    const copied = await copyTextToClipboard(textContent);
+    showNotification(
+      copied ? "Content copied to clipboard!" : "Failed to copy content",
+      copied ? "success" : "error"
+    );
   };
 
   // Toggle fullscreen mode
@@ -443,9 +528,19 @@ export default function ContentViewer({
         </div>
       )}
 
+      <div
+        className="ihub-sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {notification?.message || ""}
+      </div>
+
       {notification && (
         <div
           className={`ihub-notification ihub-notification-${notification.type}`}
+          aria-hidden="true"
         >
           {notification.message}
         </div>

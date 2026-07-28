@@ -239,6 +239,18 @@ function BasicExample() {
 | `lastUpdated` | `string` | - | Optional. Last updated timestamp |
 | `showEditBtn` | `boolean` | `true` | Whether to show edit button |
 | `showPreviewBtn` | `boolean` | `true` | Whether to show preview button |
+| `enableCodeCopy` | `boolean` | `true` | Add a language label + copy button above code blocks in view mode |
+| `enableInlineCodeCopy` | `boolean` | `true` | Let inline `code` snippets be copied on click / Enter / Space |
+| `showCodeLineNumbers` | `boolean` | `true` | Line-number gutter on code blocks with 2+ lines |
+
+## 📋 Copying Code
+
+In view mode the component renders [ContentViewer](./ContentViewer.md), so every `<pre>`
+code block gets a toolbar with the detected language and a copy button, and inline `<code>`
+can be clicked (or focused and activated with Enter/Space) to copy. Multi-line blocks also
+get a line-number gutter, and the numbers are excluded from both the copy button and manual
+highlight-and-copy. Pass `enableCodeCopy={false}`, `enableInlineCodeCopy={false}` or
+`showCodeLineNumbers={false}` to opt out.
 
 ## 🎯 Use Cases
 

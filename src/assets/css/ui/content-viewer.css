@@ -345,6 +345,161 @@
   font-size: inherit;
 }
 
+/* ==========================================================================
+   Code blocks with click-to-copy
+   ========================================================================== */
+
+.ihub-code-block-wrapper {
+  position: relative;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #1e1e2e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ihub-code-block-wrapper pre,
+.ihub-content-viewer .ihub-code-block-wrapper pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+
+.ihub-code-block-wrapper pre:focus-visible {
+  outline: 2px solid var(--DarkCyan, #00838f);
+  outline-offset: -2px;
+}
+
+.ihub-code-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.6rem 0.4rem 1rem;
+  background-color: #181825;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ihub-code-block-lang {
+  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a6adc8;
+}
+
+.ihub-code-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--Nunito, sans-serif);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #cdd6f4;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ihub-code-copy-btn:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.ihub-code-copy-btn:focus-visible {
+  outline: 2px solid var(--DarkCyan, #00838f);
+  outline-offset: 2px;
+}
+
+.ihub-code-copy-btn.ihub-copied,
+.ihub-code-copy-btn.ihub-copied:hover {
+  color: #a6e3a1;
+  background-color: rgba(166, 227, 161, 0.14);
+  border-color: rgba(166, 227, 161, 0.45);
+}
+
+.ihub-code-copy-btn svg {
+  flex-shrink: 0;
+}
+
+/* Line numbers.
+   The digits live in a ::before pseudo-element, so they are never part of the
+   DOM text (copy button, PDF export) and `user-select: none` keeps them out of
+   manual highlight-and-copy selections. */
+.ihub-content-viewer pre.ihub-line-numbers {
+  counter-reset: ihub-code-line;
+  padding-left: 0;
+}
+
+.ihub-content-viewer pre.ihub-line-numbers .ihub-code-line::before {
+  content: counter(ihub-code-line);
+  counter-increment: ihub-code-line;
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: 3.25em;
+  margin-right: 1rem;
+  padding: 0 0.75rem 0 0.5rem;
+  text-align: right;
+  color: #6c7086;
+  background-color: #1e1e2e;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  /* Keep the gutter pinned while long lines scroll horizontally */
+  position: sticky;
+  left: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Inline snippets: click (or Enter/Space) to copy */
+.ihub-content-viewer code[data-ihub-copy="inline"] {
+  cursor: copy;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.ihub-content-viewer code[data-ihub-copy="inline"]:hover {
+  background-color: rgba(0, 131, 143, 0.12);
+  color: var(--DarkCyan, #00838f);
+}
+
+.ihub-content-viewer code[data-ihub-copy="inline"]:focus-visible {
+  outline: 2px solid var(--DarkCyan, #00838f);
+  outline-offset: 2px;
+}
+
+.ihub-content-viewer code[data-ihub-copy="inline"].ihub-inline-copied {
+  background-color: rgba(64, 160, 43, 0.2);
+  color: #2f7d1f;
+}
+
+/* Screen-reader-only live region */
+.ihub-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ihub-code-copy-btn,
+  .ihub-content-viewer code[data-ihub-copy="inline"] {
+    transition: none;
+  }
+}
+
 /* Blockquote */
 .ihub-content-viewer blockquote {
   border-left: 3px solid var(--DarkCyan, #0891b2);
@@ -538,6 +693,16 @@
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+.DarkMode .ihub-content-viewer code[data-ihub-copy="inline"]:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #7fd7e3;
+}
+
+.DarkMode .ihub-content-viewer code[data-ihub-copy="inline"].ihub-inline-copied {
+  background-color: rgba(166, 227, 161, 0.22);
+  color: #a6e3a1;
+}
+
 .DarkMode .ihub-content-viewer figcaption,
 .DarkMode .ihub-content-viewer figure.ihub-te-image-block figcaption {
   color: #94a3b8;
@@ -580,8 +745,13 @@
 
 /* Print styles */
 @media print {
-  .ihub-content-toolbar {
+  .ihub-content-toolbar,
+  .ihub-code-block-toolbar {
     display: none;
+  }
+
+  .ihub-code-block-wrapper {
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   .ihub-content-viewer {

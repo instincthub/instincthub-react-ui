@@ -28,6 +28,39 @@ A content viewer component with Medium/Substack-quality typography for displayin
 | `showToolbar` | `boolean` | No | `true` | Show Print / PDF / Copy / Fullscreen toolbar |
 | `showEditBtn` | `boolean` | No | `false` | Show edit button in toolbar |
 | `isMarkdown` | `boolean` | No | `false` | Treat content as Markdown (auto-detected if not set) |
+| `enableCodeCopy` | `boolean` | No | `true` | Add a language label + copy button above every `<pre>` code block |
+| `enableInlineCodeCopy` | `boolean` | No | `true` | Let inline `<code>` snippets be copied on click / Enter / Space |
+| `showCodeLineNumbers` | `boolean` | No | `true` | Line-number gutter on code blocks with 2+ lines |
+
+## Code Blocks
+
+Every `<pre>` block is wrapped in `.ihub-code-block-wrapper` with a toolbar showing the
+detected language (from a `language-*` class) and a copy button. The `<pre>` itself gets
+`role="region"`, `tabindex="0"` and an `aria-label`, so the scrollable area is reachable by
+keyboard.
+
+### Line numbers
+
+Blocks with two or more lines get a sticky line-number gutter (single-line snippets are left
+alone). Each line is wrapped in `span.ihub-code-line` and the digits are drawn by a CSS
+counter in `::before`, so **the numbers are never copied** — not by the copy button (they are
+not part of the DOM text), and not by a manual highlight-and-copy (`user-select: none`). The
+gutter stays pinned to the left while long lines scroll horizontally.
+
+Code blocks that already contain markup — syntax highlighting, for instance — are left
+untouched so nothing is destroyed; they simply render without numbers.
+
+Inline `<code>` becomes a `role="button"` element that copies its text on click or when
+activated with Enter/Space. Inline code inside a link is left untouched. Copy confirmations
+are announced through a polite live region.
+
+Copying falls back to a hidden textarea when the async Clipboard API is unavailable
+(insecure origins, older browsers). Set `enableCodeCopy` / `enableInlineCodeCopy` to `false`
+to opt out.
+
+```tsx
+<ContentViewer content={html} enableInlineCodeCopy={false} />
+```
 
 ## Typography
 
@@ -45,6 +78,11 @@ The content viewer uses Medium/Substack-inspired typography:
 - `.ihub-content-container` — Outer wrapper
 - `.ihub-content-toolbar` — Toolbar with actions
 - `.ihub-content-viewer` — Main content area (apply to any HTML container)
+- `.ihub-code-block-wrapper` — Wrapper around a `<pre>` code block
+- `.ihub-code-block-toolbar` / `.ihub-code-block-lang` — Code block header and language label
+- `.ihub-code-copy-btn` — Copy button (gets `.ihub-copied` while confirming)
+- `pre.ihub-line-numbers` / `.ihub-code-line` — Line-numbered block and its per-line spans
+- `code[data-ihub-copy="inline"]` — Click-to-copy inline snippet (`.ihub-inline-copied` while confirming)
 
 ## Displaying IHubTextEditor Content
 
