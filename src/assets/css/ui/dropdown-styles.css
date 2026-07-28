@@ -44,6 +44,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: .8rem;
 }
 
 .ihub-dropdown-placeholder {
@@ -117,6 +118,7 @@
   padding: 10px 15px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: .8rem;
 }
 
 .ihub-dropdown-option:hover:not(.ihub-dropdown-disabled-option) {

@@ -328,11 +328,6 @@
     background: var(--DarkHover, #4a5568);
   }
 
-  .ihub-text-label {
-    color: var(--DarkText, #e2e8f0);
-    background: var(--DarkBackground, #2d3748);
-  }
-
   .ihub-time-input {
     color: var(--DarkText, #e2e8f0);
   }

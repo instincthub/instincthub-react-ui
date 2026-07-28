@@ -6,7 +6,13 @@ Comprehensive table components for displaying data with sorting, filtering, pagi
 
 ## 🏷️ Tags
 
-`ui`, `table`, `data`, `sorting`, `filtering`, `pagination`
+`ui`, `table`, `data`, `sorting`, `filtering`, `pagination`, `export`
+
+> **Exports:** passing `exportOptions` to [IHubTable](./IHubTable.md) or
+> [IHubTableServer](./IHubTableServer.md) renders CSV / Excel / PDF buttons. By default
+> (`fields: "both"`) the file holds the visible columns **plus every raw field they don't
+> cover**, so nothing in the payload is lost. See those pages for `fields`,
+> `exportValue` and `exportable`.
 
 ```tsx
 "use client";

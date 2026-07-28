@@ -1235,11 +1235,15 @@ const columns: TableColumnType<StudentType>[] = [
   {
     header: "Actions",
     accessor: "id",
-    exportable: false, // keep UI-only columns out of the file
+    exportable: false, // drops the column; see caveat below
     cell: (row) => <Action id={row.id} />,
   },
 ];
 ```
+
+⚠️ `exportable: false` removes the **column**, not the underlying data — under the
+default `fields: "both"` the raw `id` still lands in the file. Use `fields: "columns"`
+when the file must mirror the screen exactly.
 
 Use `fields: "all"` for raw-only files (re-import, data pipelines) where stable
 `parent.child` keys matter more than readable labels.

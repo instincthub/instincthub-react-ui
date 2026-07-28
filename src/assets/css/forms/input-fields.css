@@ -585,6 +585,7 @@
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: .8rem;
 }
 
 .ihub-select__item:hover {
@@ -621,6 +622,7 @@
 
 .ihub-select__btn p {
   margin: 0;
+  font-size: .8rem;
 }
 
 .ihub-select__content {
