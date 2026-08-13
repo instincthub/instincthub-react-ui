@@ -224,6 +224,17 @@ const LoginForm = ({
     password?: string;
   }>({});
 
+  /**
+   * False until the client has hydrated.
+   *
+   * Until React attaches `onSubmit`, a click on the submit button performs a
+   * *native* form submission. See the `method="post"` note on the <form> for
+   * why that is dangerous. Disabling submit until hydration closes the window
+   * entirely; the form method is the floor beneath it.
+   */
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
   // Enhanced state
   const [isOffline, setIsOffline] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({
@@ -1096,6 +1107,24 @@ const LoginForm = ({
       <form
         ref={formRef}
         onSubmit={handleSubmit}
+        /**
+         * SECURITY — do not remove.
+         *
+         * A <form> with no `method` defaults to GET. If this form ever submits
+         * natively — before hydration, or if handleSubmit throws before its
+         * preventDefault — the browser serialises every named input into the
+         * URL. That puts the user's password in the address bar, browser
+         * history, server access logs, and the Referer header sent to any
+         * third-party script on the page.
+         *
+         * Observed in production on 2026-08-13:
+         *   /auth/login?username=…&password=…
+         *
+         * POST keeps credentials in the request body whatever path the
+         * submission takes. Disabling submit until hydration is the belt; this
+         * is the braces.
+         */
+        method="post"
         className={`ihub-max-w-500 ihub-mx-auto ${formClassName || ""}`}
         aria-label={ariaLabel || "Login form"}
         aria-describedby={ariaDescribedBy}
@@ -1220,6 +1249,10 @@ const LoginForm = ({
             type="submit"
             status={status}
             variant={submitButtonVariant}
+            // Until React has attached onSubmit, pressing this would submit the
+            // form natively and leak credentials into the URL. See the form's
+            // method="post" comment.
+            disabled={!hydrated}
           />
 
           {enableFormReset && (
