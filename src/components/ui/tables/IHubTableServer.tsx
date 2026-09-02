@@ -3,6 +3,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   useRef,
   forwardRef,
   useImperativeHandle,
@@ -214,10 +215,45 @@ export const IHubTableServer = forwardRef<
   const initialRenderRef = useRef(true);
   const tableRef = useRef<HTMLDivElement>(null);
 
+  // Callback props are held in refs so that a new function identity on the
+  // consumer's side (inline arrow functions are the documented usage) can never
+  // re-trigger the fetch effect. Without this, any parent re-render refetches,
+  // and an `onFetchError` handler that touches parent state closes the loop.
+  const dataAdapterRef = useRef(dataAdapter);
+  const onFetchErrorRef = useRef(onFetchError);
+  const searchParamsRef = useRef(searchParams);
+
+  // Compare `searchParams` by value, not by reference. Consumers pass an object
+  // literal, so the identity changes on every parent render. Keys are sorted so
+  // that rebuilding the object in a different order is not seen as a change.
+  const searchParamsKey = useMemo(() => {
+    if (!searchParams) return "";
+    const entries = Object.entries(searchParams).sort(([a], [b]) =>
+      a < b ? -1 : a > b ? 1 : 0
+    );
+    return JSON.stringify(entries);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(searchParams)]);
+
+  // Sync the latest props into refs. Done in an effect rather than during
+  // render because a render can be discarded (this component adjusts state
+  // during render below). Declared before the fetch effect, so it commits
+  // first within the same pass.
+  useEffect(() => {
+    dataAdapterRef.current = dataAdapter;
+    onFetchErrorRef.current = onFetchError;
+    searchParamsRef.current = searchParams;
+  });
+
+  // Only the newest request may commit its result.
+  const requestIdRef = useRef(0);
+
   // Data state
   const [data, setData] = useState<T[]>(defaultData || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  /** Set when the server rate-limits us (429). Terminal until the user retries. */
+  const [rateLimited, setRateLimited] = useState(false);
 
   // Pagination state
   const [pagination, setPagination] = useState<ServerPaginationInfoType>({
@@ -238,17 +274,32 @@ export const IHubTableServer = forwardRef<
   const [expandedRows, setExpandedRows] = useState<(string | number)[]>([]);
   const [searchTerm, setSearchTerm] = useState(initialParams.search || "");
 
+  // When the caller's filters change, go back to page 1. Adjusting state during
+  // render (rather than in an effect) keeps this to a single fetch: React
+  // re-renders before effects run, so the fetch effect sees the final params.
+  const [prevSearchParamsKey, setPrevSearchParamsKey] =
+    useState(searchParamsKey);
+  if (prevSearchParamsKey !== searchParamsKey) {
+    setPrevSearchParamsKey(searchParamsKey);
+    setRateLimited(false);
+    setParams((prev) => (prev.page === 1 ? prev : { ...prev, page: 1 }));
+  }
+
   // Debounced search function
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      setParams((prev) => ({
-        ...prev,
-        search: term,
-        page: 1, // Reset to first page on new search
-      }));
-    }, searchDebounceMs),
-    []
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((term: string) => {
+        setParams((prev) => ({
+          ...prev,
+          search: term,
+          page: 1, // Reset to first page on new search
+        }));
+      }, searchDebounceMs),
+    [searchDebounceMs]
   );
+
+  // Drop any pending search so it cannot fire after unmount.
+  useEffect(() => () => debouncedSearch.cancel(), [debouncedSearch]);
 
   const defaultDataLength = (defaultData || []).length;
   const defaultDataObj: ApiResponseType<T> = {
@@ -268,7 +319,8 @@ export const IHubTableServer = forwardRef<
   // Function to fetch data from your API
   const handleFetchData = useCallback(
     async (
-      params: FetchParamsType
+      params: FetchParamsType,
+      signal?: AbortSignal
     ): Promise<ApiResponseType<T>> => {
       setLoading(true);
       try {
@@ -295,8 +347,9 @@ export const IHubTableServer = forwardRef<
         }
 
         // Add external search parameters if provided
-        if (searchParams) {
-          Object.entries(searchParams).forEach(([key, value]) => {
+        const activeSearchParams = searchParamsRef.current;
+        if (activeSearchParams) {
+          Object.entries(activeSearchParams).forEach(([key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
               apiParams.append(key, String(value));
             }
@@ -307,12 +360,27 @@ export const IHubTableServer = forwardRef<
         const url = `${API_HOST_URL}${endpointPath}?${apiParams.toString()}`;
 
         // Make API request
-        const response = await fetch(url, options);
-        const result = await response.json();
+        const response = await fetch(url, { ...options, signal });
+
+        // A throttled or proxied error often returns HTML, not JSON. Parsing it
+        // first would mask the real status behind a JSON syntax error.
+        let result: any = null;
+        try {
+          result = await response.json();
+        } catch {
+          result = null;
+        }
 
         if (!response.ok) {
-          const message = result.detail || result.error || "Failed to fetch data";
-          throw new Error(message);
+          const message =
+            result?.detail ||
+            result?.error ||
+            (response.status === 429
+              ? "Too many requests. Please wait a moment and try again."
+              : "Failed to fetch data");
+          const fetchError = new Error(message) as Error & { status?: number };
+          fetchError.status = response.status;
+          throw fetchError;
         }
 
         // Transform API response to match component's expected format
@@ -330,13 +398,20 @@ export const IHubTableServer = forwardRef<
           },
         };
       } catch (error) {
-        console.error("Error fetching program courses:", error);
+        // An aborted request is a superseded request, not a failure.
+        if (!(error instanceof Error && error.name === "AbortError")) {
+          console.error("Error fetching table data:", error);
+        }
         throw error;
       } finally {
-        setLoading(false);
+        if (!signal?.aborted) {
+          setLoading(false);
+        }
       }
     },
-    [searchParams]
+    // `searchParamsKey` is a value-based key; the object itself is read from a
+    // ref so an unstable identity cannot invalidate this callback.
+    [token, endpointPath, searchParamsKey]
   );
 
   // Handle search input change
@@ -400,6 +475,8 @@ export const IHubTableServer = forwardRef<
 
   // Handle refresh
   const handleRefresh = useCallback(() => {
+    // Clearing the latch lets the fetch effect run again after a 429.
+    setRateLimited(false);
     // Keep current params but trigger a refetch
     setParams((prev) => ({ ...prev }));
   }, []);
@@ -427,7 +504,8 @@ export const IHubTableServer = forwardRef<
           limit: batchSize,
         });
 
-        const adapted = dataAdapter ? dataAdapter(response) : response;
+        const adapter = dataAdapterRef.current;
+        const adapted = adapter ? adapter(response) : response;
         const pageRows = (adapted?.data as T[]) || [];
 
         collected.push(...pageRows);
@@ -445,7 +523,7 @@ export const IHubTableServer = forwardRef<
 
       return collected.slice(0, maxRows);
     },
-    [params, dataAdapter, handleFetchData]
+    [params, handleFetchData]
   );
 
   // Handle data export
@@ -523,40 +601,57 @@ export const IHubTableServer = forwardRef<
     []
   );
 
-  // Fetch data effect
+  // Fetch data effect.
+  //
+  // Deps are deliberately limited to values that genuinely define a request:
+  // `params`, and `handleFetchData` (itself keyed on token/endpointPath/
+  // searchParamsKey). `dataAdapter` and `onFetchError` are read through refs so
+  // that an inline callback — the documented usage — cannot cause a refetch on
+  // every parent render, which previously turned any failing request into an
+  // unthrottled retry loop against the API host.
   useEffect(() => {
-    let isMounted = true;
+    // A rate-limited table stays put until the user explicitly retries.
+    if (rateLimited) return;
+
+    const controller = new AbortController();
+    const requestId = ++requestIdRef.current;
+    // Only the most recent request may commit, so out-of-order responses from
+    // rapid paging or typing cannot overwrite newer data.
+    const isCurrent = () =>
+      requestId === requestIdRef.current && !controller.signal.aborted;
 
     const loadData = async () => {
       try {
-        setLoading(true);
-        const response = await handleFetchData(params);
+        const response = await handleFetchData(params, controller.signal);
+        if (!isCurrent()) return;
 
         // Process response based on whether an adapter is provided
-        if (isMounted) {
-          if (dataAdapter) {
-            const adaptedResponse = dataAdapter(response);
-            setData(adaptedResponse.data);
-            if (adaptedResponse.pagination) {
-              setPagination(adaptedResponse.pagination);
-            }
-          } else if (response) {
-            setData(response.data as T[]);
-            if (response.pagination) {
-              setPagination(response.pagination);
-            }
+        const adapter = dataAdapterRef.current;
+        if (adapter) {
+          const adaptedResponse = adapter(response);
+          setData(adaptedResponse.data);
+          if (adaptedResponse.pagination) {
+            setPagination(adaptedResponse.pagination);
           }
+        } else if (response) {
+          setData(response.data as T[]);
+          if (response.pagination) {
+            setPagination(response.pagination);
+          }
+        }
 
-          setError(null);
-        }
+        setError(null);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        if (isMounted) {
-          setError(error as Error);
-          if (onFetchError) onFetchError(error);
+        if (error instanceof Error && error.name === "AbortError") return;
+        if (!isCurrent()) return;
+
+        if ((error as { status?: number })?.status === 429) {
+          setRateLimited(true);
         }
+        setError(error as Error);
+        onFetchErrorRef.current?.(error);
       } finally {
-        if (isMounted) {
+        if (isCurrent()) {
           setLoading(false);
           initialRenderRef.current = false;
         }
@@ -566,18 +661,15 @@ export const IHubTableServer = forwardRef<
     loadData();
 
     return () => {
-      isMounted = false;
+      // Cancel the in-flight request so superseded fetches stop consuming one of
+      // the browser's six connections to the API origin.
+      controller.abort();
     };
-  }, [params, dataAdapter, onFetchError]);
+  }, [params, handleFetchData, rateLimited]);
 
-  // Watch for searchParams changes and trigger refetch
-  useEffect(() => {
-    // Only trigger refetch if searchParams exists and component has been initialized
-    if (searchParams && !initialRenderRef.current) {
-      // Trigger a refetch by updating params state
-      setParams((prev) => ({ ...prev }));
-    }
-  }, [searchParams]);
+  // NOTE: there is deliberately no effect watching `searchParams`. The refetch
+  // is driven by `handleFetchData` (keyed on `searchParamsKey`) in the effect
+  // above; the page reset happens during render, below.
 
   // Loading state
   if (loading && initialRenderRef.current) {
