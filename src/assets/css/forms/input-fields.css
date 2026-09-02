@@ -41,7 +41,7 @@
 
 .ihub-wrapper .ihub-input:disabled,
 .ihub-wrapper .ihub-input:read-only {
-  background: #f4f4f4;
+  background: var(--OpacityBackground);
 }
 
 .ihub-wrapper .ihub-input:focus + .ihub-text-label,
@@ -245,7 +245,7 @@
 }
 
 .ihub-email-item {
-  background-color: #d4d5d6;
+  background-color: var(--OpacityBackground);
   display: inline-block;
   font-size: 14px;
   border-radius: 30px;

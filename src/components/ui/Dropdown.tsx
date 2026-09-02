@@ -4,9 +4,12 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useLayoutEffect,
+  useCallback,
   KeyboardEvent,
   useMemo,
 } from "react";
+import { createPortal } from "react-dom";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -62,6 +65,12 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  * @prop {boolean} isDisabled - Whether the dropdown is disabled
  * @prop {number} maxHeight - The maximum height of the dropdown menu
  * @prop {function} renderOption - The function to render the option label
+ *
+ * The menu is rendered through a portal on `document.body` at fixed
+ * coordinates taken from the trigger. An absolutely positioned menu is clipped
+ * by any ancestor with `overflow: auto|hidden` — a table's scroll container, a
+ * modal body, a card — which made the component unusable in exactly the places
+ * a compact picker is most wanted.
  */
 
 const Dropdown: React.FC<DropdownPropsType> = ({
@@ -87,29 +96,69 @@ const Dropdown: React.FC<DropdownPropsType> = ({
     string | number | (string | number)[] | undefined
   >(externalSelectedValue);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  }>({ top: 0, left: 0, width: 0 });
 
   // Sync internal state with external prop
   useEffect(() => {
     setInternalSelectedValue(externalSelectedValue);
   }, [externalSelectedValue]);
 
-  // Close dropdown when clicking outside
+  /**
+   * Places the portalled menu under the trigger, flipping above it when there
+   * is not enough room below.
+   */
+  const positionMenu = useCallback((): void => {
+    const rect = dropdownRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const openUpwards = spaceBelow < maxHeight && rect.top > spaceBelow;
+
+    setMenuPosition({
+      top: openUpwards
+        ? Math.max(8, rect.top - Math.min(maxHeight, rect.top - 8) - 5)
+        : rect.bottom + 5,
+      left: rect.left,
+      width: rect.width,
+    });
+  }, [maxHeight]);
+
+  useLayoutEffect(() => {
+    if (isOpen) positionMenu();
+  }, [isOpen, positionMenu]);
+
+  // Close on an outside click, and on anything that invalidates the fixed
+  // coordinates. The menu lives outside dropdownRef now, so it needs its own
+  // containment check or selecting an option would close before it registers.
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current?.contains(target) &&
+        !menuRef.current?.contains(target)
       ) {
         setIsOpen(false);
       }
     };
+    const handleViewportChange = () => setIsOpen(false);
 
     document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleViewportChange, true);
+    window.addEventListener("resize", handleViewportChange);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleViewportChange, true);
+      window.removeEventListener("resize", handleViewportChange);
     };
-  }, []);
+  }, [isOpen]);
 
   // Focus search input when dropdown opens
   useEffect(() => {
@@ -298,13 +347,22 @@ const Dropdown: React.FC<DropdownPropsType> = ({
         )}
       </div>
 
-      {/* Dropdown menu */}
-      {isOpen && (
+      {/* Dropdown menu — portalled so no ancestor's overflow can clip it */}
+      {isOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
         <div
-          className="ihub-dropdown-menu"
-          style={{ maxHeight: `${maxHeight}px` }}
+          ref={menuRef}
+          className="ihub-dropdown-menu ihub-dropdown-menu-portal"
+          style={{
+            maxHeight: `${maxHeight}px`,
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+            width: `${menuPosition.width}px`,
+          }}
           role="listbox"
           aria-multiselectable={isMulti}
+          onKeyDown={handleKeyDown}
         >
           {isSearchable && (
             <div className="ihub-dropdown-search">
@@ -353,7 +411,8 @@ const Dropdown: React.FC<DropdownPropsType> = ({
               <div className="ihub-dropdown-no-options">{noOptionsMessage}</div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

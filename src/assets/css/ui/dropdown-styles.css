@@ -76,6 +76,20 @@
   animation: ihub-dropdown-appear 0.2s ease;
 }
 
+/*
+ * Portalled variant: the menu is a child of <body>, so it is positioned from
+ * the trigger's viewport rect instead of its own offset parent. Keeping the
+ * absolute rule above means any consumer still rendering the menu inline
+ * behaves as before.
+ */
+.ihub-dropdown-menu-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: auto;
+  z-index: 1200;
+}
+
 @keyframes ihub-dropdown-appear {
   from {
     opacity: 0;
