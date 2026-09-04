@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 
 /**
@@ -93,33 +94,90 @@ const Action: React.FC<ActionProps> = ({
   // State to manage dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const [menuPosition, setMenuPosition] = React.useState<{
+    top: number;
+    left: number;
+  }>({ top: 0, left: 0 });
+
+  /**
+   * Positions the menu from the trigger's bounding box.
+   *
+   * The menu is rendered into `document.body` rather than beside the trigger,
+   * because an absolutely-positioned menu is clipped by any scrolling ancestor
+   * — and the most common host for this component is a table row inside
+   * `IHubTableServer`'s `.ihub-scroll-container` (`overflow: auto`), which is
+   * only as tall as its rows. On a long table the menu had room and looked
+   * fine; on a one-row table it was cut to a sliver. Filtering a table down to
+   * a single result is exactly when someone reaches for that row's actions, so
+   * the broken case was the common one.
+   *
+   * Flips above the trigger when there is not enough room below, and clamps to
+   * the viewport horizontally.
+   */
+  const positionMenu = React.useCallback(() => {
+    const trigger = dropdownRef.current;
+    if (!trigger) return;
+
+    const rect = trigger.getBoundingClientRect();
+    const estimatedHeight = Math.min(dropdownItems.length * 40 + 8, 300);
+    const menuWidth = Math.max(rect.width, 160);
+    const openUpward =
+      window.innerHeight - rect.bottom < estimatedHeight &&
+      rect.top > estimatedHeight;
+
+    let left = rect.left;
+    if (dropdownPosition === "right") left = rect.right - menuWidth;
+    else if (dropdownPosition === "center")
+      left = rect.left + rect.width / 2 - menuWidth / 2;
+
+    setMenuPosition({
+      top: openUpward
+        ? rect.top - estimatedHeight - 8
+        : rect.bottom + 8,
+      left: Math.max(8, Math.min(left, window.innerWidth - menuWidth - 8)),
+    });
+  }, [dropdownItems.length, dropdownPosition]);
 
   // Handle opening/closing the dropdown
   const toggleDropdown = (e: React.MouseEvent) => {
     if (dropdown) {
       e.preventDefault();
       e.stopPropagation();
+      if (!isDropdownOpen) positionMenu();
       setIsDropdownOpen((prev) => !prev);
     }
   };
 
   // Close dropdown when clicking outside
   React.useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    // Both refs are checked: the menu now lives outside the trigger's subtree,
+    // so testing only the container would close it on its own menu items.
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        dropdownRef.current?.contains(target) ||
+        menuRef.current?.contains(target)
       ) {
-        setIsDropdownOpen(false);
+        return;
       }
+      setIsDropdownOpen(false);
     };
 
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    // Fixed coordinates go stale as soon as anything scrolls. Capture phase,
+    // because the table's own scroll container never bubbles to window.
+    const handleReflow = () => setIsDropdownOpen(false);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleReflow, true);
+    window.addEventListener("resize", handleReflow);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleReflow, true);
+      window.removeEventListener("resize", handleReflow);
     };
   }, [isDropdownOpen]);
 
@@ -175,7 +233,9 @@ const Action: React.FC<ActionProps> = ({
     dropdown &&
     dropdownItems.length > 0 && (
       <div
+        ref={menuRef}
         className={`ihub-action-dropdown-menu ihub-action-dropdown-${dropdownPosition}`}
+        style={{ top: menuPosition.top, left: menuPosition.left }}
         onClick={(e) => e.stopPropagation()}
       >
         {dropdownItems.map((item, index) => {
@@ -243,7 +303,9 @@ const Action: React.FC<ActionProps> = ({
     return (
       <div className="ihub-action-dropdown-container" ref={dropdownRef}>
         {actionElement}
-        {dropdownMenu}
+        {dropdownMenu &&
+          typeof document !== "undefined" &&
+          createPortal(dropdownMenu, document.body)}
       </div>
     );
   };
@@ -265,6 +327,9 @@ const Action: React.FC<ActionProps> = ({
         className={baseClasses}
         onClick={dropdown ? toggleDropdown : onClick}
         disabled={disabled}
+        {...(dropdown
+          ? { "aria-haspopup": "menu" as const, "aria-expanded": isDropdownOpen }
+          : {})}
       >
         {content}
       </button>

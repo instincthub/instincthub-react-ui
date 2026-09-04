@@ -169,14 +169,15 @@
   transition: transform 0.2s ease;
 }
 
-.ihub-action-dropdown-container:has(.ihub-action-dropdown-menu)
-  .ihub-action-dropdown-icon {
+.ihub-action-with-dropdown[aria-expanded="true"] .ihub-action-dropdown-icon {
   transform: rotate(180deg);
 }
 
+/* Fixed, not absolute: the menu is portalled to <body> and positioned from
+   the trigger's bounding box, so no scrolling ancestor can clip it. The
+   coordinates are set inline by the component. */
 .ihub-action-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
+  position: fixed;
   min-width: 160px;
   background: var(--White);
   border-radius: 5px;
@@ -188,17 +189,13 @@
   overflow-y: auto;
 }
 
-.ihub-action-dropdown-left {
-  left: 0;
-}
-
-.ihub-action-dropdown-right {
-  right: 0;
-}
-
+/* Alignment is resolved in JS when the menu is positioned; these remain only
+   so existing markup keeps a stable hook. */
+.ihub-action-dropdown-left,
+.ihub-action-dropdown-right,
 .ihub-action-dropdown-center {
-  left: 50%;
-  transform: translateX(-50%);
+  right: auto;
+  transform: none;
 }
 
 .ihub-action-dropdown-item {

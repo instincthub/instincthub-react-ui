@@ -1,5 +1,85 @@
 # Bug Handoff — instincthub-react-ui
 
+## Action (dropdown) — menu clipped inside scrolling ancestors (2026-09-04)
+
+**Status:** FIXED and VERIFIED in a consuming app.
+
+File: `src/components/ui/Action.tsx`
+CSS:  `src/assets/css/ui/action.css`
+Types: unchanged.
+
+**No public API change.** Every prop (`dropdown`, `dropdownItems`,
+`dropdownPosition`, …) behaves as documented. Existing call sites need no edits.
+
+---
+
+### HIGH — the dropdown menu was clipped by any scrolling ancestor  [FIXED]
+
+`.ihub-action-dropdown-menu` was `position: absolute; top: calc(100% + 8px)`
+inside `.ihub-action-dropdown-container`, so it was laid out inside whatever the
+trigger sits in. The dominant host for this component is a table row rendered by
+`IHubTableServer`, which wraps its rows in `.ihub-scroll-container`
+(`overflow: auto`). That container is only as tall as its rows.
+
+The result is a bug that hides during development and appears in production:
+
+    8-row table   container ~500px tall   104px menu fits    looks fine
+    1-row table   container ~134px tall   17px of 104 shown  unusable
+
+Measured in a consuming app on a one-row table: menu `top: 784.0 / bottom:
+888.4`, clipping container bottom `801.0` — 17px of a 104px menu visible. And
+filtering a table down to a single result is precisely when a user reaches for
+that row's actions, so the broken case was the common one.
+
+Fix: the menu is rendered through `createPortal` into `document.body` and
+positioned `fixed` from the trigger's `getBoundingClientRect()`. No ancestor can
+clip it. Specifically:
+
+- `positionMenu()` computes coordinates on open, resolving `dropdownPosition`
+  (`left` / `right` / `center`) in JS instead of via CSS offsets, flipping above
+  the trigger when there is not enough room below, and clamping to the viewport
+  horizontally so a menu on a far-right column cannot run off screen.
+- The outside-click handler now checks BOTH `dropdownRef` and a new `menuRef`.
+  The menu has left the trigger's subtree, so testing only the container would
+  have closed the menu on its own items — i.e. the portal alone would have
+  broken every dropdown item.
+- Fixed coordinates go stale the moment anything scrolls, so any `scroll`
+  (capture phase — the table's own scroll container never bubbles to `window`)
+  or `resize` closes the menu. Capture is required, not stylistic.
+- The trigger now carries `aria-haspopup="menu"` and `aria-expanded`, which also
+  replaces the chevron-flip rule: it keyed off
+  `.ihub-action-dropdown-container:has(.ihub-action-dropdown-menu)`, and the
+  menu is no longer a descendant of the container.
+- `.ihub-action-dropdown-{left,right,center}` are reduced to
+  `right: auto; transform: none` — they were trigger-relative offsets that would
+  now fight the inline coordinates. Kept as classes so existing markup keeps a
+  stable hook.
+
+### Verification performed
+1. **Typecheck** — `npx tsc --noEmit -p tsconfig.build.json`: 0 `Action.tsx`
+   errors. Total repo errors 96 BEFORE and 96 AFTER, confirmed by stashing the
+   change and recounting (all pre-existing, in `ui/editor/MenuBar.tsx` and
+   `ui/viewer/DangerousRenderer.tsx`).
+2. **Live browser** — reproduced and fixed in `leadboard_nextjs_v2` on the
+   Communications Hub log table. With the table filtered to one row, the menu
+   now reports `parentElement === BODY`, zero clipping ancestors, and both its
+   top and bottom corners hit-test inside the menu (`elementFromPoint`).
+   Verified in light and dark mode.
+
+### Notes for whoever picks this up
+- The same class of bug applies to **every** `Action dropdown` in a table — in
+  Leadboard that includes `InvoiceListClient`. Those pages need no code change;
+  they just need this version installed.
+- `leadboard_nextjs_v2` shipped a local `src/components/ui/RowActionsDropdown.tsx`
+  with the same portal approach, because it consumes the published package and
+  could not wait for a release. Once this version is installed there, that
+  component can be retired and those pages can go back to `Action`.
+- This package still has **no test runner** (`npm test` is a stub) — see the
+  DateRangePicker follow-ups below. A portal + fixed-position menu is exactly the
+  kind of thing that regresses silently under a CSS refactor.
+
+---
+
 ## DateRangePicker — bug audit + fixes (2026-09-02)
 
 **Status:** FIXED and VERIFIED. All 6 confirmed bugs + 4 minor issues resolved.
