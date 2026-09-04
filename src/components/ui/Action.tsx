@@ -2,6 +2,16 @@ import React from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 
+/** Menu geometry. Item height is approximate — it only sizes the menu before
+ *  it renders; the inline max-height is what actually bounds it. */
+const ITEM_HEIGHT = 40;
+const MENU_PADDING = 8;
+const MENU_GAP = 8;
+const VIEWPORT_MARGIN = 8;
+const MIN_MENU_WIDTH = 160;
+const MAX_MENU_HEIGHT = 300;
+const MIN_USABLE_HEIGHT = 120;
+
 /**
  * Defines the structure of a dropdown item
  */
@@ -98,7 +108,8 @@ const Action: React.FC<ActionProps> = ({
   const [menuPosition, setMenuPosition] = React.useState<{
     top: number;
     left: number;
-  }>({ top: 0, left: 0 });
+    maxHeight: number;
+  }>({ top: 0, left: 0, maxHeight: 0 });
 
   /**
    * Positions the menu from the trigger's bounding box.
@@ -117,14 +128,41 @@ const Action: React.FC<ActionProps> = ({
    */
   const positionMenu = React.useCallback(() => {
     const trigger = dropdownRef.current;
-    if (!trigger) return;
+    if (!trigger) return false;
 
     const rect = trigger.getBoundingClientRect();
-    const estimatedHeight = Math.min(dropdownItems.length * 40 + 8, 300);
-    const menuWidth = Math.max(rect.width, 160);
+
+    // Scrolled out of view — including horizontally, since a table scrolls
+    // sideways. Nothing to pin the menu to.
+    if (
+      rect.bottom < 0 ||
+      rect.top > window.innerHeight ||
+      rect.right < 0 ||
+      rect.left > window.innerWidth
+    ) {
+      return false;
+    }
+
+    const desiredHeight = Math.min(
+      dropdownItems.length * ITEM_HEIGHT + MENU_PADDING,
+      MAX_MENU_HEIGHT
+    );
+    const menuWidth = Math.max(rect.width, MIN_MENU_WIDTH);
+    const spaceBelow =
+      window.innerHeight - rect.bottom - MENU_GAP - VIEWPORT_MARGIN;
+    const spaceAbove = rect.top - MENU_GAP - VIEWPORT_MARGIN;
+
+    // Prefer below; flip only when below cannot show a usable amount and above
+    // is genuinely roomier.
     const openUpward =
-      window.innerHeight - rect.bottom < estimatedHeight &&
-      rect.top > estimatedHeight;
+      spaceBelow < Math.min(desiredHeight, MIN_USABLE_HEIGHT) &&
+      spaceAbove > spaceBelow;
+
+    const available = Math.max(
+      MIN_USABLE_HEIGHT,
+      openUpward ? spaceAbove : spaceBelow
+    );
+    const maxHeight = Math.min(desiredHeight, available);
 
     let left = rect.left;
     if (dropdownPosition === "right") left = rect.right - menuWidth;
@@ -132,11 +170,14 @@ const Action: React.FC<ActionProps> = ({
       left = rect.left + rect.width / 2 - menuWidth / 2;
 
     setMenuPosition({
-      top: openUpward
-        ? rect.top - estimatedHeight - 8
-        : rect.bottom + 8,
-      left: Math.max(8, Math.min(left, window.innerWidth - menuWidth - 8)),
+      top: openUpward ? rect.top - maxHeight - MENU_GAP : rect.bottom + MENU_GAP,
+      left: Math.max(
+        VIEWPORT_MARGIN,
+        Math.min(left, window.innerWidth - menuWidth - VIEWPORT_MARGIN)
+      ),
+      maxHeight,
     });
+    return true;
   }, [dropdownItems.length, dropdownPosition]);
 
   // Handle opening/closing the dropdown
@@ -144,8 +185,13 @@ const Action: React.FC<ActionProps> = ({
     if (dropdown) {
       e.preventDefault();
       e.stopPropagation();
-      if (!isDropdownOpen) positionMenu();
-      setIsDropdownOpen((prev) => !prev);
+      if (isDropdownOpen) {
+        setIsDropdownOpen(false);
+        return;
+      }
+      // Only open once we know where to put it; otherwise an off-screen
+      // trigger would drop the menu in the top-left corner.
+      if (positionMenu()) setIsDropdownOpen(true);
     }
   };
 
@@ -166,20 +212,32 @@ const Action: React.FC<ActionProps> = ({
       setIsDropdownOpen(false);
     };
 
-    // Fixed coordinates go stale as soon as anything scrolls. Capture phase,
-    // because the table's own scroll container never bubbles to window.
-    const handleReflow = () => setIsDropdownOpen(false);
+    // Fixed coordinates go stale as soon as anything scrolls, so the menu is
+    // repositioned to stay pinned to its trigger. It is NOT closed: the menu
+    // caps its own height and scrolls internally, and closing here also fired
+    // for scrolls originating INSIDE the menu — which made a list long enough
+    // to need scrolling impossible to scroll. Capture phase, because a table's
+    // own scroll container never bubbles to window.
+    const handleScroll = (event: Event) => {
+      const target = event.target as Node | null;
+      if (target && menuRef.current?.contains(target)) return;
+      if (!positionMenu()) setIsDropdownOpen(false);
+    };
+
+    const handleResize = () => {
+      if (!positionMenu()) setIsDropdownOpen(false);
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleReflow, true);
-    window.addEventListener("resize", handleReflow);
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleReflow, true);
-      window.removeEventListener("resize", handleReflow);
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, positionMenu]);
 
   // Construct class names based on props
   const baseClasses = [
@@ -235,7 +293,11 @@ const Action: React.FC<ActionProps> = ({
       <div
         ref={menuRef}
         className={`ihub-action-dropdown-menu ihub-action-dropdown-${dropdownPosition}`}
-        style={{ top: menuPosition.top, left: menuPosition.left }}
+        style={{
+          top: menuPosition.top,
+          left: menuPosition.left,
+          maxHeight: menuPosition.maxHeight || undefined,
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {dropdownItems.map((item, index) => {

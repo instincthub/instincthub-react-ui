@@ -1,5 +1,55 @@
 # Bug Handoff — instincthub-react-ui
 
+## Action (dropdown) — scrolling the menu closed it (2026-09-04, 0.1.58)
+
+**Status:** FIXED. Follow-up to the 0.1.57 portal fix below — same component,
+bug introduced by that change.
+
+File: `src/components/ui/Action.tsx`
+CSS:  `src/assets/css/ui/action.css`
+
+**No public API change.**
+
+---
+
+### HIGH — a menu long enough to need scrolling could not be scrolled  [FIXED]
+
+0.1.57 moved the menu to `position: fixed` and closed it on any scroll, on the
+reasoning that fixed coordinates go stale. They do — but the handler was bound
+in the capture phase on `window`, so it also fired for scrolls originating
+INSIDE the menu. The CSS caps the menu at 300px, so any list past ~7 items
+needs to scroll, and it closed on the first wheel tick.
+
+Fix, three parts:
+
+- `handleScroll` ignores events whose target is inside the menu, and calls
+  `positionMenu()` to keep the menu pinned to its trigger rather than closing.
+  It closes only when the trigger has actually left the viewport — checked on
+  both axes, since a table scrolls sideways too.
+- `positionMenu()` now caps the menu to the space the chosen side actually has
+  (bounded by `MAX_MENU_HEIGHT`) and sets it inline, instead of relying on a
+  flat 300px that could still overflow the viewport near the bottom of a page.
+  The flip-up branch only triggers when the other side is genuinely roomier.
+- CSS: `overflow: hidden` (which clipped a long list with no way to reach the
+  rest) became `overflow-x: hidden; overflow-y: auto` plus
+  `overscroll-behavior: contain`, so the scroll does not chain to the page and
+  drag the trigger out from under the menu.
+
+Also: `toggleDropdown` now opens only when `positionMenu()` succeeds. An
+off-screen trigger previously opened the menu at 0,0 in the top-left corner.
+
+### Verification performed
+1. **Typecheck** — `npx tsc --noEmit -p tsconfig.build.json`: 96 total (the
+   unchanged baseline), 0 in `Action.tsx`.
+2. **Live browser** — verified on the equivalent component in
+   `leadboard_nextjs_v2` (`RowActionsDropdown`, same logic): a scroll dispatched
+   from inside the menu leaves it open; a page scroll keeps it open and moves
+   it with the trigger (top 68.2 -> 8.2); scrolling the trigger out of view
+   closes it; and with the menu constrained below its content height the last
+   item is reachable by scrolling inside it.
+
+---
+
 ## Action (dropdown) — menu clipped inside scrolling ancestors (2026-09-04)
 
 **Status:** FIXED and VERIFIED in a consuming app.

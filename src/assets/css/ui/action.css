@@ -184,9 +184,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border: var(--borderDefault);
   z-index: 20;
-  overflow: hidden;
-  max-height: 300px;
+  /* max-height is set inline from the space the chosen side actually has, so
+     a long list scrolls in here instead of running off the viewport. The
+     scroll is contained: chaining it to the page would move the trigger out
+     from under the menu. */
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* Alignment is resolved in JS when the menu is positioned; these remain only
