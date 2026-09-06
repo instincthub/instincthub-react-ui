@@ -5,6 +5,7 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import React, {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   useMemo,
   useCallback,
@@ -23,6 +24,9 @@ import {
   endOfWeek,
   endOfMonth,
   subDays,
+  addDays,
+  addYears,
+  subYears,
   getDay,
   isSameDay,
 } from "date-fns";
@@ -58,6 +62,13 @@ const parseDate = (val?: string): Date | null => {
   const date = new Date(val);
   return isValid(date) ? startOfDay(date) : null;
 };
+
+/**
+ * A run of `disabledDates` should not trap the keyboard cursor, so arrow
+ * navigation steps past them in the direction of travel. Bounded so an
+ * exhaustively disabled calendar cannot spin.
+ */
+const MAX_DISABLED_SKIP = 400;
 
 /**
  * A date range picker component for selecting a start and end date.
@@ -119,11 +130,21 @@ const DateRangePicker: React.FC<DateRangePickerPropsType> = ({
   const [internalError, setInternalError] = useState<string | null>(null);
   const displayError = errorMessage || internalError;
 
+  // The day the arrow keys are currently sitting on. Only ever set by keyboard
+  // navigation; `rovingDate` below falls back to the selection when it is null.
+  const [focusedDate, setFocusedDate] = useState<Date | null>(null);
+
   // Refs
   const pickerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
+  // Day buttons by "yyyy-MM-dd", so a keyboard move can focus the new cell
+  // after it renders — including one in a month that has just been switched in.
+  const dayRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  // Only steal DOM focus for an actual key press, never on an incidental
+  // re-render, which would yank focus away from the inputs or the presets.
+  const shouldFocusDayRef = useRef(false);
 
   // Fall back to a generated id so the label and the error message are always
   // programmatically associated, even when the consumer passes no `id`.
@@ -162,6 +183,7 @@ const DateRangePicker: React.FC<DateRangePickerPropsType> = ({
     setSelectionPhase("start");
     setShowPicker(false);
     setActiveInput(null);
+    setFocusedDate(null);
   }, []);
 
   // Handle outside click
@@ -314,6 +336,136 @@ const DateRangePicker: React.FC<DateRangePickerPropsType> = ({
 
     return classes.join(" ");
   };
+
+  /* ------------------------------------------------------------------ *
+   * Keyboard navigation across the day grid (WAI-ARIA date-grid pattern)
+   *
+   * Day cells were reachable by Tab but the arrow keys did nothing, so a
+   * keyboard user had to Tab through every cell one at a time to reach a
+   * date. The grid now behaves as a single composite widget: exactly one day
+   * is in the tab order (`rovingDate`), and the arrows move within it.
+   * ------------------------------------------------------------------ */
+
+  const dayKey = (date: Date): string => format(date, "yyyy-MM-dd");
+
+  const isDaySelectable = useCallback(
+    (date: Date): boolean => !isDateDisabled(date) && isDateInRange(date),
+    [isDateDisabled, isDateInRange]
+  );
+
+  /**
+   * The single day that carries `tabIndex={0}`.
+   *
+   * It has to be a day that is actually focusable, otherwise Tab would skip
+   * the whole grid: a `disabled` button cannot take focus, and a caller is
+   * free to pass a `value` that lands on a `disabledDates` entry.
+   */
+  const rovingDate = useMemo((): Date | null => {
+    const inMonth = (date: Date): boolean =>
+      date.getMonth() === currentMonth.getMonth() &&
+      date.getFullYear() === currentMonth.getFullYear();
+
+    const monthDays = calendarDays.filter((day): day is Date => day !== null);
+
+    for (const candidate of [focusedDate, pendingStart, startDate, endDate]) {
+      if (candidate && inMonth(candidate) && isDaySelectable(candidate)) {
+        return candidate;
+      }
+    }
+    const today = new Date();
+    if (inMonth(today) && isDaySelectable(today)) return today;
+
+    return monthDays.find(isDaySelectable) ?? monthDays[0] ?? null;
+  }, [
+    focusedDate,
+    pendingStart,
+    startDate,
+    endDate,
+    currentMonth,
+    calendarDays,
+    isDaySelectable,
+  ]);
+
+  /**
+   * Move the roving focus to `target`, stepping over unavailable days in the
+   * direction given by `step`. Does nothing if that walks outside
+   * `minDate`/`maxDate` — at a bound the cursor simply stays put.
+   */
+  const moveFocusTo = useCallback(
+    (target: Date, step: 1 | -1): void => {
+      let candidate = startOfDay(target);
+
+      for (let guard = 0; guard <= MAX_DISABLED_SKIP; guard++) {
+        if (!isDateInRange(candidate)) return;
+        if (!isDateDisabled(candidate)) {
+          setFocusedDate(candidate);
+          if (
+            candidate.getMonth() !== currentMonth.getMonth() ||
+            candidate.getFullYear() !== currentMonth.getFullYear()
+          ) {
+            setCurrentMonth(startOfMonth(candidate));
+          }
+          shouldFocusDayRef.current = true;
+          return;
+        }
+        candidate = addDays(candidate, step);
+      }
+    },
+    [isDateInRange, isDateDisabled, currentMonth]
+  );
+
+  const handleDayKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    date: Date
+  ): void => {
+    const shift = event.shiftKey;
+    let handled = true;
+
+    switch (event.key) {
+      case "ArrowLeft":
+        moveFocusTo(subDays(date, 1), -1);
+        break;
+      case "ArrowRight":
+        moveFocusTo(addDays(date, 1), 1);
+        break;
+      case "ArrowUp":
+        moveFocusTo(subDays(date, 7), -1);
+        break;
+      case "ArrowDown":
+        moveFocusTo(addDays(date, 7), 1);
+        break;
+      case "Home":
+        moveFocusTo(startOfWeek(date), 1);
+        break;
+      case "End":
+        moveFocusTo(endOfWeek(date), -1);
+        break;
+      case "PageUp":
+        moveFocusTo(shift ? subYears(date, 1) : subMonths(date, 1), -1);
+        break;
+      case "PageDown":
+        moveFocusTo(shift ? addYears(date, 1) : addMonths(date, 1), 1);
+        break;
+      default:
+        // Escape and Tab must keep bubbling: Escape closes the picker on the
+        // wrapper, and Tab has to leave the grid.
+        handled = false;
+    }
+
+    if (handled) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  // Put DOM focus on the cell the arrows just moved to. Layout effect so the
+  // move is committed before paint and the outline never lags a frame behind.
+  useLayoutEffect(() => {
+    if (!shouldFocusDayRef.current) return;
+    shouldFocusDayRef.current = false;
+    if (!showPicker || !focusedDate) return;
+    dayRefs.current.get(dayKey(focusedDate))?.focus();
+  });
 
   // Navigation
   const goToPreviousMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
@@ -611,9 +763,18 @@ const DateRangePicker: React.FC<DateRangePickerPropsType> = ({
                 return (
                   <button
                     key={date.getTime()}
+                    ref={(el) => {
+                      // Keyed by date so a move can find the cell after a
+                      // month switch; deleting on unmount keeps the map from
+                      // holding on to every month ever rendered.
+                      const key = dayKey(date);
+                      if (el) dayRefs.current.set(key, el);
+                      else dayRefs.current.delete(key);
+                    }}
                     type="button"
                     className={`ihub-datetime-day ${isSelected ? "selected" : ""} ${isToday ? "today" : ""} ${isDayDisabled ? "disabled" : ""} ${rangeClass}`}
                     onClick={() => handleDateClick(date)}
+                    onKeyDown={(e) => handleDayKeyDown(e, date)}
                     onMouseEnter={() => {
                       if (pendingStart) setHoverDate(date);
                     }}
@@ -622,6 +783,12 @@ const DateRangePicker: React.FC<DateRangePickerPropsType> = ({
                       if (pendingStart) setHoverDate(date);
                     }}
                     disabled={isDayDisabled}
+                    // Roving tabindex: the grid is one tab stop, and the
+                    // arrows move inside it. Without this, Tab walked through
+                    // all ~30 cells before reaching anything after the grid.
+                    tabIndex={
+                      rovingDate && isSameDay(date, rovingDate) ? 0 : -1
+                    }
                     aria-label={format(date, "MMMM d, yyyy")}
                     aria-pressed={isSelected}
                     aria-current={isToday ? "date" : undefined}

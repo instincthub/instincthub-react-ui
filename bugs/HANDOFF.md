@@ -1,5 +1,93 @@
 # Bug Handoff — instincthub-react-ui
 
+## DateRangePicker — day grid had no arrow-key navigation (2026-09-06, 0.1.59)
+
+**Status:** FIXED and VERIFIED live. Clears the a11y follow-up recorded in the
+2026-09-02 DateRangePicker audit below.
+
+File: `src/components/forms/DateRangePicker.tsx`
+CSS:  unchanged — `.ihub-datetime-day:focus` already had a visible outline.
+
+**No public API change.** No new props.
+
+Folded into 0.1.59, which was still unpublished (npm was on 0.1.58). Bump it to
+0.1.60/0.2.0 before publishing if you would rather ship the Dropdown fixes and
+this separately — see the Tab note below, which is a deliberate behaviour change.
+
+---
+
+### MEDIUM (a11y) — arrow keys did nothing in the day grid  [FIXED]
+
+Day cells were real `<button>`s, so they were Tab-reachable, but nothing bound
+Up/Down/Left/Right — `onKeyDown` existed only on the wrapper (Escape) and the
+two inputs (open-on-ArrowDown). A keyboard user had to Tab through **every**
+day cell one at a time to reach a date, and Tab then walked all ~30 of them
+before reaching anything after the grid. That fails the WAI-ARIA date-grid
+pattern, where the grid is a single composite widget.
+
+Fix — roving tabindex plus arrow navigation:
+
+- `rovingDate` picks the one cell carrying `tabIndex={0}`; every other cell is
+  `-1`, so the grid is a single tab stop. It resolves to the first *selectable*
+  candidate among focusedDate / pendingStart / startDate / endDate / today,
+  falling back to the first selectable day of the month. It has to be
+  selectable: a `disabled` button cannot take focus, so anchoring on one would
+  make Tab skip the entire grid — and a caller is free to pass a `value` that
+  lands on a `disabledDates` entry.
+- Keys: Left/Right +/-1 day, Up/Down +/-7, Home/End week edges, PageUp/PageDown
+  +/-1 month, Shift+PageUp/PageDown +/-1 year. Crossing a month boundary
+  switches `currentMonth` and focuses the cell in the new month.
+- `moveFocusTo` steps **over** `disabledDates` in the direction of travel so a
+  run of them cannot trap the cursor, bounded by `MAX_DISABLED_SKIP` (400) so
+  an exhaustively disabled calendar cannot spin. A move that would leave
+  `minDate`/`maxDate` is refused outright — at a bound the cursor stays put.
+- Only handled keys `preventDefault`/`stopPropagation`; Escape and Tab fall
+  through to `default` so Escape still closes on the wrapper and Tab still
+  leaves the grid.
+- Focus is moved in a `useLayoutEffect` gated by `shouldFocusDayRef`, so DOM
+  focus is only stolen for an actual key press, never on an incidental
+  re-render (which would yank focus off the inputs or the presets). Day
+  elements are tracked in a `dayRefs` Map keyed by `yyyy-MM-dd`, deleted on
+  unmount, so a cell can be focused after a month switch.
+- `cancelSelection` clears `focusedDate` so the next open starts fresh.
+
+**Deliberate behaviour change:** Tab no longer visits all ~30 day cells; it
+visits one and the arrows move within the grid. That is the point of a roving
+tabindex, but it is a change consumers may notice.
+
+### Verification performed
+1. **Typecheck** — `npx tsc --noEmit -p tsconfig.build.json`: 96 total (the
+   unchanged baseline), 0 in `DateRangePicker.tsx`.
+2. **Live browser** — `src/__examples__` at `/components/forms/date-range-picker`:
+   - Roving tabindex: exactly 1 of 30 cells has `tabIndex 0`, 29 have `-1`.
+   - Arrows: Right/Left +/-1, Down/Up +/-7, Home -> Sunday, End -> Saturday.
+   - Cross-month: 24 x Right from Sep 6 landed on Oct 6 with the header
+     switching to October and the roving cell following into the new month.
+   - PageDown/PageUp -> Nov/Oct; Shift+PageDown/PageUp -> 2027/2026.
+   - Bounds (`minDate`=today, `maxDate`=today+90d): Left at minDate stays put,
+     Up (-7) past minDate stays put, PageUp into August stays put. Walking
+     forward reached exactly Dec 5 (maxDate); a further Right, Down and End all
+     stayed put, and Left moved back inside to Dec 4.
+   - Disabled skip: with Sep 7/8/9 disabled, Right from Sep 6 landed on Sep 10.
+   - Full range selected by keyboard alone: staged Oct 1, arrowed to Oct 4,
+     committed `2026-10-01` -> `2026-10-04`.
+   - Escape still bubbles to the wrapper: picker closed, focus returned to the
+     input.
+   - Range preview follows the keyboard: with Oct 4 staged, focus on Oct 9 gave
+     range-start/in-range x4/range-end, extending correctly to Oct 12.
+   - No React console errors (the 404s are the example app's missing static
+     assets, pre-existing).
+
+**Harness note for the next session:** the Browser pane runs hidden, so the
+document has no system focus — `el.focus()` updates `document.activeElement`
+but fires **no** focus event, and `window.scrollBy` fires no scroll event.
+Programmatic `new MouseEvent('mouseenter')` also does nothing, because React
+synthesises `onMouseEnter` from `mouseover`, not native `mouseenter`. Drive
+React's `onFocus` with `new FocusEvent('focusin', {bubbles:true})` instead.
+This cost real time twice; do not mistake it for a component bug.
+
+---
+
 ## Dropdown — scrolling the option list closed the menu (2026-09-06, 0.1.59)
 
 **Status:** FIXED and VERIFIED live. Same class of bug as the Action fix below,
@@ -371,11 +459,10 @@ no `id`. Start input gets `baseId`, end input `${baseId}-end`, error
   above was ad-hoc. Standing up vitest + @testing-library/react and porting the
   timezone harness into real regression tests is the highest-value follow-up —
   bug 1 in particular is exactly the kind of thing that silently regresses.
-- Full arrow-key roving-tabindex navigation inside the day grid is still not
-  implemented. Day cells are real buttons so they are Tab-reachable, but
-  Up/Down/Left/Right do not move between dates.
-- `dist/` and `.rollup.cache/` still hold the OLD build. Run `pnpm rollup`
-  before publishing.
-- I added `/Users/noaholatoye/Documents/code_projects/npm_packages/.claude/launch.json`
-  (a dev-server config for the example app) to drive the browser verification.
-  Harmless, but delete it if you don't want it.
+- ~~Full arrow-key roving-tabindex navigation inside the day grid~~ — DONE
+  2026-09-06, see the entry at the top of this file.
+- ~~`dist/` and `.rollup.cache/` still hold the OLD build~~ — rebuilt
+  2026-09-06; `dist` now matches source at 0.1.59.
+- `/Users/noaholatoye/Documents/code_projects/npm_packages/.claude/launch.json`
+  (a dev-server config for the example app) is still there from that session.
+  Harmless; delete it if you don't want it.
