@@ -250,20 +250,31 @@ const Dropdown: React.FC<DropdownPropsType> = ({
     }
   }, [isOpen, isSearchable]);
 
-  // Filter options based on search term
+  // Filter options based on search term.
+  //
+  // `key_name` belongs in the dependency list: without it, changing which
+  // field is displayed while a search term is active kept filtering against
+  // the previous field, so the list could sit on "no options" for a term that
+  // matches perfectly well under the new one.
   const filteredOptions = useMemo(() => {
     if (!searchTerm) return options;
+    const term = searchTerm.toLowerCase();
 
-    return options.filter((option) =>
-      key_name
-        ? (option[key_name as keyof DropdownOptionType] || "")
-            .toLowerCase()
-            .includes((searchTerm || "").toLowerCase())
-        : (option?.label || "")
-            .toLowerCase()
-            .includes((searchTerm || "").toLowerCase())
-    );
-  }, [options, searchTerm]);
+    return options.filter((option) => {
+      const field = key_name
+        ? option[key_name as keyof DropdownOptionType]
+        : option?.label;
+
+      // `DropdownOptionType` is indexed as `any`, so `key_name` can name a
+      // number — `key_name="id"`, as the example above uses — or a React node
+      // like `icon`. Calling toLowerCase() on those threw and tore the whole
+      // menu down mid-keystroke. Numbers are stringified so they stay
+      // searchable; anything else has no text to match.
+      if (typeof field === "number") return String(field).includes(term);
+      if (typeof field !== "string") return false;
+      return field.toLowerCase().includes(term);
+    });
+  }, [options, searchTerm, key_name]);
 
   // Handle dropdown toggle
   const toggleDropdown = () => {

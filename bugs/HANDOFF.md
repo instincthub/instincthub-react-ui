@@ -77,9 +77,43 @@ CSS:
    - Escape closes; outside mousedown closes; a window-targeted scroll event
      repositions (430.2 -> 426.7) with no uncaught error.
 
-**Known, pre-existing, not touched:** `filteredOptions`'s `useMemo` omits
-`key_name` from its dependency array, so a `key_name` that changes while a
-search term is active would filter against the old key.
+---
+
+### MEDIUM — search filtered against a stale `key_name`, and crashed on a
+### non-string one  [FIXED, same 0.1.59]
+
+Folded into 0.1.59 before it was published (npm was still on 0.1.58), so this
+did not need its own version.
+
+`filteredOptions`'s `useMemo` listed only `[options, searchTerm]`. Changing
+`key_name` while a search term was active therefore reused the previous
+filtered array: the list could sit on "No options available" for a term that
+matches perfectly well under the new field. Confirmed live — with options
+`{name, code}`, `key_name="name"` and the term `z3`, swapping to
+`key_name="code"` left the menu empty instead of matching `Z3`.
+
+Found while fixing that, in the same predicate: the field was read as
+`(option[key_name] || "").toLowerCase()`. `DropdownOptionType` is indexed
+`[key: string]: any`, so `key_name` can name a **number** — and the
+component's own JSDoc example is `key_name="id"`, where ids are usually
+numeric — or a React node like `icon`. `toLowerCase()` is not a function on
+those, so typing into the search box threw
+`TypeError: (option[key_name] || "").toLowerCase is not a function` and tore
+the entire menu down mid-keystroke. Reproduced live before fixing.
+
+Fix: `key_name` added to the dependency list; the field is resolved once, then
+numbers are stringified so they stay searchable (`"10"` matches id `101`) and
+anything that is neither string nor number is skipped rather than called into.
+Options with a missing field are still excluded, as before. The lowercased
+term is hoisted out of the per-option callback.
+
+**Verified live:** numeric `key_name` — searching `10` -> `101`, `303` ->
+`303`, `999` -> no options, no console errors, menu stays mounted. Stale memo
+— `z3` under `key_name="name"` shows no options, swapping to `"code"` matches
+`Z3`, swapping back shows no options again. Regression on the normal label
+path: `uni` and `UNITED` both match United States/United Kingdom, a no-match
+term shows no-options, clearing restores all 11, picking after filtering still
+works in multi mode, and the option-list scroll still does not close the menu.
 
 ---
 
