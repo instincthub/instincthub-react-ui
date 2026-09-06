@@ -71,7 +71,23 @@ import { DropdownOptionType, DropdownPropsType } from "@/types";
  * by any ancestor with `overflow: auto|hidden` — a table's scroll container, a
  * modal body, a card — which made the component unusable in exactly the places
  * a compact picker is most wanted.
+ *
+ * Those fixed coordinates go stale whenever anything scrolls, so the menu is
+ * re-anchored to its trigger on scroll and resize. It is not closed: a scroll
+ * listener bound in the capture phase also receives the menu's OWN options
+ * list scrolling, which made a list long enough to need scrolling impossible
+ * to use, and closing on an unrelated modal scroll is jarring rather than
+ * helpful. It closes only once the trigger has actually left the viewport.
  */
+
+/** Gap in px between the trigger and the portalled menu. */
+const MENU_OFFSET = 5;
+
+/** Keep the menu this far from the viewport edges. */
+const VIEWPORT_MARGIN = 8;
+
+/** Never squeeze the menu below this; it scrolls internally instead. */
+const MIN_USABLE_HEIGHT = 120;
 
 const Dropdown: React.FC<DropdownPropsType> = ({
   label,
@@ -102,7 +118,8 @@ const Dropdown: React.FC<DropdownPropsType> = ({
     top: number;
     left: number;
     width: number;
-  }>({ top: 0, left: 0, width: 0 });
+    maxHeight: number;
+  }>({ top: 0, left: 0, width: 0, maxHeight });
 
   // Sync internal state with external prop
   useEffect(() => {
@@ -111,27 +128,63 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
   /**
    * Places the portalled menu under the trigger, flipping above it when there
-   * is not enough room below.
+   * is not enough room below, and capping it to the space that side actually
+   * has so the list is never taller than the viewport.
+   *
+   * Returns false when the trigger has scrolled out of view — there is nothing
+   * left to pin the menu to, and the caller closes it.
    */
-  const positionMenu = useCallback((): void => {
+  const positionMenu = useCallback((): boolean => {
     const rect = dropdownRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    if (!rect) return false;
 
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const openUpwards = spaceBelow < maxHeight && rect.top > spaceBelow;
+    // Out of view on either axis — a table scrolls sideways too.
+    if (
+      rect.bottom < 0 ||
+      rect.top > window.innerHeight ||
+      rect.right < 0 ||
+      rect.left > window.innerWidth
+    ) {
+      return false;
+    }
+
+    const spaceBelow =
+      window.innerHeight - rect.bottom - MENU_OFFSET - VIEWPORT_MARGIN;
+    const spaceAbove = rect.top - MENU_OFFSET - VIEWPORT_MARGIN;
+
+    // Prefer below; flip only when below cannot show a usable amount and above
+    // is genuinely roomier.
+    const openUpwards =
+      spaceBelow < Math.min(maxHeight, MIN_USABLE_HEIGHT) &&
+      spaceAbove > spaceBelow;
+
+    const available = Math.max(
+      MIN_USABLE_HEIGHT,
+      openUpwards ? spaceAbove : spaceBelow
+    );
+    const height = Math.min(maxHeight, available);
 
     setMenuPosition({
       top: openUpwards
-        ? Math.max(8, rect.top - Math.min(maxHeight, rect.top - 8) - 5)
-        : rect.bottom + 5,
+        ? Math.max(VIEWPORT_MARGIN, rect.top - height - MENU_OFFSET)
+        : rect.bottom + MENU_OFFSET,
       left: rect.left,
       width: rect.width,
+      maxHeight: height,
     });
+    return true;
   }, [maxHeight]);
 
   useLayoutEffect(() => {
     if (isOpen) positionMenu();
   }, [isOpen, positionMenu]);
+
+  // Selecting in multi mode adds a tag to the trigger, which can grow it onto
+  // another line and shift everything below. Re-anchor so the menu does not
+  // end up overlapping the trigger it belongs to.
+  useLayoutEffect(() => {
+    if (isOpen) positionMenu();
+  }, [internalSelectedValue, isOpen, positionMenu]);
 
   // Close on an outside click, and on anything that invalidates the fixed
   // coordinates. The menu lives outside dropdownRef now, so it needs its own
@@ -139,8 +192,9 @@ const Dropdown: React.FC<DropdownPropsType> = ({
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
       if (
         !dropdownRef.current?.contains(target) &&
         !menuRef.current?.contains(target)
@@ -148,17 +202,46 @@ const Dropdown: React.FC<DropdownPropsType> = ({
         setIsOpen(false);
       }
     };
-    const handleViewportChange = () => setIsOpen(false);
+
+    /**
+     * A scroll outside the menu moves the trigger, so the menu follows it. A
+     * scroll INSIDE the menu is the user reading the options and must be left
+     * alone — capture phase means this handler sees that one too. Capture is
+     * still required: a scroll container between the trigger and <body> never
+     * bubbles its scroll event to window.
+     */
+    const handleScroll = (event: Event) => {
+      // A scroll event's target is `document` for the page and an element for
+      // a scroll container, but `window` for one dispatched at window — and
+      // Node.contains() throws on a non-Node, which would strand the menu.
+      const target = event.target;
+      if (target instanceof Node && menuRef.current?.contains(target)) return;
+      if (!positionMenu()) setIsOpen(false);
+    };
+
+    const handleResize = () => {
+      if (!positionMenu()) setIsOpen(false);
+    };
+
+    // The menu is portalled, so it can hold focus outside the trigger's
+    // subtree where the wrapper's own onKeyDown never fires.
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleViewportChange, true);
-    window.addEventListener("resize", handleViewportChange);
+    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", handleResize);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleViewportChange, true);
-      window.removeEventListener("resize", handleViewportChange);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen]);
+  }, [isOpen, positionMenu]);
 
   // Focus search input when dropdown opens
   useEffect(() => {
@@ -184,10 +267,15 @@ const Dropdown: React.FC<DropdownPropsType> = ({
 
   // Handle dropdown toggle
   const toggleDropdown = () => {
-    if (!isDisabled) {
-      setIsOpen(!isOpen);
-      setSearchTerm("");
+    if (isDisabled) return;
+    setSearchTerm("");
+    if (isOpen) {
+      setIsOpen(false);
+      return;
     }
+    // Only open once we know where to put it, so an off-screen trigger cannot
+    // drop the menu in the top-left corner.
+    if (positionMenu()) setIsOpen(true);
   };
 
   // Handle option selection
@@ -355,7 +443,7 @@ const Dropdown: React.FC<DropdownPropsType> = ({
           ref={menuRef}
           className="ihub-dropdown-menu ihub-dropdown-menu-portal"
           style={{
-            maxHeight: `${maxHeight}px`,
+            maxHeight: `${menuPosition.maxHeight}px`,
             top: `${menuPosition.top}px`,
             left: `${menuPosition.left}px`,
             width: `${menuPosition.width}px`,

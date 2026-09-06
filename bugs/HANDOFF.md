@@ -1,5 +1,88 @@
 # Bug Handoff — instincthub-react-ui
 
+## Dropdown — scrolling the option list closed the menu (2026-09-06, 0.1.59)
+
+**Status:** FIXED and VERIFIED live. Same class of bug as the Action fix below,
+in a different component: both portalled their menu and then closed it on any
+captured scroll.
+
+File: `src/components/ui/Dropdown.tsx`
+CSS:  `src/assets/css/ui/dropdown-styles.css`
+
+**No public API change.** Every prop behaves as documented.
+
+---
+
+### HIGH — a long option list could not be scrolled  [FIXED]
+
+The open-state effect registered:
+
+    const handleViewportChange = () => setIsOpen(false);
+    window.addEventListener("scroll", handleViewportChange, true);
+
+Capture phase, so it also received scroll events raised by the menu's own
+`.ihub-dropdown-options` container. Scrolling a long list closed the dropdown
+before a choice could be made; scrolling any surrounding modal closed it too,
+which reads as jarring rather than helpful. Confirmed by dispatching
+`new Event('scroll')` on `.ihub-dropdown-options` — `isOpen` went false.
+
+Fix:
+
+- `handleScroll` returns early when the event target is inside `menuRef`, and
+  otherwise calls `positionMenu()` to re-anchor to the trigger instead of
+  closing. Resize does the same. It closes only when the trigger has actually
+  left the viewport — checked on both axes, since a table scrolls sideways.
+- `positionMenu()` now returns a boolean and caps the menu to the space the
+  chosen side actually has, setting `maxHeight` inline instead of passing the
+  raw `maxHeight` prop through. It flips above the trigger only when below
+  cannot show a usable amount and above is genuinely roomier.
+- `toggleDropdown` opens only when `positionMenu()` succeeds, so an off-screen
+  trigger cannot drop the menu at 0,0 in the top-left corner.
+- Escape now closes from a `document` keydown listener. The menu is portalled,
+  so it can hold focus outside the trigger's subtree where the wrapper's own
+  `onKeyDown` never fires. `touchstart` joins `mousedown` for outside-close.
+- A `useLayoutEffect` re-anchors on selection change: in multi mode each pick
+  adds a tag to the trigger, which can grow it onto another line and leave the
+  menu overlapping the trigger it belongs to.
+- Both handlers now guard `event.target instanceof Node` before
+  `contains()`. A scroll event dispatched at `window` has a non-Node target,
+  and `Node.contains()` throws on it — which stranded the menu open and
+  unresponsive. Caught by the live console during verification.
+
+CSS:
+
+- `.ihub-dropdown-menu-portal` is a flex column, and its `.ihub-dropdown-options`
+  drops the flat `max-height: 250px` for `flex: 1 1 auto; min-height: 0`. The
+  container's `overflow: hidden` plus a 250px menu cap and a separate 250px
+  list cap meant the search box pushed ~69px of options past the bottom edge
+  with no way to reach them. The list now takes whatever the menu has left.
+- `overscroll-behavior: contain` on `.ihub-dropdown-options`, so reaching the
+  end of the list does not chain the scroll to the page.
+
+### Verification performed
+1. **Typecheck** — `npx tsc --noEmit -p tsconfig.build.json`: 96 total (the
+   unchanged baseline), 0 in `Dropdown.tsx`.
+2. **Live browser** — `src/__examples__` at `/components/ui/dropdowns`:
+   - The confirmed repro (`new Event('scroll')` on `.ihub-dropdown-options`)
+     leaves the menu open; the list scrolls to its end (413px of content in
+     an 89-181px viewport) and stays open.
+   - An outside scroll keeps it open and re-anchored: menu top tracked the
+     trigger exactly (422.7 == trigger bottom + 5) across several positions.
+   - Scrolling the trigger out of the viewport closes it.
+   - Multi-select: three picks kept the menu open, tags accumulated,
+     `aria-selected` tracked, re-clicking toggled off, search filtered, and the
+     menu re-anchored as the tags grew the trigger (428.2 -> 432.2).
+   - Single-select: opens anchored, its own list scroll does not close it,
+     picking closes and commits ("Selected: Germany").
+   - Escape closes; outside mousedown closes; a window-targeted scroll event
+     repositions (430.2 -> 426.7) with no uncaught error.
+
+**Known, pre-existing, not touched:** `filteredOptions`'s `useMemo` omits
+`key_name` from its dependency array, so a `key_name` that changes while a
+search term is active would filter against the old key.
+
+---
+
 ## Action (dropdown) — scrolling the menu closed it (2026-09-04, 0.1.58)
 
 **Status:** FIXED. Follow-up to the 0.1.57 portal fix below — same component,

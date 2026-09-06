@@ -88,6 +88,26 @@
   left: 0;
   right: auto;
   z-index: 1200;
+  /*
+   * The menu's max-height is set inline from the space the trigger actually
+   * has. Laying it out as a column lets the search box keep its natural height
+   * and hands the remainder to the options list, which then scrolls. Without
+   * this the list kept its own flat 250px and the menu's `overflow: hidden`
+   * clipped whatever the search box pushed past the bottom, with no way to
+   * reach it.
+   */
+  display: flex;
+  flex-direction: column;
+}
+
+.ihub-dropdown-menu-portal .ihub-dropdown-search {
+  flex: 0 0 auto;
+}
+
+.ihub-dropdown-menu-portal .ihub-dropdown-options {
+  flex: 1 1 auto;
+  max-height: none;
+  min-height: 0;
 }
 
 @keyframes ihub-dropdown-appear {
@@ -126,6 +146,9 @@
 .ihub-dropdown-options {
   max-height: 250px;
   overflow-y: auto;
+  /* Do not chain to the page at the ends of the list: that would scroll the
+     trigger out from under the menu the user is still reading. */
+  overscroll-behavior: contain;
 }
 
 .ihub-dropdown-option {
