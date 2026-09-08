@@ -1825,9 +1825,14 @@
   margin-top: 5px;
 }
 
-/* Improve animation for floating label */
+/* Improve animation for floating label.
+   `.ihub-has-placeholder` must be listed here as well as in the label rule
+   above. That rule gives a placeholder'd input the floated *styling* (small,
+   cyan, background punch-through); without the transform below the label is
+   never actually lifted, so it renders on top of the placeholder text. */
 .ihub-wrapper .ihub-input:focus + .ihub-text-label,
 .ihub-wrapper.ihub-value .ihub-text-label,
+.ihub-wrapper.ihub-has-placeholder .ihub-text-label,
 .ihub-wrapper .ihub-input:focus + .ihub-chips-label,
 .ihub-wrapper .ihub-chips-label {
   transform: translateY(-22px) scale(0.85);

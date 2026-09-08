@@ -1,5 +1,50 @@
 # Bug Handoff — instincthub-react-ui
 
+## InputText — floating label rendered on top of the placeholder (2026-09-08, 0.1.60)
+
+**Status:** FIXED. CSS only, no API change, no component touched.
+
+File: `src/assets/css/forms/input-fields.css`
+
+**Symptom.** Any `InputText` given both a `label` and a `placeholder` drew the
+label *inside* the input, overlapping the placeholder text, until the user
+typed. On the Leadboard Dynamic Fields modal that read as
+`Field name * stry` — the label sitting across `e.g. Industry` — and
+`Placeholder (optional) ıe empty input`. Present in every app consuming the
+package, on every placeholder'd input, in both themes.
+
+**Why.** Two rules share the work and only one listed the class.
+
+- The label rule (~line 48) selects `:focus`, `.ihub-has-placeholder` and
+  `.ihub-value`, and gives all three the floated *appearance* — 14px, cyan,
+  `background: var(--White)` to punch through the border.
+- The rule that actually lifts the label (~line 1829, "Improve animation for
+  floating label") applies `transform: translateY(-22px) scale(0.85)` — and
+  listed only `:focus`, `.ihub-value` and the chips label. **`.ihub-has-placeholder`
+  was missing.**
+
+So a placeholder'd empty input got a label styled as though it had floated,
+which never moved: `top: 15px` inside a 50px input, directly over the
+placeholder. Measured on production before the fix — label offset **+15px**
+from the input's top edge, against **−7px** for the `.ihub-value` case that
+renders correctly.
+
+**Fix.** Add `.ihub-wrapper.ihub-has-placeholder .ihub-text-label` to the
+transform rule, so the two selector lists agree. A placeholder'd input now
+renders identically to a filled one (−7px, label on the border).
+
+**Not affected, checked:**
+
+- `InputTextarea` — guards in JS instead, passing `placeholder` only when
+  focused or non-empty, so the label and placeholder are never both visible.
+- `time-picker.css` — moves its label with `top: -10px` rather than a
+  transform, and already lists `.ihub-has-placeholder` in that rule.
+
+**Found by** reading the Leadboard Dynamic Fields page while scripting demo
+video LBD-13b; the modal's first frame is on camera in that video.
+
+---
+
 ## DateRangePicker — day grid had no arrow-key navigation (2026-09-06, 0.1.59)
 
 **Status:** FIXED and VERIFIED live. Clears the a11y follow-up recorded in the
