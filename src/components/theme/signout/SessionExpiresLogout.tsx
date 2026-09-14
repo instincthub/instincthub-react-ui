@@ -30,8 +30,29 @@ export default function SessionExpiresLogout({
   disableValidation = false,
   onSessionInvalid,
 }: SessionExpiresLogoutProps) {
-  const [validationState, setValidationState] =
-    useState<ValidationState>("loading");
+  /**
+   * Derived, not hardcoded to "loading", and this matters for SSR.
+   *
+   * The state below only ever leaves "loading" inside the effect further down,
+   * and effects do not run on the server. So a hardcoded "loading" meant the
+   * server always took the loading branch and rendered the spinner as the
+   * entire body of every page in every app that mounts this provider — no
+   * headings, no copy, no structured data. All the real markup existed only in
+   * the RSC flight payload and was painted after hydration, which is invisible
+   * to any crawler that does not execute JavaScript.
+   *
+   * Each branch here is exactly what the effect would have set for that input,
+   * so runtime behaviour is unchanged; it just skips the round trip through
+   * "loading" for the two cases that need no asynchronous work. A real session
+   * still starts in "loading" and is still validated against the API.
+   *
+   * Note "invalid" for the no-session case is deliberate and mirrors the
+   * effect: the render guard below is `invalid && session?.user`, so with no
+   * session it falls through to children.
+   */
+  const [validationState, setValidationState] = useState<ValidationState>(() =>
+    disableValidation ? "valid" : session ? "loading" : "invalid"
+  );
 
   const user = session?.user?.name || session?.user || {};
   const token = user?.token || user?.accessToken;
