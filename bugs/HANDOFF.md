@@ -1,5 +1,29 @@
 # Bug Handoff — instincthub-react-ui
 
+## S3MultiUploader — fast-failing upload retries forever and freezes the page; signed headers dropped (2026-09-17, 0.1.61)
+
+**Status:** FIXED in working tree, not yet published.
+
+Files: `src/components/forms/uploads/S3MultiUploader.tsx`, `src/types/index.ts`
+
+**Symptom.** In creators_nextjs (lms.instincthub.com) choosing a video in any `S3MultiUploader` locked the tab
+(renderer unresponsive). Separately, presigned URLs from instincthub_apis sign `x-amz-acl`, which the uploader
+never sent, so a correct PUT would still be rejected.
+
+**Root cause.** `tick()` picks the next item from `queueRef`, but `queueRef.current = queue` only ran on
+render. When `uploadOne` failed without crossing a macrotask (e.g. `getPresignedUrl` missing or rejecting
+synchronously) the `status: "error"` update was still queued in React, `tick()` recursed, saw the item as
+`queued` again and retried it in an endless microtask loop — React never got to render. `uploadToPresignedUrl`
+only set `Content-Type`.
+
+**Fix.** `updateItem` now applies the patch to `queueRef.current` synchronously as well as via `setQueue`.
+`PresignedUploadResult` gains optional `headers`; `uploadToPresignedUrl` sends them (Content-Type still from
+`contentType`).
+
+**Tests.** jsdom harness (scratch, not committed): rejecting presign → exactly 1 `onError`, event loop free;
+successful presign → XHR headers `{Content-Type, x-amz-acl}`, `onFileComplete` receives the key. Typecheck
+count unchanged at 96.
+
 ## InputText — floating label rendered on top of the placeholder (2026-09-08, 0.1.60)
 
 **Status:** FIXED. CSS only, no API change, no component touched.

@@ -150,6 +150,11 @@ export interface PresignedUploadResult {
    * browser File.type value here.
    */
   contentType: string;
+  /**
+   * Extra headers the presigned signature covers (e.g. `x-amz-acl`).
+   * Sent verbatim on the PUT; omit when the URL signs only Content-Type.
+   */
+  headers?: Record<string, string>;
 }
 
 /**

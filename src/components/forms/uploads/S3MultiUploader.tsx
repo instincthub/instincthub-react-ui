@@ -76,7 +76,8 @@ function uploadToPresignedUrl(
   url: string,
   file: File,
   contentType: string,
-  onProgress: (pct: number) => void
+  onProgress: (pct: number) => void,
+  headers: Record<string, string> = {}
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -101,6 +102,10 @@ function uploadToPresignedUrl(
     xhr.open("PUT", url);
     // Use the server-validated content type — never trust file.type alone.
     xhr.setRequestHeader("Content-Type", contentType);
+    // Any other headers the signature covers (e.g. x-amz-acl) must match exactly.
+    Object.entries(headers)
+      .filter(([name]) => name.toLowerCase() !== "content-type")
+      .forEach(([name, value]) => xhr.setRequestHeader(name, value));
     xhr.send(file);
   });
 }
@@ -148,9 +153,13 @@ export default function S3MultiUploader({
   const clampedConcurrency = Math.min(Math.max(concurrency, 1), 4);
 
   const updateItem = useCallback((id: string, patch: Partial<QueueItem>) => {
-    setQueue((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...patch } : item))
-    );
+    const apply = (items: QueueItem[]) =>
+      items.map((item) => (item.id === id ? { ...item, ...patch } : item));
+    // Keep the ref in step immediately: `tick` reads it before React has
+    // re-rendered, and a stale "queued" status made a fast-failing upload
+    // (e.g. a rejected presign) retry forever and lock the page.
+    queueRef.current = apply(queueRef.current);
+    setQueue(apply);
   }, []);
 
   const uploadOne = useCallback(
@@ -159,11 +168,17 @@ export default function S3MultiUploader({
 
       try {
         // Server validates auth, MIME, size, and path — returns a scoped, short-lived URL.
-        const { url, key, cdnUrl, contentType } = await getPresignedUrl(item.file);
+        const { url, key, cdnUrl, contentType, headers } = await getPresignedUrl(item.file);
 
-        await uploadToPresignedUrl(url, item.file, contentType, (pct) => {
-          updateItem(item.id, { progress: pct });
-        });
+        await uploadToPresignedUrl(
+          url,
+          item.file,
+          contentType,
+          (pct) => {
+            updateItem(item.id, { progress: pct });
+          },
+          headers
+        );
 
         const response: S3UploadResponseType = {
           title: item.file.name,
