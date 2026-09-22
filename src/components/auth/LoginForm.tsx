@@ -68,6 +68,16 @@ const sanitizeInput = (input: string): string => {
     .trim();
 };
 
+// Decode a callbackUrl without throwing on malformed percent-encoding
+const safeDecodeCallbackUrl = (value?: string): string | undefined => {
+  if (!value) return undefined;
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return undefined;
+  }
+};
+
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -207,8 +217,10 @@ const LoginForm = ({
 }: LoginFormPropsType) => {
   const router = useRouter();
   const { error, callbackUrl: rawCallbackUrl } = searchParams;
-  // Ensure callbackUrl is properly decoded if it comes as an encoded URL parameter
-  const callbackUrl = rawCallbackUrl ? decodeURIComponent(rawCallbackUrl) : undefined;
+  // Ensure callbackUrl is properly decoded if it comes as an encoded URL parameter.
+  // Next has usually decoded searchParams already, so a stray "%" left behind
+  // makes decodeURIComponent throw URIError mid-render — drop it instead.
+  const callbackUrl = safeDecodeCallbackUrl(rawCallbackUrl);
 
   // Core state
   const [message, setMessage] = useState<string>("");

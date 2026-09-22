@@ -1,5 +1,20 @@
 # Bug Handoff — instincthub-react-ui
 
+## LoginForm — malformed `callbackUrl` throws `URIError: URI malformed` during render (2026-09-22)
+
+**Status:** FIXED in working tree, not yet published. Sentry `CREATORSAPP-NEXTJS-65`.
+
+- **Symptom:** `/auth/login?callbackUrl=<value with a stray %>` 500s on SSR. One event, from a curl
+  scanner (Ashburn, AWS), 0 users; release `199328e` = creators_nextjs HEAD.
+- **Root cause:** `LoginForm.tsx` ran `decodeURIComponent(searchParams.callbackUrl)` in the render body.
+  Next has already decoded `searchParams` once, so e.g. `?callbackUrl=%25E0` arrives as `%E0` and the
+  second decode throws.
+- **Fix:** `safeDecodeCallbackUrl()` — try/catch, returns `undefined` for a malformed value (the form then
+  falls back to the normal post-login redirect). Only `decodeURIComponent` call in `src/`.
+- **Verified:** `rollup -c` output contains the guarded decode; no new TS warnings (the 5 on this file are
+  pre-existing `NodeJS.Timeout`/`process` typing noise). No test runner in this repo.
+- **Follow-up:** publish with the pending 0.1.61 uploader fixes, then bump creators_nextjs.
+
 ## S3MultiUploader — fast-failing upload retries forever and freezes the page; signed headers dropped (2026-09-17, 0.1.61)
 
 **Status:** FIXED in working tree, not yet published.
