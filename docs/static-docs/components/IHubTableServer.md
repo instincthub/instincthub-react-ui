@@ -890,10 +890,32 @@ record also stores a value-based key of `searchParams`:
 If the remembered page is past the end because rows were deleted, the table
 clamps to the last real page instead of showing an empty list.
 
+### The row they opened gets focus on return
+
+When a row is clicked (via `onRowClick`) its `keyExtractor` value is saved with
+the page. On the next mount that row gets the `ihub-row-visited` class (tinted
+background, accent bar on the left), is scrolled into the middle of the view,
+and receives keyboard focus, so the eye lands on the record the user was
+working with. The highlight clears as soon as the row is no longer on screen,
+for example after paging away.
+
+Navigation that does not go through `onRowClick`, such as a "View" entry in an
+actions menu, should tell the table which row is being left:
+
+```tsx
+const tableRef = useRef<IHubTableServerRef>(null);
+
+const handleView = (lead: LeadRecord) => {
+  tableRef.current?.rememberRow(lead.id); // same value keyExtractor returns
+  router.push(`/leads/${lead.id}`);
+};
+```
+
 ### Resetting from the parent
 
 The ref exposes `resetState()` alongside `refresh()`. It clears the stored
-record and returns the table to page 1 with the `initialParams` defaults.
+record, drops the highlighted row and returns the table to page 1 with the
+`initialParams` defaults.
 
 ```tsx
 const tableRef = useRef<IHubTableServerRef>(null);

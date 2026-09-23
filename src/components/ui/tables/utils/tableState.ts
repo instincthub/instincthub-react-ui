@@ -27,6 +27,11 @@ export interface PersistedTableStateType {
    */
   searchParamsKey: string;
   savedAt: number;
+  /**
+   * `keyExtractor` value of the row the user last opened from this table, so
+   * the table can highlight and focus it when they come back.
+   */
+  rowKey?: string | number;
 }
 
 const isPositiveInteger = (value: unknown): value is number =>
@@ -90,12 +95,31 @@ export const parseTableState = (raw: unknown): PersistedTableStateType | null =>
     params.direction = rawParams.direction;
   }
 
-  return {
+  const parsed: PersistedTableStateType = {
     params,
     searchParamsKey:
       typeof record.searchParamsKey === "string" ? record.searchParamsKey : "",
     savedAt: typeof record.savedAt === "number" ? record.savedAt : 0,
   };
+  if (
+    (typeof record.rowKey === "string" && record.rowKey) ||
+    typeof record.rowKey === "number"
+  ) {
+    parsed.rowKey = record.rowKey;
+  }
+  return parsed;
+};
+
+/**
+ * The row to highlight on return, if the table is showing the same list it
+ * was left on. A row key from a different filter set is not on screen anyway.
+ */
+export const resolveRestoredRowKey = (
+  stored: PersistedTableStateType | null,
+  currentSearchParamsKey: string
+): string | number | null => {
+  if (!stored || stored.searchParamsKey !== currentSearchParamsKey) return null;
+  return stored.rowKey ?? null;
 };
 
 /** Read and validate the persisted state for a table. Never throws. */

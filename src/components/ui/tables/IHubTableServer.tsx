@@ -35,6 +35,7 @@ import {
   pickPersistedParams,
   readTableState,
   resolveRestoredParams,
+  resolveRestoredRowKey,
   writeTableState,
 } from "./utils/tableState";
 import {
@@ -47,6 +48,12 @@ export interface IHubTableServerRef {
   refresh: () => void;
   /** Forget the remembered page/sort/search for this table and go back to page 1. */
   resetState: () => void;
+  /**
+   * Mark a row (by its `keyExtractor` value) as the one the user is leaving
+   * for, so it is highlighted and focused when they come back. Row clicks do
+   * this automatically; call it from action menus that navigate away.
+   */
+  rememberRow: (rowKey: string | number) => void;
 }
 
 interface IHubTableServerPropsType<T> {
@@ -268,6 +275,7 @@ export const IHubTableServer = forwardRef<
   const dataAdapterRef = useRef(dataAdapter);
   const onFetchErrorRef = useRef(onFetchError);
   const searchParamsRef = useRef(searchParams);
+  const keyExtractorRef = useRef(keyExtractor);
 
   // Compare `searchParams` by value, not by reference. Consumers pass an object
   // literal, so the identity changes on every parent render. Keys are sorted so
@@ -289,6 +297,7 @@ export const IHubTableServer = forwardRef<
     dataAdapterRef.current = dataAdapter;
     onFetchErrorRef.current = onFetchError;
     searchParamsRef.current = searchParams;
+    keyExtractorRef.current = keyExtractor;
   });
 
   // Only the newest request may commit its result.
@@ -345,6 +354,13 @@ export const IHubTableServer = forwardRef<
   const [expandedRows, setExpandedRows] = useState<(string | number)[]>([]);
   const [searchTerm, setSearchTerm] = useState(() => params.search || "");
 
+  // The row the user last opened from this table. Highlighted while it is on
+  // screen, and scrolled into view + focused once when restored from storage.
+  const [visitedRowKey, setVisitedRowKey] = useState<string | number | null>(
+    () => resolveRestoredRowKey(storedState, searchParamsKey)
+  );
+  const focusVisitedRowRef = useRef<boolean>(visitedRowKey !== null);
+
   // When the caller's filters change, go back to page 1, unless a pending
   // restore was saved for exactly these filters, in which case resume there.
   // Adjusting state during render (rather than in an effect) keeps this to a
@@ -363,6 +379,10 @@ export const IHubTableServer = forwardRef<
       pendingRestoreRef.current = null;
       setParams((prev) => ({ ...prev, ...pending.params }));
       setSearchTerm(pending.params.search || "");
+      if (pending.rowKey !== undefined) {
+        setVisitedRowKey(pending.rowKey);
+        focusVisitedRowRef.current = true;
+      }
     } else {
       setParams((prev) => (prev.page === 1 ? prev : { ...prev, page: 1 }));
     }
@@ -568,6 +588,8 @@ export const IHubTableServer = forwardRef<
   const handleResetState = useCallback(() => {
     if (storageKey) clearTableState(storageKey);
     pendingRestoreRef.current = null;
+    focusVisitedRowRef.current = false;
+    setVisitedRowKey(null);
     setRateLimited(false);
     setSearchTerm(initialParams.search || "");
     setParams({
@@ -581,13 +603,18 @@ export const IHubTableServer = forwardRef<
   }, [storageKey, defaultRowsPerPage, JSON.stringify(initialParams)]);
 
   // Expose refresh method to parent components
+  const handleRememberRow = useCallback((rowKey: string | number) => {
+    setVisitedRowKey(rowKey);
+  }, []);
+
   useImperativeHandle(
     ref,
     () => ({
       refresh: handleRefresh,
       resetState: handleResetState,
+      rememberRow: handleRememberRow,
     }),
-    [handleRefresh, handleResetState]
+    [handleRefresh, handleResetState, handleRememberRow]
   );
 
   // Fetch every page the current filters match, up to `maxRows`.
@@ -735,6 +762,14 @@ export const IHubTableServer = forwardRef<
           if (resolved.pagination) {
             setPagination(resolved.pagination);
           }
+          // The highlighted row only means something while it is on screen.
+          // Paging away from it, or deleting it, drops the highlight.
+          const extract = keyExtractorRef.current;
+          setVisitedRowKey((prev) =>
+            prev !== null && !resolved.data.some((row) => extract(row) === prev)
+              ? null
+              : prev
+          );
         }
 
         // The first commit settles which filters the table is showing; a
@@ -786,8 +821,22 @@ export const IHubTableServer = forwardRef<
       params: pickPersistedParams(params),
       searchParamsKey,
       savedAt: Date.now(),
+      ...(visitedRowKey !== null ? { rowKey: visitedRowKey } : {}),
     });
-  }, [storageKey, params, searchParamsKey]);
+  }, [storageKey, params, searchParamsKey, visitedRowKey]);
+
+  // Bring the restored row into view and give it focus, once, after it has
+  // rendered. A row highlighted by a click in this session is not scrolled to.
+  useEffect(() => {
+    if (!focusVisitedRowRef.current || visitedRowKey === null) return;
+    const rowEl = tableRef.current?.querySelector<HTMLTableRowElement>(
+      "tr[data-ihub-row-visited]"
+    );
+    if (!rowEl) return;
+    focusVisitedRowRef.current = false;
+    rowEl.scrollIntoView({ block: "center" });
+    rowEl.focus({ preventScroll: true });
+  }, [data, visitedRowKey]);
 
   // NOTE: there is deliberately no effect watching `searchParams`. The refetch
   // is driven by `handleFetchData` (keyed on `searchParamsKey`) in the effect
@@ -981,8 +1030,27 @@ export const IHubTableServer = forwardRef<
                 return (
                   <React.Fragment key={rowKey}>
                     <tr
-                      onClick={() => onRowClick && onRowClick(row)}
-                      className={onRowClick ? "ihub-clickable-row" : ""}
+                      onClick={
+                        onRowClick
+                          ? () => {
+                              setVisitedRowKey(rowKey);
+                              onRowClick(row);
+                            }
+                          : undefined
+                      }
+                      className={[
+                        onRowClick ? "ihub-clickable-row" : "",
+                        rowKey === visitedRowKey ? "ihub-row-visited" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      tabIndex={rowKey === visitedRowKey ? -1 : undefined}
+                      data-ihub-row-visited={
+                        rowKey === visitedRowKey ? "" : undefined
+                      }
+                      aria-current={
+                        rowKey === visitedRowKey ? "true" : undefined
+                      }
                     >
                       {/* Row number cell */}
                       {showRowNumbers && (

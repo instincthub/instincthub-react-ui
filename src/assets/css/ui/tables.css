@@ -41,6 +41,23 @@
   cursor: pointer;
 }
 
+/* The row the user last opened from this table. Applied on click, and again
+   when the table is restored after navigating back, so the eye lands on the
+   record they were working with. */
+.ihub-table tbody tr.ihub-row-visited {
+  background-color: rgba(0, 131, 143, 0.08);
+  box-shadow: inset 3px 0 0 var(--DarkCyan);
+}
+
+.ihub-table tbody tr.ihub-row-visited:hover {
+  background-color: rgba(0, 131, 143, 0.14);
+}
+
+.ihub-table tbody tr.ihub-row-visited:focus {
+  outline: 2px solid var(--DarkCyan);
+  outline-offset: -2px;
+}
+
 .ihub-column-header {
   display: flex;
   align-items: center;

@@ -1,5 +1,27 @@
 # Bug Handoff — instincthub-react-ui
 
+## IHubTableServer — the row the user opened is not obvious on return (2026-09-23, 0.1.63)
+
+**Status:** FIXED, publishing as 0.1.63. Follow-up to the 0.1.62 pagination restore, requested on the
+Leadboard Contacts table.
+
+Files: `src/components/ui/tables/IHubTableServer.tsx`, `utils/tableState.ts`, `src/assets/css/ui/tables.css`.
+
+**Symptom.** After 0.1.62 the page is restored on back-navigation, but nothing marks the record the user
+had opened, so they still hunt for it.
+
+**Fix.** A row click (through `onRowClick`) stores the row's `keyExtractor` value as `rowKey` in the same
+sessionStorage record. On restore that row gets `ihub-row-visited` (tint + accent bar, `aria-current`),
+is scrolled into the centre of the view and receives focus once. The highlight is dropped as soon as a
+fetch no longer contains the row (paged away, deleted). `ref.rememberRow(key)` lets action-menu
+navigation that bypasses `onRowClick` mark the row; `ref.resetState()` clears it.
+
+**Verified in Leadboard (localhost, Contacts).** Page 2 -> open "Ada Lovelace" -> back: page 2 restored,
+row highlighted, `document.activeElement` is the row, row within viewport. Note the Next dev server
+must be restarted after upgrading the package: node_modules are treated as immutable by a running
+`next dev`, so the old bundle keeps being served (this is what looked like "nothing happens" at first).
+tsc count unchanged at 96. Helper checks for `rowKey` parsing/restore pass.
+
 ## IHubTableServer — pagination lost on back-navigation; table collapses on short screens (2026-09-23, 0.1.62)
 
 **Status:** FIXED, publishing as 0.1.62. Reported by a Leadboard customer on the Deals table.
