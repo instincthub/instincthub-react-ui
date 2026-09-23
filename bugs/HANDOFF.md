@@ -1,5 +1,39 @@
 # Bug Handoff — instincthub-react-ui
 
+## IHubTableServer — pagination lost on back-navigation; table collapses on short screens (2026-09-23, 0.1.62)
+
+**Status:** FIXED, publishing as 0.1.62. Reported by a Leadboard customer on the Deals table.
+
+Files: `src/components/ui/tables/IHubTableServer.tsx`, new `src/components/ui/tables/utils/tableState.ts`
+and `utils/tableLayout.ts`, docs `IHubTableServer.md`, example `TableServerExamples.tsx`.
+
+**Symptom 1.** Page to 5, open a row's detail page, press back: the table is on page 1 again.
+
+**Root cause.** The page lived only in React state. Remounting after navigation recreated it from
+`initialParams`.
+
+**Fix.** Page, rows per page, sort and search are saved to `sessionStorage` under
+`ihub-table-state:<pathname>|<endpointPath>` and restored on mount (on by default; `persistKey` to
+disambiguate, `persistState={false}` to opt out, `ref.resetState()` to clear). The record carries the
+value-based `searchParams` key: page and search are only restored when the filters match, rows per
+page and sort always. A record whose filters do not match yet is kept pending and applied if the
+consumer's filters catch up before the first fetch commits. After any fetch, a page past
+`totalPages` is clamped to the last real page.
+
+**Symptom 2.** On a 1280x600 viewport the Deals table shows ~4 rows with a nested scrollbar.
+
+**Root cause.** Leadboard passes `maxHeight="calc(100vh - 340px)"`, which is ~260px there, and the
+library applied it with no floor.
+
+**Fix.** New `minHeight` prop (default `"360px"`) wraps `maxHeight` in CSS `max()`. Pass `"0"` to
+disable. No effect when `maxHeight` is unset.
+
+**Verified.** `tsc -p tsconfig.build.json` count unchanged at 96, none in touched files. `rollup -c`
+emits `dist/src/components/ui/tables/utils/tableState.js`. Scripted assertion check over the pure
+helpers (SSR no-window, storage round-trip, filter matching, garbage input, height floor) passes.
+Back-navigation not exercised in a running Leadboard; no test runner in this repo.
+
+
 ## LoginForm — malformed `callbackUrl` throws `URIError: URI malformed` during render (2026-09-22)
 
 **Status:** FIXED in working tree, not yet published. Sentry `CREATORSAPP-NEXTJS-65`.

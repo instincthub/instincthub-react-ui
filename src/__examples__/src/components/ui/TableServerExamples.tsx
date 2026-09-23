@@ -304,7 +304,9 @@ export default function ProgramCoursesPage() {
         renderExpandedRow={renderExpandedRow}
         keyExtractor={(row) => row.id}
         stickyHeader={true}
-        maxHeight="600px"
+        maxHeight="calc(100vh - 340px)"
+        minHeight="360px" // floor so short screens still show a usable table
+        persistKey="program-courses" // remember page/sort/search across visits in this tab
       />
 
       <h2>Dummy Data</h2>

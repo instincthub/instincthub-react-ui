@@ -697,7 +697,8 @@ const handleRefreshData = () => {
               <li>Implement server-side pagination for large datasets</li>
               <li>Use <code>debounce</code> for search (default: 1000ms)</li>
               <li>Enable <code>stickyHeader</code> for better UX</li>
-              <li>Set appropriate <code>maxHeight</code> for scrolling</li>
+              <li>Set appropriate <code>maxHeight</code> for scrolling; <code>minHeight</code> (default 360px) keeps it usable on short screens</li>
+              <li>Leave <code>persistState</code> on so users return to the page they left; set <code>persistKey</code> when two tables share an endpoint</li>
             </ul>
           </div>
           
@@ -762,7 +763,7 @@ function FilterableTable() {
 
         <div className="ihub-mt-4">
           <h4>External Refresh Control:</h4>
-          <p>The component exposes a <code>refresh</code> method through ref that allows parent components to trigger a data refresh:</p>
+          <p>The component exposes a <code>refresh</code> method through ref that allows parent components to trigger a data refresh, and a <code>resetState</code> method that forgets the remembered page/sort/search and returns to page 1:</p>
           <div className="ihub-code-block">
             <pre>
 {`import { useRef } from 'react';
@@ -851,6 +852,69 @@ GET /api/students?limit=10&offset=0&ordering=name&search=john&department=Compute
 
 export default IHubTableServerExamples;
 ```
+
+## 🧭 Remembering the page between visits
+
+`IHubTableServer` stores its page, rows per page, sort and search term in
+`sessionStorage` and restores them the next time it mounts in the same tab.
+A user who pages to 5, opens a row's detail page and presses back lands on
+page 5 again. Session storage is per tab and is cleared when the tab closes,
+so nothing leaks between sessions.
+
+This is on by default and needs no code changes.
+
+### How a table is identified
+
+The storage key is `ihub-table-state:<pathname>|<endpointPath>`. One list per
+page, which is the usual layout, is therefore unique out of the box. Pass
+`persistKey` when that is not true:
+
+```tsx
+// Two tables on one page reading the same endpoint
+<IHubTableServer persistKey="deals-open" endpointPath="deals/" searchParams={{ status: "open" }} />
+<IHubTableServer persistKey="deals-won" endpointPath="deals/" searchParams={{ status: "won" }} />
+
+// Opt out for a table that should always open on page 1
+<IHubTableServer persistState={false} ... />
+```
+
+### Filters and the remembered page
+
+A page number only makes sense for the filters it was reached with, so the
+record also stores a value-based key of `searchParams`:
+
+- Same filters on the next mount: page, search, sort and rows per page are all restored.
+- Different filters: only rows per page and sort are restored. The page and search term reset.
+- Filters applied a render after mount (for example read from the URL in an effect) are still matched, as long as they arrive before the first fetch completes.
+
+If the remembered page is past the end because rows were deleted, the table
+clamps to the last real page instead of showing an empty list.
+
+### Resetting from the parent
+
+The ref exposes `resetState()` alongside `refresh()`. It clears the stored
+record and returns the table to page 1 with the `initialParams` defaults.
+
+```tsx
+const tableRef = useRef<IHubTableServerRef>(null);
+tableRef.current?.resetState();
+```
+
+## 📏 Height on short screens
+
+`maxHeight` is commonly given as a viewport-relative value such as
+`calc(100vh - 340px)`. On a short laptop screen that collapses to two or
+three rows with a nested scrollbar. The component now wraps `maxHeight` in
+CSS `max()` with a floor, `minHeight`, which defaults to `360px`. The page
+scrolls a little instead of the table becoming unusable.
+
+```tsx
+<IHubTableServer maxHeight="calc(100vh - 340px)" />                 // floor of 360px applied
+<IHubTableServer maxHeight="calc(100vh - 340px)" minHeight="480px" /> // taller floor
+<IHubTableServer maxHeight="200px" minHeight="0" />                 // exact height, no floor
+```
+
+`minHeight` has no effect when `maxHeight` is not set.
 
 ## 📤 Exporting Data
 

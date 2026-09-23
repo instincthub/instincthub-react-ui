@@ -28,10 +28,25 @@ import {
   resolveExportOptions,
   TableExportFormatType,
 } from "./utils/tableExport";
+import {
+  PersistedTableStateType,
+  buildTableStateKey,
+  clearTableState,
+  pickPersistedParams,
+  readTableState,
+  resolveRestoredParams,
+  writeTableState,
+} from "./utils/tableState";
+import {
+  DEFAULT_TABLE_MIN_HEIGHT,
+  resolveScrollMaxHeight,
+} from "./utils/tableLayout";
 
 // Ref type for exposing table methods
 export interface IHubTableServerRef {
   refresh: () => void;
+  /** Forget the remembered page/sort/search for this table and go back to page 1. */
+  resetState: () => void;
 }
 
 interface IHubTableServerPropsType<T> {
@@ -86,11 +101,33 @@ interface IHubTableServerPropsType<T> {
   // UI customization
   stickyHeader?: boolean;
   maxHeight?: string;
+  /**
+   * Floor for `maxHeight`, so a viewport-relative value such as
+   * `calc(100vh - 340px)` cannot collapse the table to a couple of rows on a
+   * short screen. Defaults to `"360px"`. Pass `"0"` to disable the floor.
+   * Ignored when `maxHeight` is not set.
+   */
+  minHeight?: string;
   hideHeaderOnMobile?: boolean;
 
   // Row numbering
   showRowNumbers?: boolean;
   rowNumberStartFrom?: number;
+
+  // State persistence
+  /**
+   * Remember page, rows per page, sort and search in `sessionStorage` and
+   * restore them when the table mounts again in the same tab, e.g. after
+   * navigating to a detail page and back. Defaults to `true`.
+   */
+  persistState?: boolean;
+  /**
+   * Identifier for the persisted state. Defaults to the current pathname plus
+   * `endpointPath`, which is unique for the usual one-table-per-page layout.
+   * Set it when two tables on one page read the same endpoint, or when the
+   * same table should share its state across several routes.
+   */
+  persistKey?: string;
 }
 
 /**
@@ -160,9 +197,15 @@ interface IHubTableServerPropsType<T> {
  * @prop {Function} keyExtractor - The callback for the key extraction
  * @prop {boolean} stickyHeader - Whether to enable sticky header
  * @prop {string} maxHeight - The maximum height of the table
+ * @prop {string} minHeight - Floor applied to `maxHeight` so short viewports still
+ *   show a usable table (defaults to "360px"; pass "0" to disable)
  * @prop {boolean} hideHeaderOnMobile - Whether to hide the header on mobile
  * @prop {boolean} showRowNumbers - Whether to show row numbers for each record
  * @prop {number} rowNumberStartFrom - The starting number for row numbering (defaults to 1)
+ * @prop {boolean} persistState - Remember page, rows per page, sort and search in
+ *   sessionStorage and restore them on the next mount in the same tab (defaults to true)
+ * @prop {string} persistKey - Identifier for the persisted state (defaults to
+ *   pathname + endpointPath). Set it when two tables on one page share an endpoint.
  *
  * @link https://github.com/instincthub/instincthub-react-ui/blob/main/src/__examples__/src/components/ui/TableServerExamples.tsx
  */
@@ -205,9 +248,12 @@ export const IHubTableServer = forwardRef<
     keyExtractor = (row) => JSON.stringify(row),
     stickyHeader = false,
     maxHeight,
+    minHeight = DEFAULT_TABLE_MIN_HEIGHT,
     hideHeaderOnMobile = false,
     showRowNumbers = false,
     rowNumberStartFrom = 1,
+    persistState = true,
+    persistKey,
   }: IHubTableServerPropsType<T>,
   ref: any
 ) {
@@ -263,26 +309,63 @@ export const IHubTableServer = forwardRef<
     totalPages: 0,
   });
 
+  // Persisted state (page, rows per page, sort, search) lives in sessionStorage
+  // so that navigating to a detail page and back lands on the same page.
+  const storageKey = useMemo(
+    () => (persistState ? buildTableStateKey(persistKey, endpointPath) : null),
+    [persistState, persistKey, endpointPath]
+  );
+
+  // Read once on mount. Lazy so SSR (no window) simply gets null; the client
+  // hydration render reads storage itself, and the initial "Loading data..."
+  // markup does not depend on params, so there is no hydration mismatch.
+  const [storedState] = useState<PersistedTableStateType | null>(() =>
+    storageKey ? readTableState(storageKey) : null
+  );
+
+  // A stored page is only meaningful for the filter set it was reached with.
+  // Consumers often apply their filters (e.g. from the URL) a render after
+  // mount, so a record whose filters do not match yet is kept pending and
+  // applied the moment the filters catch up. See the render-time block below.
+  const pendingRestoreRef = useRef<PersistedTableStateType | null>(
+    storedState && storedState.searchParamsKey !== searchParamsKey
+      ? storedState
+      : null
+  );
+
   // Request params state
-  const [params, setParams] = useState<FetchParamsType>({
+  const [params, setParams] = useState<FetchParamsType>(() => ({
     page: 1,
     limit: defaultRowsPerPage,
     ...initialParams,
-  });
+    ...resolveRestoredParams(storedState, searchParamsKey),
+  }));
 
   // UI state
   const [expandedRows, setExpandedRows] = useState<(string | number)[]>([]);
-  const [searchTerm, setSearchTerm] = useState(initialParams.search || "");
+  const [searchTerm, setSearchTerm] = useState(() => params.search || "");
 
-  // When the caller's filters change, go back to page 1. Adjusting state during
-  // render (rather than in an effect) keeps this to a single fetch: React
-  // re-renders before effects run, so the fetch effect sees the final params.
+  // When the caller's filters change, go back to page 1, unless a pending
+  // restore was saved for exactly these filters, in which case resume there.
+  // Adjusting state during render (rather than in an effect) keeps this to a
+  // single fetch: React re-renders before effects run, so the fetch effect
+  // sees the final params.
   const [prevSearchParamsKey, setPrevSearchParamsKey] =
     useState(searchParamsKey);
   if (prevSearchParamsKey !== searchParamsKey) {
     setPrevSearchParamsKey(searchParamsKey);
     setRateLimited(false);
-    setParams((prev) => (prev.page === 1 ? prev : { ...prev, page: 1 }));
+    const pending = pendingRestoreRef.current;
+    if (pending && pending.searchParamsKey === searchParamsKey) {
+      // If React discards this render the ref is already cleared and the
+      // re-render falls through to the page-1 reset below. That only loses
+      // the remembered page, so it is an acceptable edge.
+      pendingRestoreRef.current = null;
+      setParams((prev) => ({ ...prev, ...pending.params }));
+      setSearchTerm(pending.params.search || "");
+    } else {
+      setParams((prev) => (prev.page === 1 ? prev : { ...prev, page: 1 }));
+    }
   }
 
   // Debounced search function
@@ -481,13 +564,30 @@ export const IHubTableServer = forwardRef<
     setParams((prev) => ({ ...prev }));
   }, []);
 
+  // Forget the remembered state and start again from page 1.
+  const handleResetState = useCallback(() => {
+    if (storageKey) clearTableState(storageKey);
+    pendingRestoreRef.current = null;
+    setRateLimited(false);
+    setSearchTerm(initialParams.search || "");
+    setParams({
+      page: 1,
+      limit: defaultRowsPerPage,
+      ...initialParams,
+    });
+    // `initialParams` is an object literal in the documented usage; comparing
+    // it by value keeps this callback stable across parent renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storageKey, defaultRowsPerPage, JSON.stringify(initialParams)]);
+
   // Expose refresh method to parent components
   useImperativeHandle(
     ref,
     () => ({
       refresh: handleRefresh,
+      resetState: handleResetState,
     }),
-    [handleRefresh]
+    [handleRefresh, handleResetState]
   );
 
   // Fetch every page the current filters match, up to `maxRows`.
@@ -627,17 +727,28 @@ export const IHubTableServer = forwardRef<
 
         // Process response based on whether an adapter is provided
         const adapter = dataAdapterRef.current;
-        if (adapter) {
-          const adaptedResponse = adapter(response);
-          setData(adaptedResponse.data);
-          if (adaptedResponse.pagination) {
-            setPagination(adaptedResponse.pagination);
+        const resolved: ApiResponseType<T> | undefined = adapter
+          ? adapter(response)
+          : response;
+        if (resolved) {
+          setData(resolved.data);
+          if (resolved.pagination) {
+            setPagination(resolved.pagination);
           }
-        } else if (response) {
-          setData(response.data as T[]);
-          if (response.pagination) {
-            setPagination(response.pagination);
-          }
+        }
+
+        // The first commit settles which filters the table is showing; a
+        // restore that never matched them is stale from here on.
+        pendingRestoreRef.current = null;
+
+        // A remembered page can be past the end once rows are deleted or the
+        // filters no longer match. The API answers with an empty page, so
+        // clamp to the last real page rather than show "No data".
+        const totalPages = resolved?.pagination?.totalPages ?? 0;
+        if (totalPages > 0 && params.page > totalPages) {
+          setParams((prev) =>
+            prev.page > totalPages ? { ...prev, page: totalPages } : prev
+          );
         }
 
         setError(null);
@@ -667,9 +778,22 @@ export const IHubTableServer = forwardRef<
     };
   }, [params, handleFetchData, rateLimited]);
 
+  // Remember the current state for the next mount. Written on every change so
+  // the record is fresh whenever the user leaves the page.
+  useEffect(() => {
+    if (!storageKey) return;
+    writeTableState(storageKey, {
+      params: pickPersistedParams(params),
+      searchParamsKey,
+      savedAt: Date.now(),
+    });
+  }, [storageKey, params, searchParamsKey]);
+
   // NOTE: there is deliberately no effect watching `searchParams`. The refetch
   // is driven by `handleFetchData` (keyed on `searchParamsKey`) in the effect
   // above; the page reset happens during render, below.
+
+  const scrollMaxHeight = resolveScrollMaxHeight(maxHeight, minHeight);
 
   // Loading state
   if (loading && initialRenderRef.current) {
@@ -787,7 +911,9 @@ export const IHubTableServer = forwardRef<
         className={`ihub-scroll-container ${
           stickyHeader ? "ihub-sticky-header" : ""
         }`}
-        style={maxHeight ? { maxHeight } : undefined}
+        style={
+          scrollMaxHeight ? { maxHeight: scrollMaxHeight } : undefined
+        }
       >
         <table className="ihub-table ihub-scroll-container">
           <thead className={hideHeaderOnMobile ? "ihub-hide-on-mobile" : ""}>
