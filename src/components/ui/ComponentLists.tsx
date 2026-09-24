@@ -1,6 +1,6 @@
 "use client";
 import { Check, Copy } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import FilterObjects from "../forms/FilterObjects";
 import InputText from "../forms/InputText";
 import { FilterObjectsType } from "../../types";
@@ -1096,7 +1096,11 @@ const ComponentLists = () => {
   const baseRepoUrl =
     "https://github.com/instincthub/instincthub-react-ui/blob/main/";
 
-  const uiBaseUrl= window.location.origin;
+  // window doesn't exist during server rendering / static export, so read it after mount.
+  const [uiBaseUrl, setUiBaseUrl] = useState("");
+  useEffect(() => {
+    setUiBaseUrl(window.location.origin);
+  }, []);
 
   const copyToClipboard = async (url: string, linkType: string) => {
     try {

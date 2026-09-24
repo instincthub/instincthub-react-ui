@@ -3,6 +3,7 @@ import "../assets/styles/globals.css";
 import "../assets/styles/header.css";
 import MainFooter from "../components/navbars/MainFooter";
 import CursorProviders from "../components/navbars/CursorProviders";
+import { Suspense } from "react";
 import { ReactClientProviders } from "../../../index";
 export const metadata = {
   title: "InstinctHub React UI",
@@ -30,7 +31,8 @@ export default function RootLayout({
         </head>
         <body>
           <ReactClientProviders session={null}>
-            {children}
+            {/* Several demos use useSearchParams(); Next.js needs a Suspense boundary to pre-render them. */}
+            <Suspense fallback={null}>{children}</Suspense>
             <MainFooter />
           </ReactClientProviders>
         </body>
