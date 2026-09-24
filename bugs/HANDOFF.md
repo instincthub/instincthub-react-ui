@@ -3,8 +3,11 @@
 ## Docs site (ui.instincthub.com) — every production deploy failing (2026-09-24, 0.2.0)
 
 **Status:** FIXED, deployed. Vercel production deploys had all been in Error for at least 63 days.
-The ComponentLists `window` fix shipped to npm in **0.2.1**: 0.2.0 had already been published from the
-build made before it, and npm doesn't allow re-publishing a version.
+The ComponentLists `window` fix shipped to npm in **0.2.2**. 0.2.0 had already been published from the
+build made before it, and npm doesn't allow re-publishing a version. **0.2.1 is broken (README +
+package.json only, no dist):** it was packed while `rm -rf dist && npm run rollup` was rebuilding. Never
+rebuild dist while a publish might be running; always check `total files` (~4727) in the publish output
+before approving the npm web auth. 0.2.1 should be deprecated.
 
 Three stacked causes, each hidden behind the previous one:
 1. `vercel.json` ran `npm install`, which ignores `pnpm-lock.yaml` and pulled `@types/node` 26 (its
