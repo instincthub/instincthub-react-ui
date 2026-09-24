@@ -1,5 +1,23 @@
 # Bug Handoff — instincthub-react-ui
 
+## Docs site (ui.instincthub.com) — every production deploy failing (2026-09-24, 0.2.0)
+
+**Status:** FIXED, deployed. Vercel production deploys had all been in Error for at least 63 days.
+
+Three stacked causes, each hidden behind the previous one:
+1. `vercel.json` ran `npm install`, which ignores `pnpm-lock.yaml` and pulled `@types/node` 26 (its
+   `const` type params need TS 5; the repo is on 4.9) → failed at type checking. Now
+   `pnpm install --frozen-lockfile` + `pnpm run build`. Keep package.json and the lockfile in sync or
+   the frozen install fails on Vercel.
+2. `next build` pre-render errors: `ComponentLists` read `window.location.origin` during render, and demos
+   using `useSearchParams()` had no Suspense boundary. Fixed with a mount-time read and a Suspense boundary
+   in the examples layout.
+3. Vercel refuses to deploy vulnerable Next.js (15.5.6, the RSC CVE). Lockfile now on next 15.5.26 and
+   react 19.3.0 (within existing ranges).
+
+Verified: `pnpm run build` 81/81 pages locally; `vercel --prod` aliased to https://ui.instincthub.com, and
+the IHubTextEditor page is live with the new examples.
+
 ## IHubTextEditor — caret jumps to the end; weak tables; no uploads; rich HTML lost (2026-09-24, 0.2.0)
 
 **Status:** FIXED, publishing as 0.2.0. Reported against the demo at
