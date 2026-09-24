@@ -1,35 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useMemo } from "react";
-import {
-  Heading2,
-  Heading3,
-  List,
-  ListOrdered,
-  ListChecks,
-  Quote,
-  CodeXml,
-  ImageIcon,
-  TableIcon,
-  Minus,
-  Youtube,
-  MessageSquareQuote,
-} from "lucide-react";
 import { SlashCommandItem } from "../types";
-
-const ICON_MAP: Record<string, React.ReactNode> = {
-  "heading-2": <Heading2 size={18} />,
-  "heading-3": <Heading3 size={18} />,
-  list: <List size={18} />,
-  "list-ordered": <ListOrdered size={18} />,
-  "list-checks": <ListChecks size={18} />,
-  quote: <Quote size={18} />,
-  "code-xml": <CodeXml size={18} />,
-  image: <ImageIcon size={18} />,
-  table: <TableIcon size={18} />,
-  minus: <Minus size={18} />,
-  youtube: <Youtube size={18} />,
-  "message-square-quote": <MessageSquareQuote size={18} />,
-};
+import { COMMAND_ICONS } from "./commandIcons";
 
 interface SlashCommandMenuProps {
   items: SlashCommandItem[];
@@ -84,10 +56,10 @@ export default function SlashCommandMenu({
             index === selectedIndex ? " ihub-te-slash-item--selected" : ""
           }`}
           onClick={() => onSelect(index)}
-          onMouseEnter={() => {}} // Hover handled via CSS
+          onMouseDown={(e) => e.preventDefault()}
         >
           <span className="ihub-te-slash-item-icon">
-            {ICON_MAP[item.icon] || null}
+            {COMMAND_ICONS[item.icon] || null}
           </span>
           <span className="ihub-te-slash-item-text">
             <span className="ihub-te-slash-item-title">{item.title}</span>

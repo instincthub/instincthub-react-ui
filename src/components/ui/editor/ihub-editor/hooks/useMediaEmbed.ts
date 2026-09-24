@@ -1,67 +1,33 @@
 "use client";
 import { useEffect } from "react";
 import { Editor } from "@tiptap/react";
-
-const YOUTUBE_REGEX =
-  /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
-
-const SUPPORTED_EMBED_PATTERNS = [
-  {
-    name: "youtube",
-    regex: YOUTUBE_REGEX,
-    getUrl: (match: RegExpMatchArray) =>
-      `https://www.youtube.com/embed/${match[1]}`,
-  },
-];
+import { toEmbedUrl } from "../upload/mediaKinds";
 
 interface UseMediaEmbedOptions {
   editor: Editor | null;
   enabled?: boolean;
 }
 
-export default function useMediaEmbed({
-  editor,
-  enabled = true,
-}: UseMediaEmbedOptions) {
+/** Turn a pasted YouTube / Vimeo / Loom / Figma / Drive link into an embed block. */
+export default function useMediaEmbed({ editor, enabled = true }: UseMediaEmbedOptions) {
   useEffect(() => {
     if (!editor || !enabled) return;
 
-    const handlePaste = (_view: any, event: ClipboardEvent) => {
+    const handlePaste = (event: ClipboardEvent) => {
+      // Only a bare link: pasted rich HTML should go through the normal parser.
+      if (event.clipboardData?.getData("text/html")) return;
       const text = event.clipboardData?.getData("text/plain")?.trim();
-      if (!text) return false;
-
-      // Check if it's a YouTube URL
-      const youtubeMatch = text.match(YOUTUBE_REGEX);
-      if (youtubeMatch) {
-        event.preventDefault();
-        editor.commands.setYoutubeVideo({ src: text });
-        return true;
-      }
-
-      // Check other embed patterns
-      for (const pattern of SUPPORTED_EMBED_PATTERNS) {
-        if (pattern.name === "youtube") continue; // Already handled above
-        const match = text.match(pattern.regex);
-        if (match) {
-          event.preventDefault();
-          (editor.commands as any).setEmbed({
-            src: pattern.getUrl(match),
-            type: pattern.name,
-          });
-          return true;
-        }
-      }
-
-      return false;
+      if (!text || /\s/.test(text)) return;
+      const src = toEmbedUrl(text);
+      if (!src) return;
+      event.preventDefault();
+      event.stopPropagation();
+      editor.chain().focus().setMediaBlock({ kind: "embed", src, name: text }).run();
     };
 
-    // We attach at the DOM level to intercept before Tiptap's default paste
+    // Capture phase so we run before ProseMirror's own paste handling.
     const dom = editor.view.dom;
-    const handler = (e: Event) => handlePaste(null, e as ClipboardEvent);
-    dom.addEventListener("paste", handler, { capture: true });
-
-    return () => {
-      dom.removeEventListener("paste", handler, { capture: true });
-    };
+    dom.addEventListener("paste", handlePaste, { capture: true });
+    return () => dom.removeEventListener("paste", handlePaste, { capture: true });
   }, [editor, enabled]);
 }

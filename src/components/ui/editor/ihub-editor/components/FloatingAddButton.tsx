@@ -1,118 +1,37 @@
 "use client";
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { FloatingMenu, Editor } from "@tiptap/react";
-import {
-  Plus,
-  GripVertical,
-  Heading2,
-  Heading3,
-  List,
-  ListOrdered,
-  ListChecks,
-  Quote,
-  CodeXml,
-  ImageIcon,
-  TableIcon,
-  Minus,
-  Youtube,
-} from "lucide-react";
+import { Plus } from "lucide-react";
+import type { SlashCommandItem } from "../types";
+import { COMMAND_ICONS } from "./commandIcons";
 
 interface FloatingAddButtonProps {
   editor: Editor;
-  onImageInsert?: () => void;
+  commands: SlashCommandItem[];
 }
 
-const BLOCK_ITEMS = [
-  {
-    icon: <Heading2 size={16} />,
-    label: "Heading 2",
-    action: (editor: Editor) =>
-      editor.chain().focus().setHeading({ level: 2 }).run(),
-  },
-  {
-    icon: <Heading3 size={16} />,
-    label: "Heading 3",
-    action: (editor: Editor) =>
-      editor.chain().focus().setHeading({ level: 3 }).run(),
-  },
-  {
-    icon: <List size={16} />,
-    label: "Bullet List",
-    action: (editor: Editor) =>
-      editor.chain().focus().toggleBulletList().run(),
-  },
-  {
-    icon: <ListOrdered size={16} />,
-    label: "Numbered List",
-    action: (editor: Editor) =>
-      editor.chain().focus().toggleOrderedList().run(),
-  },
-  {
-    icon: <ListChecks size={16} />,
-    label: "Task List",
-    action: (editor: Editor) =>
-      editor.chain().focus().toggleTaskList().run(),
-  },
-  {
-    icon: <Quote size={16} />,
-    label: "Quote",
-    action: (editor: Editor) =>
-      editor.chain().focus().toggleBlockquote().run(),
-  },
-  {
-    icon: <CodeXml size={16} />,
-    label: "Code Block",
-    action: (editor: Editor) =>
-      editor.chain().focus().toggleCodeBlock().run(),
-  },
-  {
-    icon: <ImageIcon size={16} />,
-    label: "Image",
-    action: (_editor: Editor) => {
-      document.dispatchEvent(
-        new CustomEvent("ihub-editor-insert-image")
-      );
-    },
-  },
-  {
-    icon: <TableIcon size={16} />,
-    label: "Table",
-    action: (editor: Editor) =>
-      editor
-        .chain()
-        .focus()
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-        .run(),
-  },
-  {
-    icon: <Minus size={16} />,
-    label: "Divider",
-    action: (editor: Editor) =>
-      editor.chain().focus().setHorizontalRule().run(),
-  },
-  {
-    icon: <Youtube size={16} />,
-    label: "YouTube",
-    action: (editor: Editor) => {
-      const url = prompt("Enter YouTube URL:");
-      if (url) editor.commands.setYoutubeVideo({ src: url });
-    },
-  },
-];
+const BLOCKED_PARENTS = ["tableCell", "tableHeader", "listItem", "taskItem", "blockquote", "callout", "sectionBanner", "toggleBlock"];
 
-export default function FloatingAddButton({
-  editor,
-}: FloatingAddButtonProps) {
+export default function FloatingAddButton({ editor, commands }: FloatingAddButtonProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleAction = useCallback(
-    (action: (editor: Editor) => void) => {
-      action(editor);
+    (item: SlashCommandItem) => {
+      item.command({ editor });
       setIsExpanded(false);
     },
     [editor]
   );
+
+  // Close when the caret moves elsewhere.
+  useEffect(() => {
+    const close = () => setIsExpanded(false);
+    editor.on("selectionUpdate", close);
+    return () => {
+      editor.off("selectionUpdate", close);
+    };
+  }, [editor]);
 
   return (
     <FloatingMenu
@@ -121,67 +40,47 @@ export default function FloatingAddButton({
         duration: 150,
         placement: "left-start",
         offset: [-4, 0],
+        onHidden: () => setIsExpanded(false),
       }}
       className="ihub-te-floating-wrapper"
       shouldShow={({ state }) => {
-        const { $from } = state.selection;
-        const isEmptyParagraph =
-          $from.parent.type.name === "paragraph" &&
-          $from.parent.content.size === 0;
+        const { $from, empty } = state.selection;
+        if (!empty) return false;
+        const isEmptyParagraph = $from.parent.type.name === "paragraph" && $from.parent.content.size === 0;
         if (!isEmptyParagraph) return false;
-
-        // Don't show inside tables, lists, or blockquotes
-        const depth = $from.depth;
-        for (let i = depth; i > 0; i--) {
-          const node = $from.node(i);
-          const name = node.type.name;
-          if (
-            name === "tableCell" ||
-            name === "tableHeader" ||
-            name === "listItem" ||
-            name === "taskItem" ||
-            name === "blockquote"
-          ) {
-            return false;
-          }
+        for (let depth = $from.depth; depth > 0; depth -= 1) {
+          if (BLOCKED_PARENTS.includes($from.node(depth).type.name)) return false;
         }
-
         return true;
       }}
     >
-      <div ref={menuRef} className="ihub-te-floating-container">
+      <div ref={menuRef} className="ihub-te-floating-container" onMouseDown={(e) => e.preventDefault()}>
         <button
           type="button"
-          className={`ihub-te-floating-btn${
-            isExpanded ? " ihub-te-floating-btn--active" : ""
-          }`}
+          className={`ihub-te-floating-btn${isExpanded ? " ihub-te-floating-btn--active" : ""}`}
           onClick={() => setIsExpanded((prev) => !prev)}
           title="Add a block"
+          aria-expanded={isExpanded}
         >
           <Plus
             size={18}
             strokeWidth={2}
-            style={{
-              transform: isExpanded ? "rotate(45deg)" : "none",
-              transition: "transform 0.2s ease",
-            }}
+            style={{ transform: isExpanded ? "rotate(45deg)" : "none", transition: "transform 0.2s ease" }}
           />
         </button>
-        <span className="ihub-te-floating-grip" aria-hidden="true">
-          <GripVertical size={14} />
-        </span>
         {isExpanded && (
-          <div className="ihub-te-floating-menu">
-            {BLOCK_ITEMS.map((item) => (
+          <div className="ihub-te-floating-menu" role="menu">
+            {commands.map((item) => (
               <button
-                key={item.label}
+                key={item.title}
                 type="button"
+                role="menuitem"
                 className="ihub-te-floating-menu-item"
-                onClick={() => handleAction(item.action)}
-                title={item.label}
+                onClick={() => handleAction(item)}
+                title={item.description}
               >
-                {item.icon}
-                <span>{item.label}</span>
+                {COMMAND_ICONS[item.icon]}
+                <span>{item.title}</span>
               </button>
             ))}
           </div>

@@ -1,17 +1,21 @@
 "use client";
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { EditorContent } from "@tiptap/react";
 
 import { IHubTextEditorProps, DEFAULT_FEATURES } from "./types";
 import useIHubEditor from "./hooks/useIHubEditor";
 import useSlashCommands from "./hooks/useSlashCommands";
-import useImageUpload from "./hooks/useImageUpload";
 import useMediaEmbed from "./hooks/useMediaEmbed";
+import useSurfaceClick from "./hooks/useSurfaceClick";
 import BubbleToolbar from "./components/BubbleToolbar";
 import SlashCommandMenu from "./components/SlashCommandMenu";
 import FloatingAddButton from "./components/FloatingAddButton";
 import TableToolbar from "./components/TableToolbar";
+import TableControls from "./table/TableControls";
+import BlockHandle from "./blocks/BlockHandle";
 import EditorFooter from "./components/EditorFooter";
+import { commandsForFeatures } from "./constants";
+import { canUpload, createUploader, type EditorUploader } from "./upload/uploadFile";
 
 export default function IHubTextEditor({
   name = "editor-content",
@@ -24,6 +28,8 @@ export default function IHubTextEditor({
   charLimit = 50000,
   features: featuresProp,
   onImageUpload,
+  onFileUpload,
+  upload,
   className = "",
   minHeight = "400px",
   maxHeight = "80vh",
@@ -31,14 +37,17 @@ export default function IHubTextEditor({
   readOnly = false,
   extensions: additionalExtensions = [],
 }: IHubTextEditorProps) {
-  const features = useMemo(
-    () => ({ ...DEFAULT_FEATURES, ...featuresProp }),
-    [featuresProp]
-  );
-
+  const features = useMemo(() => ({ ...DEFAULT_FEATURES, ...featuresProp }), [featuresProp]);
   const [htmlContent, setHtmlContent] = useState(content);
-
+  const areaRef = useRef<HTMLDivElement>(null);
   const slashCommands = useSlashCommands();
+
+  // A ref keeps node views on the latest upload props without rebuilding the editor.
+  const uploaderRef = useRef<EditorUploader | null>(null);
+  const sources = { onFileUpload, onImageUpload, upload };
+  uploaderRef.current = canUpload(sources, "file") || canUpload(sources, "image") ? createUploader(sources) : null;
+
+  const commands = useMemo(() => commandsForFeatures(features), [features]);
 
   const handleChange = (html: string) => {
     setHtmlContent(html);
@@ -56,18 +65,11 @@ export default function IHubTextEditor({
     additionalExtensions,
     onSlashCommandStart: slashCommands.onStart,
     onSlashCommandExit: slashCommands.onExit,
+    uploaderRef,
   });
 
-  const { openFilePicker } = useImageUpload({
-    editor,
-    onImageUpload,
-    enabled: features.imageUpload,
-  });
-
-  useMediaEmbed({
-    editor,
-    enabled: features.mediaEmbeds,
-  });
+  useMediaEmbed({ editor, enabled: features.mediaEmbeds && !readOnly });
+  const surfaceClick = useSurfaceClick(editor, readOnly);
 
   const wrapperClass = [
     "ihub-te-wrapper",
@@ -77,63 +79,6 @@ export default function IHubTextEditor({
   ]
     .filter(Boolean)
     .join(" ");
-
-  const handleEditorAreaClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!editor || readOnly) return;
-      const target = e.target as HTMLElement;
-
-      // Ignore clicks on bubble toolbar / link popover to preserve selection
-      const isBubbleToolbar = target.closest(
-        ".ihub-te-bubble-menu, .ihub-te-bubble-toolbar, .ihub-te-link-popover"
-      );
-      if (isBubbleToolbar) return;
-
-      const isInsideContent = target.closest(".ihub-te-content");
-
-      if (!isInsideContent) {
-        // Click on empty space outside content — focus at end
-        editor.commands.focus("end");
-        return;
-      }
-
-      // If clicking below the last node (e.g. after a code block),
-      // check if the last node is not a paragraph and add one
-      const editorEl = target.closest(".ihub-te-content") as HTMLElement;
-      if (!editorEl) return;
-
-      const lastChild = editorEl.lastElementChild;
-      if (!lastChild) return;
-
-      const lastChildRect = lastChild.getBoundingClientRect();
-      const clickY = e.clientY;
-
-      // User clicked below the last block element
-      if (clickY > lastChildRect.bottom) {
-        const { doc } = editor.state;
-        const lastNode = doc.lastChild;
-        if (lastNode && lastNode.type.name !== "paragraph") {
-          // Insert a paragraph at the end and focus it
-          editor
-            .chain()
-            .focus("end")
-            .command(({ tr, dispatch }) => {
-              if (dispatch) {
-                const paragraph =
-                  editor.state.schema.nodes.paragraph.create();
-                tr.insert(tr.doc.content.size, paragraph);
-              }
-              return true;
-            })
-            .focus("end")
-            .run();
-        } else {
-          editor.commands.focus("end");
-        }
-      }
-    },
-    [editor, readOnly]
-  );
 
   if (!editor) return null;
 
@@ -147,23 +92,15 @@ export default function IHubTextEditor({
       )}
 
       <div
+        ref={areaRef}
         className="ihub-te-editor-area"
-        style={{
-          minHeight,
-          maxHeight,
-        }}
-        onClick={handleEditorAreaClick}
+        style={{ minHeight, maxHeight }}
+        onMouseDown={surfaceClick.onMouseDown}
+        onClick={surfaceClick.onClick}
       >
-        {features.bubbleMenu && !readOnly && (
-          <BubbleToolbar editor={editor} />
-        )}
+        {features.bubbleMenu && !readOnly && <BubbleToolbar editor={editor} />}
 
-        {features.floatingAddButton && !readOnly && (
-          <FloatingAddButton
-            editor={editor}
-            onImageInsert={openFilePicker}
-          />
-        )}
+        {features.floatingAddButton && !readOnly && <FloatingAddButton editor={editor} commands={commands} />}
 
         {features.slashCommands && slashCommands.isOpen && (
           <SlashCommandMenu
@@ -174,25 +111,16 @@ export default function IHubTextEditor({
           />
         )}
 
-        <EditorContent
-          editor={editor}
-          className="ihub-te-content-wrapper"
-        />
+        <EditorContent editor={editor} className="ihub-te-content-wrapper" />
 
-        {features.tables && !readOnly && (
-          <TableToolbar editor={editor} />
-        )}
+        {features.dragHandle && !readOnly && <BlockHandle editor={editor} containerRef={areaRef} />}
+        {features.tables && !readOnly && <TableControls editor={editor} containerRef={areaRef} />}
+        {features.tables && !readOnly && <TableToolbar editor={editor} />}
       </div>
 
       <input type="hidden" value={htmlContent} name={name} />
 
-      {features.characterCount && (
-        <EditorFooter
-          editor={editor}
-          charLimit={charLimit}
-          lastUpdated={lastUpdated}
-        />
-      )}
+      {features.characterCount && <EditorFooter editor={editor} charLimit={charLimit} lastUpdated={lastUpdated} />}
     </div>
   );
 }

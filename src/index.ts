@@ -89,7 +89,16 @@ export type { S3UploadResponseType, S3MultiUploaderProps, PresignedUploadResult 
 // UI Components
 export { default as CustomTextEditor } from "./components/ui/editor/CustomTextEditor";
 export { default as IHubTextEditor } from "./components/ui/editor/ihub-editor";
-export type { IHubTextEditorProps, IHubEditorFeatures } from "./components/ui/editor/ihub-editor";
+export type {
+  IHubTextEditorProps,
+  IHubEditorFeatures,
+  IHubEditorUploadConfig,
+  FileUploadHandler,
+  FileUploadContext,
+  UploadedFileResult,
+  EditorPresignResult,
+  MediaKind,
+} from "./components/ui/editor/ihub-editor";
 export { default as ContentViewer } from "./components/ui/viewer/ContentViewer";
 export { default as ContentViewOrEdit } from "./components/ui/viewer/ContentViewOrEdit";
 export { default as CodeDisplay } from "./components/ui/viewer/CodeDisplay";

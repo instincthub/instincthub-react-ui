@@ -626,7 +626,7 @@ const ComponentLists = () => {
     {
       name: "IHubTextEditor",
       description:
-        "Medium/Substack-style rich text editor with floating toolbar, slash commands, and image uploads",
+        "Notion-style rich text editor: slash commands, flexible tables (row/column handles, add, move, duplicate, colour), image/video/audio/PDF/file uploads, embeds, section banners, callouts, toggles, CTA buttons, and rich HTML that keeps its inline styles",
       category: "UI",
       repo_path: "src/components/ui/editor/ihub-editor/IHubTextEditor.tsx",
       example_path: "docs/static-docs/components/IHubTextEditor.md",

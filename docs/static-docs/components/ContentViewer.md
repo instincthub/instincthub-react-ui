@@ -99,8 +99,10 @@ import { ContentViewer } from "@instincthub/react-ui";
 Link the CSS and wrap content in `.ihub-content-viewer`:
 
 ```html
-<!-- Link the stylesheet -->
+<!-- Link the stylesheets -->
 <link rel="stylesheet" href="https://unpkg.com/@instincthub/react-ui/dist/src/assets/css/ui/content-viewer.css" />
+<!-- Needed for media blocks (file cards, PDF viewer, embeds), toggles and callouts -->
+<link rel="stylesheet" href="https://unpkg.com/@instincthub/react-ui/dist/src/assets/css/ui/ihub-text-editor-blocks.css" />
 
 <!-- Wrap your HTML content -->
 <div class="ihub-content-viewer">
@@ -109,7 +111,7 @@ Link the CSS and wrap content in `.ihub-content-viewer`:
 </div>
 ```
 
-**Important:** The `.ihub-content-viewer` class provides all the typography styles. No JavaScript required for display.
+**Important:** The `.ihub-content-viewer` class provides all the typography styles. No JavaScript required for display. Section banners, callouts and buttons carry inline styles, so they render even without the blocks stylesheet. File cards, the PDF header and embed sizing need `ihub-text-editor-blocks.css`.
 
 ## HTML Block Types Produced by IHubTextEditor
 
@@ -131,8 +133,16 @@ Link the CSS and wrap content in `.ihub-content-viewer`:
 | Pull quote | `<blockquote data-type="pull-quote"><p>...</p></blockquote>` |
 | Code block | `<pre><code>...</code></pre>` |
 | Table | `<table><tr><th>...</th></tr><tr><td>...</td></tr></table>` |
-| Image + caption | `<figure class="ihub-te-image-block"><img src="..." /><figcaption>...</figcaption></figure>` |
-| YouTube embed | `<div data-youtube-video><iframe src="..."></iframe></div>` |
+| Image | `<figure data-type="ihub-media" data-kind="image" class="ihub-te-media ihub-te-image-block ..."><img src="..." /><figcaption>...</figcaption></figure>` |
+| Video / audio | `<figure data-type="ihub-media" data-kind="video"><video src="..." controls></video></figure>` (`<audio>` for audio) |
+| PDF | `<figure data-type="ihub-media" data-kind="pdf"><div class="ihub-te-pdf-header">…</div><iframe class="ihub-te-pdf-frame" src="…pdf"></iframe></figure>` |
+| File | `<figure data-type="ihub-media" data-kind="file"><a class="ihub-te-file-card" href="..." download>…</a></figure>` |
+| Embed | `<figure data-type="ihub-media" data-kind="embed"><div class="ihub-te-embed-responsive"><iframe sandbox="…" src="..."></iframe></div></figure>` |
+| YouTube (legacy) | `<div data-youtube-video><iframe src="..."></iframe></div>` |
+| Section banner | `<div data-type="section-banner" style="background-color:…;color:…">…</div>` |
+| Callout | `<div data-type="callout" data-variant="info" style="…"><span class="ihub-te-callout-emoji">💡</span><div class="ihub-te-callout-body">…</div></div>` |
+| Toggle | `<details class="ihub-te-toggle"><summary>…</summary>…</details>` |
+| Button | `<div data-type="ihub-button"><a class="ihub-te-button" href="…" style="…">Label</a></div>` |
 | Horizontal rule | `<hr />` |
 
 ## Django / Backend Template Example

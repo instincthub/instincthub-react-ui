@@ -3,10 +3,6 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import Table from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableCell from "@tiptap/extension-table-cell";
-import TableHeader from "@tiptap/extension-table-header";
 import CodeBlock from "@tiptap/extension-code-block";
 import Highlight from "@tiptap/extension-highlight";
 import TaskList from "@tiptap/extension-task-list";
@@ -23,12 +19,20 @@ import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import { type AnyExtension, type Extensions } from "@tiptap/core";
 
-import { IHubEditorFeatures, DEFAULT_FEATURES } from "../types";
+import { IHubEditorFeatures, DEFAULT_FEATURES, MediaKind } from "../types";
 import PullQuoteExtension from "../extensions/PullQuoteExtension";
 import SlashCommandExtension from "../extensions/SlashCommandExtension";
-import ImageWithCaption from "../extensions/ImageWithCaption";
 import EmbedExtension from "../extensions/EmbedExtension";
-import { SLASH_COMMANDS } from "../constants";
+import MediaBlock from "../extensions/MediaBlock";
+import SectionBanner from "../extensions/SectionBanner";
+import Callout from "../extensions/Callout";
+import ToggleBlock, { ToggleSummary } from "../extensions/ToggleBlock";
+import ButtonBlock from "../extensions/ButtonBlock";
+import { PreserveStyles, StyledBlock } from "../extensions/PreserveStyles";
+import { IHubTable, IHubTableCell, IHubTableHeader, IHubTableRow } from "../extensions/TableExtensions";
+import BlockKeymap from "../blocks/BlockKeymap";
+import { commandsForFeatures, filterCommands } from "../constants";
+import type { EditorUploader } from "../upload/uploadFile";
 
 interface UseIHubEditorOptions {
   content?: string;
@@ -41,158 +45,104 @@ interface UseIHubEditorOptions {
   additionalExtensions?: Extensions;
   onSlashCommandStart?: (props: any) => void;
   onSlashCommandExit?: () => void;
+  uploaderRef?: { current: EditorUploader | null };
 }
 
-export default function useIHubEditor({
-  content = "",
+function uploadKinds(features: Required<IHubEditorFeatures>): MediaKind[] {
+  const kinds: MediaKind[] = [];
+  if (features.imageUpload) kinds.push("image");
+  if (features.fileUploads) kinds.push("video", "audio", "pdf", "file");
+  return kinds;
+}
+
+/** Build the extension list for the enabled features. Exported for headless tests. */
+export function buildExtensions({
   placeholder = "Tell your story...",
   charLimit = 50000,
   features: featuresProp,
-  readOnly = false,
-  onChange,
-  onBlur,
   additionalExtensions = [],
   onSlashCommandStart,
   onSlashCommandExit,
-}: UseIHubEditorOptions) {
+  uploaderRef = { current: null },
+}: Omit<UseIHubEditorOptions, "content" | "readOnly" | "onChange" | "onBlur">): AnyExtension[] {
   const features = { ...DEFAULT_FEATURES, ...featuresProp };
 
   const extensions: AnyExtension[] = [
-    StarterKit.configure({
-      dropcursor: false,
-      codeBlock: false,
-    }),
-    Link.configure({
-      openOnClick: false,
-      HTMLAttributes: {
-        class: "ihub-te-link",
-      },
-    }),
+    StarterKit.configure({ dropcursor: false, codeBlock: false }),
+    Link.configure({ openOnClick: false, HTMLAttributes: { class: "ihub-te-link" } }),
     Underline,
     Highlight.configure({ multicolor: true }),
     TextStyle,
     Color,
-    Dropcursor.configure({
-      color: "var(--DarkCyan)",
-      width: 2,
-    }),
-    TextAlign.configure({
-      types: ["heading", "paragraph"],
-    }),
-    Image,
-    ImageWithCaption,
+    Dropcursor.configure({ color: "var(--DarkCyan)", width: 2 }),
+    TextAlign.configure({ types: ["heading", "paragraph"] }),
+    // Plain <img> from pasted HTML; uploads use MediaBlock.
+    Image.configure({ HTMLAttributes: { class: "ihub-te-inline-image" } }),
+    MediaBlock.configure({ uploaderRef, uploadKinds: uploadKinds(features) }),
     Placeholder.configure({
-      placeholder: ({ node }) => {
-        if (node.type.name === "heading") {
-          return `Heading ${node.attrs.level}`;
-        }
-        return "Press '/' for commands";
+      placeholder: ({ node, editor }) => {
+        if (node.type.name === "heading") return `Heading ${node.attrs.level}`;
+        if (node.type.name === "toggleSummary") return "Toggle title";
+        return editor.isEmpty ? placeholder : "Type '/' for commands";
       },
       showOnlyCurrent: true,
+      includeChildren: true,
       emptyEditorClass: "ihub-te-empty",
     }),
-    CharacterCount.configure({
-      limit: charLimit,
-    }),
+    CharacterCount.configure({ limit: charLimit }),
   ];
 
-  if (features.tables) {
-    extensions.push(
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableCell,
-      TableHeader
-    );
-  }
-
-  if (features.codeBlocks) {
-    extensions.push(
-      CodeBlock.configure({
-        exitOnTripleEnter: true,
-        exitOnArrowDown: true,
-      })
-    );
-  }
-
-  if (features.taskLists) {
-    extensions.push(
-      TaskList,
-      TaskItem.configure({ nested: true })
-    );
-  }
-
-  if (features.pullQuotes) {
-    extensions.push(PullQuoteExtension);
-  }
-
+  if (features.tables) extensions.push(IHubTable, IHubTableRow, IHubTableCell, IHubTableHeader);
+  if (features.codeBlocks) extensions.push(CodeBlock.configure({ exitOnTripleEnter: true, exitOnArrowDown: true }));
+  if (features.taskLists) extensions.push(TaskList, TaskItem.configure({ nested: true }));
+  if (features.pullQuotes) extensions.push(PullQuoteExtension);
+  if (features.banners) extensions.push(SectionBanner);
+  if (features.callouts) extensions.push(Callout);
+  if (features.toggles) extensions.push(ToggleBlock, ToggleSummary);
+  if (features.buttons) extensions.push(ButtonBlock);
+  if (features.preserveStyles) extensions.push(PreserveStyles, StyledBlock);
   if (features.mediaEmbeds) {
-    extensions.push(
-      Youtube.configure({
-        HTMLAttributes: {
-          class: "ihub-te-youtube",
-        },
-      }),
-      EmbedExtension
-    );
+    extensions.push(Youtube.configure({ HTMLAttributes: { class: "ihub-te-youtube" } }), EmbedExtension);
   }
-
-  if (features.typography) {
-    extensions.push(Typography);
-  }
-
-  if (features.focusMode) {
-    extensions.push(
-      Focus.configure({
-        className: "ihub-te-has-focus",
-        mode: "deepest",
-      })
-    );
-  }
+  if (features.dragHandle) extensions.push(BlockKeymap);
+  if (features.typography) extensions.push(Typography);
+  if (features.focusMode) extensions.push(Focus.configure({ className: "ihub-te-has-focus", mode: "deepest" }));
 
   if (features.slashCommands) {
+    const available = commandsForFeatures(features);
     extensions.push(
       SlashCommandExtension.configure({
         suggestion: {
-          items: ({ query }: { query: string }) => {
-            return SLASH_COMMANDS.filter((item) =>
-              item.title.toLowerCase().includes(query.toLowerCase())
-            ).slice(0, 10);
-          },
-          render: () => {
-            return {
-              onStart: (props: any) => {
-                onSlashCommandStart?.(props);
-              },
-              onUpdate: (props: any) => {
-                onSlashCommandStart?.(props);
-              },
-              onKeyDown: (props: any) => {
-                if (props.event.key === "Escape") {
-                  onSlashCommandExit?.();
-                  return true;
-                }
-                return false;
-              },
-              onExit: () => {
+          items: ({ query }: { query: string }) => filterCommands(available, query),
+          render: () => ({
+            onStart: (props: any) => onSlashCommandStart?.(props),
+            onUpdate: (props: any) => onSlashCommandStart?.(props),
+            onKeyDown: (props: any) => {
+              if (props.event.key === "Escape") {
                 onSlashCommandExit?.();
-              },
-            };
-          },
+                return true;
+              }
+              return false;
+            },
+            onExit: () => onSlashCommandExit?.(),
+          }),
         },
       })
     );
   }
 
   extensions.push(...additionalExtensions);
+  return extensions;
+}
 
-  const editor = useEditor({
-    extensions,
+export default function useIHubEditor({ content = "", readOnly = false, onChange, onBlur, ...rest }: UseIHubEditorOptions) {
+  return useEditor({
+    extensions: buildExtensions(rest),
     content,
     editable: !readOnly,
+    immediatelyRender: false,
     editorProps: {
-      attributes: {
-        class: "ihub-te-content",
-      },
+      attributes: { class: "ihub-te-content" },
     },
     onUpdate: ({ editor }) => {
       onChange?.(editor.getHTML());
@@ -201,6 +151,4 @@ export default function useIHubEditor({
       onBlur?.();
     },
   });
-
-  return editor;
 }

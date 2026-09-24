@@ -2,6 +2,20 @@
 
 import React, { useState } from "react";
 import { IHubTextEditor, SubmitButton } from "../../../../index";
+import type { FileUploadHandler } from "../../../../index";
+import { BLOCKS_SAMPLE, EMAIL_TEMPLATE_SAMPLE } from "./ihubTextEditorSamples";
+
+/**
+ * Demo-only uploader: simulates progress and returns a local object URL.
+ * In an app, pass `upload={{ presignEndpoint, token }}` or set the env vars instead.
+ */
+const mockFileUpload: FileUploadHandler = async (file, { onProgress }) => {
+  for (let pct = 10; pct <= 100; pct += 15) {
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    onProgress(Math.min(pct, 100));
+  }
+  return { url: URL.createObjectURL(file), name: file.name, size: file.size, mime: file.type };
+};
 
 const IHubTextEditorExample: React.FC = () => {
   const [content1, setContent1] = useState("");
@@ -9,6 +23,8 @@ const IHubTextEditorExample: React.FC = () => {
     "<h2>Welcome to IHubTextEditor</h2><p>This is a <strong>Medium-style</strong> editor with a distraction-free writing experience.</p><p>Try selecting text to see the floating toolbar, or type <code>/</code> to insert blocks.</p>"
   );
   const [content3, setContent3] = useState("");
+  const [blocksHtml, setBlocksHtml] = useState(BLOCKS_SAMPLE);
+  const [emailHtml, setEmailHtml] = useState(EMAIL_TEMPLATE_SAMPLE);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const mockImageUpload = async (file: File): Promise<string> => {
@@ -30,12 +46,49 @@ const IHubTextEditorExample: React.FC = () => {
       <div className="ihub-page-header">
         <h1>IHubTextEditor Examples</h1>
         <p>
-          Medium/Substack-style rich text editor with floating toolbar, slash
-          commands, and image uploads
+          Notion-style rich text editor: slash commands, flexible tables,
+          image/video/PDF/file uploads, section banners, callouts, toggles,
+          buttons, and rich HTML that keeps its styles
         </p>
       </div>
 
       <div className="ihub-examples-grid">
+        {/* Blocks showcase */}
+        <div className="ihub-example-card">
+          <h3>Blocks, tables and uploads</h3>
+          <p>
+            Type &quot;/&quot; or click &quot;+&quot; on an empty line for Image, Video,
+            Audio, PDF, File, Embed, Section Banner, Callout, Toggle and Button.
+            Drag files straight into the editor to upload them.
+          </p>
+          <IHubTextEditor
+            name="blocks-demo"
+            content={blocksHtml}
+            onChange={setBlocksHtml}
+            onFileUpload={mockFileUpload}
+          />
+        </div>
+
+        {/* Rich HTML */}
+        <div className="ihub-example-card">
+          <h3>Rich HTML (email template)</h3>
+          <p>
+            Pasted or loaded HTML keeps its inline styles, email table attributes
+            and layout. Paste with ⌘⇧V / Ctrl+Shift+V to paste plain text instead.
+          </p>
+          <IHubTextEditor
+            name="email-demo"
+            content={emailHtml}
+            onChange={setEmailHtml}
+            onFileUpload={mockFileUpload}
+            maxHeight="none"
+          />
+          <details className="ihub-mt-3">
+            <summary>Output HTML</summary>
+            <pre style={{ whiteSpace: "pre-wrap", fontSize: "0.75rem" }}>{emailHtml}</pre>
+          </details>
+        </div>
+
         {/* Basic Editor */}
         <div className="ihub-example-card">
           <h3>Basic Editor</h3>
@@ -174,21 +227,32 @@ const [content, setContent] = useState("");
         </div>
 
         <div className="ihub-code-section">
-          <h3>With Image Upload</h3>
+          <h3>Uploads (image, video, audio, PDF, file)</h3>
           <pre>
-            <code>{`const handleImageUpload = async (file: File) => {
-  const formData = new FormData();
-  formData.append("image", file);
-  const res = await fetch("/api/upload", { method: "POST", body: formData });
-  const { url } = await res.json();
-  return url;
-};
-
+            <code>{`// 1. Your own handler (highest priority)
 <IHubTextEditor
-  content={content}
-  onChange={setContent}
-  onImageUpload={handleImageUpload}
-/>`}</code>
+  onFileUpload={async (file, { kind, onProgress }) => {
+    const url = await myUpload(file, onProgress);
+    return { url, name: file.name, size: file.size };
+  }}
+/>
+
+// 2. Presigned S3 upload (recommended). Endpoint receives
+//    { filename, content_type, size, kind } and returns { url, cdnUrl }.
+<IHubTextEditor upload={{ presignEndpoint: \`\${API_HOST_URL}uploads/presign/\`, token }} />
+
+// 3. Multipart endpoint (Leadboard documents style). Response JSON
+//    needs a url / file / location field.
+<IHubTextEditor upload={{ endpoint: \`\${API_HOST_URL}documents/\${handle}/\`, token }} />
+
+// Or configure with env vars instead of props:
+// NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL=https://api.example.com/uploads/presign/
+// NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL=https://api.example.com/uploads/
+// 4. Direct S3 (opt-in: NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3=true or upload={{ directS3: true }})
+//    reuses FileUploader's variables. The secret key ships to the browser, so prefer presign:
+// NEXT_PUBLIC_AWS_BUCKET_NAME, NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+// NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY, NEXT_PUBLIC_AWS_REGION,
+// NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER, NEXT_PUBLIC_IHUB_EDITOR_FILE_URL`}</code>
           </pre>
         </div>
 
@@ -203,6 +267,9 @@ const [content, setContent] = useState("");
     floatingAddButton: false,
     focusMode: true,
     tables: false,
+    banners: false,
+    fileUploads: false,   // video, audio, PDF and file blocks
+    preserveStyles: false // strip inline styles from pasted HTML
   }}
 />`}</code>
           </pre>

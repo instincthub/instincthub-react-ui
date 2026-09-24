@@ -1,5 +1,76 @@
 # Bug Handoff — instincthub-react-ui
 
+## IHubTextEditor — caret jumps to the end; weak tables; no uploads; rich HTML lost (2026-09-24, 0.2.0)
+
+**Status:** FIXED, publishing as 0.2.0. Reported against the demo at
+ui.instincthub.com/components/ui/ihub-text-editor, with a Kids Can Code email template as the rich-HTML sample.
+
+Files: `src/components/ui/editor/ihub-editor/**` (new `extensions/`, `components/media|blocks`, `table/`,
+`upload/`, `hooks/useSurfaceClick.ts`, `__tests__/`), new `src/assets/css/ui/ihub-text-editor-blocks.css`,
+docs `IHubTextEditor.md`, example `IHubTextEditorExample.tsx` + `ihubTextEditorSamples.ts`.
+
+**Symptom 1 — caret jumps to the end** when selecting text or choosing an option from the "+" / slash menu.
+Root cause: the editor-area `onClick` called `editor.commands.focus("end")` for any click whose target was
+outside `.ihub-te-content`. That included the floating "+" menu, the slash menu, the table toolbar, and
+drag-selections released below the last block. Fix: `useSurfaceClick` acts only on a plain click
+(no drag, text selection collapsed or node-selected) on the blank surface below the last block.
+
+**Symptom 2 — "+"/slash Image did nothing / jumped.** Besides the click bug, the floating menu's
+Image item dispatched `ihub-editor-insert-image` without the editor, so its listener ignored it.
+Replaced by a `mediaBlock` node with a Notion-style Upload / Embed-link placeholder.
+
+**Symptom 3 — pasted email HTML lost its styles.** The ProseMirror schema dropped `style` and table
+attributes. Fix: `PreserveStyles` global `style` attr (sanitised), `StyledBlock` for `div[style]`,
+table/cell attrs (`role`, `cellpadding`, `bgcolor`, `width`…) plus a `TableView` subclass that applies
+them live. Note that ProseMirror writes `style` via `cssText`, so output colours come back as `rgb()`
+(`bgcolor` stays hex), and browser-unknown declarations such as `mso-*` are dropped.
+
+**Added:** table row/column handles (insert, move, duplicate, header, colour, delete) + "+" bars;
+media blocks (image/video/audio/PDF/file/embed) with an upload chain (onFileUpload > onImageUpload >
+presign > multipart endpoint > opt-in direct S3); section banner, callout, toggle, CTA button; bubble
+text/highlight colour, alignment, clear formatting.
+
+**Review fixes (same session):** callout without body div crashed the editor (contentElement fallback);
+attributes leaked as raw HTML attrs (`renderHTML: () => ({})`); uploads lost if the block moved mid-upload
+(uploads now in `upload/uploadRegistry.ts`, keyed by `pendingId`); `width` CSS injection (`safeWidth`);
+arbitrary iframes (embed host allow-list + sandbox; PDFs framed only for `.pdf` URLs, because Chrome won't
+render PDFs in a sandboxed frame); style sanitiser now drops remote `url()` and `position:fixed/sticky`;
+direct S3 made opt-in.
+
+**Verified:** `pnpm test` 70/70 (vitest + jsdom, new). In the examples app (port 3055), the following
+were driven by the real mouse, or by synthetic drag/paste events where noted: drag-select keeps the
+selection; "+" → Image inserts at the caret; add column / move row via handles; text colour; PDF upload
+with progress; drag-drop and multi-file paste (synthetic events); YouTube link paste; banner colours;
+button edit; the email template pastes with all 4 tables and renders like the original.
+
+**Follow-up (same day): drag to reorder blocks.** The first version used HTML5 drag and drop from a grip
+outside `view.dom`, and it did not work with a real mouse (the user reported it). My test had only
+dispatched synthetic drag events, which is why I missed it. Replaced by `blocks/useBlockDrag.ts`, a
+pointer-event drag in the Notion style:
+- a ghost copy follows the pointer (cloned before the dim decoration redraws the node)
+- the source block is dimmed via a ProseMirror node decoration (`blockDragKey` in `blocks/BlockKeymap.ts`),
+  because a class added directly to PM-managed DOM gets wiped
+- a blue line marks the drop gap (`computeDropIndex` / `indicatorY`)
+- the area auto-scrolls near its edges, Esc cancels, and the move is one undo step (`moveTopBlockTo`)
+
+Gotchas:
+- BlockHandle must keep the same React tree shape while dragging, or the ghost element remounts empty.
+- The handle tracks the vertically nearest block; containment-only hit testing hid it in the gaps between blocks.
+- Nested drops: `blocks/blockLayout.ts` resolves the level under the pointer. Over a container's inner content
+  (between its first and last child, ±6px) it uses the container's children; near the container's edges it
+  uses the parent's gaps. It never descends into the block being dragged. Ops are position-based
+  (`moveBlock`, `moveBlockSibling`, `canDropAt`). A toggle's summary is always index 0, and ProseMirror
+  refills a container whose last block is dragged out. Verified with real mouse drags into the callout,
+  out of it and into the toggle; the banner drop was held with dispatched pointer events because of the
+  auto-scroll edge. 89/89 tests (`nestedBlocks.test.ts`).
+
+Verified in the pane with real mouse drags (`left_click_drag`): the callout moved below the table, and the
+heading moved to the top. Mid-drag screenshot shows the ghost, the dimmed source and the drop line.
+Esc cancel and ⌘Z also checked. 81/81 tests.
+
+**Open follow-ups:** lucide-react icons bloat each built file (~225 KB, pre-existing; separate task);
+`tsconfig.build.json` `preserveSymlinks` makes build-time type errors unreliable under pnpm.
+
 ## IHubTableServer — the row the user opened is not obvious on return (2026-09-23, 0.1.63)
 
 **Status:** FIXED, publishing as 0.1.63. Follow-up to the 0.1.62 pagination restore, requested on the

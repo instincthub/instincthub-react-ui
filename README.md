@@ -82,6 +82,12 @@ Then, build the package using:
 npm run rollup
 ```
 
+Run the unit tests (Vitest with jsdom). Tests live in `__tests__/` folders next to the code they cover (`src/**/__tests__/*.test.ts`):
+
+```sh
+npm test
+```
+
 ## Linking the Package (For Local Development)
 
 To test `@instincthub/react-ui` locally within another project:
@@ -111,6 +117,8 @@ npm unlink @instincthub/react-ui
 | `npm run build` | Build the example Next.js app |
 | `npm run start` | Start the built example app |
 | `npm run rollup` | Build the library for distribution |
+| `npm test` | Run the unit tests once (Vitest + jsdom) |
+| `npm run test:watch` | Run the unit tests in watch mode |
 | `npm run link-ui` | Rebuild and `npm link` for local development (macOS/Linux) |
 | `npm run link-ui-win` | Rebuild and `npm link` for local development (Windows) |
 | `npm run unlink-ui-linux` | Unlink the package (macOS/Linux) |
@@ -297,6 +305,37 @@ Dropdown menu for actions.
 />
 ```
 
+#### IHubTextEditor
+
+Notion-style rich text editor: slash commands and a "+" block menu, drag-to-reorder blocks (including into banners, callouts and toggles), tables with row/column handles, image/video/audio/PDF/file uploads, embeds, section banners, callouts, toggles, CTA buttons, and pasted HTML (including email templates) that keeps its inline styles.
+
+```jsx
+<IHubTextEditor
+  content={html}
+  onChange={setHtml}
+  upload={{ presignEndpoint: `${API_HOST_URL}uploads/presign/`, token }}
+/>
+```
+
+Uploads can come from `onFileUpload`, the `upload` prop, or these environment variables:
+
+<!-- AUTO-GENERATED from process.env reads in src/components/ui/editor/ihub-editor/upload -->
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL` | No | Presign endpoint: receives `POST { filename, content_type, size, kind }`, returns `{ url, cdnUrl }` (recommended) | `https://api.example.com/uploads/presign/` |
+| `NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL` | No | Multipart upload endpoint; JSON response must include `url`, `file`, `location` or `cdnUrl` | `https://api.example.com/uploads/` |
+| `NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3` | No | `true` to allow direct browser → S3 uploads with the AWS keys below (off by default; the secret key ships to the browser) | `true` |
+| `NEXT_PUBLIC_AWS_BUCKET_NAME` | For direct S3 | Bucket for direct uploads (shared with `FileUploader`) | `instincthub-media` |
+| `NEXT_PUBLIC_AWS_ACCESS_KEY_ID` | For direct S3 | Access key; scope it to `PutObject` on one prefix | — |
+| `NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY` | For direct S3 | Secret key (exposed to the browser) | — |
+| `NEXT_PUBLIC_AWS_REGION` | For direct S3 | Bucket region | `eu-west-2` |
+| `NEXT_PUBLIC_AWS_S3_ENDPOINT_URL` | No | Custom S3-compatible endpoint | `https://s3.example.com` |
+| `NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER` | No | Key prefix for direct uploads (default `editor`) | `editor` |
+| `NEXT_PUBLIC_IHUB_EDITOR_FILE_URL` | No | Public base URL for uploaded files (falls back to `NEXT_PUBLIC_FILE_URL`, then the bucket URL) | `https://cdn.example.com/` |
+<!-- END AUTO-GENERATED -->
+
+Block, table and media styles are in `src/assets/css/ui/ihub-text-editor-blocks.css`, which is included by `ui-index.css`. Full reference: [docs/static-docs/components/IHubTextEditor.md](docs/static-docs/components/IHubTextEditor.md).
+
 ### Utility Functions
 
 #### openToast
@@ -388,9 +427,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+3. Add or update tests and make sure `npm test` passes
+4. Commit your changes: `git commit -m 'Add some amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
 
 ## License
 

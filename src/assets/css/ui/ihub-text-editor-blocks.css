@@ -1,0 +1,951 @@
+/* ============================================
+   IHubTextEditor — blocks, media, tables, palettes
+   Prefix: .ihub-te-*
+   ============================================ */
+
+:root {
+  --ihub-te-accent: var(--DarkCyan, #00838f);
+  --ihub-te-surface: var(--White, #fff);
+  --ihub-te-muted: #6b7280;
+  --ihub-te-soft: rgba(0, 131, 143, 0.08);
+  --ihub-te-line: rgba(15, 23, 42, 0.12);
+  --ihub-te-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+}
+
+.DarkMode {
+  --ihub-te-muted: #9ca3af;
+  --ihub-te-line: rgba(255, 255, 255, 0.14);
+  --ihub-te-soft: rgba(0, 155, 162, 0.16);
+}
+
+/* The area is a height-capped flex column: stop the content from shrinking
+   so anything after it (table toolbar) doesn't overlap the text. */
+.ihub-te-editor-area > .ihub-te-content-wrapper {
+  flex: 1 0 auto;
+}
+
+.ihub-te-editor-area > .ihub-te-table-toolbar {
+  position: sticky;
+  bottom: 8px;
+  z-index: 15;
+  flex-shrink: 0;
+}
+
+/* ---- Tables: live wrapper, selection, resize ---- */
+.ihub-te-content .tableWrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.ihub-te-content .tableWrapper > table {
+  margin: 0;
+}
+
+.ihub-te-content .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ihub-te-soft);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ihub-te-content .column-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  background: var(--ihub-te-accent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ihub-te-content.resize-cursor {
+  cursor: col-resize;
+}
+
+/* Email / layout tables keep their own look: no forced grid or fixed layout. */
+.ihub-te-content table[role="presentation"],
+.ihub-te-content table[border="0"] {
+  table-layout: auto;
+  border-collapse: separate;
+  margin: 0;
+}
+
+/* Without a width attribute an email table shrinks to fit (e.g. CTA buttons). */
+.ihub-te-content table[role="presentation"]:not([width]),
+.ihub-te-content table[border="0"]:not([width]) {
+  width: auto;
+}
+
+.ihub-te-content table[role="presentation"] > tbody > tr > td,
+.ihub-te-content table[border="0"] > tbody > tr > td {
+  border: 1px dashed transparent;
+  padding: 0;
+}
+
+.ihub-te-wrapper:not(.ihub-te-wrapper--readonly) .ihub-te-content table[role="presentation"] > tbody > tr > td:hover {
+  border-color: var(--ihub-te-line);
+}
+
+/* ---- Table handles & add bars ---- */
+.ihub-te-table-controls {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 0;
+  height: 0;
+  z-index: 20;
+}
+
+.ihub-te-table-handle,
+.ihub-te-table-add,
+.ihub-te-toggle-btn,
+.ihub-te-emoji-picker button,
+.ihub-te-callout-emoji {
+  /* Reset the library's global button padding / min-width. */
+  padding: 0;
+  min-width: 0;
+  box-sizing: border-box;
+  line-height: 1;
+}
+
+.ihub-te-table-handle {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 6px;
+  background: var(--ihub-te-surface);
+  color: var(--ihub-te-muted);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.ihub-te-table-handle:hover {
+  color: var(--ihub-te-accent);
+  border-color: var(--ihub-te-accent);
+}
+
+.ihub-te-table-add {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 16px;
+  min-height: 16px;
+  border: 1px dashed var(--ihub-te-line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ihub-te-muted);
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.ihub-te-table-add--col { width: 18px; }
+.ihub-te-table-add--row { height: 18px; }
+
+.ihub-te-table-add:hover {
+  opacity: 1;
+  color: var(--ihub-te-accent);
+  border-color: var(--ihub-te-accent);
+  background: var(--ihub-te-soft);
+}
+
+.ihub-te-table-menu {
+  position: absolute;
+  min-width: 220px;
+  padding: 6px;
+  background: var(--ihub-te-surface);
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 10px;
+  box-shadow: var(--ihub-te-shadow);
+  font-family: var(--ihub-te-ui-font);
+  z-index: 30;
+}
+
+.ihub-te-table-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--Gunmetal, #1f2937);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ihub-te-table-menu-item:hover:not(:disabled) { background: var(--ihub-te-soft); }
+.ihub-te-table-menu-item:disabled { opacity: 0.4; cursor: not-allowed; }
+.ihub-te-table-menu-item.is-danger { color: #b91c1c; }
+
+.ihub-te-table-menu-divider {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--ihub-te-line);
+}
+
+.ihub-te-table-menu-note {
+  margin: 4px 8px;
+  font-size: 0.72rem;
+  color: var(--ihub-te-muted);
+}
+
+.ihub-te-table-toolbar-color { position: relative; }
+
+.ihub-te-table-toolbar-popover {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ihub-te-table-toolbar-btn.is-active { background: var(--ihub-te-soft); }
+
+/* ---- Colour palette ---- */
+.ihub-te-palette { display: flex; flex-direction: column; gap: 6px; padding: 4px 2px; }
+
+.ihub-te-palette-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ihub-te-muted);
+}
+
+.ihub-te-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 20px);
+  gap: 5px;
+}
+
+.ihub-te-swatch {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ihub-te-swatch.is-active { outline: 2px solid var(--ihub-te-accent); outline-offset: 1px; }
+
+.ihub-te-swatch--clear {
+  display: grid;
+  place-items: center;
+  background: var(--ihub-te-surface);
+  color: var(--ihub-te-muted);
+}
+
+.ihub-te-swatch--custom {
+  overflow: hidden;
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+}
+
+.ihub-te-swatch--custom input {
+  position: absolute;
+  inset: -6px;
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Bubble toolbar colour panel (dark surface) */
+.ihub-te-bubble-toolbar { position: relative; flex-wrap: wrap; }
+
+.ihub-te-bubble-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 10px;
+  background: #1e293b;
+  border-radius: 8px;
+  box-shadow: var(--ihub-te-shadow);
+}
+
+.ihub-te-bubble-panel .ihub-te-palette-label { color: #cbd5e1; }
+
+/* ---- Shared block chrome ---- */
+.ihub-te-block-shell { position: relative; }
+
+.ihub-te-block-controls {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  background: var(--ihub-te-surface);
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+  font-family: var(--ihub-te-ui-font);
+  text-align: left;
+  color: var(--Gunmetal, #1f2937);
+}
+
+.ihub-te-block-shell:hover > .ihub-te-block-controls,
+.ihub-te-block-shell.is-open > .ihub-te-block-controls,
+.ihub-te-block-shell.is-selected > .ihub-te-block-controls,
+.ihub-te-block-controls:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ihub-te-block-controls button,
+.ihub-te-block-grip,
+.ihub-te-popover-row button {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ihub-te-block-grip { cursor: grab; color: var(--ihub-te-muted); }
+
+.ihub-te-block-controls button:hover,
+.ihub-te-block-controls button.is-active,
+.ihub-te-popover-row button:hover,
+.ihub-te-popover-row button.is-active {
+  background: var(--ihub-te-soft);
+  color: var(--ihub-te-accent);
+}
+
+.ihub-te-block-controls button.is-danger:hover { color: #b91c1c; background: #fef2f2; }
+
+.ihub-te-block-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 240px;
+  padding: 10px;
+  background: var(--ihub-te-surface);
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 10px;
+  box-shadow: var(--ihub-te-shadow);
+  z-index: 30;
+  color: var(--Gunmetal, #1f2937);
+  font-family: var(--ihub-te-ui-font);
+  text-align: left;
+}
+
+.ihub-te-popover-row { display: flex; align-items: center; gap: 4px; }
+.ihub-te-popover-row .ihub-te-palette-label { min-width: 48px; }
+
+.ihub-te-popover-done {
+  margin-left: auto;
+  background: var(--ihub-te-accent) !important;
+  color: #fff !important;
+  padding: 0 12px !important;
+}
+
+.ihub-te-field { display: flex; flex-direction: column; gap: 4px; }
+
+.ihub-te-field input,
+.ihub-te-media-link-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 6px;
+  background: var(--ihub-te-surface);
+  color: var(--Gunmetal, #1f2937);
+  font: 0.875rem var(--ihub-te-ui-font);
+}
+
+.ihub-te-field input:focus,
+.ihub-te-media-link-input:focus {
+  outline: 2px solid var(--ihub-te-soft);
+  border-color: var(--ihub-te-accent);
+}
+
+/* ---- Section banner ---- */
+.ihub-te-content .ihub-te-banner {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+}
+
+.ihub-te-content .ihub-te-banner :is(h1, h2, h3, h4, p, li, blockquote, strong, em, a) {
+  color: inherit;
+}
+
+.ihub-te-content .ihub-te-banner > .ihub-te-banner-content > * + *,
+.ihub-te-content .ihub-te-banner > [data-node-view-content] > * + * {
+  margin-top: 0.5rem;
+}
+
+.ihub-te-content .ihub-te-banner :is(h1, h2, h3) { margin: 0 0 0.5rem; }
+
+/* ---- Callout ---- */
+.ihub-te-content .ihub-te-callout {
+  display: flex;
+  gap: 12px;
+  margin: 1.25rem 0;
+  padding: 16px 18px;
+  border-left: 4px solid var(--ihub-te-accent);
+  border-radius: 6px;
+  color: #1f2937;
+}
+
+.ihub-te-callout-emoji-wrap { position: relative; }
+
+.ihub-te-callout-emoji {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ihub-te-callout-body { flex: 1; min-width: 0; }
+
+/* Callout backgrounds are light in both themes, so keep dark text. */
+.ihub-te-content .ihub-te-callout-body :is(p, li, h1, h2, h3, h4, blockquote, strong, em, span) { color: #1f2937; }
+.ihub-te-callout-body > * + * { margin-top: 0.5rem; }
+
+.ihub-te-emoji-picker {
+  left: 0;
+  right: auto;
+  display: grid;
+  grid-template-columns: repeat(6, 32px);
+  min-width: 0;
+}
+
+.ihub-te-emoji-picker button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.ihub-te-emoji-picker button:hover { background: var(--ihub-te-soft); }
+
+.ihub-te-variant-dot {
+  width: 14px !important;
+  min-width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+}
+
+.ihub-te-variant-dot.is-active { outline: 2px solid var(--Gunmetal, #1f2937); outline-offset: 1px; }
+
+/* ---- Toggle ---- */
+.ihub-te-content .ihub-te-toggle {
+  position: relative;
+  margin: 0.75rem 0;
+  padding-left: 1.75rem;
+}
+
+.ihub-te-toggle-btn {
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ihub-te-muted);
+}
+
+.ihub-te-toggle-btn::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  margin: auto;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  transition: transform 0.15s ease;
+}
+
+.ihub-te-toggle.is-open > .ihub-te-toggle-btn::before { transform: rotate(90deg); }
+.ihub-te-toggle-btn:hover { background: var(--ihub-te-soft); }
+
+.ihub-te-toggle-summary,
+.ihub-te-toggle-content > summary {
+  display: block;
+  font-weight: 600;
+  list-style: none;
+}
+
+.ihub-te-toggle:not(.is-open) > .ihub-te-toggle-content > :not(:first-child) { display: none; }
+.ihub-te-toggle-content > * + * { margin-top: 0.5rem; }
+
+/* Exported <details> (content viewers) */
+details.ihub-te-toggle > summary { cursor: pointer; font-weight: 600; }
+
+/* ---- Button block ---- */
+.ihub-te-content .ihub-te-button-node { margin: 1.5rem 0; }
+.ihub-te-content .ihub-te-button-node.is-selected .ihub-te-button { outline: 2px solid var(--ihub-te-accent); outline-offset: 3px; }
+.ihub-te-button { font-family: var(--ihub-te-ui-font); font-size: 0.95rem; line-height: 1.2; }
+.ihub-te-button-panel { right: auto; left: 50%; transform: translateX(-50%); }
+
+/* Inline marks inherit the surrounding typography unless styled inline. */
+.ihub-te-content span {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.ihub-te-content :is(a, strong, b, em, i, u, s) {
+  font-family: inherit;
+}
+
+/* ---- Styled wrapper div from pasted HTML ---- */
+.ihub-te-content div[data-styled] > * + * { margin-top: 0; }
+
+/* ---- Media blocks ---- */
+.ihub-te-content .ihub-te-media-node {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.ihub-te-media-node.is-selected .ihub-te-media-img,
+.ihub-te-media-node.is-selected .ihub-te-media-video,
+.ihub-te-media-node.is-selected .ihub-te-file-card,
+.ihub-te-media-node.is-selected .ihub-te-pdf,
+.ihub-te-media-node.is-selected .ihub-te-embed-responsive,
+.ihub-te-media-node.is-selected .ihub-te-media-placeholder {
+  outline: 2px solid var(--ihub-te-accent);
+  outline-offset: 2px;
+}
+
+.ihub-te-media-img,
+.ihub-te-media-video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.ihub-te-image-center .ihub-te-media-img,
+.ihub-te-image-center .ihub-te-media-video { margin: 0 auto; }
+.ihub-te-image-right .ihub-te-media-img,
+.ihub-te-image-right .ihub-te-media-video { margin-left: auto; }
+
+.ihub-te-media-img.is-uploading { opacity: 0.5; max-height: 280px; object-fit: cover; }
+.ihub-te-media-audio { width: 100%; }
+
+.ihub-te-media-toolbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 4;
+  font-family: var(--ihub-te-ui-font);
+}
+
+.ihub-te-media-node:hover > .ihub-te-media-toolbar,
+.ihub-te-media-node.is-selected > .ihub-te-media-toolbar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ihub-te-media-toolbar button,
+.ihub-te-media-toolbar a {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ihub-te-media-toolbar button:hover,
+.ihub-te-media-toolbar a:hover,
+.ihub-te-media-toolbar button.is-active { background: rgba(255, 255, 255, 0.18); color: #fff; }
+.ihub-te-media-toolbar button.is-danger:hover { background: #b91c1c; }
+
+.ihub-te-media-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 2px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ihub-te-media-caption {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 2px 0;
+  border: none;
+  background: transparent;
+  color: var(--ihub-te-muted);
+  font: italic 0.875rem var(--ihub-te-ui-font);
+  text-align: center;
+  outline: none;
+}
+
+.ihub-te-media-caption:read-only { cursor: default; }
+
+/* Placeholder (Notion-style empty block) */
+.ihub-te-media-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ihub-te-line);
+  background: rgba(127, 127, 127, 0.07);
+  color: var(--Gunmetal, #1f2937);
+  font-family: var(--ihub-te-ui-font);
+}
+
+.ihub-te-media-placeholder-head { display: flex; align-items: center; gap: 8px; }
+.ihub-te-media-placeholder-icon { display: grid; place-items: center; color: var(--ihub-te-muted); }
+.ihub-te-media-placeholder-title { font-size: 0.9rem; font-weight: 600; }
+
+.ihub-te-media-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--ihub-te-line);
+}
+
+.ihub-te-media-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--ihub-te-muted);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.ihub-te-media-tabs button.is-active { color: var(--Gunmetal, #1f2937); border-bottom-color: var(--ihub-te-accent); }
+
+.ihub-te-media-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px;
+  border: 1.5px dashed var(--ihub-te-line);
+  border-radius: 8px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ihub-te-media-dropzone.is-dragging { border-color: var(--ihub-te-accent); background: var(--ihub-te-soft); }
+
+.ihub-te-media-upload-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--ihub-te-accent);
+  color: #fff;
+  font: 600 0.8125rem var(--ihub-te-ui-font);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ihub-te-media-upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ihub-te-media-link-row { display: flex; gap: 8px; }
+.ihub-te-media-hint { margin: 0; font-size: 0.78rem; color: var(--ihub-te-muted); }
+.ihub-te-media-error { margin: 6px 0 0; font: 0.8rem var(--ihub-te-ui-font); color: #b91c1c; }
+
+.ihub-te-media-uploading { display: flex; flex-direction: column; gap: 8px; font-family: var(--ihub-te-ui-font); }
+
+.ihub-te-media-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ihub-te-line);
+  overflow: hidden;
+}
+
+.ihub-te-media-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--ihub-te-accent);
+  transition: width 0.2s ease;
+}
+
+/* File card, PDF viewer (also used by exported HTML) */
+.ihub-te-file-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  font-family: var(--ihub-te-ui-font);
+  transition: background 0.15s ease;
+}
+
+.ihub-te-file-card:hover { background: var(--ihub-te-soft); }
+
+.ihub-te-file-ext {
+  display: grid;
+  place-items: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 4px;
+  border-radius: 6px;
+  background: var(--ihub-te-soft);
+  color: var(--ihub-te-accent);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.ihub-te-file-meta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.ihub-te-file-name { font-size: 0.9rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ihub-te-file-size { font-size: 0.75rem; color: var(--ihub-te-muted); }
+.ihub-te-file-download { color: var(--ihub-te-muted); flex-shrink: 0; }
+
+.ihub-te-pdf { border: 1px solid var(--ihub-te-line); border-radius: 8px; overflow: hidden; }
+
+.ihub-te-pdf-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ihub-te-line);
+  font-family: var(--ihub-te-ui-font);
+}
+
+.ihub-te-pdf-header .ihub-te-file-ext { min-width: 34px; height: 28px; }
+.ihub-te-pdf-header .ihub-te-file-name { flex: 1; }
+.ihub-te-pdf-open { color: var(--ihub-te-muted); display: grid; place-items: center; }
+
+.ihub-te-pdf-frame {
+  display: block;
+  width: 100%;
+  height: 560px;
+  border: none;
+  background: #f3f4f6;
+}
+
+figure.ihub-te-media--pdf > .ihub-te-pdf-frame { border: 1px solid var(--ihub-te-line); border-radius: 0 0 8px 8px; }
+
+.ihub-te-content img.ihub-te-inline-image { max-width: 100%; height: auto; }
+
+@media (max-width: 767px) {
+  .ihub-te-pdf-frame { height: 420px; }
+  .ihub-te-palette-grid { grid-template-columns: repeat(7, 20px); }
+  .ihub-te-media-link-row { flex-direction: column; }
+}
+
+/* ---- "+" block menu: two-column dropdown below the button ---- */
+.ihub-te-floating-container .ihub-te-floating-menu {
+  top: calc(100% + 6px);
+  left: 0;
+  transform: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(340px, calc(100vw - 48px));
+  max-width: none;
+  max-height: 340px;
+  overflow-y: auto;
+  white-space: normal;
+}
+
+.ihub-te-floating-container .ihub-te-floating-menu-item {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.ihub-te-floating-container:has(.ihub-te-floating-menu) {
+  opacity: 1;
+}
+
+/* ---- Block handle: "+" and drag grip on every block ---- */
+.ihub-te-block-handle {
+  position: absolute;
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 24px;
+  font-family: var(--ihub-te-ui-font);
+  /* Solid pill so the handle reads on coloured blocks (callouts, banners) too. */
+  border-radius: 6px;
+  background: var(--ihub-te-surface);
+  box-shadow: 0 0 0 1px var(--ihub-te-line);
+}
+
+.ihub-te-block-handle > button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  min-width: 0;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ihub-te-muted);
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.ihub-te-block-handle > button:hover,
+.ihub-te-block-handle > button[aria-expanded="true"] {
+  opacity: 1;
+  background: var(--ihub-te-soft);
+  color: var(--Gunmetal, #1f2937);
+}
+
+.ihub-te-block-handle > .ihub-te-block-grip-btn {
+  cursor: grab;
+}
+
+.ihub-te-block-handle > .ihub-te-block-grip-btn:active {
+  cursor: grabbing;
+}
+
+.ihub-te-block-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  padding: 6px;
+  background: var(--ihub-te-surface);
+  border: 1px solid var(--ihub-te-line);
+  border-radius: 10px;
+  box-shadow: var(--ihub-te-shadow);
+}
+
+.ihub-te-block-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--Gunmetal, #1f2937);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ihub-te-block-menu button span { flex: 1; }
+.ihub-te-block-menu button kbd { font: 0.7rem var(--ihub-te-ui-font); color: var(--ihub-te-muted); }
+.ihub-te-block-menu button:hover:not(:disabled) { background: var(--ihub-te-soft); }
+.ihub-te-block-menu button:disabled { opacity: 0.4; cursor: not-allowed; }
+.ihub-te-block-menu button.is-danger { color: #b91c1c; }
+
+/* Selected block (after clicking its grip) */
+.ihub-te-content > .ProseMirror-selectednode {
+  outline: 2px solid var(--ihub-te-soft);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Give the handle room beside blocks */
+.ihub-te-editor-area > .ihub-te-content-wrapper {
+  padding-left: max(2rem, 52px);
+}
+
+@media (max-width: 767px) {
+  .ihub-te-editor-area > .ihub-te-content-wrapper { padding-left: 48px; }
+}
+
+/* ---- Block drag: drop line, ghost and dimmed source (Notion style) ---- */
+.ihub-te-drop-indicator {
+  position: absolute;
+  z-index: 25;
+  height: 3px;
+  border-radius: 2px;
+  background: #2383e2;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(35, 131, 226, 0.15);
+}
+
+.ihub-te-drop-indicator::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2383e2;
+}
+
+.ihub-te-drag-ghost.ihub-te-content {
+  position: fixed;
+  z-index: 10000;
+  max-height: 140px;
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0.7;
+  border: 1px solid var(--ihub-te-line);
+  pointer-events: none;
+  border-radius: 6px;
+  background: var(--ihub-te-surface);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  font-family: var(--ihub-te-body-font);
+  font-size: 1.125rem;
+  line-height: var(--ihub-te-line-height);
+  color: var(--Gunmetal, #1f2937);
+  padding: 4px 8px;
+}
+
+.ihub-te-drag-ghost.ihub-te-content > * {
+  margin: 0 !important;
+}
+
+.ihub-te-content > .ihub-te-block-dragging {
+  opacity: 0.35;
+}
+
+body.ihub-te-body-dragging,
+body.ihub-te-body-dragging * {
+  cursor: grabbing !important;
+  user-select: none !important;
+}
+
+.ihub-te-block-handle > .ihub-te-block-grip-btn {
+  touch-action: none;
+}
