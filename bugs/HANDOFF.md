@@ -7,7 +7,9 @@ The ComponentLists `window` fix shipped to npm in **0.2.2**. 0.2.0 had already b
 build made before it, and npm doesn't allow re-publishing a version. **0.2.1 is broken (README +
 package.json only, no dist):** it was packed while `rm -rf dist && npm run rollup` was rebuilding. Never
 rebuild dist while a publish might be running; always check `total files` (~4727) in the publish output
-before approving the npm web auth. 0.2.1 should be deprecated.
+before approving the npm web auth. Resolved 2026-09-26: 0.2.1 is deprecated ("Broken publish: missing dist.
+Use 0.2.2 or later.") and 0.2.2 is `latest`. The downloaded tarball has 4727 files, the ComponentLists fix
+and the editor code.
 
 Three stacked causes, each hidden behind the previous one:
 1. `vercel.json` ran `npm install`, which ignores `pnpm-lock.yaml` and pulled `@types/node` 26 (its
