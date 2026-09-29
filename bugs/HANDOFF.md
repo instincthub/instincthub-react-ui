@@ -1,3 +1,74 @@
+## 2026-09-29 — Dropdown "scroll closes the menu": ALREADY FIXED, no publish needed
+
+### Report
+The portalled `Dropdown` menu was said to close when its own
+`.ihub-dropdown-options` list is scrolled, because the open-state effect
+registered `const handleViewportChange = () => setIsOpen(false);` on
+`window` in the CAPTURE phase. Reproduction given:
+`dispatchEvent(new Event('scroll'))` on `.ihub-dropdown-options` sets
+`isOpen` false.
+
+### Finding — the bug is real but was fixed a year of versions ago
+`handleViewportChange` exists nowhere in this repo. `git log -S` places it
+only in `7086c8a^`, i.e. the revision immediately BEFORE
+`7086c8a fix(Dropdown): stop the option list scroll from closing the menu`,
+which shipped in **0.1.59**. Current package version is **0.2.2**.
+
+All four requested items were already present in
+`src/components/ui/Dropdown.tsx` and on `main`:
+1. menu-scroll guard — `if (target instanceof Node && menuRef.current?.contains(target)) return;`
+2. outside scroll re-anchors via `positionMenu()` instead of closing; same for resize
+3. outside-mousedown (and touchstart) close
+4. Escape close, on `document` because the portalled menu holds focus outside
+   the trigger's subtree where the wrapper's `onKeyDown` never fires
+
+The **published** 0.2.2 build carries it too. `dist/src/components/ui/Dropdown.js`
+minifies the handler to `inside || Q() || O(!1)` (`I`=menuRef, `Q`=positionMenu,
+`O`=setIsOpen) — the guard, the re-anchor and the close-only-on-failure, intact.
+There is one build artifact (CJS, `exports` maps both `import` and `require` to
+`dist/src/index.js`), so there is no esm/cjs skew hiding an older copy.
+`leadboard_nextjs_v2` already has 0.2.2 installed and pinned.
+
+**So nothing was changed and nothing was published.** The source needed no edit.
+
+### Where the stale description came from
+`leadboard_nextjs_v2/src/components/ui/SelectDropdown.tsx` was added as a local
+workaround in `a93f71e fix(events): keep the registration dropdown open while
+scrolling its list`, against a library version that still had the bug. Its
+docblock still narrates the old library behaviour, and that text is what the
+bug report quoted. The workaround is now redundant: Leadboard can drop
+`SelectDropdown` and go back to the library `Dropdown` (follow-up, not done here).
+
+### What this session actually added — regression tests
+`src/components/ui/__tests__/dropdownScroll.test.tsx`, 7 tests, no new deps
+(React 19 `act` + `react-dom/client`; `@testing-library/react` is NOT installed).
+jsdom reports all-zero rects, so the trigger's `getBoundingClientRect` is stubbed.
+Needs `globalThis.IS_REACT_ACT_ENVIRONMENT = true` or React warns and the results
+cannot be trusted.
+
+Covers: the exact reported reproduction; outside scroll re-anchors
+(`top` 145px -> 95px) rather than closing; closes once the trigger leaves the
+viewport; a scroll dispatched AT `window` (target is not a Node) does not strand
+the menu; Escape and outside-mousedown close while a menu mousedown does not;
+multi-select keeps accumulating across an options-list scroll and toggles off;
+single-select closes on pick.
+
+**Validated by reintroducing the bug**: reverting the handler to
+`() => setIsOpen(false)` and dropping the Escape listener fails 5 of the 7.
+They are not vacuous. Full suite: 96/96 passing.
+
+### Latent bug found in passing — Action.tsx (NOT fixed)
+`src/components/ui/Action.tsx:221` has the same menu-scroll guard but casts
+instead of narrowing: `const target = event.target as Node | null;` then
+`menuRef.current?.contains(target)`. A scroll dispatched at `window` makes
+`target` the Window — truthy, not a Node — and `Node.contains(window)` throws a
+`TypeError` (verified in jsdom), which would strand that menu open. `Dropdown`
+guards this with `instanceof Node` and its comment calls the hazard out by name.
+One-line fix, same bug family, but a different component than the one asked
+about, so it was left alone pending a decision.
+
+---
+
 # Bug Handoff — instincthub-react-ui
 
 ## Docs site (ui.instincthub.com) — every production deploy failing (2026-09-24, 0.2.0)
