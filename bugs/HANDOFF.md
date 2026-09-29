@@ -1,4 +1,4 @@
-## 2026-09-29 — Dropdown "scroll closes the menu": ALREADY FIXED, no publish needed
+## 2026-09-29 — Dropdown "scroll closes the menu": ALREADY FIXED; Action.tsx window-scroll TypeError: FIXED
 
 ### Report
 The portalled `Dropdown` menu was said to close when its own
@@ -57,15 +57,48 @@ single-select closes on pick.
 `() => setIsOpen(false)` and dropping the Escape listener fails 5 of the 7.
 They are not vacuous. Full suite: 96/96 passing.
 
-### Latent bug found in passing — Action.tsx (NOT fixed)
-`src/components/ui/Action.tsx:221` has the same menu-scroll guard but casts
+### Latent bug found in passing — Action.tsx  [FIXED, same day]
+`src/components/ui/Action.tsx:221` had the same menu-scroll guard but cast
 instead of narrowing: `const target = event.target as Node | null;` then
 `menuRef.current?.contains(target)`. A scroll dispatched at `window` makes
 `target` the Window — truthy, not a Node — and `Node.contains(window)` throws a
-`TypeError` (verified in jsdom), which would strand that menu open. `Dropdown`
-guards this with `instanceof Node` and its comment calls the hazard out by name.
-One-line fix, same bug family, but a different component than the one asked
-about, so it was left alone pending a decision.
+`TypeError` (verified in jsdom), which stranded that menu open at stale
+coordinates. `Dropdown` guards this with `instanceof Node` and its comment
+calls the hazard out by name.
+
+**Fixed** by narrowing the same way, with the `Dropdown` comment carried over:
+
+    const target = event.target;
+    if (target instanceof Node && menuRef.current?.contains(target)) return;
+
+Not a theoretical target: `window.dispatchEvent(new Event("scroll"))` is what
+lazy-load, sticky-header and analytics code does, so any page running one of
+those alongside an open Action menu hit this.
+
+**Regression test:** `src/components/ui/__tests__/actionScroll.test.tsx`,
+7 tests, same shape as the `Dropdown` file beside it (React 19 `act` +
+`react-dom/client`, no `@testing-library/react`, stubbed
+`getBoundingClientRect`). Note `positionMenu` measures
+`.ihub-action-dropdown-container`, not the button, so that is the element to
+stub.
+
+**Validated against the un-narrowed cast first** — 3 of the 7 fail, one per
+symptom: the `TypeError` escapes; the menu goes stale (`top` stays 148px
+instead of re-anchoring to 98px); and it stays open when the trigger has left
+the viewport.
+
+Worth recording: **"the menu is still present" is a vacuous assertion on its
+own here.** The throw aborts `handleScroll` *before* `setIsDropdownOpen(false)`,
+so the buggy build leaves the menu mounted and that check passes. jsdom does not
+let the exception escape `dispatchEvent` either, so `expect(...).not.toThrow()`
+cannot see it — the test installs a `window` `error` listener to catch it, and
+asserts on re-anchoring and on close-when-out-of-viewport to pin the rest.
+
+Full suite: **103/103**. Typecheck of `Action.tsx` + `src/components/ui/__tests__`
+clean (scratch tsconfig — `tsconfig.build.json` sets `preserveSymlinks`, which
+makes every tiptap import report bogus errors).
+
+**Not published.** Source and tests only; ships with the next release.
 
 ---
 
