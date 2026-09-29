@@ -219,8 +219,11 @@ const Action: React.FC<ActionProps> = ({
     // to need scrolling impossible to scroll. Capture phase, because a table's
     // own scroll container never bubbles to window.
     const handleScroll = (event: Event) => {
-      const target = event.target as Node | null;
-      if (target && menuRef.current?.contains(target)) return;
+      // A scroll event's target is `document` for the page and an element for
+      // a scroll container, but `window` for one dispatched at window — and
+      // Node.contains() throws on a non-Node, which would strand the menu.
+      const target = event.target;
+      if (target instanceof Node && menuRef.current?.contains(target)) return;
       if (!positionMenu()) setIsDropdownOpen(false);
     };
 
