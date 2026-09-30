@@ -1005,12 +1005,14 @@ export const IHubTable = <T extends object>({
                 pageNum = currentPage - 2 + i;
               }
 
+              const isCurrent = currentPage === pageNum;
               return (
                 <button
                   key={pageNum}
                   className={`ihub-pagination-button ${
-                    currentPage === pageNum ? "ihub-active" : ""
+                    isCurrent ? "ihub-active" : ""
                   }`}
+                  aria-current={isCurrent ? "page" : undefined}
                   onClick={() => setCurrentPage(Number(pageNum))}
                 >
                   {pageNum}

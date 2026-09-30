@@ -1187,12 +1187,14 @@ export const IHubTableServer = forwardRef<
                   pageNum = (pagination.currentPage - 2 + i) as number;
                 }
 
+                const isCurrent = pagination.currentPage === pageNum;
                 return (
                   <button
                     key={pageNum}
                     className={`ihub-pagination-button ${
-                      pagination.currentPage === pageNum ? "ihub-active" : ""
+                      isCurrent ? "ihub-active" : ""
                     }`}
+                    aria-current={isCurrent ? "page" : undefined}
                     onClick={() => handlePageChange(Number(pageNum))}
                     disabled={loading}
                   >
