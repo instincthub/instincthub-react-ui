@@ -104,6 +104,51 @@ makes every tiptap import report bogus errors).
 
 # Bug Handoff — instincthub-react-ui
 
+## Build — every file importing from `lucide-react` shipped all ~1,600 icons (2026-09-24)
+
+**Status:** FIXED in `rollup.config.ts`. Not yet published.
+
+**Symptom.** `rollup -c` emitted each file with `import { X } from "lucide-react"` at ~225 KB
+(`ComponentLists.js` 243 KB, `BubbleToolbar.js` 226 KB). Every one of them opened with a bare
+`require(".../lucide-react/dist/esm/icons/<icon>.js")` for each icon in lucide.
+
+**Root cause.** Not lucide: its package.json has `sideEffects: false`. `@rollup/plugin-typescript`
+(8.5.0, `allowJs: true`) resolves *every* import, including lucide's internal relative imports
+(`./icons/a-arrow-down.js`), and returns a bare id with no `moduleSideEffects`. Only node-resolve reads
+`sideEffects`, and its `resolveId` is `order: "post"`, so it never got a say (moving it earlier in the
+plugins array changes nothing). A null `moduleSideEffects` defaults to true, so Rollup kept every
+module the barrel re-exports and hoisted them into the importer as side-effect requires.
+
+**Fix.** `skipNodeModulesResolution()` wraps the typescript plugin and returns null from `resolveId`
+when the importer is under `node_modules`, leaving those to node-resolve. Source files and the `@/*`
+alias still go through typescript. lucide stays bundled on purpose: making it external would make
+the CJS output `require("lucide-react")`, which loads the whole CJS barrel in consumers.
+
+**Verified.** Built each format separately, before and after:
+
+| | JS files | JS total | lucide icon files | ComponentLists.js | BubbleToolbar.js |
+|---|---|---|---|---|---|
+| cjs before | 2089 | 5082 KB | 1611 | 242,824 B | 225,827 B |
+| cjs after | 512 | 2659 KB | 34 | 35,204 B | 4,774 B |
+| esm before | 2089 | 4872 KB | 1611 | 237,666 B | 220,783 B |
+| esm after | 512 | 2586 KB | 34 | 34,892 B | 4,576 B |
+
+Apart from the icons, the emitted file set differs only in canonical `.pnpm` paths (object-assign,
+react-is, tslib now come from their own packages instead of symlinked copies). Export names of all
+five entry points are identical, TS diagnostics unchanged (27 lines). The CJS `dist/src/index.js`
+loads in node (217 exports), and built icon modules render to SVG with `react-dom/server`. The
+examples app imports `src/` directly, so it doesn't exercise `dist`, but the IHubTextEditor bubble
+toolbar still renders its 10 lucide icons.
+
+**Open follow-up (not fixed).** The `cjs` and `esm` outputs both write to `dir: "dist"` with the same
+file names, so whichever finishes last wins. Of two full `rollup -c` runs here, one left CJS in `dist` and
+the other ESM. `package.json` points `import` and `require` at the same file, so the published format is
+effectively random.
+
+**Worktree note.** Symlinking the main repo's `node_modules` into a worktree breaks the build
+(`'debounce' is not exported by lodash`): the real path sits outside the cwd, so babel's
+`exclude: "node_modules/**"` stops matching. Run `pnpm install --frozen-lockfile --offline` instead.
+
 ## Docs site (ui.instincthub.com) — every production deploy failing (2026-09-24, 0.2.0)
 
 **Status:** FIXED, deployed. Vercel production deploys had all been in Error for at least 63 days.
@@ -197,7 +242,7 @@ Verified in the pane with real mouse drags (`left_click_drag`): the callout move
 heading moved to the top. Mid-drag screenshot shows the ghost, the dimmed source and the drop line.
 Esc cancel and ⌘Z also checked. 81/81 tests.
 
-**Open follow-ups:** lucide-react icons bloat each built file (~225 KB, pre-existing; separate task);
+**Open follow-ups:** ~~lucide-react icons bloat each built file~~ fixed, see the Build entry above;
 `tsconfig.build.json` `preserveSymlinks` makes build-time type errors unreliable under pnpm.
 
 ## IHubTableServer — the row the user opened is not obvious on return (2026-09-23, 0.1.63)
