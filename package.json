@@ -2,7 +2,7 @@
   "name": "@instincthub/react-ui",
   "version": "0.2.2",
   "description": "InstinctHub React UI components and assets in TypeScript",
-  "main": "dist/src/index.js",
+  "main": "dist/src/index.cjs",
   "module": "dist/src/index.js",
   "types": "dist/src/types/index.d.ts",
   "typesVersions": {
@@ -52,12 +52,12 @@
     ".": {
       "types": "./dist/src/types/index.d.ts",
       "import": "./dist/src/index.js",
-      "require": "./dist/src/index.js"
+      "require": "./dist/src/index.cjs"
     },
     "./ssr": {
       "types": "./dist/src/types/ssr.d.ts",
       "import": "./dist/src/ssr.js",
-      "require": "./dist/src/ssr.js"
+      "require": "./dist/src/ssr.cjs"
     },
     "./types": {
       "types": "./dist/src/types/types/index.d.ts",
@@ -72,7 +72,7 @@
     "./lib": {
       "types": "./dist/src/types/components/lib/index.d.ts",
       "import": "./dist/src/components/lib/index.js",
-      "require": "./dist/src/components/lib/index.js"
+      "require": "./dist/src/components/lib/index.cjs"
     },
     "./lib/*": {
       "types": "./dist/src/types/components/lib/*",
@@ -82,12 +82,12 @@
     "./redux": {
       "types": "./dist/src/types/components/lib/redux/index.d.ts",
       "import": "./dist/src/components/lib/redux/index.js",
-      "require": "./dist/src/components/lib/redux/index.js"
+      "require": "./dist/src/components/lib/redux/index.cjs"
     },
     "./cursors": {
       "types": "./dist/src/types/components/cursors/index.d.ts",
       "import": "./dist/src/components/cursors/index.js",
-      "require": "./dist/src/components/cursors/index.js"
+      "require": "./dist/src/components/cursors/index.cjs"
     },
     "./assets/*": {
       "import": "./dist/src/assets/*",

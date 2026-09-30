@@ -19,10 +19,15 @@ export default {
     "src/components/lib/redux/index.ts",
     "src/components/cursors/index.ts",
   ], // js and css files
+  // Both formats share `dist` (the TS plugin needs outDir/declarationDir inside
+  // `dir`), so CJS gets its own extension. Without it the two outputs write the
+  // same file names and whichever finishes last wins. ESM stays `.js`: `.mjs`
+  // would make webpack require fully specified `next/navigation` etc.
   output: [
     {
       dir: "dist",
       format: "cjs",
+      entryFileNames: "[name].cjs",
       sourcemap: true,
       preserveModules: true, // Ensures tree-shaking and correct imports
       exports: "named", // Ensures named exports are properly handled
