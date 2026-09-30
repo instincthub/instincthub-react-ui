@@ -194,6 +194,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
+    "vercel": "50.13.2",
     "vitest": "^3.2.7"
   },
   "keywords": [
@@ -217,5 +218,6 @@
   "bugs": {
     "url": "https://github.com/instincthub/instincthub-react-ui/issues"
   },
-  "homepage": "https://github.com/instincthub/instincthub-react-ui#readme"
+  "homepage": "https://github.com/instincthub/instincthub-react-ui#readme",
+  "packageManager": "pnpm@10.29.2"
 }
