@@ -151,9 +151,23 @@
   cursor: not-allowed;
 }
 
-.ihub-pagination-button.ihub-active {
+/* Current page. Selectors are deliberately more specific than the two-class
+   form: consumer apps override `.ihub-pagination-button` for dark mode with
+   `html.DarkMode .ihub-pagination-button` (specificity 0,2,1), which beat the
+   old `.ihub-pagination-button.ihub-active` (0,2,0) and flattened the active
+   page to look like every other button. `aria-current="page"` is set by both
+   IHubTable and IHubTableServer and doubles as the accessibility marker. */
+.ihub-pagination-controls .ihub-pagination-button.ihub-active,
+.ihub-pagination-controls .ihub-pagination-button[aria-current="page"] {
   background-color: var(--DarkCyan);
   color: var(--White);
+  border-color: var(--DarkCyan);
+}
+
+.ihub-pagination-controls .ihub-pagination-button.ihub-active:hover:not(:disabled),
+.ihub-pagination-controls
+  .ihub-pagination-button[aria-current="page"]:hover:not(:disabled) {
+  background-color: var(--DarkCyan);
   border-color: var(--DarkCyan);
 }
 
