@@ -1,0 +1,119 @@
+# Test every PR; on main, test then build the docs site (src/__examples__, via
+# vercel.json's buildCommand) on the runner and ship the prebuilt output to
+# Vercel production (ui.instincthub.com). npm publishing stays manual. Vercel's own Git deployments are switched off in
+# vercel.json, so this workflow is the only thing that deploys.
+#
+# Secrets (Settings → Secrets and variables → Actions):
+#   VERCEL_TOKEN       vercel.com/account/tokens, scoped to the project's team
+#   VERCEL_ORG_ID      .vercel/project.json → orgId
+#   VERCEL_PROJECT_ID  .vercel/project.json → projectId
+# Every other build variable comes from the Vercel project via `vercel pull`.
+name: CI / Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Never cancel a production deploy halfway; a newer push queues behind it.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: "22"   # match the Vercel project's Node.js version
+  PRODUCTION_URL: https://ui.instincthub.com   # a custom domain: *.vercel.app URLs may sit behind SSO
+
+jobs:
+  test:
+    name: Type-check, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      # Version comes from package.json "packageManager", so CI and laptops match.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # No repo-wide type-check/lint: tsconfig.build.json gives bogus tiptap
+      # errors under pnpm. `next build` in the deploy job type-checks the docs app.
+      - run: pnpm test
+
+  deploy:
+    name: Build and deploy to Vercel (production)
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Check deploy secrets
+        run: |
+          missing=""
+          for name in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+      # Version comes from package.json "packageManager", so CI and laptops match.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # The CLI is pinned in package.json, so CI and a laptop build the same way.
+      - name: Pull production settings and env
+        run: pnpm exec vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      # Node's default heap on the 7 GB runner is ~2 GB and next build (webpack)
+      # can run out of it. Leave ~1 GB for the OS and workers.
+      - name: Build
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: pnpm exec vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy prebuilt output
+        id: deploy
+        run: |
+          url=$(pnpm exec vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed $url"
+
+      # Deployment URLs sit behind Vercel SSO, so prove it on the public domain.
+      - name: Smoke test production
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$PRODUCTION_URL/" || echo 000)
+            echo "attempt $attempt: $PRODUCTION_URL → $code"
+            case "$code" in 2??|3??) exit 0 ;; esac
+            sleep 10
+          done
+          echo "::error::$PRODUCTION_URL did not answer 2xx/3xx after deploy."
+          echo "::error::Not rolled back automatically: a rollback stops later --prod deploys taking the domain."
+          echo "::error::To revert: vercel rollback <previous-deployment-url>; after the fix, vercel promote <new-url>."
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Vercel production deploy"
+            echo "- Commit: \`${GITHUB_SHA::7}\`"
+            echo "- Deployment: ${{ steps.deploy.outputs.url || 'not created' }}"
+            echo "- Production: $PRODUCTION_URL"
+            echo "- Result: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"
