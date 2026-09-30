@@ -200,6 +200,50 @@ Esc cancel and ⌘Z also checked. 81/81 tests.
 **Open follow-ups:** lucide-react icons bloat each built file (~225 KB, pre-existing; separate task);
 `tsconfig.build.json` `preserveSymlinks` makes build-time type errors unreliable under pnpm.
 
+
+## Build — CJS and ESM outputs overwrite each other in `dist/` (2026-09-24)
+
+**Status:** FIXED, merged to main (rebased onto 0.2.2). Not published — ships with the next release.
+
+Files: `rollup.config.ts`, `package.json`.
+
+**Symptom.** Two full `rollup -c` runs left `dist/src/index.js` as CJS in one run and ESM in the other.
+`main`, `module` and `exports` import/require all pointed at the same `.js`, so the published format was
+effectively random.
+
+**Root cause.** Both outputs used `dir: "dist"` + `preserveModules` with the same file names, so the last
+format to finish won. Both outputs have to stay in `dist` because `@rollup/plugin-typescript` requires
+`outDir`/`declarationDir` (`dist`, `dist/src/types`) inside each output `dir`.
+
+**Fix.** The CJS output gets `entryFileNames: "[name].cjs"`, so it writes `dist/src/**/*.cjs` next to the ESM
+`.js`. `main` and every non-wildcard `exports[...].require` (`.`, `./ssr`, `./lib`, `./redux`, `./cursors`)
+now point at `.cjs`. `module`, `import`, `types`, `typesVersions` and `./assets/*` are unchanged.
+ESM stays `.js`, not `.mjs`: webpack treats `.mjs` as fully specified and would reject the bundle's
+`next/link` / `next/navigation` imports, because `next` has no exports map.
+
+**Verified.**
+- Two consecutive full builds are byte-identical (shasum of every non-map file). `.js` files are ESM,
+  `.cjs` files are CJS, and every relative `require` in a `.cjs` targets another `.cjs`.
+- The ESM tree is byte-identical to a baseline ESM-only build of HEAD. The CJS file set matches a
+  baseline CJS-only build, apart from the extension.
+- CJS `require("@instincthub/react-ui" + "", "/ssr", "/lib", "/redux", "/cursors")` all load through the
+  exports map, and their export names equal the baseline CJS (217 / 2 / 155 / 81 / 12).
+- ESM: `/ssr` and `/cursors` load in plain Node. `/lib` and `/redux` load once a resolve hook mimics
+  webpack for `next/*` (no exports map) and `redux-logger` (UMD, no named exports). The root entry
+  resolves and links under the same hook (plus the sub-dir `package.json` of `primereact/fileupload`),
+  but its evaluation fails in Node because `import t from "styled-components"` gets the CJS
+  `module.exports` object. Webpack uses the package's `module` build, so that's a Node-only limit.
+  None of this is new: the ESM bytes are unchanged. The root's static export list equals the CJS keys (217).
+- `npm pack --dry-run`: 8816 files, 7.9 MB packed. It includes 2088 `.cjs` + maps, the unchanged `.js`
+  files, 271 `.d.ts` and `assets/css/styles.css`. Every `main`/`module`/`types`/exports target is present.
+
+**Follow-ups / not done.**
+- `./lib/*` wildcard `require` still points at ESM `.js`. No consumer found using deep `lib/*` imports.
+- There's one `.d.ts` for both conditions, with no `.d.cts`. That's fine for Next's `bundler` resolution.
+  Strict `node16` TS consumers would flag the `require` side as "masquerading as ESM".
+- `dist/tsconfig.build.tsbuildinfo` is still shipped in the tarball (this predates the change).
+- Leadboard / creators_nextjs were not rebuilt against this dist. Smoke-test one before publishing.
+
 ## IHubTableServer — the row the user opened is not obvious on return (2026-09-23, 0.1.63)
 
 **Status:** FIXED, publishing as 0.1.63. Follow-up to the 0.1.62 pagination restore, requested on the
