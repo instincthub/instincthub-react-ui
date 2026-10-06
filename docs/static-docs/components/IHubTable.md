@@ -1177,6 +1177,10 @@ const TableExamples = () => {
 export default TableExamples;
 ```
 
+## 🔢 Pagination controls
+
+With `pagination` enabled the footer shows first/previous/next/last buttons, page numbers with the first and last page always visible, `…` gap buttons that jump five pages, and a "Go to page" input. When the data fits on one page the navigation hides but the row summary and rows-per-page selector stay. See [IHubTableServer](./IHubTableServer.md#-pagination-controls) for details.
+
 ## 📤 Exporting Data
 
 Passing `exportOptions` renders the CSV / Excel / PDF buttons. Exports cover the

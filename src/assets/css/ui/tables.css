@@ -195,6 +195,91 @@
     border-color: rgba(197, 192, 219, .3);
 }
 
+/* Pager navigation: page buttons plus the "Go to page" form. */
+.ihub-pagination-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ihub-pagination-controls {
+  flex-wrap: wrap;
+}
+
+/* Gap buttons jump five pages. They read as "…" until hovered or focused,
+   then show the jump size so the affordance is discoverable. */
+.ihub-pagination-jump {
+  letter-spacing: 1px;
+}
+
+.ihub-pagination-jump-label {
+  display: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.ihub-pagination-jump:hover:not(:disabled) .ihub-pagination-jump-dots,
+.ihub-pagination-jump:focus-visible .ihub-pagination-jump-dots {
+  display: none;
+}
+
+.ihub-pagination-jump:hover:not(:disabled) .ihub-pagination-jump-label,
+.ihub-pagination-jump:focus-visible .ihub-pagination-jump-label {
+  display: inline;
+}
+
+.ihub-pagination-goto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.ihub-pagination-goto label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--Gunmetal);
+  white-space: nowrap;
+}
+
+.ihub-pagination-goto input {
+  width: 64px;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 7px 8px;
+  border: var(--borderDefault);
+  border-radius: 4px;
+  background-color: var(--OpacityBackground);
+  color: var(--Gunmetal);
+  font-family: var(--Nunito);
+  font-size: 0.9rem;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.ihub-pagination-goto input::-webkit-outer-spin-button,
+.ihub-pagination-goto input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ihub-pagination-goto input:focus {
+  outline: none;
+  border-color: var(--DarkCyan);
+}
+
+.ihub-pagination-goto .ihub-pagination-button {
+  padding: 8px 10px;
+}
+
 .ihub-sticky-header {
   overflow: auto;
 }
@@ -303,8 +388,13 @@
     gap: 16px;
   }
 
-  .ihub-pagination-controls {
+  .ihub-pagination-nav {
     order: 1;
+    justify-content: center;
+  }
+
+  .ihub-pagination-controls {
+    justify-content: center;
   }
 
   .ihub-pagination-info {

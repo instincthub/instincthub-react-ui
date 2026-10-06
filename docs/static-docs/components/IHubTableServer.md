@@ -853,6 +853,18 @@ GET /api/students?limit=10&offset=0&ordering=name&search=john&department=Compute
 export default IHubTableServerExamples;
 ```
 
+## 🔢 Pagination controls
+
+The footer pager is shared with `IHubTable` and offers several ways to move:
+
+- **First / previous / next / last** buttons (`«` `‹` `›` `»`).
+- **Page numbers** with the first and last page always visible, so any page can be reached by number. Two pages on either side of the current page are shown; the gaps are **`…` buttons that jump five pages** back or forward (hover shows `-5` / `+5`).
+- **Go to page**: type a number and press Enter or **Go**. Out-of-range numbers are clamped to the first or last page.
+- **One page of results**: the navigation hides. The "Showing 1 to N of N entries" summary and the rows-per-page selector stay so the page size can still be changed.
+- **No rows**: the footer is not rendered at all.
+
+Every control is disabled while a page is loading. When `endpointPath` is empty, `defaultData` is searched, sorted and paged in memory so demos and tests behave like the live API.
+
 ## 🧭 Remembering the page between visits
 
 `IHubTableServer` stores its page, rows per page, sort and search term in
