@@ -24,6 +24,7 @@ import {
   resolveExportOptions,
   TableExportFormatType,
 } from "./utils/tableExport";
+import TablePagination from "./TablePagination";
 
 export interface FilterState {
   [key: string]: string | string[] | null;
@@ -968,90 +969,16 @@ export const IHubTable = <T extends object>({
       )}
 
       {/* Pagination */}
-      {pagination && totalPages > 1 && (
-        <div className="ihub-table-pagination">
-          <div className="ihub-pagination-info">
-            Showing{" "}
-            {Math.min((currentPage - 1) * rowsPerPage + 1, sortedData.length)}{" "}
-            to {Math.min(currentPage * rowsPerPage, sortedData.length)} of{" "}
-            {sortedData.length} entries
-          </div>
-          <div className="ihub-pagination-controls">
-            <button
-              className="ihub-pagination-button"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(1)}
-            >
-              «
-            </button>
-            <button
-              className="ihub-pagination-button"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            >
-              ‹
-            </button>
-
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              // Show pages around current page
-              let pageNum: number;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (currentPage <= 3) {
-                pageNum = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = currentPage - 2 + i;
-              }
-
-              const isCurrent = currentPage === pageNum;
-              return (
-                <button
-                  key={pageNum}
-                  className={`ihub-pagination-button ${
-                    isCurrent ? "ihub-active" : ""
-                  }`}
-                  aria-current={isCurrent ? "page" : undefined}
-                  onClick={() => setCurrentPage(Number(pageNum))}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
-
-            <button
-              className="ihub-pagination-button"
-              disabled={currentPage === totalPages}
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-            >
-              ›
-            </button>
-            <button
-              className="ihub-pagination-button"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(totalPages)}
-            >
-              »
-            </button>
-          </div>
-          <div className="ihub-rows-per-page">
-            <span>Rows per page:</span>
-            <select
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(Number(e.target.value))}
-              className="ihub-rows-select"
-            >
-              {rowsPerPageOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+      {pagination && (
+        <TablePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalCount={sortedData.length}
+          perPage={rowsPerPage}
+          rowsPerPageOptions={rowsPerPageOptions}
+          onPageChange={setCurrentPage}
+          onRowsPerPageChange={setRowsPerPage}
+        />
       )}
     </div>
   );

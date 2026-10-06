@@ -42,6 +42,8 @@ import {
   DEFAULT_TABLE_MIN_HEIGHT,
   resolveScrollMaxHeight,
 } from "./utils/tableLayout";
+import { pageLocalData } from "./utils/localPaging";
+import TablePagination from "./TablePagination";
 
 // Ref type for exposing table methods
 export interface IHubTableServerRef {
@@ -404,20 +406,11 @@ export const IHubTableServer = forwardRef<
   // Drop any pending search so it cannot fire after unmount.
   useEffect(() => () => debouncedSearch.cancel(), [debouncedSearch]);
 
-  const defaultDataLength = (defaultData || []).length;
-  const defaultDataObj: ApiResponseType<T> = {
-    data: defaultData || [],
-    pagination: {
-      totalCount: defaultDataLength,
-      currentPage: 1,
-      perPage: 10,
-      totalPages: Math.ceil(defaultDataLength / 10) || 1,
-    },
-    links: {
-      next: null,
-      previous: null,
-    },
-  };
+  // `defaultData` is read through a ref so the fetch callback stays stable.
+  const defaultDataRef = useRef<T[]>(defaultData || []);
+  useEffect(() => {
+    defaultDataRef.current = defaultData || [];
+  });
 
   // Function to fetch data from your API
   const handleFetchData = useCallback(
@@ -427,8 +420,9 @@ export const IHubTableServer = forwardRef<
     ): Promise<ApiResponseType<T>> => {
       setLoading(true);
       try {
+        // No endpoint: page the supplied rows in memory the way the API would.
         if (!endpointPath) {
-          return defaultDataObj;
+          return pageLocalData(defaultDataRef.current, params);
         }
 
         // Prepare API parameters
@@ -1143,103 +1137,16 @@ export const IHubTableServer = forwardRef<
       </div>
 
       {/* Pagination */}
-      {pagination && pagination.totalPages > 1 && (
-        <div className="ihub-table-pagination">
-          <div className="ihub-pagination-info">
-            Showing {(pagination.currentPage - 1) * pagination.perPage + 1} to{" "}
-            {Math.min(
-              pagination.currentPage * pagination.perPage,
-              pagination.totalCount
-            )}{" "}
-            of {pagination.totalCount} entries
-          </div>
-          <div className="ihub-pagination-controls">
-            <button
-              className="ihub-pagination-button"
-              disabled={pagination.currentPage === 1 || loading}
-              onClick={() => handlePageChange(1)}
-            >
-              «
-            </button>
-            <button
-              className="ihub-pagination-button"
-              disabled={pagination.currentPage === 1 || loading}
-              onClick={() => handlePageChange(pagination.currentPage - 1)}
-            >
-              ‹
-            </button>
-
-            {Array.from(
-              { length: Math.min(5, pagination.totalPages) },
-              (_, i) => {
-                // Show pages around current page
-                let pageNum: number;
-                if (pagination.totalPages <= 5) {
-                  pageNum = (i + 1) as number;
-                } else if (pagination.currentPage <= 3) {
-                  pageNum = (i + 1) as number;
-                } else if (
-                  pagination.currentPage >=
-                  pagination.totalPages - 2
-                ) {
-                  pageNum = (pagination.totalPages - 4 + i) as number;
-                } else {
-                  pageNum = (pagination.currentPage - 2 + i) as number;
-                }
-
-                const isCurrent = pagination.currentPage === pageNum;
-                return (
-                  <button
-                    key={pageNum}
-                    className={`ihub-pagination-button ${
-                      isCurrent ? "ihub-active" : ""
-                    }`}
-                    aria-current={isCurrent ? "page" : undefined}
-                    onClick={() => handlePageChange(Number(pageNum))}
-                    disabled={loading}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              }
-            )}
-
-            <button
-              className="ihub-pagination-button"
-              disabled={
-                pagination.currentPage === pagination.totalPages || loading
-              }
-              onClick={() => handlePageChange(pagination.currentPage + 1)}
-            >
-              ›
-            </button>
-            <button
-              className="ihub-pagination-button"
-              disabled={
-                pagination.currentPage === pagination.totalPages || loading
-              }
-              onClick={() => handlePageChange(pagination.totalPages)}
-            >
-              »
-            </button>
-          </div>
-          <div className="ihub-rows-per-page">
-            <span>Rows per page:</span>
-            <select
-              value={pagination.perPage}
-              onChange={(e) => handleRowsPerPageChange(Number(e.target.value))}
-              className="ihub-rows-select"
-              disabled={loading}
-            >
-              {rowsPerPageOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
+      <TablePagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        totalCount={pagination.totalCount}
+        perPage={pagination.perPage}
+        rowsPerPageOptions={rowsPerPageOptions}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        loading={loading}
+      />
     </div>
   );
 }) as IHubTableServerComponent;
