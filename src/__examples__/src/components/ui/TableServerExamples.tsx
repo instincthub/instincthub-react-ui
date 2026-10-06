@@ -35,6 +35,53 @@ interface InvoiceData extends IHubTableDefaultDataType {
   status: "paid" | "pending" | "overdue";
 }
 
+
+// Deterministic dummy invoices (no Math.random, so SSR and client agree).
+// 187 rows = 19 pages at 10 per page: enough to exercise the gap jumps,
+// the "Go to page" input and reaching the last page by number.
+const STUDENTS = [
+  "John Smith",
+  "Sarah Johnson",
+  "Adaeze Okafor",
+  "Tunde Bakare",
+  "Maria Garcia",
+  "Chen Wei",
+  "Fatima Al-Sayed",
+  "Liam O'Connor",
+  "Priya Nair",
+  "Kwame Mensah",
+  "Yuki Tanaka",
+  "Elena Petrova",
+];
+const CATEGORIES = [
+  "Tuition Fees",
+  "ICT Fees",
+  "Library Fees",
+  "Hostel Fees",
+  "Exam Fees",
+];
+const STATUSES: InvoiceData["status"][] = ["paid", "pending", "overdue"];
+
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
+
+const mockData: InvoiceData[] = Array.from({ length: 187 }, (_, i) => {
+  const issued = new Date(Date.UTC(2023, i % 12, (i % 27) + 1));
+  const due = new Date(issued);
+  due.setUTCDate(due.getUTCDate() + 30);
+  return {
+    id: `INV-${String(i + 1).padStart(3, "0")}`,
+    student: STUDENTS[i % STUDENTS.length],
+    amount: 150 + ((i * 37) % 1400),
+    category: CATEGORIES[i % CATEGORIES.length],
+    date: isoDate(issued),
+    dueDate: isoDate(due),
+    status: STATUSES[(i * 7) % STATUSES.length],
+  };
+});
+
+/** Fits on one page: the pager's navigation should not render for this table. */
+const singlePageData: InvoiceData[] = mockData.slice(0, 6);
+
 // Example page component
 export default function ProgramCoursesPage() {
   // Create ref for table control
@@ -202,30 +249,6 @@ export default function ProgramCoursesPage() {
     },
   ];
 
-  // Mock data for demo purposes
-  // In a real implementation, this would be fetched from an API
-  const mockData: InvoiceData[] = [
-    {
-      id: "INV-001",
-      student: "John Smith",
-      amount: 1250,
-      category: "Tuition Fees",
-      date: "2023-04-12",
-      dueDate: "2023-05-12",
-      status: "paid",
-    },
-    {
-      id: "INV-002",
-      student: "Sarah Johnson",
-      amount: 450,
-      category: "ICT Fees",
-      date: "2023-04-10",
-      dueDate: "2023-05-10",
-      status: "paid",
-    },
-    // ... other payment data
-  ];
-
   // Action handlers
   const handleRowClick = (row: ProgramCourseData) => {
     console.log("Row clicked:", row);
@@ -321,6 +344,7 @@ export default function ProgramCoursesPage() {
         }}
         title="Student Payments"
         endpointPath=""
+        persistState={false}
         showSearch={true}
         searchPlaceholder="Search by invoice or student..."
         enableSorting={true}
@@ -334,6 +358,17 @@ export default function ProgramCoursesPage() {
         // keyExtractor={(row) => row.id}
         stickyHeader={true}
         maxHeight="500px"
+      />
+
+      <h2>Single Page (pager navigation hides)</h2>
+      <IHubTableServer
+        columns={columns2 as TableColumnType<InvoiceData>[]}
+        defaultData={singlePageData}
+        endpointPath=""
+        title="Recent Payments"
+        showSearch={false}
+        enableSorting={true}
+        persistState={false}
       />
 
       <Link
