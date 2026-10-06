@@ -1,3 +1,28 @@
+## 2026-10-06 — IHubTableServer `defaultData` never paged; pager rebuilt: FIXED (0.3.0)
+
+### Report
+The table pager only showed a sliding window of five numbers, so the last
+page could not be reached by number, there was no way to jump several
+pages or type a page, and with one page of results the whole footer
+(summary and rows-per-page) disappeared.
+
+### Finding
+Two separate problems:
+1. `IHubTableServer` with `defaultData` and no `endpointPath` returned the
+   whole array on page 1 with a hard-coded `perPage: 10`, ignoring the
+   requested page, limit, search and sort. Clicking page 2 in the demo did
+   nothing. Fixed in `src/components/ui/tables/utils/localPaging.ts`,
+   which searches, sorts and slices in memory the way the API would.
+2. The pager markup was duplicated in `IHubTable` and `IHubTableServer`.
+   Both now render `src/components/ui/tables/TablePagination.tsx`: first
+   and last page always visible (MUI-style range in
+   `utils/paginationRange.ts`), `…` gap buttons jump five pages, a "Go to
+   page" input, aria-labels on every control. One page hides only the
+   navigation; zero rows render no footer.
+
+Tests: `__tests__/paginationRange.test.ts`, `localPaging.test.ts`,
+`tablePagination.test.tsx`. Shipped in PR #6; published as 0.3.0.
+
 ## 2026-09-29 — Dropdown "scroll closes the menu": ALREADY FIXED; Action.tsx window-scroll TypeError: FIXED
 
 ### Report

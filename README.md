@@ -125,7 +125,7 @@ npm unlink @instincthub/react-ui
 | `npm run yalc-link-ui` | Rebuild and publish to local yalc store |
 | `npm run yalc-link-ui-win` | Rebuild and publish to local yalc store (Windows) |
 | `npm run yalc-update-ui` | Rebuild and push updates to all yalc consumers |
-| `npm run deploy` | Build + publish to npm + deploy to Vercel |
+| `npm run deploy` | Build + publish to npm (the docs site deploys from GitHub Actions on push to main) |
 <!-- END AUTO-GENERATED -->
 
 ## Core Features
