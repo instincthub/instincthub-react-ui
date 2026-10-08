@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo, useId } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   SideNavbarProps,
   NavItemType,
@@ -12,8 +13,16 @@ import {
   NavGroupItem,
   NavButtonItem,
   NavDividerItem,
+  NavSectionItem,
+  SideNavSearchConfig,
 } from "../../types/navbar";
 import { ClientOnly } from "../auth";
+import SideNavSearch from "./SideNavSearch";
+import {
+  containsNavId,
+  findFlaggedActive,
+  resolveSideNavActive,
+} from "./sideNavMatch";
 
 const SideNavbar = ({
   items,
@@ -45,8 +54,11 @@ const SideNavbar = ({
   tooltip,
   toggleShortcut,
   contentContainerClassName = "",
+  activePath,
+  search,
   children,
 }: SideNavbarProps) => {
+  const idPrefix = `ihub-sidenav-${useId().replace(/:/g, "")}`;
   // Determine if component is controlled or uncontrolled
   const isControlled = controlledExpanded !== undefined;
 
@@ -88,67 +100,119 @@ const SideNavbar = ({
 
   const toggleExpanded = () => setIsExpanded(!getIsExpanded());
 
-  // Track active item and expanded groups
-  const [activeItemId, setActiveItemId] = useState<string | null>(null);
-  const [expandedGroups, setExpandedGroups] = useState(new Set<string>());
+  // Where the current page sits in the menu. With `activePath` the route
+  // decides (most specific href wins); otherwise the `isActive` flags do, at
+  // any depth.
+  const active = useMemo(
+    () =>
+      activePath !== undefined
+        ? resolveSideNavActive(items, activePath)
+        : findFlaggedActive(items),
+    [items, activePath]
+  );
+  const ancestorKey = active.ancestorIds.join("|");
 
-  // Initialize expanded groups
+  const [activeItemId, setActiveItemId] = useState<string | null>(active.id);
+  const [expandedGroups, setExpandedGroups] = useState(
+    () => new Set<string>(active.ancestorIds)
+  );
+  const sectionsKey = `${persistStateKey}-sections`;
+  const [collapsedSections, setCollapsedSections] = useState(() => {
+    const collapsed = new Set<string>();
+    items.forEach((item) => {
+      if (item.type === "section" && item.defaultCollapsed) collapsed.add(item.id);
+    });
+    active.ancestorIds.forEach((id) => collapsed.delete(id));
+    return collapsed;
+  });
+
   useEffect(() => {
-    const defaultExpandedGroups = new Set<string>();
+    if (active.id) setActiveItemId(active.id);
+  }, [active.id]);
 
-    const findDefaultExpanded = (
-      navItems: NavItemType[],
-      parentExpanded = false
-    ) => {
+  // Restore remembered section state after hydration, so server and first
+  // client render agree. The active page's section stays open regardless.
+  useEffect(() => {
+    if (!persistState || typeof window === "undefined") return;
+    try {
+      const saved: unknown = JSON.parse(localStorage.getItem(sectionsKey) || "null");
+      if (saved && typeof saved === "object") {
+        setCollapsedSections((prev) => {
+          const next = new Set(prev);
+          Object.entries(saved as Record<string, boolean>).forEach(([id, isCollapsed]) => {
+            if (isCollapsed && !active.ancestorIds.includes(id)) next.add(id);
+            else next.delete(id);
+          });
+          return next;
+        });
+      }
+    } catch {
+      // Unreadable storage: keep the defaults.
+    }
+  }, [persistState, sectionsKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Open default-expanded groups. Merged into, not replacing, what is open:
+  // `items` is often a new array on every parent render, and replacing shut
+  // every group the user had opened.
+  useEffect(() => {
+    const defaults: string[] = [];
+    const walk = (navItems: NavItemType[], parentExpanded = false) => {
       navItems.forEach((item) => {
-        if (item.type === "group") {
-          const groupItem = item as NavGroupItem;
-          const shouldExpand =
-            groupItem.defaultExpanded ||
-            parentExpanded ||
-            groupItem.children.some(
-              (child) =>
-                ("isActive" in child && child.isActive) ||
-                (child.type === "group" &&
-                  (child as NavGroupItem).defaultExpanded)
-            );
-
-          if (shouldExpand) {
-            defaultExpandedGroups.add(item.id);
-            findDefaultExpanded(groupItem.children, true);
+        if (item.type === "section") {
+          walk(item.children, parentExpanded);
+        } else if (item.type === "group") {
+          if (item.defaultExpanded || parentExpanded) {
+            defaults.push(item.id);
+            walk(item.children, true);
+          } else {
+            walk(item.children, false);
           }
         }
       });
     };
-
-    findDefaultExpanded(items);
-    setExpandedGroups(defaultExpandedGroups);
-  }, [items]);
-
-  // Find active item based on current route
-  useEffect(() => {
-    // This would typically check against the current route
-    const findActiveItem = (navItems: NavItemType[]): string | null => {
-      for (const item of navItems) {
-        if ("isActive" in item && item.isActive) {
-          return item.id;
-        }
-        if (item.type === "group") {
-          const activeChild = findActiveItem((item as NavGroupItem).children);
-          if (activeChild) {
-            setExpandedGroups((prev) => new Set([...prev, item.id]));
-            return activeChild;
-          }
-        }
-      }
-      return null;
-    };
-
-    const activeId = findActiveItem(items);
-    if (activeId) {
-      setActiveItemId(activeId);
+    walk(items);
+    if (defaults.length) {
+      setExpandedGroups((prev) =>
+        defaults.every((id) => prev.has(id)) ? prev : new Set([...prev, ...defaults])
+      );
     }
   }, [items]);
+
+  // Open everything above the active page whenever it changes - this is what
+  // makes a hard reload on a nested page show that page in the menu.
+  useEffect(() => {
+    if (!active.ancestorIds.length) return;
+    setExpandedGroups((prev) =>
+      active.ancestorIds.every((id) => prev.has(id))
+        ? prev
+        : new Set([...prev, ...active.ancestorIds])
+    );
+    setCollapsedSections((prev) =>
+      active.ancestorIds.some((id) => prev.has(id))
+        ? new Set([...prev].filter((id) => !active.ancestorIds.includes(id)))
+        : prev
+    );
+  }, [ancestorKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleSection = (id: string) => {
+    setCollapsedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      if (persistState && typeof window !== "undefined") {
+        try {
+          const record: Record<string, boolean> = {};
+          items.forEach((item) => {
+            if (item.type === "section") record[item.id] = next.has(item.id);
+          });
+          localStorage.setItem(sectionsKey, JSON.stringify(record));
+        } catch {
+          // Private mode or a full quota: the menu works, it just forgets.
+        }
+      }
+      return next;
+    });
+  };
 
   // Toggle group expansion
   const toggleGroup = (id: string) => {
@@ -173,7 +237,9 @@ const SideNavbar = ({
         (item as NavButtonItem).onClick(e as React.MouseEvent);
       }
 
-      setActiveItemId(item.id);
+      // A button is an action, not a place: it never takes the highlight
+      // from the page you are on.
+      if (item.type === "link") setActiveItemId(item.id);
       onNavigate?.(item, e);
 
       // Auto collapse on mobile
@@ -245,6 +311,23 @@ const SideNavbar = ({
   );
   const resizingRef = useRef(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Bring the active row into view once the groups above it have opened, so
+  // a reload deep in a long menu does not leave it scrolled off-screen.
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const row = contentRef.current?.querySelector<HTMLElement>('[aria-current="page"]');
+      const box = contentRef.current;
+      if (!row || !box) return;
+      const rowRect = row.getBoundingClientRect();
+      const boxRect = box.getBoundingClientRect();
+      if (rowRect.top < boxRect.top || rowRect.bottom > boxRect.bottom) {
+        row.scrollIntoView({ block: "center" });
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [activeItemId, expandedGroups, collapsedSections]);
 
   useEffect(() => {
     setSidebarWidth(getIsExpanded() ? expandedWidth : collapsedWidth);
@@ -332,6 +415,8 @@ const SideNavbar = ({
         return renderNavButton(item as NavButtonItem, level);
       case "divider":
         return renderNavDivider(item as NavDividerItem, level);
+      case "section":
+        return renderNavSection(item as NavSectionItem);
       default:
         return null;
     }
@@ -343,7 +428,10 @@ const SideNavbar = ({
       return null;
     }
 
-    const isActive = item.id === activeItemId;
+    // With a route, the route decides; without one, a flag still counts so
+    // menus that mark several items keep working.
+    const isActive =
+      item.id === activeItemId || (activePath === undefined && !!item.isActive);
     const indentClass = level > 0 ? `ihub-sidenav-indent-${level}` : "";
 
     const linkContent = (
@@ -404,14 +492,15 @@ const SideNavbar = ({
       <Link
         href={item.href}
         className={`ihub-sidenav-item ihub-sidenav-link ${indentClass} ${
-          item.isActive && level === 0
+          isActive && level === 0
             ? "ihub-sidenav-active"
-            : item.isActive
+            : isActive
             ? "ihub-sidenav-child-active"
             : ""
         } ${item.isDisabled ? "ihub-sidenav-disabled" : ""} ${
           item.className || ""
         }`}
+        aria-current={isActive ? "page" : undefined}
         onClick={(e) => !item.isDisabled && handleNavigation(item, e)}
         data-tooltip={
           !getIsExpanded() && tooltip?.enabled ? item.title : undefined
@@ -425,14 +514,7 @@ const SideNavbar = ({
 
   const renderNavGroup = (item: NavGroupItem, level: number) => {
     const isGroupExpanded = expandedGroups.has(item.id);
-    const hasActiveChild = item.children.some(
-      (child) =>
-        child.id === activeItemId ||
-        (child.type === "group" &&
-          (child as NavGroupItem).children.some(
-            (subChild) => subChild.id === activeItemId
-          ))
-    );
+    const hasActiveChild = containsNavId(item, activeItemId);
 
     const indentClass = level > 0 ? `ihub-sidenav-indent-${level}` : "";
 
@@ -558,6 +640,60 @@ const SideNavbar = ({
     );
   };
 
+  const renderNavSection = (item: NavSectionItem) => {
+    const expanded = getIsExpanded();
+    const collapsible = item.collapsible !== false;
+    // A collapsed sidebar shows icons only, so a section is just its items.
+    const isCollapsed = expanded && collapsible && collapsedSections.has(item.id);
+    const listId = `${idPrefix}-section-${item.id}`;
+    const holdsActive = containsNavId(item, activeItemId);
+
+    return (
+      <div
+        className={`ihub-sidenav-section ${item.className || ""} ${
+          holdsActive ? "ihub-sidenav-section-active" : ""
+        }`}
+      >
+        {expanded &&
+          (collapsible ? (
+            <button
+              type="button"
+              className="ihub-sidenav-section-head"
+              aria-expanded={!isCollapsed}
+              aria-controls={listId}
+              onClick={() => toggleSection(item.id)}
+            >
+              <span className="ihub-sidenav-section-title">{item.title}</span>
+              {isCollapsed && holdsActive && (
+                <span className="ihub-sidenav-section-dot" aria-label="Current page is here" />
+              )}
+              {isCollapsed && (
+                <span className="ihub-sidenav-section-count">
+                  {item.children.filter((child) => child.type !== "divider").length}
+                </span>
+              )}
+              <span className="ihub-sidenav-section-chevron" aria-hidden="true">
+                <ExpandMoreIcon />
+              </span>
+            </button>
+          ) : (
+            <div className="ihub-sidenav-section-head ihub-sidenav-section-head-static">
+              <span className="ihub-sidenav-section-title">{item.title}</span>
+            </div>
+          ))}
+        {!isCollapsed && (
+          <div id={listId} className="ihub-sidenav-section-items">
+            {item.children.map((child, index) => (
+              <React.Fragment key={child.id || `section-child-${index}`}>
+                {renderNavItem(child, 0)}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderNavDivider = (item: NavDividerItem, level: number) => {
     return (
       <div className="ihub-sidenav-divider">
@@ -567,6 +703,80 @@ const SideNavbar = ({
       </div>
     );
   };
+
+  const searchConfig: SideNavSearchConfig | null =
+    search === true ? {} : search ? search : null;
+
+  const renderSearchResult: React.ComponentProps<typeof SideNavSearch>["renderResult"] = (
+    { item },
+    { id, selected, label, onMouseEnter, onActivated }
+  ) => {
+    const icon = item.icon && (
+      <span className="ihub-sidenav-icon" aria-hidden="true">
+        {typeof item.icon === "string" ? (
+          <Image src={item.icon} alt="" width={24} height={24} />
+        ) : (
+          item.icon
+        )}
+      </span>
+    );
+    const common = {
+      id,
+      role: "option" as const,
+      "aria-selected": selected,
+      className: "ihub-sidenav-item ihub-sidenav-result",
+      onMouseEnter,
+    };
+    if (item.type === "button") {
+      return (
+        <button
+          type="button"
+          {...common}
+          onClick={(e) => {
+            handleNavigation(item, e);
+            onActivated();
+          }}
+        >
+          {icon}
+          {label}
+        </button>
+      );
+    }
+    const onClick = (e: React.MouseEvent) => {
+      handleNavigation(item, e);
+      onActivated();
+    };
+    return item.isExternal ? (
+      <a href={item.href} target="_blank" rel="noopener noreferrer" {...common} onClick={onClick}>
+        {icon}
+        {label}
+      </a>
+    ) : (
+      <Link href={item.href} {...common} onClick={onClick}>
+        {icon}
+        {label}
+      </Link>
+    );
+  };
+
+  const renderContent = (results: React.ReactNode | null) => (
+    <div
+      ref={contentRef}
+      className={`ihub-sidenav-content ihub-scrollbar-thin-light ${
+        !logo?.href && !searchConfig ? "ihub-mt-2" : ""
+      }`}
+    >
+      {results ?? (
+        <nav className="ihub-sidenav-nav">
+          {items.map((item, index) => (
+            <React.Fragment key={item.id || `nav-item-${index}`}>
+              {renderNavItem(item)}
+            </React.Fragment>
+          ))}
+        </nav>
+      )}
+    </div>
+  );
 
   // Compose CSS classes
   const sidebarClasses = [
@@ -686,20 +896,20 @@ const SideNavbar = ({
           />
         )}
 
-        {/* Navigation Items */}
-        <div
-          className={`ihub-sidenav-content ihub-scrollbar-thin-light ${
-            !logo?.href ? "ihub-mt-2" : ""
-          }`}
-        >
-          <nav className="ihub-sidenav-nav">
-            {items.map((item, index) => (
-              <React.Fragment key={item.id || `nav-item-${index}`}>
-                {renderNavItem(item)}
-              </React.Fragment>
-            ))}
-          </nav>
-        </div>
+        {/* Navigation Items (behind the search field when there is one) */}
+        {searchConfig && getIsExpanded() ? (
+          <SideNavSearch
+            items={items}
+            config={searchConfig}
+            idPrefix={idPrefix}
+            shortcutEnabled={!isMobile || getIsExpanded()}
+            renderResult={renderSearchResult}
+          >
+            {(results) => renderContent(results)}
+          </SideNavSearch>
+        ) : (
+          renderContent(null)
+        )}
 
         {/* Footer */}
         {footer && (

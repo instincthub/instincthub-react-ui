@@ -15,121 +15,93 @@ import HelpIcon from "@mui/icons-material/Help";
 const SideNavbarExample: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Sample navigation items
+  // The page this demo pretends to be on. A real app passes usePathname().
+  const [activePath, setActivePath] = useState("/settings");
+
+  // Sample navigation items, grouped into sections. "More" starts collapsed,
+  // and opens by itself when the active page is inside it.
   const navItems: NavItemType[] = [
     {
-      id: "dashboard",
-      title: "Dashboard",
-      icon: <DashboardIcon />,
-      type: "link",
-      href: "/dashboard",
-      isActive: true,
-    },
-    {
-      id: "analytics",
-      title: "Analytics",
-      icon: <AnalyticsIcon />,
-      type: "link",
-      href: "/analytics",
-    },
-    {
-      id: "divider1",
-      type: "divider",
-      title: "Management",
-    },
-    {
-      id: "users",
-      title: "Users",
-      icon: <PersonIcon />,
-      type: "group",
-      defaultExpanded: true,
+      id: "main",
+      type: "section",
+      title: "Main",
       children: [
         {
-          id: "all-users",
-          title: "All Users",
+          id: "dashboard",
+          title: "Dashboard",
+          icon: <DashboardIcon />,
           type: "link",
-          href: "/users",
+          href: "/dashboard",
         },
         {
-          id: "add-user",
-          title: "Add User",
+          id: "analytics",
+          title: "Analytics",
+          icon: <AnalyticsIcon />,
           type: "link",
-          href: "/users/new",
-          badge: {
-            content: "New",
-            variant: "primary",
-          },
+          href: "/analytics",
+          keywords: ["reports", "charts"],
         },
         {
-          id: "user-roles",
-          title: "User Roles",
-          type: "link",
-          href: "/users/roles",
+          id: "users",
+          title: "Users",
+          icon: <PersonIcon />,
+          type: "group",
+          keywords: ["people", "team"],
+          children: [
+            { id: "all-users", title: "All Users", type: "link", href: "/users" },
+            {
+              id: "add-user",
+              title: "Add User",
+              type: "link",
+              href: "/users/new",
+              badge: { content: "New", variant: "primary" },
+            },
+            { id: "user-roles", title: "User Roles", type: "link", href: "/users/roles", keywords: ["permissions"] },
+          ],
+        },
+        {
+          id: "content",
+          title: "Content",
+          icon: <FolderIcon />,
+          type: "group",
+          children: [
+            { id: "articles", title: "Articles", type: "link", href: "/content/articles", keywords: ["blog", "posts"] },
+            { id: "media", title: "Media Library", type: "link", href: "/content/media", keywords: ["images", "uploads"] },
+            { id: "pages", title: "Pages", type: "link", href: "/content/pages" },
+          ],
         },
       ],
     },
     {
-      id: "content",
-      title: "Content",
-      icon: <FolderIcon />,
-      type: "group",
+      id: "more",
+      type: "section",
+      title: "More",
+      defaultCollapsed: true,
       children: [
         {
-          id: "articles",
-          title: "Articles",
+          id: "notifications",
+          title: "Notifications",
+          icon: <NotificationsIcon />,
           type: "link",
-          href: "/content/articles",
+          href: "/notifications",
+          badge: { content: 5, variant: "danger" },
+        },
+        { id: "settings", title: "Settings", icon: <SettingsIcon />, type: "link", href: "/settings" },
+        {
+          id: "theme-toggle",
+          title: `Toggle ${darkMode ? "Light" : "Dark"} Mode`,
+          type: "button",
+          onClick: () => setDarkMode(!darkMode),
         },
         {
-          id: "media",
-          title: "Media Library",
+          id: "help",
+          title: "Help & Support",
+          icon: <HelpIcon />,
           type: "link",
-          href: "/content/media",
-        },
-        {
-          id: "pages",
-          title: "Pages",
-          type: "link",
-          href: "/content/pages",
+          href: "/help",
+          isExternal: true,
         },
       ],
-    },
-    {
-      id: "notifications",
-      title: "Notifications",
-      icon: <NotificationsIcon />,
-      type: "link",
-      href: "/notifications",
-      badge: {
-        content: 5,
-        variant: "danger",
-      },
-    },
-    {
-      id: "divider2",
-      type: "divider",
-      title: "Settings",
-    },
-    {
-      id: "settings",
-      title: "Settings",
-      icon: <SettingsIcon />,
-      type: "link",
-      href: "/settings",
-    },
-    {
-      id: "theme-toggle",
-      title: `Toggle ${darkMode ? "Light" : "Dark"} Mode`,
-      type: "button",
-      onClick: () => setDarkMode(!darkMode),
-    },
-    {
-      id: "help",
-      title: "Help & Support",
-      icon: <HelpIcon />,
-      type: "link",
-      href: "/help",
-      isExternal: true,
     },
   ];
 
@@ -168,10 +140,22 @@ const SideNavbarExample: React.FC = () => {
       tooltip={{ enabled: true }}
       resizable={true}
       toggleShortcut="ctrl+b"
+      activePath={activePath}
+      search={{ placeholder: "Search menu" }}
+      onNavigate={(item, e) => {
+        // Demo only: stay on this page and pretend to navigate.
+        if (item.type === "link" && !item.isExternal) {
+          e.preventDefault();
+          setActivePath(item.href);
+        }
+      }}
     >
       <div className="ihub-p-4">
         <h1>Main Content Area</h1>
-        <p>This is where your main application content would go.</p>
+        <p>
+          Simulated route: <code>{activePath}</code>. Reload and the menu opens
+          the section and group that hold it. Press <kbd>/</kbd> to search.
+        </p>
         <div className="ihub-card ihub-p-4 ihub-mt-4">
           <h2>Example Content</h2>
           <p>

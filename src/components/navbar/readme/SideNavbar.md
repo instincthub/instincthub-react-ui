@@ -129,6 +129,8 @@ const YourComponent = () => (
 | `persistStateKey` | `string` | `"ihub-sidenav-expanded"` | Key for localStorage persistence |
 | `lazyRender` | `boolean` | `false` | Render content only when needed (performance) |
 | `toggleShortcut` | `string` | - | Keyboard shortcut to toggle sidebar (e.g., "ctrl+b") |
+| `activePath` | `string` | - | Current route, e.g. `usePathname()`. The link with the most specific matching `href` is active, and every group and section above it opens, including after a hard reload. Overrides per-item `isActive`. |
+| `search` | `boolean \| SideNavSearchConfig` | - | Show a search field above the menu that filters every link and button, nested ones included. Config: `placeholder`, `shortcut` (default `"/"`, `false` to disable), `emptyMessage(query)`, `onSearch(query)`. |
 
 ### Tooltip Props
 
@@ -214,6 +216,61 @@ const dividerItem: NavDividerItem = {
   title: "Section Title" // Optional
 };
 ```
+
+### Section Item
+
+A labelled block of items with a collapsible heading. Use sections to group a
+long menu by purpose and keep rarely used modules out of the way. A section
+the active page is in always opens, even when it starts collapsed. Collapse
+state is remembered under `` `${persistStateKey}-sections` `` when
+`persistState` is on.
+
+```tsx
+const navItems: NavItemType[] = [
+  {
+    type: "section",
+    id: "main",
+    title: "Main",
+    children: [
+      { type: "link", id: "home", title: "Dashboard", href: "/acme" },
+      {
+        type: "group",
+        id: "deals",
+        title: "Deals",
+        keywords: ["pipeline"], // helps search; children inherit it as a fallback
+        children: [
+          { type: "link", id: "deals-list", title: "All Deals", href: "/acme/deals" },
+          { type: "link", id: "deals-import", title: "Import", href: "/acme/deals/import" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "section",
+    id: "more",
+    title: "More tools",
+    defaultCollapsed: true, // shows a count while shut
+    children: [/* ... */],
+  },
+];
+
+<SideNavbar items={navItems} activePath={usePathname()} search />;
+```
+
+| Field | Type | Default | Description |
+|------|------|---------|-------------|
+| `collapsible` | `boolean` | `true` | Whether the heading collapses the section |
+| `defaultCollapsed` | `boolean` | `false` | Start collapsed until opened or until the active page is inside |
+
+Any item can also carry `keywords: string[]` for the search ("people" for a
+Users link). A child matching only through its group's keywords is shown only
+when nothing matches directly.
+
+### Search keyboard
+
+`/` focuses the field (unless you are typing in another field), arrow keys move
+through the matches, Enter opens one, Escape clears the query, and a second
+Escape leaves the field.
 
 ## Customization
 
