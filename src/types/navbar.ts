@@ -28,6 +28,8 @@ export interface NavItemBase {
   };
   /** Additional metadata for custom rendering */
   meta?: Record<string, any>;
+  /** Extra words the menu search matches ("pipeline" for a Deals item) */
+  keywords?: string[];
 }
 
 /**
@@ -82,9 +84,49 @@ export interface NavDividerItem {
 }
 
 /**
+ * A labelled block of items ("Main", "Money", "More tools") with an optional
+ * collapsible heading. Sections sit at the top level; they do not nest.
+ */
+export interface NavSectionItem {
+  /** Type of navigation item */
+  type: 'section';
+  /** Unique identifier */
+  id: string;
+  /** Heading shown above the items */
+  title: string;
+  /** Items in the section */
+  children: (NavLinkItem | NavGroupItem | NavButtonItem | NavDividerItem)[];
+  /** Whether the heading collapses the section (default true) */
+  collapsible?: boolean;
+  /** Start collapsed until opened, or until the active page is inside it */
+  defaultCollapsed?: boolean;
+  /** Additional CSS class names */
+  className?: string;
+}
+
+/**
  * Union of all navigation item types
  */
-export type NavItemType = NavLinkItem | NavGroupItem | NavButtonItem | NavDividerItem;
+export type NavItemType =
+  | NavLinkItem
+  | NavGroupItem
+  | NavButtonItem
+  | NavDividerItem
+  | NavSectionItem;
+
+/**
+ * Menu search configuration
+ */
+export interface SideNavSearchConfig {
+  /** Input placeholder (default "Search menu") */
+  placeholder?: string;
+  /** Key that focuses the search from anywhere on the page (default "/"); false to disable */
+  shortcut?: string | false;
+  /** Shown when nothing matches; receives the query */
+  emptyMessage?: (query: string) => React.ReactNode;
+  /** Called whenever the query changes */
+  onSearch?: (query: string) => void;
+}
 
 /**
  * Logo configuration
@@ -245,6 +287,16 @@ export interface SideNavbarProps {
   
   /** Container class name for the main content area */
   contentContainerClassName?: string;
+
+  /**
+   * Current route (e.g. `usePathname()`). When set, the item with the most
+   * specific matching `href` is active and every group and section above it
+   * opens, including on a hard reload. Overrides per-item `isActive`.
+   */
+  activePath?: string;
+
+  /** Show a search field above the menu that filters every link, nested ones included */
+  search?: boolean | SideNavSearchConfig;
   
   /** Children content to render in main area */
   children?: React.ReactNode;

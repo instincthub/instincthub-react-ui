@@ -305,6 +305,16 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+/* main.css colours every bare span and svg (`span, i, li` and `time, svg`
+   get var(--Gunmetal)), which beat the row's own colour: labels, icons and
+   section headings stayed Gunmetal on the dark sidebar's Gunmetal
+   background, and active rows never turned DarkCyan. Inside the sidebar they
+   follow their parent instead. One class of specificity, and early in the
+   file, so every sidebar rule below that sets a colour still wins. */
+.ihub-sidenav :where(span, svg) {
+  color: inherit;
+}
+
 .ihub-sidenav-active {
   background-color: rgba(0, 131, 143, 0.1);
   color: var(--DarkCyan, #00838f);
@@ -680,4 +690,287 @@
   to {
     opacity: 1;
   }
+}
+
+/* ---- Search ---- */
+.ihub-sidenav-search {
+  padding: 12px 12px 6px;
+}
+
+.ihub-sidenav-search-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--crm-border, rgba(44, 51, 58, 0.15));
+  border-radius: 10px;
+  background: var(--Magnolia, #f4f3fe);
+  color: var(--Rhythm, #69779b);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.ihub-sidenav-search-box:focus-within {
+  border-color: var(--DarkCyan, #00838f);
+  background: var(--White, #ffffff);
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.12);
+}
+
+.ihub-sidenav-search-box svg {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.ihub-sidenav-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--Gunmetal, #2c333a);
+  font-size: 14px;
+}
+
+.ihub-sidenav-search-input::placeholder {
+  color: var(--Rhythm, #69779b);
+}
+
+.ihub-sidenav-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.ihub-sidenav-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--crm-border, rgba(44, 51, 58, 0.2));
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--White, #ffffff);
+  color: var(--Rhythm, #69779b);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.ihub-sidenav-search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(125, 124, 124, 0.12);
+  color: var(--Rhythm, #69779b);
+  cursor: pointer;
+}
+
+.ihub-sidenav-search-clear svg {
+  font-size: 14px;
+}
+
+.ihub-sidenav-results {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px;
+}
+
+.ihub-sidenav-results-meta {
+  padding: 4px 16px 6px;
+  font-size: 11px;
+  color: var(--Rhythm, #69779b);
+}
+
+.ihub-sidenav-result {
+  align-items: flex-start;
+  white-space: normal;
+}
+
+.ihub-sidenav-result[aria-selected="true"] {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 3px 0 0 var(--DarkCyan, #00838f);
+}
+
+.ihub-sidenav-result-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ihub-sidenav-result-title mark {
+  background: rgba(0, 131, 143, 0.12);
+  color: var(--DarkCyan, #00838f);
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.ihub-sidenav-result-trail {
+  font-size: 11.5px;
+  color: var(--Rhythm, #69779b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ihub-sidenav-search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--Rhythm, #69779b);
+}
+
+.ihub-sidenav-search-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(125, 124, 124, 0.12);
+}
+
+.ihub-sidenav-search-empty strong {
+  color: var(--Gunmetal, #2c333a);
+  word-break: break-word;
+}
+
+/* ---- Sections ---- */
+.ihub-sidenav-section + .ihub-sidenav-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--crm-border, rgba(44, 51, 58, 0.15));
+}
+
+.ihub-sidenav-section-head {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 16px;
+  border: none;
+  background: transparent;
+  color: var(--Rhythm, #69779b);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ihub-sidenav-section-head:hover {
+  color: var(--Gunmetal, #2c333a);
+}
+
+.ihub-sidenav-section-head-static {
+  cursor: default;
+}
+
+.ihub-sidenav-section-title {
+  flex: 1;
+}
+
+.ihub-sidenav-section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(125, 124, 124, 0.12);
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.ihub-sidenav-section-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--DarkCyan, #00838f);
+}
+
+.ihub-sidenav-section-chevron {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+
+.ihub-sidenav-section-chevron svg {
+  font-size: 16px;
+}
+
+.ihub-sidenav-section-head[aria-expanded="false"] .ihub-sidenav-section-chevron {
+  transform: rotate(-90deg);
+}
+
+/* Collapsed (icon-only) sidebar: a section is a thin rule and its icons. */
+.ihub-sidenav-collapsed .ihub-sidenav-section + .ihub-sidenav-section {
+  border-top-style: solid;
+}
+
+@media (hover: none) {
+  .ihub-sidenav-search-box .ihub-sidenav-kbd {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ihub-sidenav-section-chevron {
+    transition: none;
+  }
+}
+
+/* Dark sidebar */
+.ihub-sidenav-dark .ihub-sidenav-search-box {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-search-box:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--TiffanyBlue, #0fabbc);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-search-input,
+.ihub-sidenav-dark .ihub-sidenav-search-empty strong {
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-kbd {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-section-head,
+.ihub-sidenav-dark .ihub-sidenav-result-trail,
+.ihub-sidenav-dark .ihub-sidenav-results-meta {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-section-head:hover {
+  color: var(--White, #ffffff);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-section + .ihub-sidenav-section {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.ihub-sidenav-dark .ihub-sidenav-result-title mark {
+  background: rgba(15, 171, 188, 0.2);
+  color: var(--TiffanyBlue, #0fabbc);
 }
