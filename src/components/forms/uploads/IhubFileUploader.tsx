@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, DragEvent, ChangeEvent } from "react";
 import { FILE_URL, IN_DEV_MODE, slugifyFileName, reqOptions } from "../../lib/helpFunction";
+import { uploadedFileUrl } from "./uploadedFileUrl";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { openToast } from "../../lib/modals/modals";
@@ -305,7 +306,11 @@ export default function IhubFileUploader({
         key: prefixUniqueKey,
         content_type: selectedFile.type,
         size: selectedFile.size,
-        location: `${FILE_URL}creators/${prefixUniqueKey}`,
+        location: uploadedFileUrl(
+          fullKey,
+          FILE_URL,
+          process.env.NEXT_PUBLIC_AWS_LOCATION_FILES
+        ),
       };
 
       // Save to DB if endpoint provided
