@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
+import { uploadedFileUrl } from "./uploadedFileUrl";
 import { S3Client } from "@aws-sdk/client-s3";
 import { openToast } from "../../lib/modals/modals";
 
@@ -206,7 +207,11 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
         key: prefixUniqueKey,
         content_type: fileToUpload.type,
         size: fileToUpload.size,
-        location: `${FILE_URL}creators/${prefixUniqueKey}`,
+        location: uploadedFileUrl(
+          fullKey,
+          FILE_URL,
+          process.env.NEXT_PUBLIC_AWS_LOCATION_FILES
+        ),
       };
 
       props.setResponse && props.setResponse(res);

@@ -1,3 +1,32 @@
+## 2026-10-13 - Uploaders reported a 403 URL for video uploads: FIXED (0.3.1)
+
+### Report
+`IhubFileUploader` with `accept="video/*"` wrote the object under
+`NEXT_PUBLIC_AWS_LOCATION` but always returned
+`location: ${FILE_URL}creators/${key}`, i.e. a path under the FILES location.
+Verified on www.leadboard.ng: key
+`leadboard-2026-10-13t092009-214z-lb-9x16-web-drag-.mp4` is 200 under
+`creator-videos/` and 403 at the reported `prod_env/social-files/creators/` URL.
+Leadboard itself dodges it (MediaUploader never passes exactly "video/*",
+see `buildAcceptTypes` in leadboard_nextjs_v2 `composeHelpers.ts`); other apps
+using the library did not.
+
+### Finding
+Same pattern in `FileUploader.tsx`. Both now build `location` from the exact
+`fullKey` written, via `src/components/forms/uploads/uploadedFileUrl.ts`:
+CDN base = `NEXT_PUBLIC_FILE_URL` minus the path segments it shares with the
+start of `NEXT_PUBLIC_AWS_LOCATION_FILES`, then `+ fullKey`. For the files
+location this gives the same URL as before. No new env var.
+
+Tests: `src/components/forms/uploads/__tests__/uploadedFileUrl.test.ts`.
+
+### Open follow-up (not changed)
+`FileUploader` picks the VIDEO location when `props.accepts` is any truthy
+string (`props.accepts || acceptedFileTypes?.includes("video/*")`), so an
+`accepts="image/*"` upload lands in the video folder. The reported URL is now
+correct either way; changing where files are written was left alone because
+existing apps may depend on it.
+
 ## 2026-10-06 — IHubTableServer `defaultData` never paged; pager rebuilt: FIXED (0.3.0)
 
 ### Report
