@@ -23,6 +23,7 @@ import {
   findFlaggedActive,
   resolveSideNavActive,
 } from "./sideNavMatch";
+import { useRevealActiveRow } from "./useRevealActiveRow";
 
 const SideNavbar = ({
   items,
@@ -313,21 +314,10 @@ const SideNavbar = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Bring the active row into view once the groups above it have opened, so
-  // a reload deep in a long menu does not leave it scrolled off-screen.
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const row = contentRef.current?.querySelector<HTMLElement>('[aria-current="page"]');
-      const box = contentRef.current;
-      if (!row || !box) return;
-      const rowRect = row.getBoundingClientRect();
-      const boxRect = box.getBoundingClientRect();
-      if (rowRect.top < boxRect.top || rowRect.bottom > boxRect.bottom) {
-        row.scrollIntoView({ block: "center" });
-      }
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [activeItemId, expandedGroups, collapsedSections]);
+  // Bring the current page's row into view when the page changes, once the
+  // groups above it have opened. Toggling a group or section leaves the list
+  // where the user scrolled it.
+  useRevealActiveRow(contentRef, activeItemId, [expandedGroups, collapsedSections]);
 
   useEffect(() => {
     setSidebarWidth(getIsExpanded() ? expandedWidth : collapsedWidth);

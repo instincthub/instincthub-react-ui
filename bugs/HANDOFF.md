@@ -1,3 +1,23 @@
+## 2026-10-14 - SideNavbar jumped to the top when a group or section was toggled: FIXED (0.3.2)
+
+### Report
+Scroll a long menu to the bottom and open a section ("More tools") or a
+group ("Social"): the list jumped back up to the current page's row. Seen on
+leadboard.ng (its own CrmSidebar shares the pattern) and reproduced in the
+library example at a short viewport.
+
+### Finding
+The "bring the active row into view" effect re-ran on every change to
+`expandedGroups` / `collapsedSections`, and its only guard was "is the row
+off-screen", which is exactly the state after the user scrolls away. Now
+`src/components/navbar/useRevealActiveRow.ts` arms the scroll only when the
+active item changes (click, route change, first render), keeps the request
+pending until the row exists (its ancestors may open a render later), and
+nudges a partly visible row with `nearest` instead of recentring it.
+
+Tests: `src/components/navbar/__tests__/sideNavbarSections.test.tsx`
+("SideNavbar scroll position").
+
 ## 2026-10-13 - Uploaders reported a 403 URL for video uploads: FIXED (0.3.1)
 
 ### Report
