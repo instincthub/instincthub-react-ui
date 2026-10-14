@@ -193,3 +193,38 @@ describe("SideNavbar buttons", () => {
     expect(current()).toEqual(["Deals Table"]);
   });
 });
+
+describe("SideNavbar scroll position", () => {
+  // jsdom has no layout: stand in for a menu box 300px tall whose current
+  // page row sits 100px above the top edge (the user scrolled past it).
+  const layOutRowAbove = () => {
+    Element.prototype.getBoundingClientRect = function () {
+      const rect = { top: 0, bottom: 300, left: 0, right: 240, width: 240, height: 300, x: 0, y: 0 };
+      if (this.getAttribute("aria-current") === "page") {
+        return { ...rect, top: -100, bottom: -60, height: 40 } as DOMRect;
+      }
+      return rect as DOMRect;
+    };
+  };
+
+  it("leaves the list where it is when a section or group is toggled", () => {
+    layOutRowAbove();
+    render({ activePath: "/acme" });
+    (Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>).mockClear();
+    act(() => sectionHead("More tools")?.click());
+    const groupHead = [...container.querySelectorAll<HTMLElement>(".ihub-sidenav-group-header")].find(
+      (el) => el.textContent?.startsWith("SMS")
+    );
+    act(() => groupHead?.click());
+    expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it("brings the new page's row into view once its section has opened", () => {
+    layOutRowAbove();
+    render({ activePath: "/acme" });
+    (Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>).mockClear();
+    render({ activePath: "/acme/sms/templates" });
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+    expect(current()).toEqual(["Templates"]);
+  });
+});
