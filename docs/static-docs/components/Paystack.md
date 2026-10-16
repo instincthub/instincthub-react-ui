@@ -2,6 +2,20 @@
 
 A comprehensive payment processing utility library that integrates with Paystack's payment gateway. This library provides functions for handling payments, charging existing authorizations, coupon validation, and complete payment workflows with error handling and user interactions.
 
+## Migrating to 0.4.0 (breaking)
+
+The Paystack secret key must never be in browser code: every `NEXT_PUBLIC_*`
+variable is inlined into the JavaScript bundle anyone can download.
+
+- `NEXT_PUBLIC_PAYSTACK_SECRET_KEY` is no longer read. Delete it from every
+  environment (Vercel, `.env*`) and rotate the key if it was ever set.
+- `chargeAuthorization(config)` became `chargeAuthorization({ chargeUrl, token, body })`
+  and calls your server instead of `api.paystack.co`.
+- `handlePaymentSubmit` only offers a saved card when you pass
+  `savedCardCharge: { chargeUrl, token, body? }`. Without it the user gets the
+  popup. `configObj.authorization_code` is ignored.
+- `PaystackConfigType.publicKey` and `.authorization_code` were removed.
+
 ## Features
 
 - **Multiple Payment Methods**: Support for new cards and saved payment methods
@@ -43,10 +57,15 @@ const config = paystackDataConfig({
 
 ### chargeAuthorization
 
-Charges a customer using an existing authorization code.
+Charges the logged-in user's saved card through YOUR server (never from the
+browser). The server looks the card up and prices the item.
 
 ```tsx
-const result = await chargeAuthorization(paystackConfig);
+const result = await chargeAuthorization({
+  chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+  token,
+  body: { payment_method_id: savedCard.id, item_type: "course", item_id },
+});
 if (result.status === "success") {
   console.log("Payment successful");
 }
@@ -972,7 +991,6 @@ import {
 
 // Mock Paystack environment variables
 process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY = 'pk_test_123';
-process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY = 'sk_test_123';
 
 // Mock window.PaystackPop
 global.window = {
@@ -1163,11 +1181,9 @@ describe('Paystack Utilities', () => {
 ```bash
 # .env.local
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_your_public_key
-NEXT_PUBLIC_PAYSTACK_SECRET_KEY=sk_test_your_secret_key
 
 # For production
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_live_your_public_key
-NEXT_PUBLIC_PAYSTACK_SECRET_KEY=sk_live_your_secret_key
 ```
 
 ### Paystack Script Integration

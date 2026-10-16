@@ -2,6 +2,20 @@
 
 A TypeScript utility library for handling PayStack payment processing in web applications.
 
+## Migrating to 0.4.0 (breaking)
+
+The Paystack secret key must never be in browser code: every `NEXT_PUBLIC_*`
+variable is inlined into the JavaScript bundle anyone can download.
+
+- `NEXT_PUBLIC_PAYSTACK_SECRET_KEY` is no longer read. Delete it from every
+  environment (Vercel, `.env*`) and rotate the key if it was ever set.
+- `chargeAuthorization(config)` became `chargeAuthorization({ chargeUrl, token, body })`
+  and calls your server instead of `api.paystack.co`.
+- `handlePaymentSubmit` only offers a saved card when you pass
+  `savedCardCharge: { chargeUrl, token, body? }`. Without it the user gets the
+  popup. `configObj.authorization_code` is ignored.
+- `PaystackConfigType.publicKey` and `.authorization_code` were removed.
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -26,7 +40,6 @@ Make sure to set up your environment variables in your `.env.local` file:
 
 ```
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=your_paystack_public_key
-NEXT_PUBLIC_PAYSTACK_SECRET_KEY=your_paystack_secret_key
 ```
 
 ### PayStack Script Integration
@@ -87,7 +100,6 @@ Configuration for initializing a PayStack payment.
 
 ```typescript
 export interface PaystackConfigObjectType {
-  authorization_code?: string;
   email: string;
   first_name: string;
   last_name: string;
@@ -107,14 +119,12 @@ The complete configuration sent to PayStack.
 
 ```typescript
 export interface PaystackConfigType {
-  authorization_code?: string;
   reference: string;
   email: string;
   first_name: string;
   last_name: string;
   currency: string;
   amount: number;
-  publicKey: string | undefined;
   key: string | undefined;
   callback_url: string;
   metadata?: PaystackMetadataType;
@@ -233,28 +243,47 @@ Configures PayStack payment data for processing.
 
 ### chargeAuthorization
 
-Charges a customer using an existing authorization.
+Charges the logged-in user's **saved card through your server**. Since 0.4.0
+the browser never calls Paystack's `charge_authorization` API and never holds
+the secret key or an authorization code. It POSTs purchase identifiers to your
+endpoint; the server looks the card up by the logged-in user, prices the item
+itself, charges it with `PAYSTACK_SECRET_KEY` and returns the Paystack
+transaction object.
 
 - **Parameters**:
-  - `data: PaystackConfig` - Payment configuration data
-- **Returns**: `Promise<any>` - Promise with transaction data
+  - `options.chargeUrl: string` - your server endpoint
+  - `options.token?: string` - the user's bearer token
+  - `options.channel?: string` - optional channel header
+  - `options.body?: object` - identifiers only (`payment_method_id`, item, coupon)
+- **Returns**: `Promise<any>` - the transaction data (`status: "failed"` on error)
 - **Usage**:
 
   ```typescript
-  const config = paystackDataConfig({
-    authorization_code: "AUTH_123456",
-    email: "customer@example.com",
-    first_name: "John",
-    last_name: "Doe",
-    amount: 5000,
-    content_type: "1" // Model ID,
-    object_id: "123" // Object ID,
+  const response = await chargeAuthorization({
+    chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+    token,
+    body: {
+      payment_method_id: savedCard.id,
+      item_type: "course",
+      item_id: course.id,
+      coupon: "DISCOUNT10",
+    },
   });
-
-  const response = await chargeAuthorization(config);
   if (response.status === "success") {
-    // Handle successful payment
+    // Record the purchase with response.reference
   }
+  ```
+
+### payWithAccessCode
+
+Opens the popup for a transaction your **server initialised** with
+`POST /transaction/initialize`, so amount, email and metadata cannot be changed
+in the browser. Loads Paystack inline v2 on demand.
+
+  ```typescript
+  const { access_code } = await fetch(initUrl, reqOptions("POST", JSON.stringify({ item_id }), token, "json")).then((r) => r.json());
+  const res = await payWithAccessCode(access_code);
+  if (res.status === "success") verifyOnServer(res.reference);
   ```
 
 ### payWithPaystack
@@ -309,13 +338,11 @@ Handles the complete payment submission process with full user data.
       content_type: "course",
       object_id: "123",
     },
-    paymentMethod: {
-      authorization: {
-        authorization_code: "AUTH_123456",
-        email: "customer@example.com",
-      },
-      card_type: "Visa",
-      last4: "4242",
+    paymentMethod: savedCard, // from user-payment-method-list
+    savedCardCharge: {
+      chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+      token,
+      body: { item_type: "course", item_id: "123" },
     },
     setStatus: (status) => {
       // Update UI based on status
@@ -558,8 +585,6 @@ const processSavedCardPayment = async () => {
     const paymentContext = {
       objects: productDetails,
       configObj: {
-        authorization_code:
-          defaultPaymentMethod.authorization.authorization_code,
         email: defaultPaymentMethod.authorization.email,
         first_name: user.firstName,
         last_name: user.lastName,
@@ -568,6 +593,12 @@ const processSavedCardPayment = async () => {
         object_id: productId,
       },
       paymentMethod: defaultPaymentMethod,
+      // The server charges the card; the browser only names the purchase.
+      savedCardCharge: {
+        chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+        token,
+        body: { item_type: "product", item_id: productId },
+      },
       setStatus: updateLoadingState,
       handleDBAction: handleSuccessfulPurchase,
       label: productDetails.title,

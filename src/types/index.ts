@@ -698,6 +698,11 @@ export interface PaystackMetadataType {
 }
 
 export interface PaystackConfigObjectType {
+  /**
+   * @deprecated Ignored since 0.4.0. Saved cards are charged by the app's
+   * server (see `PaymentContextType.savedCardCharge`), which looks the card up
+   * itself; the browser no longer handles authorization codes.
+   */
   authorization_code?: string;
   email: string;
   first_name: string;
@@ -718,8 +723,7 @@ export interface PaystackConfigType {
   currency: string;
   amount: number;
   reference?: string;
-  authorization_code?: string;
-  publicKey?: string | undefined;
+  /** Paystack PUBLIC key (pk_...). Never put a secret key in browser code. */
   key?: string | undefined;
   callback_url?: string;
   metadata?: PaystackMetadataType;
@@ -778,6 +782,27 @@ export interface PaymentContextType {
   defaultMsg?: string;
   gatwayCharges?: number;
   openConfirm?: boolean;
+  /**
+   * Server endpoint that charges `paymentMethod`. When omitted, saved cards
+   * are not offered and the Paystack popup is used.
+   */
+  savedCardCharge?: SavedCardChargeOptionsType;
+}
+
+/**
+ * Options for charging a saved card through the app's own server.
+ * The server looks the card up by the logged-in user and prices the item;
+ * the browser sends identifiers only.
+ */
+export interface SavedCardChargeOptionsType {
+  /** Absolute URL of the server endpoint that performs the charge. */
+  chargeUrl: string;
+  /** Bearer token of the logged-in user. */
+  token?: string | null;
+  /** Optional channel header passed to `reqOptions`. */
+  channel?: string | null;
+  /** Purchase identifiers, e.g. payment_method_id, item_type, item_id, coupon. */
+  body?: Record<string, any>;
 }
 
 export interface PaymentReferenceType {

@@ -1,3 +1,27 @@
+## 2026-10-16 - Paystack SECRET key read in browser code: FIXED (0.4.0, breaking)
+
+### Report
+A production build of leadboard.ng contained a Paystack live secret key
+(`sk_live_`) in three browser chunks.
+
+### Finding
+`src/components/lib/paystack.ts` read `process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY`
+twice: `paystackDataConfig` put it in an unused `publicKey` field of every
+popup config, and `chargeAuthorization` sent it as a Bearer token to
+`api.paystack.co/transaction/charge_authorization` from the browser. Next.js
+inlines every `NEXT_PUBLIC_*` value it sees, so any app that set the variable
+shipped the key to every visitor.
+
+### Fix
+No secret is read anywhere. `chargeAuthorization({ chargeUrl, token, body })`
+POSTs purchase identifiers to the app's own server, which looks the card up by
+the logged-in user, prices the item and charges it (instincthub_apis:
+`payments/<channel>/paystack/charge-saved-card/`). `handlePaymentSubmit` only
+offers a saved card when given `savedCardCharge`; otherwise it uses the popup.
+New `payWithAccessCode(accessCode)` opens a server-initialised transaction.
+`PaystackConfigType.publicKey` / `.authorization_code` removed. Migration notes
+in `src/components/lib/readme/paystack.md`.
+
 ## 2026-10-16 - SubmitButton icons vanished on dark mode: FIXED (0.3.3)
 
 ### Report

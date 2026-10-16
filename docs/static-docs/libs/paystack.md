@@ -4,6 +4,20 @@
 
 Comprehensive Paystack payment processing utilities for handling subscriptions, one-time payments, and saved payment methods. Includes coupon validation, gateway charges calculation, and complete payment flow management with user confirmation dialogs.
 
+## Migrating to 0.4.0 (breaking)
+
+The Paystack secret key must never be in browser code: every `NEXT_PUBLIC_*`
+variable is inlined into the JavaScript bundle anyone can download.
+
+- `NEXT_PUBLIC_PAYSTACK_SECRET_KEY` is no longer read. Delete it from every
+  environment (Vercel, `.env*`) and rotate the key if it was ever set.
+- `chargeAuthorization(config)` became `chargeAuthorization({ chargeUrl, token, body })`
+  and calls your server instead of `api.paystack.co`.
+- `handlePaymentSubmit` only offers a saved card when you pass
+  `savedCardCharge: { chargeUrl, token, body? }`. Without it the user gets the
+  popup. `configObj.authorization_code` is ignored.
+- `PaystackConfigType.publicKey` and `.authorization_code` were removed.
+
 ## 📁 File Location
 
 `src/components/lib/paystack.ts`
@@ -565,7 +579,9 @@ interface PaystackConfigObjectType {
 }
 ```
 
-#### `chargeAuthorization(data: PaystackConfigType): Promise<any>`
+#### `chargeAuthorization(options: SavedCardChargeOptionsType): Promise<any>`
+
+POSTs `options.body` to `options.chargeUrl` (your server). See the migration notes above.
 Charges a customer using an existing authorization (saved card).
 
 #### `payWithPaystack(config: PaystackConfigType): Promise<PaystackResponseType>`

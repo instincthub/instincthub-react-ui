@@ -306,7 +306,7 @@ await handlePaymentWithoutUserData({
                   <ContentViewer
                     className="ihub-bg-white ihub-p-2 ihub-rounded ihub-mt-2"
                     content={`<pre>{NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_...
-NEXT_PUBLIC_PAYSTACK_SECRET_KEY=sk_test_...}
+# Never put the SECRET key in a NEXT_PUBLIC_ variable: it ships to every browser.}
                       </pre>`}
                   />
                 </li>
