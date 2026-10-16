@@ -15,7 +15,11 @@ import {
   PaystackResponseType,
   PaymentContextType,
   CouponType,
+  SavedCardChargeOptionsType,
 } from "@/types";
+
+/** Paystack inline v2 script, needed for server-initialised transactions. */
+export const PAYSTACK_INLINE_V2_URL = "https://js.paystack.co/v2/inline.js";
 
 /**
  * Context for processing payments
@@ -36,61 +40,150 @@ import {
  */
 
 /**
- * Configures the Paystack payment data for processing
+ * Configures the Paystack popup data.
+ *
+ * Only the PUBLIC key (`NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`) is ever read here.
+ * The secret key must never reach the browser: anything a `NEXT_PUBLIC_*`
+ * variable holds is inlined into the shipped JavaScript.
  * @param obj - Object containing payment details
  * @returns PaystackConfig - Configured payment data
  */
 export const paystackDataConfig = (
   obj: PaystackConfigObjectType
 ): PaystackConfigType => ({
-  authorization_code: obj.authorization_code,
   reference: new Date().getTime().toString(),
   email: obj.email,
   first_name: obj.first_name,
   last_name: obj.last_name,
   amount: Math.round(obj.amount * 100), // Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
   currency: obj.currency || "NGN",
-  publicKey: process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY,
   key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
   callback_url: window.location.href,
   metadata: obj.metadata,
 });
 
 /**
- * Charges a customer using an existing authorization
- * @param data - Payment configuration data
- * @returns Promise with transaction data
+ * Charges the logged-in user's saved card THROUGH THE APP'S SERVER.
+ *
+ * The browser never calls Paystack's charge_authorization API and never sends
+ * an authorization code or an amount the server trusts. It POSTs only what
+ * identifies the purchase (`body`, e.g. the saved payment method id, the item
+ * and a coupon code) to `chargeUrl`; the server looks the card up by the
+ * logged-in user, prices the item itself and charges it with its own secret
+ * key. The server is expected to answer with the Paystack transaction object
+ * (`status`, `reference`, `amount`, ...), optionally wrapped in `data`.
+ *
+ * @example
+ * ```ts
+ * const res = await chargeAuthorization({
+ *   chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+ *   token,
+ *   body: { payment_method_id: card.id, item_type: "course", item_id: course.id },
+ * });
+ * if (res.status === "success") recordPayment(res);
+ * ```
+ * @param options - Server endpoint, auth token and purchase identifiers
+ * @returns Promise with the transaction data (status "failed" on error)
  */
 export const chargeAuthorization = async (
-  data: PaystackConfigType
+  options: SavedCardChargeOptionsType
 ): Promise<any> => {
-  // This function tries to charge user with existing card
-  const url = "https://api.paystack.co/transaction/charge_authorization";
-  const options = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY}`,
-      "Content-Type": "application/json",
-    },
-  };
+  if (!options?.chargeUrl) {
+    openToast("Saved card payments are not available here.", 400);
+    return { status: "failed", message: "chargeUrl is required" };
+  }
+
+  const requestOptions = reqOptions(
+    "POST",
+    JSON.stringify(options.body || {}),
+    options.token || null,
+    "json",
+    options.channel || null
+  );
 
   try {
-    const req = await fetch(url, options);
-    const res = await req.json();
+    const req = await fetch(options.chargeUrl, requestOptions);
+    const res = await req.json().catch(() => ({}));
+    const data = res?.data && typeof res.data === "object" ? res.data : res;
 
-    if (res.data?.status === "success") {
-      openToast(`Payment was successful with reference: ${res.data.reference}`);
-    } else {
-      openToast(`Payment failed with reference: ${res.data.reference}`, 400);
+    if (req.ok && data?.status === "success") {
+      openToast(`Payment was successful with reference: ${data.reference}`);
+      return data;
     }
 
-    return res.data;
+    const message =
+      res?.detail ||
+      data?.gateway_response ||
+      data?.message ||
+      "Payment could not be completed with the saved card";
+    openToast(message, 400);
+    return { ...data, status: data?.status || "failed", message };
   } catch (error) {
     openToast("Payment processing error occurred", 400);
-    console.error("Payment authorization error:", error);
+    console.error("Saved card charge error:", error);
     return { status: "failed", error };
   }
+};
+
+/**
+ * Opens the Paystack popup for a transaction the app's SERVER initialised
+ * (POST /transaction/initialize with the secret key), so amount, email and
+ * metadata are fixed server-side and cannot be changed in the browser.
+ *
+ * Uses Paystack inline v2 (`resumeTransaction`). The v2 script is loaded on
+ * demand when it is not already on the page.
+ * @param accessCode - `access_code` returned by the server's initialize call
+ * @returns Promise with the payment response (`status: "canceled"` on close)
+ */
+export const payWithAccessCode = (
+  accessCode: string
+): Promise<PaystackResponseType> => {
+  const empty = { email: "", amount: 0 };
+
+  const loadV2 = (): Promise<any> =>
+    new Promise((resolve, reject) => {
+      const existing = (window as any).PaystackPop;
+      if (existing && typeof existing === "function") {
+        return resolve(existing);
+      }
+      const script = document.createElement("script");
+      script.src = PAYSTACK_INLINE_V2_URL;
+      script.async = true;
+      script.onload = () => resolve((window as any).PaystackPop);
+      script.onerror = () => reject(new Error("Paystack script failed to load"));
+      document.body.appendChild(script);
+    });
+
+  return new Promise(async (resolve) => {
+    try {
+      if (!accessCode) throw new Error("accessCode is required");
+      const Pop = await loadV2();
+      const popup = new Pop();
+      popup.resumeTransaction(accessCode, {
+        onSuccess: (response: PaystackResponseType) => {
+          openToast("Payment complete! Reference: " + response.reference);
+          resolve({ ...empty, ...response, status: response.status || "success" });
+        },
+        onCancel: () => {
+          openToast("Transaction was not completed, window closed.", 400);
+          resolve({
+            ...empty,
+            status: "canceled",
+            cancelled: true,
+            reference: "",
+          } as PaystackResponseType);
+        },
+        onError: (error: any) => {
+          openToast(error?.message || "Payment could not be initiated", 400);
+          resolve({ ...empty, status: "failed", reference: "", error });
+        },
+      });
+    } catch (error) {
+      console.error("Paystack access code error:", error);
+      openToast("Payment could not be initiated", 400);
+      resolve({ ...empty, status: "failed", reference: "", error });
+    }
+  });
 };
 
 /**
@@ -159,18 +252,19 @@ export const payWithPaystack = (
  *     email: "user@example.com",
  *     amount: 1000,
  *     currency: "NGN",
- *     authorization_code: "1234567890",
  *     first_name: "John",
  *     last_name: "Doe",
  *     email: "user@example.com",
  *   },
  *   coupon: "1234567890",
  *   gatwayCharges: 10,
- *   paymentMethod: {
- *     authorization: {
- *       card_type: "MasterCard",
- *       last4: "1234",
- *     },
+ *   paymentMethod: savedCard, // from user-payment-method-list
+ *   // Saved cards are charged by YOUR server, never from the browser.
+ *   // Without savedCardCharge the user always gets the Paystack popup.
+ *   savedCardCharge: {
+ *     chargeUrl: `${API_HOST_URL}payments/${channel}/paystack/charge-saved-card/`,
+ *     token,
+ *     body: { item_type: "course", item_id: "123" },
  *   },
  *   handleDBAction: (data: any) => {
  *     console.log(data);
@@ -316,14 +410,24 @@ export async function handlePaymentSubmit(
     const dataset = paystackDataConfig(mewConfigObj);
 
     if (mewConfigObj.amount) {
-      if (mewConfigObj.authorization_code && contexts.paymentMethod) {
+      if (contexts.paymentMethod && contexts.savedCardCharge?.chargeUrl) {
         // Ask if user wants to use existing payment method
-        const msg = `Would you prefer we charge your existing ${contexts.paymentMethod.authorization.card_type} card that ends with ${contexts.paymentMethod.last4}?`;
+        const msg = `Would you prefer we charge your existing ${contexts.paymentMethod.authorization?.card_type || ""} card that ends with ${contexts.paymentMethod.last4}?`;
         const confirm = await openConfirmModal(msg, true);
 
         if (confirm) {
-          // Charge user with existing card
-          const res = await chargeAuthorization(dataset);
+          // Charge the saved card on the server: it prices the item itself.
+          const res = await chargeAuthorization({
+            ...contexts.savedCardCharge,
+            body: {
+              payment_method_id: contexts.paymentMethod.id,
+              coupon: contexts.coupon || null,
+              content_type: contexts.configObj.content_type ?? null,
+              object_id: contexts.configObj.object_id ?? null,
+              metadata: dataset.metadata || {},
+              ...(contexts.savedCardCharge.body || {}),
+            },
+          });
           contexts.handleDBAction(res);
         } else {
           // Request for user card details
