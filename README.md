@@ -41,18 +41,18 @@ To use the `@instincthub/react-ui` package, another project needs to install the
 `@instincthub/react-ui` has several peer dependencies that need to be installed separately:
 
 ```sh
-npm install @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
+npm install @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16
 ```
 
 Or using yarn:
 
 ```sh
-yarn add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
+yarn add @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
 
 Or using pnmpm:
 
 ```sh
-pnpm add @aws-sdk/client-s3@^3.777.0 @aws-sdk/lib-storage@^3.777.0 @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
+pnpm add @emotion/react@^11.14.0 @emotion/styled@^11.14.0 @mui/icons-material@^7.0.0 @mui/material@^7.0.0 @reduxjs/toolkit@^2.6.1 @types/redux-logger@^3.0.13 jspdf@^3.0.1 next@^15.2.1 next-auth@beta primereact@^10.9.3 react@^19.0.0 react-dom@^19.0.0 react-redux@^9.2.0 redux-logger@^3.0.6 react-syntax-highlighter@^15.6.1 styled-components@^6.1.16```
 
 ### Step 2: Install the Package
 
@@ -324,14 +324,6 @@ Uploads can come from `onFileUpload`, the `upload` prop, or these environment va
 |----------|----------|-------------|---------|
 | `NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL` | No | Presign endpoint: receives `POST { filename, content_type, size, kind }`, returns `{ url, cdnUrl }` (recommended) | `https://api.example.com/uploads/presign/` |
 | `NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL` | No | Multipart upload endpoint; JSON response must include `url`, `file`, `location` or `cdnUrl` | `https://api.example.com/uploads/` |
-| `NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3` | No | `true` to allow direct browser → S3 uploads with the AWS keys below (off by default; the secret key ships to the browser) | `true` |
-| `NEXT_PUBLIC_AWS_BUCKET_NAME` | For direct S3 | Bucket for direct uploads (shared with `FileUploader`) | `instincthub-media` |
-| `NEXT_PUBLIC_AWS_ACCESS_KEY_ID` | For direct S3 | Access key; scope it to `PutObject` on one prefix | — |
-| `NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY` | For direct S3 | Secret key (exposed to the browser) | — |
-| `NEXT_PUBLIC_AWS_REGION` | For direct S3 | Bucket region | `eu-west-2` |
-| `NEXT_PUBLIC_AWS_S3_ENDPOINT_URL` | No | Custom S3-compatible endpoint | `https://s3.example.com` |
-| `NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER` | No | Key prefix for direct uploads (default `editor`) | `editor` |
-| `NEXT_PUBLIC_IHUB_EDITOR_FILE_URL` | No | Public base URL for uploaded files (falls back to `NEXT_PUBLIC_FILE_URL`, then the bucket URL) | `https://cdn.example.com/` |
 <!-- END AUTO-GENERATED -->
 
 Block, table and media styles are in `src/assets/css/ui/ihub-text-editor-blocks.css`, which is included by `ui-index.css`. Full reference: [docs/static-docs/components/IHubTextEditor.md](docs/static-docs/components/IHubTextEditor.md).

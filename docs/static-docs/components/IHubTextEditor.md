@@ -103,9 +103,9 @@ Resolution order when a file is added (picker, drag-and-drop or paste):
 1. `onFileUpload` (or `onImageUpload` for images)
 2. `upload.getPresignedUrl`, `upload.presignEndpoint`, or `NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL`. The endpoint receives `POST { filename, content_type, size, kind }` and returns `{ url, cdnUrl, contentType?, headers? }`; the file is `PUT` to `url` with progress
 3. `upload.endpoint` or `NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL`: multipart `POST` (field `file`, plus `name`, `kind`, `extraFields`), the same pattern as Leadboard documents. The JSON response must include `url`, `cdnUrl`, `location`, `file_url` or `file` (nested under `data` is fine)
-4. Direct browser-to-S3 (opt-in: `upload={{ directS3: true }}` or `NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3=true`) using FileUploader's variables: `NEXT_PUBLIC_AWS_BUCKET_NAME`, `NEXT_PUBLIC_AWS_ACCESS_KEY_ID`, `NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY`, `NEXT_PUBLIC_AWS_REGION`, optional `NEXT_PUBLIC_AWS_S3_ENDPOINT_URL`, `NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER` (default `editor`) and `NEXT_PUBLIC_IHUB_EDITOR_FILE_URL` (public base URL)
+There is no direct browser-to-S3 option: it needed the bucket secret in a `NEXT_PUBLIC_` variable, which ships to every visitor. It was removed in 0.5.0 (`upload.directS3`, `upload.s3Folder` and `NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3` are gone); use a presign endpoint instead.
 
-`token` and `channel` are sent through `reqOptions`, so the sk-headers and `Authorization: Bearer` are included. Anything `NEXT_PUBLIC_` ships to the browser, so prefer option 2 in production. If you enable direct S3, scope the key to `PutObject` on one prefix.
+`token` and `channel` are sent through `reqOptions`, so the sk-headers and `Authorization: Bearer` are included.
 
 Embeds are limited to YouTube, Vimeo, Loom, Figma, Google Drive and CodePen, and render in a sandboxed iframe. PDF blocks show the inline viewer only for URLs ending in `.pdf`; other links render as a download card. Pasted styles lose `url(...)` backgrounds (except `data:image`) and `position: fixed/sticky`.
 

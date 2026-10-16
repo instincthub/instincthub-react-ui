@@ -41,9 +41,9 @@ export interface EditorPresignResult {
  * 1. `onFileUpload` prop (or `onImageUpload` for images)
  * 2. `getPresignedUrl` / `presignEndpoint` / NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL
  * 3. `endpoint` / NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL (multipart POST, Leadboard style)
- * 4. Direct S3 using the NEXT_PUBLIC_AWS_* variables FileUploader already uses —
- *    opt-in only (`directS3: true` or NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3=true),
- *    because the secret key ships to the browser.
+ *
+ * There is no direct browser-to-S3 option: that needs the bucket secret in
+ * the browser. It was removed in 0.5.0.
  */
 export interface IHubEditorUploadConfig {
   /** Bearer token sent with presign / endpoint requests via reqOptions. */
@@ -59,13 +59,6 @@ export interface IHubEditorUploadConfig {
   fieldName?: string;
   /** Extra multipart fields sent with the file. */
   extraFields?: Record<string, string>;
-  /**
-   * Opt in to direct browser → S3 uploads with the NEXT_PUBLIC_AWS_* keys.
-   * Defaults to NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3 === "true". Prefer a presign endpoint.
-   */
-  directS3?: boolean;
-  /** Folder/prefix for direct S3 uploads (default NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER or "editor"). */
-  s3Folder?: string;
   /** Max upload size per kind in MB. */
   maxSizeMB?: Partial<Record<MediaKind, number>>;
 }

@@ -71,10 +71,9 @@ describe("review fixes", () => {
     expect(safeButtonHref("mailto:hi@x.com")).toBe("mailto:hi@x.com");
   });
 
-  it("keeps direct S3 off unless explicitly enabled", () => {
-    // No NEXT_PUBLIC_AWS_* keys here, so even opting in has nothing to use.
+  it("has no upload strategy without a handler, presign or endpoint", () => {
+    // Direct browser-to-S3 was removed: it needed the bucket secret in the browser.
     expect(canUpload({ upload: {} }, "image")).toBe(false);
-    expect(canUpload({ upload: { directS3: true } }, "image")).toBe(false);
   });
 
   it("clears table styles the view applied when the style changes", () => {

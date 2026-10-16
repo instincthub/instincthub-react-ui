@@ -1,22 +1,22 @@
 "use client";
 import React, { useState, useRef, DragEvent, ChangeEvent } from "react";
-import { FILE_URL, IN_DEV_MODE, slugifyFileName, reqOptions } from "../../lib/helpFunction";
-import { uploadedFileUrl } from "./uploadedFileUrl";
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
+import { reqOptions } from "../../lib/helpFunction";
 import { openToast } from "../../lib/modals/modals";
+import { presignAndUpload, UPLOADS_NOT_CONFIGURED } from "./presignedPut";
 import { FileUploaderType, S3UploadResponseType } from "@/types";
 
 interface UploadedFile {
   response: S3UploadResponseType;
   dbId?: string;
-  fullS3Key: string;
 }
 
 /**
  * A modern file uploader component with drag and drop support.
- * Uploads directly to S3, optionally saves to DB, and supports
- * delete from both DB and S3.
+ *
+ * Uploads straight to the bucket with a presigned PUT URL from the
+ * consumer's `getPresignedUrl` (the browser never holds bucket keys),
+ * optionally saves a DB record, and on remove deletes the record and calls
+ * `deleteFile` so the consumer's server can delete the object.
  */
 export default function IhubFileUploader({
   header,
@@ -26,7 +26,6 @@ export default function IhubFileUploader({
   name = "upload",
   module = "",
   step = "",
-  username = null,
   onUploadComplete,
   setValues,
   setModules,
@@ -36,7 +35,8 @@ export default function IhubFileUploader({
   saveEndpoint,
   deleteEndpoint,
   token,
-  enableS3Delete = false,
+  getPresignedUrl,
+  deleteFile,
   onRemove,
 }: FileUploaderType) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -155,36 +155,6 @@ export default function IhubFileUploader({
   };
 
   /**
-   * Delete file from S3 using the full key extracted from file_url.
-   */
-  const deleteFromS3 = async (fileUrl: string): Promise<void> => {
-    try {
-      const url = new URL(fileUrl);
-      const s3Key = url.pathname.replace(/^\//, "");
-      if (!s3Key) return;
-
-      const s3Client = new S3Client({
-        region: process.env.NEXT_PUBLIC_AWS_REGION,
-        endpoint: process.env.NEXT_PUBLIC_AWS_S3_ENDPOINT_URL,
-        requestChecksumCalculation: "WHEN_REQUIRED",
-        credentials: {
-          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || "",
-          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-        },
-      });
-
-      await s3Client.send(
-        new DeleteObjectCommand({
-          Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "",
-          Key: s3Key,
-        })
-      );
-    } catch (err) {
-      console.error("S3 delete error:", err);
-    }
-  };
-
-  /**
    * Delete file from DB via API endpoint.
    */
   const deleteFromDb = async (dbId: string): Promise<boolean> => {
@@ -211,9 +181,13 @@ export default function IhubFileUploader({
       await deleteFromDb(file.dbId);
     }
 
-    // 2. Delete from S3
-    if (enableS3Delete && file.response.location) {
-      await deleteFromS3(file.response.location);
+    // 2. Delete the object through the consumer's server
+    if (deleteFile) {
+      try {
+        await deleteFile(file.response);
+      } catch (err) {
+        console.error("File delete error:", err);
+      }
     }
 
     // 3. Remove from UI
@@ -233,84 +207,29 @@ export default function IhubFileUploader({
     setUploadStatus("uploading");
     setErrorMessage("");
 
+    if (!getPresignedUrl) {
+      console.error(UPLOADS_NOT_CONFIGURED);
+      setUploadStatus("error");
+      setErrorMessage("Uploads are not configured.");
+      return;
+    }
+
     try {
-      const s3Client = new S3Client({
-        region: process.env.NEXT_PUBLIC_AWS_REGION,
-        endpoint: process.env.NEXT_PUBLIC_AWS_S3_ENDPOINT_URL,
-        requestChecksumCalculation: "WHEN_REQUIRED",
-        credentials: {
-          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || "",
-          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-        },
-      });
-
-      const timestamp = new Date().toISOString();
-      const uniqueKey = slugifyFileName(
-        `${username || "anonymous"}-${timestamp}-${selectedFile.name}`
+      const presigned = await presignAndUpload(
+        selectedFile,
+        getPresignedUrl,
+        setUploadPercentage
       );
-      const prefixUniqueKey = IN_DEV_MODE
-        ? `test-env__${uniqueKey}`
-        : uniqueKey;
-
-      const keyLocation =
-        accept === "video/*"
-          ? process.env.NEXT_PUBLIC_AWS_LOCATION
-          : process.env.NEXT_PUBLIC_AWS_LOCATION_FILES;
-
-      const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "";
-      const fullKey = `${keyLocation}/${prefixUniqueKey}`;
-
-      const FILE_SIZE_THRESHOLD = 100 * 1024 * 1024;
-
-      if (selectedFile.size < FILE_SIZE_THRESHOLD) {
-        setUploadPercentage(10);
-        const putCommand = new PutObjectCommand({
-          Bucket: bucketName,
-          Key: fullKey,
-          Body: selectedFile,
-          ContentType: selectedFile.type,
-          ACL: "public-read",
-        });
-        const simulateProgress = setInterval(() => {
-          setUploadPercentage((prev) => Math.min(prev + 5, 95));
-        }, 300);
-        await s3Client.send(putCommand);
-        clearInterval(simulateProgress);
-        setUploadPercentage(100);
-      } else {
-        const upload = new Upload({
-          client: s3Client,
-          params: {
-            Bucket: bucketName,
-            Key: fullKey,
-            Body: selectedFile,
-            ContentType: selectedFile.type,
-            ACL: "public-read",
-          },
-        });
-        upload.on("httpUploadProgress", (progress: any) => {
-          const percentage = Math.round(
-            (progress.loaded / progress.total) * 100
-          );
-          setUploadPercentage(percentage);
-        });
-        await upload.done();
-      }
-
+      setUploadPercentage(100);
       setUploadStatus("success");
       openToast("File Uploaded Successfully!");
 
       const response: S3UploadResponseType = {
-        bucket: bucketName,
         title: selectedFile.name,
-        key: prefixUniqueKey,
-        content_type: selectedFile.type,
+        key: presigned.key,
+        content_type: presigned.contentType,
         size: selectedFile.size,
-        location: uploadedFileUrl(
-          fullKey,
-          FILE_URL,
-          process.env.NEXT_PUBLIC_AWS_LOCATION_FILES
-        ),
+        location: presigned.cdnUrl,
       };
 
       // Save to DB if endpoint provided
@@ -321,10 +240,7 @@ export default function IhubFileUploader({
       }
 
       // Track uploaded file for removal
-      setUploadedFiles((prev) => [
-        ...prev,
-        { response, dbId, fullS3Key: fullKey },
-      ]);
+      setUploadedFiles((prev) => [...prev, { response, dbId }]);
 
       // Call callbacks
       if (onUploadComplete) onUploadComplete(response);

@@ -194,8 +194,14 @@ export interface FileUploaderType {
   module?: string;
   /** Step identifier for setting values */
   step?: string;
-  /** Username for file naming */
+  /** @deprecated Ignored since 0.5.0: the server builds the object key. */
   username?: string | null;
+  /**
+   * Required to upload. Asks YOUR server for a short-lived presigned PUT URL;
+   * the browser never holds bucket credentials. Same contract as
+   * S3MultiUploader's `getPresignedUrl`.
+   */
+  getPresignedUrl?: (file: File) => Promise<PresignedUploadResult>;
   /** Callback for handling the upload response */
   onUploadComplete?: (response: S3UploadResponseType) => void;
   /** Callback for setting values */
@@ -220,7 +226,12 @@ export interface FileUploaderType {
   deleteEndpoint?: string;
   /** Auth token for API calls (used with reqOptions for saveEndpoint/deleteEndpoint). */
   token?: string | null;
-  /** If true, delete file from S3 when user removes it. Requires the file_url to extract the S3 key. Default: false. */
+  /**
+   * Called when the user removes an uploaded file, so your server can delete
+   * the object (e.g. DELETE /api/uploads/<key>). Errors are logged, not thrown.
+   */
+  deleteFile?: (response: S3UploadResponseType) => Promise<void>;
+  /** @deprecated Ignored since 0.5.0: pass `deleteFile` to delete objects. */
   enableS3Delete?: boolean;
   /** Callback when a file is removed (after DB + S3 delete). Receives the S3UploadResponseType of the removed file. */
   onRemove?: (response: S3UploadResponseType) => void;

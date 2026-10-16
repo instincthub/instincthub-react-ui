@@ -9,7 +9,9 @@ const IhubFileUploaderDocs: React.FC = () => {
       <p>
         A modern, TypeScript-based file upload component for InstinctHub
         applications, featuring drag-and-drop functionality, progress tracking,
-        and AWS S3 integration.
+        and presigned direct-to-bucket uploads. Since 0.5.0 it never holds
+        bucket credentials: pass <code>getPresignedUrl</code>, a function that
+        asks your server for a short-lived PUT URL.
       </p>
 
       <h2>Table of Contents</h2>
@@ -51,7 +53,7 @@ const IhubFileUploaderDocs: React.FC = () => {
           showLineNumbers={true}
           wrapLines={false}
           darkMode={true}
-          code="npm install @aws-sdk/client-s3 @aws-sdk/lib-storage"
+          code="npm install @instincthub/react-ui"
         />
 
         <p>Add the component files to your project:</p>
@@ -90,7 +92,8 @@ const IhubFileUploaderDocs: React.FC = () => {
             and sizes
           </li>
           <li>
-            <strong>S3 Integration</strong>: Direct uploading to AWS S3 buckets
+            <strong>Presigned uploads</strong>: Uploads straight to the bucket
+            with a URL your server signs, so no secret reaches the browser
           </li>
           <li>
             <strong>Smart Uploading</strong>: Automatic switching between
@@ -130,6 +133,7 @@ const MyUploadPage: React.FC = () => {
       <h1>Upload Documents</h1>
       <IhubFileUploader
         header="Upload Your Resume"
+        getPresignedUrl={getPresignedUrl} // asks your server for a PUT URL
         accept=".pdf,.docx"
         maxFileSize={10 * 1024 * 1024} // 10MB
         onUploadComplete={handleUploadComplete}
@@ -249,7 +253,7 @@ export default MyUploadPage;`}
               <td>
                 <code>null</code>
               </td>
-              <td>Username used in file naming</td>
+              <td>Deprecated, ignored since 0.5.0 (your server builds the key)</td>
             </tr>
             <tr>
               <td>
@@ -344,8 +348,10 @@ export default MyUploadPage;`}
   module?: string;
   /** Step identifier for setting values */
   step?: string;
-  /** Username for file naming */
-  username?: string | null;
+  /** Required to upload: asks your server for a presigned PUT URL */
+  getPresignedUrl?: (file: File) => Promise<PresignedUploadResult>;
+  /** Called on remove so your server can delete the object */
+  deleteFile?: (response: S3UploadResponseType) => Promise<void>;
   /** Callback for handling the upload response */
   onUploadComplete?: (response: S3UploadResponseType) => void;
   /** Callback for setting values */
@@ -437,6 +443,7 @@ export default MyUploadPage;`}
           darkMode={true}
           code={`<IhubFileUploader
   header="Upload Profile Picture"
+  getPresignedUrl={getPresignedUrl}
   accept="image/*"
   maxFileSize={5 * 1024 * 1024} // 5MB
   onUploadComplete={(response) => {
@@ -452,6 +459,7 @@ export default MyUploadPage;`}
           darkMode={true}
           code={`<IhubFileUploader
   header="Upload Assignment"
+  getPresignedUrl={getPresignedUrl}
   accept=".pdf,.doc,.docx"
   maxFileSize={20 * 1024 * 1024} // 20MB
   module="course123"
@@ -469,6 +477,7 @@ export default MyUploadPage;`}
           darkMode={true}
           code={`<IhubFileUploader
   header="Upload Course Video"
+  getPresignedUrl={getPresignedUrl}
   label="Drag and drop your video file or click to browse"
   accept="video/*"
   maxFileSize={500 * 1024 * 1024} // 500MB

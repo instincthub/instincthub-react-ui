@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback, DragEvent, ChangeEvent } from "react";
 import { openToast } from "../../lib/modals/modals";
 import { S3MultiUploaderProps, S3UploadResponseType } from "@/types";
+import { uploadToPresignedUrl } from "./presignedPut";
 
 interface QueueItem {
   id: string;
@@ -66,49 +67,6 @@ const XIcon = ({ size = 13 }: { size?: number }) => (
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
-
-/**
- * Upload a single file to a presigned PUT URL, reporting progress via XHR.
- * The server is responsible for issuing the URL with appropriate constraints
- * (Content-Type, Content-Length-Range, expiry, scoped key).
- */
-function uploadToPresignedUrl(
-  url: string,
-  file: File,
-  contentType: string,
-  onProgress: (pct: number) => void,
-  headers: Record<string, string> = {}
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        onProgress(Math.round((e.loaded / e.total) * 100));
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve();
-      } else {
-        reject(new Error(`Upload failed: HTTP ${xhr.status}`));
-      }
-    };
-
-    xhr.onerror = () => reject(new Error("Network error during upload"));
-    xhr.ontimeout = () => reject(new Error("Upload timed out"));
-
-    xhr.open("PUT", url);
-    // Use the server-validated content type — never trust file.type alone.
-    xhr.setRequestHeader("Content-Type", contentType);
-    // Any other headers the signature covers (e.g. x-amz-acl) must match exactly.
-    Object.entries(headers)
-      .filter(([name]) => name.toLowerCase() !== "content-type")
-      .forEach(([name, value]) => xhr.setRequestHeader(name, value));
-    xhr.send(file);
-  });
-}
 
 /**
  * S3MultiUploader — multi-file queue uploader with per-file progress.
