@@ -2,13 +2,12 @@
 
 import React, { useState } from "react";
 import { FileUpload } from "primereact/fileupload";
-import { FILE_URL, IN_DEV_MODE, slugifyFileName } from "../../lib/helpFunction";
-import { uploadedFileUrl } from "./uploadedFileUrl";
-import { S3Client } from "@aws-sdk/client-s3";
 import { openToast } from "../../lib/modals/modals";
+import type { PresignedUploadResult } from "@/types";
+import { presignAndUpload, UPLOADS_NOT_CONFIGURED } from "./presignedPut";
 
 interface S3UploadResponse {
-  bucket: string;
+  bucket?: string;
   title: string;
   key: string;
   content_type: string;
@@ -19,8 +18,13 @@ interface S3UploadResponse {
 interface FileUploaderProps {
   /** Function called when files are selected */
   onFilesSelected?: (files: File[]) => void;
-  /** Function called when upload is triggered */
+  /** Function called when upload is triggered (replaces the built-in upload) */
   onUpload?: (files: File[]) => Promise<void>;
+  /**
+   * Built-in upload: asks YOUR server for a presigned PUT URL, then uploads
+   * straight to the bucket. The browser never holds bucket credentials.
+   */
+  getPresignedUrl?: (file: File) => Promise<PresignedUploadResult>;
   /** Maximum number of files allowed */
   maxFiles?: number;
   /** Maximum file size in bytes */
@@ -59,6 +63,7 @@ interface FileUploaderProps {
   names?: string;
   module?: string;
   step?: string;
+  /** @deprecated Ignored since 0.5.0: the server builds the object key. */
   username?: string | null;
   setResponse?: (response: S3UploadResponse) => void;
   setValues?: (name: string, value: string) => void;
@@ -110,108 +115,30 @@ const FileUploader: React.FC<FileUploaderProps> = (props) => {
       }
     }
 
-    // Use the first file for legacy S3 upload
+    if (!props.getPresignedUrl) {
+      console.error(UPLOADS_NOT_CONFIGURED);
+      openToast("Uploads are not configured.", 400);
+      return;
+    }
+
+    // The built-in upload sends the first file
     const fileToUpload = filesToUpload[0];
 
     try {
-      // Initialize S3 client
-      const s3Client = new S3Client({
-        region: process.env.NEXT_PUBLIC_AWS_REGION,
-        endpoint: process.env.NEXT_PUBLIC_AWS_S3_ENDPOINT_URL,
-        credentials: {
-          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || "",
-          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
-        },
-      });
-
-      // Create unique key for the file
-      const timestamp = new Date().toISOString();
-      const uniqueKey = slugifyFileName(
-        `${props.username || "anonymous"}-${timestamp}-${fileToUpload.name}`
+      const presigned = await presignAndUpload(
+        fileToUpload,
+        props.getPresignedUrl,
+        setUploadPercentage
       );
-      const prefixUniqueKey = IN_DEV_MODE
-        ? `test-env__${uniqueKey}`
-        : uniqueKey;
-
-      // Set file location
-      const keyLocation =
-        (props.accepts || props.acceptedFileTypes?.includes("video/*"))
-          ? process.env.NEXT_PUBLIC_AWS_LOCATION
-          : process.env.NEXT_PUBLIC_AWS_LOCATION_FILES;
-
-      const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "";
-      const fullKey = `${keyLocation}/${prefixUniqueKey}`;
-
-      // Convert File to Uint8Array — browser File/Blob streams cause
-      // "readableStream.getReader is not a function" in the AWS SDK's
-      // Next.js bundle because of stream API polyfill mismatches.
-      const arrayBuffer = await fileToUpload.arrayBuffer();
-      const fileBody = new Uint8Array(arrayBuffer);
-
-      // Decide between single-part and multipart upload based on file size
-      const FILE_SIZE_THRESHOLD = 100 * 1024 * 1024; // 100 MB threshold
-
-      if (fileToUpload.size < FILE_SIZE_THRESHOLD) {
-        // For smaller files, use simple upload
-        const { PutObjectCommand } = await import("@aws-sdk/client-s3");
-
-        setUploadPercentage(10); // Start progress
-
-        const putCommand = new PutObjectCommand({
-          Bucket: bucketName,
-          Key: fullKey,
-          Body: fileBody,
-          ContentType: fileToUpload.type,
-          ACL: "public-read",
-        });
-
-        // Use a timer to simulate progress
-        const simulateProgress = setInterval(() => {
-          setUploadPercentage((prev) => Math.min(prev + 5, 95));
-        }, 300);
-
-        await s3Client.send(putCommand);
-        clearInterval(simulateProgress);
-        setUploadPercentage(100);
-      } else {
-        // For larger files, use multipart upload
-        const { Upload } = await import("@aws-sdk/lib-storage");
-
-        const upload = new Upload({
-          client: s3Client,
-          params: {
-            Bucket: bucketName,
-            Key: fullKey,
-            Body: fileBody,
-            ContentType: fileToUpload.type,
-            ACL: "public-read",
-          },
-        });
-
-        upload.on("httpUploadProgress", (progress: any) => {
-          const percentage = Math.round(
-            (progress.loaded / progress.total) * 100
-          );
-          setUploadPercentage(percentage);
-        });
-
-        await upload.done();
-      }
-
-      // Upload completed successfully
+      setUploadPercentage(100);
       openToast("File Uploaded Successfully!");
 
       const res: S3UploadResponse = {
-        bucket: bucketName,
         title: fileToUpload.name,
-        key: prefixUniqueKey,
-        content_type: fileToUpload.type,
+        key: presigned.key,
+        content_type: presigned.contentType,
         size: fileToUpload.size,
-        location: uploadedFileUrl(
-          fullKey,
-          FILE_URL,
-          process.env.NEXT_PUBLIC_AWS_LOCATION_FILES
-        ),
+        location: presigned.cdnUrl,
       };
 
       props.setResponse && props.setResponse(res);

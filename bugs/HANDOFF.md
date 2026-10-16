@@ -1,3 +1,30 @@
+## 2026-10-16 - AWS secret key read in browser code by the uploaders: FIXED (0.5.0, breaking)
+
+### Report
+`NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY` was set on Vercel for creators, Leadboard and
+community-ft, and shipped to every visitor's browser.
+
+### Finding
+`IhubFileUploader` and `FileUploader` built an `S3Client` in the browser from
+`NEXT_PUBLIC_AWS_ACCESS_KEY_ID` / `NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY` to upload and
+delete. The editor's opt-in `s3Direct` did the same. Its module-level `env` object
+referenced the secret, so Next.js inlined it into every app bundle that included
+the editor and set the variable, whether or not direct S3 was enabled.
+
+### Fix
+No uploader reads AWS credentials. `IhubFileUploader` and `FileUploader` take
+`getPresignedUrl(file)` (same contract as `S3MultiUploader`) and PUT to the URL the
+consumer's server signs; `IhubFileUploader` takes `deleteFile(response)` for
+removal. `username` and `enableS3Delete` are ignored. The editor's direct-S3 path,
+`upload.directS3`, `upload.s3Folder` and `NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3` are
+removed. `@aws-sdk/*` is no longer a peer dependency. Shared PUT helper:
+`src/components/forms/uploads/presignedPut.ts`. Reference server route:
+creators_nextjs `src/app/api/uploads/presign/route.ts`.
+
+### Note
+0.4.0 (Paystack) was merged but never reached npm (`npm whoami` 401). 0.5.0 carries
+both changes.
+
 ## 2026-10-16 - Paystack SECRET key read in browser code: FIXED (0.4.0, breaking)
 
 ### Report

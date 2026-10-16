@@ -324,7 +324,7 @@ const ComponentLists = () => {
     },
     {
       name: "S3MultiUploader",
-      description: "Multi-file queue uploader with per-file progress bars and direct S3 multipart upload via @aws-sdk/lib-storage",
+      description: "Multi-file queue uploader with per-file progress bars; uploads straight to the bucket with presigned PUT URLs from your server",
       category: "Forms",
       repo_path: "src/components/forms/uploads/S3MultiUploader.tsx",
       example_path: "docs/static-docs/components/S3MultiUploader.md",

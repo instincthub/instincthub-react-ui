@@ -248,11 +248,7 @@ const [content, setContent] = useState("");
 // Or configure with env vars instead of props:
 // NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL=https://api.example.com/uploads/presign/
 // NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL=https://api.example.com/uploads/
-// 4. Direct S3 (opt-in: NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3=true or upload={{ directS3: true }})
-//    reuses FileUploader's variables. The secret key ships to the browser, so prefer presign:
-// NEXT_PUBLIC_AWS_BUCKET_NAME, NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-// NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY, NEXT_PUBLIC_AWS_REGION,
-// NEXT_PUBLIC_IHUB_EDITOR_S3_FOLDER, NEXT_PUBLIC_IHUB_EDITOR_FILE_URL`}</code>
+// There is no direct browser-to-S3 option: it needed the bucket secret in the browser.`}</code>
           </pre>
         </div>
 

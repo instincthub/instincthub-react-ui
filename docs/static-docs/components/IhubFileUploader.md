@@ -2,13 +2,15 @@
 
 **Category:** Forms | **Type:** component
 
-Advanced file uploader with drag & drop, direct S3 upload, progress tracking, optional DB persistence, and S3 deletion on remove.
+Advanced file uploader with drag & drop, presigned direct-to-bucket upload, progress tracking, optional DB persistence, and server-side deletion on remove.
+
+> **0.5.0 breaking change:** the component no longer signs S3 requests in the browser and no longer reads `NEXT_PUBLIC_AWS_ACCESS_KEY_ID` / `NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY` (anything `NEXT_PUBLIC_` ships to every visitor). Pass `getPresignedUrl` to upload and `deleteFile` to delete. `username` and `enableS3Delete` are ignored.
 
 **File Location:** `src/components/forms/uploads/IhubFileUploader.tsx`
 
 ## Tags
 
-`forms`, `upload`, `files`, `drag-drop`, `progress`, `s3`, `aws`
+`forms`, `upload`, `files`, `drag-drop`, `progress`, `s3`, `presigned`
 
 ## Installation & Import
 
@@ -21,32 +23,50 @@ import { IhubFileUploader } from "@instincthub/react-ui";
 import type { S3UploadResponseType } from "@instincthub/react-ui/types";
 ```
 
-## Environment Variables Required
+## Server Presign Endpoint (required)
 
-```bash
-# S3 / DigitalOcean Spaces configuration
-NEXT_PUBLIC_AWS_REGION="nyc3"
-NEXT_PUBLIC_AWS_S3_ENDPOINT_URL="https://nyc3.digitaloceanspaces.com"
-NEXT_PUBLIC_AWS_ACCESS_KEY_ID="your-access-key"
-NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY="your-secret-key"
-NEXT_PUBLIC_AWS_BUCKET_NAME="your-bucket"
-NEXT_PUBLIC_AWS_LOCATION="dev_env__creator-videos"        # Video upload path
-NEXT_PUBLIC_AWS_LOCATION_FILES="dev_env__creator-files"   # File/image upload path
+The browser asks YOUR server for a short-lived presigned PUT URL, then uploads the bytes straight to the bucket. The bucket secret stays on the server. `getPresignedUrl` must resolve to a `PresignedUploadResult` (the same contract as `S3MultiUploader`):
+
+```typescript
+interface PresignedUploadResult {
+  url: string;          // presigned PUT URL
+  key: string;          // object key the server chose (stored on your record)
+  cdnUrl: string;       // public URL of the uploaded file
+  contentType: string;  // server-validated type the URL was signed with
+  headers?: Record<string, string>; // other signed headers, e.g. { "x-amz-acl": "public-read" }
+}
 ```
 
-## Basic Usage (S3 Upload Only)
+The server should require a session, allowlist the content type, cap the size, build the key itself, and sign `Content-Type`, `Content-Length` and any ACL header. See `creators_nextjs` `src/app/api/uploads/presign/route.ts` for a Next.js route handler.
 
-Uploads directly to S3 from the browser. No backend needed.
+## Basic Usage
 
 ```tsx
 "use client";
 import { IhubFileUploader } from "@instincthub/react-ui";
-import { S3UploadResponseType } from "@instincthub/react-ui/types";
+import type { PresignedUploadResult, S3UploadResponseType } from "@instincthub/react-ui/types";
+
+async function getPresignedUrl(file: File): Promise<PresignedUploadResult> {
+  const res = await fetch("/api/uploads/presign", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ file_name: file.name, content_type: file.type, size_bytes: file.size }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Could not start the upload");
+  return {
+    url: data.upload_url,
+    key: data.key,
+    cdnUrl: data.cdn_url,
+    contentType: data.upload_headers["Content-Type"],
+    headers: data.upload_headers,
+  };
+}
 
 export default function BasicUpload() {
   const handleUpload = (response: S3UploadResponseType) => {
     console.log("Uploaded:", response.location); // Public CDN URL
-    console.log("S3 Key:", response.key);        // Slugified filename
+    console.log("Key:", response.key);           // Key chosen by your server
   };
 
   return (
@@ -54,20 +74,20 @@ export default function BasicUpload() {
       header="Upload File"
       label="Drag and drop or click to browse"
       accept="image/*,video/*"
-      username="myapp"
+      getPresignedUrl={getPresignedUrl}
       onUploadComplete={handleUpload}
     />
   );
 }
 ```
 
-## With DB Save + S3 Delete (Full Lifecycle)
+## With DB Save + Delete (Full Lifecycle)
 
 When `saveEndpoint` and `token` are provided, the component automatically:
-1. Uploads file to S3
+1. Uploads the file with the presigned URL
 2. POSTs metadata to `saveEndpoint` to create a DB record
 3. Shows uploaded files in a gallery with remove buttons
-4. On remove: DELETEs from DB via `deleteEndpoint/{id}/`, then deletes from S3
+4. On remove: DELETEs from DB via `deleteEndpoint/{id}/`, then calls `deleteFile` so your server deletes the object
 
 ```tsx
 "use client";
@@ -91,18 +111,20 @@ export default function ManagedUpload({ companyHandle, accessToken }: Props) {
 
   return (
     <IhubFileUploader
-      username={companyHandle}
       header="Upload Media"
       label="Drag and drop images or videos"
       accept="image/*,video/*"
       name="social-media"
       module="social-media"
+      getPresignedUrl={getPresignedUrl}
       onUploadComplete={handleUpload}
       // DB lifecycle props
       saveEndpoint={`${API_HOST_URL}social/${companyHandle}/media/upload/`}
       deleteEndpoint={`${API_HOST_URL}social/${companyHandle}/media/`}
       token={accessToken}
-      enableS3Delete={true}
+      deleteFile={async (file) => {
+        await fetch(`/api/uploads/${encodeURIComponent(file.key)}`, { method: "DELETE" });
+      }}
       onRemove={handleRemove}
     />
   );
@@ -111,7 +133,7 @@ export default function ManagedUpload({ companyHandle, accessToken }: Props) {
 
 ### Save Endpoint Contract
 
-When `saveEndpoint` is provided, the component POSTs JSON after S3 upload:
+When `saveEndpoint` is provided, the component POSTs JSON after the upload:
 
 ```
 POST {saveEndpoint}
@@ -120,7 +142,7 @@ Content-Type: application/json
 
 {
   "file_url": "https://bucket.cdn.digitaloceanspaces.com/path/file.png",
-  "file_key": "test-env__username-2026-03-29-filename.png",
+  "file_key": "u42__2026-03-29t12-00-00-000z-filename.png",
   "file_name": "original-filename.png",
   "file_size": 123456,
   "content_type": "image/png",
@@ -139,7 +161,7 @@ DELETE {deleteEndpoint}{dbId}/
 Authorization: Bearer {token}
 ```
 
-The `dbId` is the `id` returned from the save endpoint. The component also deletes the file from S3 directly if `enableS3Delete={true}`.
+The `dbId` is the `id` returned from the save endpoint. The object itself is deleted only through `deleteFile` (your server).
 
 ## Props Reference
 
@@ -147,34 +169,36 @@ The `dbId` is the `id` returned from the save endpoint. The component also delet
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `header` | `string` | — | Header text above the uploader |
+| `header` | `string` | - | Header text above the uploader |
 | `label` | `string` | `"Drag and drop files here or click to browse"` | Dropzone label text |
 | `accept` | `string` | `"*"` | Accepted file types (e.g., `"image/*"`, `".pdf,.docx"`) |
 | `maxFileSize` | `number` | `0` (unlimited) | Max file size in bytes |
 | `name` | `string` | `"upload"` | Input field name |
 | `module` | `string` | `""` | Module identifier for `setModules` callback |
 | `step` | `string` | `""` | Step identifier for `setSteps` callback |
-| `username` | `string \| null` | `null` | Used in S3 key generation (`{username}-{timestamp}-{filename}`) |
+| `getPresignedUrl` | `(file: File) => Promise<PresignedUploadResult>` | - | **Required to upload.** Asks your server for a presigned PUT URL |
+| `username` | `string \| null` | `null` | Deprecated, ignored since 0.5.0 (the server builds the key) |
 | `className` | `string` | `""` | Additional CSS classes |
 
 ### Callback Props
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `onUploadComplete` | `(response: S3UploadResponseType) => void` | Called after successful S3 upload (and DB save if enabled) |
-| `onRemove` | `(response: S3UploadResponseType) => void` | Called after file is removed (DB + S3 delete) |
+| `onUploadComplete` | `(response: S3UploadResponseType) => void` | Called after a successful upload (and DB save if enabled) |
+| `onRemove` | `(response: S3UploadResponseType) => void` | Called after the file is removed (DB delete + `deleteFile`) |
+| `deleteFile` | `(response: S3UploadResponseType) => Promise<void>` | Called on remove so your server deletes the object. Errors are logged |
 | `setValues` | `(name: string, value: string) => void` | Sets `name` to the S3 key |
 | `setModules` | `(module, name, value) => void` | Sets module-scoped value |
 | `setSteps` | `(module, step, name, value) => void` | Sets step-scoped value |
 
-### DB + S3 Lifecycle Props
+### DB Lifecycle Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `saveEndpoint` | `string` | — | API endpoint for POST to save DB record after S3 upload |
-| `deleteEndpoint` | `string` | — | API endpoint prefix for DELETE (appends `{id}/`) |
-| `token` | `string \| null` | — | Auth token for API calls (used with `reqOptions`) |
-| `enableS3Delete` | `boolean` | `false` | If true, deletes file from S3 when user removes it |
+| `saveEndpoint` | `string` | - | API endpoint for POST to save DB record after the upload |
+| `deleteEndpoint` | `string` | - | API endpoint prefix for DELETE (appends `{id}/`) |
+| `token` | `string \| null` | - | Auth token for API calls (used with `reqOptions`) |
+| `enableS3Delete` | `boolean` | `false` | Deprecated, ignored since 0.5.0: pass `deleteFile` |
 
 ## S3UploadResponseType
 
@@ -182,22 +206,19 @@ Returned by `onUploadComplete` and `onRemove`:
 
 ```typescript
 interface S3UploadResponseType {
-  bucket: string;        // S3 bucket name
+  bucket?: string;       // Not set by the presigned uploaders
   title: string;         // Original filename
-  key: string;           // Slugified S3 key (filename only, no path prefix)
+  key: string;           // Key returned by your presign endpoint
   content_type: string;  // MIME type (e.g., "image/png")
   size: number;          // File size in bytes
   location: string;      // Full public CDN URL
 }
 ```
 
-### S3 Key vs Location
+### Key vs Location
 
-- **`key`**: Just the slugified filename, e.g., `test-env__myapp-2026-03-29t12-00-00z-photo.png`
-- **`location`**: Full CDN URL, e.g., `https://bucket.nyc3.cdn.digitaloceanspaces.com/dev_env__creator-files/test-env__myapp-2026-03-29t12-00-00z-photo.png`
-- **Actual S3 key** (for deletion): Extract from URL pathname, e.g., `dev_env__creator-files/test-env__myapp-2026-03-29t12-00-00z-photo.png`
-
-The component handles this extraction automatically when `enableS3Delete={true}`.
+- **`key`**: whatever your presign endpoint returned as `key` (usually without the bucket folder)
+- **`location`**: the `cdnUrl` your presign endpoint returned
 
 ## Upload Flow
 
@@ -206,9 +227,9 @@ The component handles this extraction automatically when `enableS3Delete={true}`
    ↓
 2. Client-side validation (type, size)
    ↓
-3. Upload to S3 (PutObjectCommand or multipart for >100MB)
+3. getPresignedUrl(file) on your server, then PUT the file to the returned URL
    ↓  Progress bar shown
-4. S3 upload complete
+4. Upload complete
    ↓
 5. [If saveEndpoint] POST metadata to API → DB record created
    ↓
@@ -224,7 +245,7 @@ The component handles this extraction automatically when `enableS3Delete={true}`
    ↓
 2. [If deleteEndpoint + dbId] DELETE {deleteEndpoint}{dbId}/ → DB record deleted
    ↓
-3. [If enableS3Delete] Extract S3 key from file_url → DeleteObjectCommand
+3. [If deleteFile] deleteFile(response) → your server deletes the object
    ↓
 4. onRemove callback fired
    ↓

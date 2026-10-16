@@ -6,7 +6,6 @@ import type {
   UploadedFileResult,
 } from "../types";
 import { DEFAULT_MAX_SIZE_MB, KIND_LABEL } from "./mediaKinds";
-import { directS3Upload, isDirectS3Configured } from "./s3Direct";
 
 export type EditorUploader = (
   file: File,
@@ -29,13 +28,6 @@ export class UploadNotConfiguredError extends Error {
 
 const PRESIGN_ENV = process.env.NEXT_PUBLIC_IHUB_EDITOR_PRESIGN_URL || "";
 const ENDPOINT_ENV = process.env.NEXT_PUBLIC_IHUB_EDITOR_UPLOAD_URL || "";
-const DIRECT_S3_ENV = process.env.NEXT_PUBLIC_IHUB_EDITOR_DIRECT_S3 === "true";
-
-/** Direct browser → S3 exposes the secret key, so it only runs when explicitly enabled. */
-function directS3Enabled(config: IHubEditorUploadConfig): boolean {
-  const optedIn = config.directS3 ?? DIRECT_S3_ENV;
-  return optedIn === true && isDirectS3Configured();
-}
 
 const URL_KEYS = ["url", "cdnUrl", "cdn_url", "location", "file_url", "file", "src"];
 
@@ -165,9 +157,6 @@ export function createUploader(sources: UploaderSources): EditorUploader {
     }
     const endpoint = config.endpoint || ENDPOINT_ENV;
     if (endpoint) return uploadViaEndpoint(file, kind, config, endpoint, onProgress);
-    if (directS3Enabled(config)) {
-      return directS3Upload(file, config.s3Folder, onProgress);
-    }
     throw new UploadNotConfiguredError();
   };
 }
@@ -182,7 +171,6 @@ export function canUpload(sources: UploaderSources, kind: MediaKind): boolean {
       config.presignEndpoint ||
       PRESIGN_ENV ||
       config.endpoint ||
-      ENDPOINT_ENV ||
-      directS3Enabled(config)
+      ENDPOINT_ENV
   );
 }
