@@ -570,6 +570,34 @@ const SubmitButtonExamples = () => {
 export default SubmitButtonExamples;
 ```
 
+## 🎨 Status marks, themes and tokens
+
+Every status renders a mark in the button's trailing slot, drawn in `currentColor` so it is visible on both themes:
+
+| Status | Mark                                   | Clickable |
+| ------ | -------------------------------------- | --------- |
+| `0`    | Spinner, label dimmed, `aria-busy`     | No        |
+| `1`    | Chevron on hover and focus             | Yes       |
+| `2`    | Check mark                             | Yes       |
+| `3`    | Error mark with one short shake        | Yes       |
+
+The `<button>` carries `data-status` and `data-variant` attributes. Dark theme is keyed on the `DarkMode` class `DarkModeProvider` puts on `<html>`, or on an `.ihub-dark-mode` wrapper; wrap a light card inside a dark page in `.ihub-light-mode`. Text on teal and red is always white; `primary` inverts to a white button with ink text on dark.
+
+Restyle a whole form by setting the scoped tokens on a parent:
+
+```css
+.checkout-form {
+  --ihub-sb-brand: #5b3df5;
+  --ihub-sb-brand-hover: #4a2fd6;
+  --ihub-sb-brand-text: #4a2fd6;
+  --ihub-sb-radius: 999px;
+}
+```
+
+Available tokens: `--ihub-sb-brand`, `--ihub-sb-brand-hover`, `--ihub-sb-brand-text`, `--ihub-sb-brand-tint`, `--ihub-sb-on-brand`, `--ihub-sb-ink`, `--ihub-sb-surface`, `--ihub-sb-neutral`, `--ihub-sb-danger`, `--ihub-sb-ring`, `--ihub-sb-height`, `--ihub-sb-radius`.
+
+Live preview with every variant in every state, on light and dark surfaces: `/components/forms/submit-button` in the examples app.
+
 ## 🔗 Related Components
 
 - [InputText](./InputText.md) - Text input field component

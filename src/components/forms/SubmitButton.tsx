@@ -6,7 +6,17 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
+/** Loading state: 0 = loading, 1 = ready, 2 = success, 3 = error */
+export type SubmitButtonStatus = 0 | 1 | 2 | 3;
+
+export type SubmitButtonVariant =
+  | "important"
+  | "outlined"
+  | "primary"
+  | "danger"
+  | "default"
+  | "icon";
 
 interface SubmitButtonProps {
   /** Button label text */
@@ -18,13 +28,7 @@ interface SubmitButtonProps {
   /** Button name attribute */
   name?: string;
   /** Button style variant */
-  variant?:
-    | "important"
-    | "outlined"
-    | "primary"
-    | "danger"
-    | "default"
-    | "icon";
+  variant?: SubmitButtonVariant;
   /** Disable the button */
   disabled?: boolean;
   /** Button onClick handler */
@@ -40,6 +44,104 @@ interface SubmitButtonProps {
   /** Data testid for testing */
   testId?: string;
 }
+
+const STATUS_LOADING = 0;
+const STATUS_READY = 1;
+const STATUS_SUCCESS = 2;
+const STATUS_ERROR = 3;
+
+/**
+ * Every icon is drawn in currentColor so it always matches the button text,
+ * whichever theme is active. A hard-coded fill is what made the chevron and
+ * spinner vanish on dark mode's inverted "primary" button.
+ */
+const SpinnerIcon = () => (
+  <svg
+    className="ihub-submit-btn__icon ihub-submit-btn__spinner ihub-bt-spinner"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="9"
+      stroke="currentColor"
+      strokeOpacity="0.25"
+      strokeWidth="2.5"
+    />
+    <path
+      d="M21 12a9 9 0 0 0-9-9"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const ChevronIcon = () => (
+  <svg
+    className="ihub-submit-btn__icon ihub-submit-btn__chevron"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M9 6l6 6-6 6"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg
+    className="ihub-submit-btn__icon ihub-submit-btn__check"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M5 12.5l4.5 4.5L19 7.5"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ErrorIcon = () => (
+  <svg
+    className="ihub-submit-btn__icon ihub-submit-btn__error"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" />
+    <path
+      d="M12 7.5v5.5"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+    <circle cx="12" cy="16.5" r="1.25" fill="currentColor" />
+  </svg>
+);
+
+/** The trailing slot holds exactly one mark for the current status. */
+const StatusMark = ({ status }: { status: number }) => {
+  if (status === STATUS_LOADING) return <SpinnerIcon />;
+  if (status === STATUS_SUCCESS) return <CheckIcon />;
+  if (status === STATUS_ERROR) return <ErrorIcon />;
+  return <ChevronIcon />;
+};
 
 /**
  * Submit button component with loading state and animation
@@ -61,12 +163,15 @@ interface SubmitButtonProps {
  * @property {string} [ariaLabel] - ARIA label for better accessibility
  * @property {string} [id="submitBtn"] - ID for the button element
  * @property {string} [testId="submit-button"] - Data testid for testing
+ *
+ * The rendered button carries `data-variant` and `data-status` attributes so
+ * consumers can style or test each state without relying on class names.
  */
 const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
   (
     {
       label,
-      status = 1,
+      status = STATUS_READY,
       type = "submit",
       name,
       variant = "important",
@@ -89,16 +194,15 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
 
     // Auto-reset loading state after timeout
     useEffect(() => {
-      if (internalStatus === 0 && autoResetTimeout > 0) {
+      if (internalStatus === STATUS_LOADING && autoResetTimeout > 0) {
         const timer = setTimeout(() => {
-          setInternalStatus(1);
+          setInternalStatus(STATUS_READY);
         }, autoResetTimeout);
 
         return () => clearTimeout(timer);
       }
     }, [internalStatus, autoResetTimeout]);
 
-    // Handle click with loading state management
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         if (onClick) {
@@ -108,8 +212,19 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
       [onClick]
     );
 
-    const isLoading = internalStatus === 0;
+    const isLoading = internalStatus === STATUS_LOADING;
     const isDisabled = disabled || isLoading;
+    const isIconOnly = variant === "icon";
+
+    const classes = [
+      "ihub-submit-btn",
+      `${variant}-btn`,
+      isIconOnly ? "" : "ihub-submit-btn--with-slot",
+      isLoading ? "ihub-rolling" : "",
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div className="ihub-submit-btn-wrapper">
@@ -119,29 +234,27 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
           name={name}
           id={id}
           data-testid={testId}
-          className={`ihub-submit-btn ${variant}-btn ihub-anime-button-chevron ${
-            isLoading ? "ihub-rolling" : ""
-          } ${className}`}
+          data-variant={variant}
+          data-status={internalStatus}
+          className={classes}
           disabled={isDisabled}
           onClick={handleClick}
           aria-label={ariaLabel || (typeof label === "string" ? label : "")}
           aria-busy={isLoading}
         >
-          {isLoading && (
-            <svg
-              className="ihub-bt-spinner"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              aria-hidden="true"
-              role="presentation"
-              fill="#fff"
-            >
-              <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"></path>
-            </svg>
-          )}
-          {label}
-          {variant !== "icon" && (
-            <ChevronRightIcon fill="#fff" id="animate" width="16" height="16" />
+          {isIconOnly ? (
+            isLoading ? (
+              <SpinnerIcon />
+            ) : (
+              <span className="ihub-submit-btn__label">{label}</span>
+            )
+          ) : (
+            <>
+              <span className="ihub-submit-btn__label">{label}</span>
+              <span className="ihub-submit-btn__slot" aria-hidden="true">
+                <StatusMark status={internalStatus} />
+              </span>
+            </>
           )}
         </button>
       </div>

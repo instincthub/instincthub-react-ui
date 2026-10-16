@@ -101,22 +101,45 @@ interface NewSubmitBtnProps {
 
 ## Status States
 
-The component supports four different status states:
+Each status renders a distinct mark in the button's trailing slot. The mark is
+drawn in `currentColor`, so it always matches the label and stays visible on
+both themes.
 
-- `0`: Loading state (shows spinner)
-- `1`: Ready state (normal button)
-- `2`: Success state (can be used for visual feedback)
-- `3`: Error state (can be used for visual feedback)
+| Status | Meaning | What the button shows                          | Clickable |
+| ------ | ------- | ---------------------------------------------- | --------- |
+| `0`    | Loading | Spinner in the slot, label dimmed, `aria-busy` | No        |
+| `1`    | Ready   | Chevron slides in on hover and focus           | Yes       |
+| `2`    | Success | Check mark pops in                             | Yes       |
+| `3`    | Error   | Error mark pops in, one short shake            | Yes       |
+
+The button does not reset from success or error on its own; set `status`
+back to `1` when you are ready. Loading auto-resets after `autoResetTimeout`.
+
+The rendered `<button>` carries `data-status` and `data-variant` attributes,
+so tests and page styles can target a state without relying on class names:
+
+```css
+.checkout [data-status="3"] {
+  outline: 2px solid var(--Danger);
+}
+```
 
 ## Style Variants
 
-The component supports five different style variants:
+| Variant     | Use it for                             | Light theme                | Dark theme                     |
+| ----------- | -------------------------------------- | -------------------------- | ------------------------------ |
+| `important` | The one main action on a form          | Teal fill, white text      | Brighter teal fill, white text |
+| `primary`   | A high-contrast neutral action         | Ink fill, white text       | White fill, ink text           |
+| `outlined`  | Secondary actions beside the main one  | Teal border and text       | Light teal border and text     |
+| `danger`    | Destructive actions                    | Red fill, white text       | Red fill, white text           |
+| `default`   | Quiet actions (cancel, back)           | Light grey fill, ink text  | Translucent fill, light text   |
+| `icon`      | A single icon, 44 by 44 px             | Grey square, inherits text | Translucent square, light icon |
 
-- `important`: Primary action button (blue background)
-- `outlined`: Secondary action button (transparent with border)
-- `primary`: Alternative primary button (dark background)
-- `danger`: Destructive action button (red background)
-- `default`: Default button style (light gray background)
+Text on a brand colour (teal, red) is always white. Neutral surfaces follow
+the theme. Dark theme is keyed on the `DarkMode` class that
+`DarkModeProvider` sets on `<html>`, or on an `.ihub-dark-mode` wrapper for a
+dark card inside a light page. Wrap a light card inside a dark page in
+`.ihub-light-mode` to force the light tokens there.
 
 ## Features
 
@@ -138,7 +161,9 @@ The component is fully accessible via keyboard navigation with enhanced focus st
 
 ### Loading Animation
 
-When in loading state (status = 0), the button displays a spinner animation:
+When in loading state (status = 0), the button keeps its variant colour, dims
+the label and spins a ring in the trailing slot. The button width does not
+change, so nothing around it shifts:
 
 ```tsx
 <SubmitButton label="Processing..." status={0} />
@@ -146,7 +171,10 @@ When in loading state (status = 0), the button displays a spinner animation:
 
 ### Hover Animation
 
-The button features a chevron animation on hover, enhancing user experience.
+On hover and keyboard focus the label nudges left and a chevron slides into
+the trailing slot. Hover lifts filled variants by one pixel with a soft
+shadow. With `prefers-reduced-motion: reduce` the transitions and the error
+shake are removed; only the spinner keeps turning, more slowly.
 
 ### Forward Refs
 
@@ -159,15 +187,40 @@ const buttonRef = React.useRef<HTMLButtonElement>(null);
 
 ## CSS Customization
 
-The component uses CSS classes for styling. You can override these classes in your own CSS:
+Colours and shape are CSS custom properties scoped to `.ihub-submit-btn`, so
+one rule on a parent restyles every button inside it:
 
 ```css
-/* Example of customizing the important button variant */
-.ihub-submit-btn.important-btn {
-  background-color: purple;
-  color: white;
+/* A purple checkout form */
+.checkout-form {
+  --ihub-sb-brand: #5b3df5;
+  --ihub-sb-brand-hover: #4a2fd6;
+  --ihub-sb-brand-text: #4a2fd6;
+  --ihub-sb-radius: 999px;
 }
 ```
+
+| Token                        | Controls                                           |
+| ---------------------------- | -------------------------------------------------- |
+| `--ihub-sb-brand`            | `important` fill                                   |
+| `--ihub-sb-brand-hover`      | `important` fill on hover                          |
+| `--ihub-sb-brand-text`       | `outlined` text and border, `icon` hover colour    |
+| `--ihub-sb-brand-tint`       | `outlined` and `icon` hover background             |
+| `--ihub-sb-on-brand`         | Text on teal and red fills (white by default)      |
+| `--ihub-sb-ink`              | `primary` fill, `default` and `icon` text          |
+| `--ihub-sb-surface`          | `primary` text, gap colour of the focus ring       |
+| `--ihub-sb-neutral`          | `default` and `icon` fill                          |
+| `--ihub-sb-danger`           | `danger` fill                                      |
+| `--ihub-sb-ring`             | Focus ring colour                                  |
+| `--ihub-sb-height`           | Button height (44px)                               |
+| `--ihub-sb-radius`           | Corner radius (6px)                                |
+
+Class names stay available for one-off overrides: `.ihub-submit-btn`,
+`.important-btn`, `.outlined-btn`, `.primary-btn`, `.danger-btn`,
+`.default-btn`, `.icon-btn`, plus `.ihub-submit-btn__label`,
+`.ihub-submit-btn__slot`, `.ihub-submit-btn__spinner`,
+`.ihub-submit-btn__check`, `.ihub-submit-btn__error` and
+`.ihub-submit-btn__chevron`.
 
 ## Accessibility
 

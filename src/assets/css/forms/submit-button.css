@@ -1,180 +1,418 @@
-/* Submit Button Styles */
+/* ==========================================================================
+   SubmitButton
+   --------------------------------------------------------------------------
+   Tokens are scoped to the button so they never inherit the theme's flipped
+   --White / --Gunmetal values by accident. Text on a brand colour (teal, red)
+   is always white; neutral surfaces adapt to the theme. Every icon inherits
+   currentColor, so nothing can disappear on dark mode.
+
+   Override any token on a parent to restyle a whole form:
+     .checkout-form { --ihub-sb-brand: #1f6feb; }
+   ========================================================================== */
+
 .ihub-submit-btn-wrapper {
   position: relative;
   display: inline-block;
+  max-width: 100%;
 }
 
 .ihub-submit-btn {
+  /* Light theme tokens */
+  --ihub-sb-brand: var(--DarkCyan, #00838f);
+  --ihub-sb-brand-hover: #006f7a;
+  --ihub-sb-brand-text: #00737e;
+  --ihub-sb-brand-tint: rgba(0, 131, 143, 0.09);
+  --ihub-sb-on-brand: #ffffff;
+  --ihub-sb-ink: #2c333a;
+  --ihub-sb-ink-hover: #3b434b;
+  --ihub-sb-surface: #ffffff;
+  --ihub-sb-neutral: #edf0f2;
+  --ihub-sb-neutral-hover: #e0e5e8;
+  --ihub-sb-danger: var(--Danger, #ea5f5e);
+  --ihub-sb-danger-hover: #d84c4b;
+  --ihub-sb-ring: var(--ihub-sb-brand);
+  --ihub-sb-shadow: rgba(44, 51, 58, 0.22);
+
+  /* Shape */
+  --ihub-sb-height: 44px;
+  --ihub-sb-radius: 6px;
+  --ihub-sb-slot: 18px;
+
   position: relative;
-  padding: 12px 35px;
-  border-radius: 5px;
-  border: 0;
-  background-color: unset;
-  font-family: var(--Montserat);
-  outline: 0;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--ihub-sb-height);
+  min-width: 150px;
+  max-width: 100%;
+  padding: 0 22px;
+  border: 1.5px solid transparent;
+  border-radius: var(--ihub-sb-radius);
+  background-color: transparent;
+  color: var(--ihub-sb-ink);
+  font-family: var(--Montserat, "Montserrat", sans-serif);
+  font-size: 0.9375rem;
   font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease-in;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  outline: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+/* Buttons that carry the trailing slot (every variant except icon) */
+.ihub-submit-btn--with-slot {
+  padding-right: 26px;
+}
+
+/* Beats the global `span` rule that would recolour and resize the label. */
+.ihub-submit-btn .ihub-submit-btn__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  transition: transform 0.22s ease;
+}
+
+/* The global `svg { color: var(--Gunmetal) }` rule would paint any icon
+   passed as a label in the page's text colour, which is how icons vanished
+   on dark mode. Inside the button every svg and span follows the button. */
+.ihub-submit-btn svg,
+.ihub-submit-btn span {
+  color: inherit;
+}
+
+.ihub-submit-btn__icon {
+  width: var(--ihub-sb-slot);
+  height: var(--ihub-sb-slot);
+  flex: 0 0 auto;
+  display: block;
+}
+
+/* The trailing slot: chevron at rest, spinner / check / error by status. */
+.ihub-submit-btn__slot {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: var(--ihub-sb-slot);
+  height: var(--ihub-sb-slot);
+  margin-top: calc(var(--ihub-sb-slot) / -2);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 150px;
+  pointer-events: none;
 }
 
-.ihub-submit-btn:focus-visible {
-  box-shadow: 0 0 0 2px var(--White), 0 0 0 4px var(--DarkCyan);
-  outline: none;
+.ihub-submit-btn__chevron {
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
 }
 
-/* Button variants */
+.ihub-submit-btn:hover:not(:disabled) .ihub-submit-btn__chevron,
+.ihub-submit-btn:focus-visible .ihub-submit-btn__chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ihub-submit-btn:hover:not(:disabled) .ihub-submit-btn__label,
+.ihub-submit-btn:focus-visible .ihub-submit-btn__label,
+.ihub-submit-btn[data-status="0"] .ihub-submit-btn__label,
+.ihub-submit-btn[data-status="2"] .ihub-submit-btn__label,
+.ihub-submit-btn[data-status="3"] .ihub-submit-btn__label {
+  transform: translateX(-4px);
+}
+
+/* --------------------------------------------------------------------------
+   Variants
+   -------------------------------------------------------------------------- */
+
+/* important: the one filled brand button on a form */
 .ihub-submit-btn.important-btn {
-  background-color: var(--DarkCyan);
-  color: var(--White);
+  background-color: var(--ihub-sb-brand);
+  border-color: var(--ihub-sb-brand);
+  color: var(--ihub-sb-on-brand);
 }
 
 .ihub-submit-btn.important-btn:hover:not(:disabled) {
-  background-color: var(--DarkCyan);
-  opacity: 0.9;
+  background-color: var(--ihub-sb-brand-hover);
+  border-color: var(--ihub-sb-brand-hover);
+  box-shadow: 0 8px 18px -8px var(--ihub-sb-brand);
   transform: translateY(-1px);
 }
 
-.ihub-submit-btn.important-btn:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-.ihub-submit-btn.icon-btn.ihub-anime-button-chevron:hover:not(:disabled) {
-  padding-right: 20px;
-  scale: 1.05;
-}
-
-.ihub-submit-btn.icon-btn.ihub-anime-button-chevron:hover svg {
-  transform: translateX(0px);
-}
-
-.ihub-submit-btn.icon-btn {
-  background-color: var(--OpacityBackground);
-  border-radius: 5px;
-  color: var(--Gunmetal);
-  border: none;
-  min-width: auto;
-  padding: 5px;
-}
-
-.ihub-submit-btn.icon-btn:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.ihub-submit-btn.outlined-btn {
-  background-color: transparent;
-  color: var(--DarkCyan);
-  border: 1px solid var(--DarkCyan);
-}
-
-.ihub-submit-btn.outlined-btn:hover:not(:disabled) {
-  color: var(--White);
-  background-color: var(--DarkCyan);
-}
-
+/* primary: ink on surface, the high-contrast neutral */
 .ihub-submit-btn.primary-btn {
-  background-color: var(--Gunmetal);
-  color: var(--White);
+  background-color: var(--ihub-sb-ink);
+  border-color: var(--ihub-sb-ink);
+  color: var(--ihub-sb-surface);
 }
 
 .ihub-submit-btn.primary-btn:hover:not(:disabled) {
-  opacity: 0.9;
+  background-color: var(--ihub-sb-ink-hover);
+  border-color: var(--ihub-sb-ink-hover);
+  box-shadow: 0 8px 18px -8px var(--ihub-sb-shadow);
+  transform: translateY(-1px);
 }
 
+/* outlined: brand text and border, tint on hover */
+.ihub-submit-btn.outlined-btn {
+  background-color: transparent;
+  border-color: var(--ihub-sb-brand-text);
+  color: var(--ihub-sb-brand-text);
+}
+
+.ihub-submit-btn.outlined-btn:hover:not(:disabled) {
+  background-color: var(--ihub-sb-brand-tint);
+  border-color: var(--ihub-sb-brand-text);
+  color: var(--ihub-sb-brand-text);
+}
+
+/* danger: destructive actions */
 .ihub-submit-btn.danger-btn {
-  background-color: var(--Danger);
-  color: var(--White);
+  background-color: var(--ihub-sb-danger);
+  border-color: var(--ihub-sb-danger);
+  color: var(--ihub-sb-on-brand);
 }
 
 .ihub-submit-btn.danger-btn:hover:not(:disabled) {
-  opacity: 0.9;
+  background-color: var(--ihub-sb-danger-hover);
+  border-color: var(--ihub-sb-danger-hover);
+  box-shadow: 0 8px 18px -8px var(--ihub-sb-danger);
+  transform: translateY(-1px);
 }
 
+/* default: quiet neutral */
 .ihub-submit-btn.default-btn {
-  background-color: var(--Gray);
-  color: var(--Gunmetal);
+  background-color: var(--ihub-sb-neutral);
+  border-color: var(--ihub-sb-neutral);
+  color: var(--ihub-sb-ink);
 }
 
-.ihub-submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: var(--Gray);
-  color: var(--Gunmetal);
-  border: 1px solid rgba(204, 204, 204, 0.4);
+.ihub-submit-btn.default-btn:hover:not(:disabled) {
+  background-color: var(--ihub-sb-neutral-hover);
+  border-color: var(--ihub-sb-neutral-hover);
+  color: var(--ihub-sb-ink);
+}
+
+/* icon: a square that holds one icon */
+.ihub-submit-btn.icon-btn {
+  min-width: var(--ihub-sb-height);
+  width: var(--ihub-sb-height);
+  height: var(--ihub-sb-height);
+  padding: 0;
+  background-color: var(--ihub-sb-neutral);
+  border-color: var(--ihub-sb-neutral);
+  color: var(--ihub-sb-ink);
+}
+
+.ihub-submit-btn.icon-btn .ihub-submit-btn__label {
+  transform: none;
+}
+
+.ihub-submit-btn.icon-btn .ihub-submit-btn__label > svg,
+.ihub-submit-btn.icon-btn .ihub-submit-btn__label > .MuiSvgIcon-root {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  fill: currentColor;
+}
+
+.ihub-submit-btn.icon-btn:hover:not(:disabled) {
+  background-color: var(--ihub-sb-brand-tint);
+  border-color: var(--ihub-sb-brand-tint);
+  color: var(--ihub-sb-brand-text);
+}
+
+/* --------------------------------------------------------------------------
+   Interaction states
+   -------------------------------------------------------------------------- */
+
+.ihub-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
   box-shadow: none;
 }
 
-/* Spinner animation */
-.ihub-submit-btn.ihub-rolling .ihub-bt-spinner {
-  display: block;
+.ihub-submit-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--ihub-sb-surface),
+    0 0 0 4px var(--ihub-sb-ring);
+}
+
+/* Disabled keeps the variant colour so the form still reads correctly. */
+.ihub-submit-btn:disabled {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.ihub-submit-btn:disabled:not([aria-busy="true"]) {
+  opacity: 0.5;
+}
+
+/* Loading: full colour, dimmed label, spinner in the slot.
+   (The global button:disabled rule would otherwise fade the whole button.) */
+.ihub-submit-btn[aria-busy="true"] {
+  cursor: progress;
   opacity: 1;
 }
 
-.ihub-bt-spinner {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  animation: ihub-spinner-rotation 1s linear infinite;
-  opacity: 0;
-  display: none;
+.ihub-submit-btn[aria-busy="true"] .ihub-submit-btn__label {
+  opacity: 0.7;
 }
 
-/* Hover animation */
-.ihub-anime-button-chevron {
-  position: relative;
-  overflow: hidden;
+.ihub-submit-btn__spinner {
+  animation: ihub-sb-spin 0.8s linear infinite;
 }
 
-.ihub-anime-button-chevron svg#animate {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translate(-40px, -50%);
-  transition: all 0.4s ease;
-  opacity: 0;
+/* Success: the check pops in. */
+.ihub-submit-btn__check {
+  animation: ihub-sb-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
 }
 
-.ihub-anime-button-chevron:hover:not(:disabled) {
-  padding-right: 55px;
+/* Error: one short shake, then the mark stays. */
+.ihub-submit-btn[data-status="3"] {
+  animation: ihub-sb-shake 0.4s ease both;
 }
 
-.ihub-anime-button-chevron:hover:not(:disabled) svg#animate {
-  opacity: 1;
-  transform: translate(0, -50%);
+.ihub-submit-btn__error {
+  animation: ihub-sb-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
 }
 
-@keyframes ihub-spinner-rotation {
-  0% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(360deg);
+@keyframes ihub-sb-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .ihub-submit-btn.outlined-btn {
-    border-color: var(--White);
-    color: var(--White);
+@keyframes ihub-sb-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
   }
-
-  .ihub-submit-btn:focus-visible {
-    box-shadow: 0 0 0 2px var(--Gunmetal), 0 0 0 4px var(--White);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* Responsive adjustments */
+@keyframes ihub-sb-shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-3px);
+  }
+  40%,
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dark theme
+   Keyed on the theme class the DarkModeProvider sets, not on the system
+   preference, so a light page never gets dark buttons.
+   -------------------------------------------------------------------------- */
+
+html.DarkMode .ihub-submit-btn,
+.ihub-dark-mode .ihub-submit-btn {
+  --ihub-sb-brand: #0d9ea5;
+  --ihub-sb-brand-hover: #21b1b8;
+  --ihub-sb-brand-text: #52cfd5;
+  --ihub-sb-brand-tint: rgba(82, 207, 213, 0.14);
+  --ihub-sb-ink: #f3f5f7;
+  --ihub-sb-ink-hover: #dfe3e8;
+  --ihub-sb-surface: #1c1f22;
+  --ihub-sb-neutral: rgba(255, 255, 255, 0.09);
+  --ihub-sb-neutral-hover: rgba(255, 255, 255, 0.16);
+  --ihub-sb-danger-hover: #f07271;
+  --ihub-sb-ring: #52cfd5;
+  --ihub-sb-shadow: rgba(0, 0, 0, 0.6);
+}
+
+html.DarkMode .ihub-submit-btn.primary-btn,
+.ihub-dark-mode .ihub-submit-btn.primary-btn {
+  /* Ink on surface inverts to a white button: text must be dark, not --White. */
+  color: #1c1f22;
+}
+
+/* A light island inside a dark page (previews, embedded light cards). */
+html .ihub-light-mode .ihub-submit-btn {
+  --ihub-sb-brand: #00838f;
+  --ihub-sb-brand-hover: #006f7a;
+  --ihub-sb-brand-text: #00737e;
+  --ihub-sb-brand-tint: rgba(0, 131, 143, 0.09);
+  --ihub-sb-ink: #2c333a;
+  --ihub-sb-ink-hover: #3b434b;
+  --ihub-sb-surface: #ffffff;
+  --ihub-sb-neutral: #edf0f2;
+  --ihub-sb-neutral-hover: #e0e5e8;
+  --ihub-sb-danger-hover: #d84c4b;
+  --ihub-sb-ring: #00838f;
+  --ihub-sb-shadow: rgba(44, 51, 58, 0.22);
+}
+
+html .ihub-light-mode .ihub-submit-btn.primary-btn {
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Motion and layout preferences
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ihub-submit-btn,
+  .ihub-submit-btn__label,
+  .ihub-submit-btn__chevron {
+    transition: none;
+  }
+
+  .ihub-submit-btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .ihub-submit-btn[data-status="3"],
+  .ihub-submit-btn__check,
+  .ihub-submit-btn__error {
+    animation: none;
+  }
+
+  .ihub-submit-btn__spinner {
+    animation-duration: 1.6s;
+  }
+}
+
 @media (max-width: 576px) {
-  .ihub-submit-btn {
+  .ihub-submit-btn-wrapper {
+    display: block;
+  }
+
+  .ihub-submit-btn:not(.icon-btn) {
     width: 100%;
-    padding: 12px 20px;
   }
 }

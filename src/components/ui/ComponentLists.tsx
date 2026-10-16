@@ -242,6 +242,7 @@ const ComponentLists = () => {
       category: "Forms",
       repo_path: "src/components/forms/SubmitButton.tsx",
       example_path: "docs/static-docs/components/SubmitButton.md",
+      visual_demo_url: "/components/forms/submit-button",
     },
     {
       name: "Tables",
