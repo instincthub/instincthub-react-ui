@@ -1,0 +1,157 @@
+/* SubmitButton preview page */
+
+.sb-demo {
+  padding-bottom: 40px;
+}
+
+.sb-demo__intro {
+  max-width: 62ch;
+  margin: 8px 0 32px;
+  color: var(--Gunmetal);
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.sb-demo h2 {
+  font-size: 1.25rem;
+  margin: 40px 0 6px;
+}
+
+.sb-demo__hint {
+  margin: 0 0 18px;
+  color: var(--Gunmetal);
+  opacity: 0.7;
+  max-width: 62ch;
+  line-height: 1.5;
+}
+
+/* Two surfaces, side by side */
+.sb-demo__surfaces {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.sb-demo__surface {
+  border-radius: 12px;
+  padding: 24px 20px 28px;
+  border: 1px solid transparent;
+}
+
+.sb-demo__surface--light {
+  background: #ffffff;
+  color: #2c333a;
+  border-color: #e3e7ea;
+}
+
+.sb-demo__surface--dark {
+  background: #1c1f22;
+  color: #f3f5f7;
+  border-color: #2b3034;
+}
+
+.sb-demo__surface h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 18px;
+  color: inherit;
+}
+
+/* The state matrix */
+.sb-demo__matrix {
+  color: inherit;
+  display: grid;
+  grid-template-columns: 84px repeat(5, minmax(0, 1fr));
+  gap: 12px 10px;
+  align-items: center;
+}
+
+.sb-demo__matrix-head,
+.sb-demo__matrix-row {
+  color: inherit;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.sb-demo__matrix-head {
+  font-size: 0.78rem;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.sb-demo__matrix-row {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.sb-demo__cell {
+  color: inherit;
+  display: flex;
+  justify-content: center;
+}
+
+/* Inside the matrix the button sizes to its cell, not to 150px. */
+.sb-demo__cell .ihub-submit-btn-wrapper {
+  width: 100%;
+}
+
+.sb-demo__cell .ihub-submit-btn:not(.icon-btn) {
+  width: 100%;
+  min-width: 0;
+  padding-left: 12px;
+  padding-right: 26px;
+}
+
+.sb-demo__cell .ihub-submit-btn__slot {
+  right: 4px;
+}
+
+/* Lifecycle playground */
+.sb-demo__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.sb-demo__log {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  min-height: 1.4em;
+  opacity: 0.8;
+}
+
+/* In-context form */
+.sb-demo__form {
+  max-width: 440px;
+}
+
+.sb-demo__form .ihub-submit-btn-wrapper {
+  margin-top: 8px;
+}
+
+@media (max-width: 1100px) {
+  .sb-demo__surfaces {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* On phones the matrix keeps real button proportions and scrolls sideways. */
+@media (max-width: 640px) {
+  .sb-demo__surface {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sb-demo__matrix {
+    grid-template-columns: 76px repeat(5, 104px);
+    gap: 10px 8px;
+    width: max-content;
+  }
+
+  .sb-demo__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
