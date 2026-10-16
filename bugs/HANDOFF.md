@@ -1,4 +1,25 @@
-## 2026-10-16 - LoginForm ignored every attempt after the first failed login: FIXED (unreleased)
+## 2026-10-16 - SubmitButton icons vanished on dark mode: FIXED (0.3.3)
+
+### Report
+On dark mode the chevron, spinner and any icon passed as a label disappeared,
+worst on the `primary` variant, which inverts to a white button.
+
+### Finding
+Two causes. The chevron and spinner were drawn with a hard-coded white fill.
+And `tag-only-selectors.css` ships a bare `svg { color: var(--Gunmetal) }` rule
+(plus `span { color: var(--Gunmetal) }` and `button:disabled { opacity: .5 }`),
+so any MUI icon inside the button took the page text colour, not the button's.
+`--Gunmetal` flips to white under `html.DarkMode`, giving white on white.
+
+### Fix
+Icons inherit `currentColor`; the button resets the leaking span/svg/disabled
+rules; colours live in scoped `--ihub-sb-*` tokens so text on teal and red is
+always white. Status 2 and 3 now render a check and an error mark. Dark theme
+is keyed on the theme class, not `prefers-color-scheme`.
+`src/components/forms/__tests__/submitButton.test.tsx` guards against a
+hard-coded icon colour. Preview: `/components/forms/submit-button`.
+
+## 2026-10-16 - LoginForm ignored every attempt after the first failed login: FIXED (0.3.3)
 
 ### Report
 On leadboard.ng, a wrong password showed no error and emptied both fields.
