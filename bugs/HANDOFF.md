@@ -1,3 +1,30 @@
+## 2026-10-16 - LoginForm ignored every attempt after the first failed login: FIXED (unreleased)
+
+### Report
+On leadboard.ng, a wrong password showed no error and emptied both fields.
+That was the app's workaround: it remounted `LoginForm` after each failure
+because the library's Login button stopped working after one failure.
+
+### Finding
+`mountedRef` starts `true` and the unmount cleanup sets it `false`, but
+nothing set it back. React StrictMode (on in Next.js dev) mounts, unmounts
+and remounts once, so the ref stayed `false`. The `finally` after a failed
+request only clears `isSubmitting` when the ref is true, so the form stayed
+"submitting" and `preventMultipleSubmissions` dropped every later submit.
+Production builds don't double-mount, so only development showed it.
+
+### Fix
+The cleanup effect sets `mountedRef.current = true` in its body.
+`src/components/auth/__tests__/loginFormRetry.test.tsx` renders the form in
+StrictMode, fails a login, and checks that the error shows, the email stays and
+a second submit reaches `fetch`. It failed before the fix (1 call) and passes
+after it.
+
+### Follow-up
+After this is published, leadboard_nextjs_v2 can drop its remount workaround
+in `LoginFormComponent.tsx` and `src/lib/auth/loginFailure.ts` (see that
+repo's bugs/HANDOFF.md, 2026-10-16).
+
 ## 2026-10-14 - SideNavbar jumped to the top when a group or section was toggled: FIXED (0.3.2)
 
 ### Report

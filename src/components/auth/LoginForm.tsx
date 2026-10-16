@@ -1025,8 +1025,11 @@ const LoginForm = ({
     }
   }, [focusOnMount]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount. Set the flag back on (re)mount: React StrictMode
+  // unmounts and remounts once in development, and a flag left false kept
+  // the form "submitting" forever after the first failed login.
   useEffect(() => {
+    mountedRef.current = true;
     return () => {
       mountedRef.current = false;
       cleanup();
