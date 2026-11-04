@@ -1068,3 +1068,18 @@ no `id`. Start input gets `baseId`, end input `${baseId}-end`, error
 - `/Users/noaholatoye/Documents/code_projects/npm_packages/.claude/launch.json`
   (a dev-server config for the example app) is still there from that session.
   Harmless; delete it if you don't want it.
+
+# HANDOFF - SideNavbar collapse toggle sat on the search box / first menu icon
+
+**Date:** 2026-11-04 · **Status:** Fixed, published as 0.5.1 (PR #15).
+
+- **Symptom:** In creators_nextjs the sidebar toggle overlapped the "Search menu" box when
+  expanded and the first menu icon when collapsed.
+- **Root cause:** `.ihub-sidenav-toggle` was `position: absolute; right: -12px` (meant to straddle
+  the edge) inside `.ihub-sidenav`, which has `overflow: hidden`; the clipped button ended up
+  inside the edge on top of the content. The global `button` padding also stretched it to 60px.
+- **Fix:** `src/assets/css/navbar/sidenav.css`: the sidebar reserves a 44px header strip
+  (`padding-top`), the toggle is a 32px square inside it (right-aligned when expanded, centred in
+  the 64px column when collapsed), with padding and margin zeroed and a hover state.
+- **Note:** creators_nextjs hides this toggle and renders its own in the top bar; the fix still
+  matters for every other consumer of `SideNavbar`.
