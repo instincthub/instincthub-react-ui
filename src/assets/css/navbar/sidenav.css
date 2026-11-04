@@ -188,34 +188,55 @@
   object-fit: contain;
 }
 
-/* Toggle button */
+/* Toggle button.
+   The sidebar clips overflow, so the toggle must live inside it. A 44px
+   header strip (padding-top on .ihub-sidenav) keeps it off the search box
+   and off the first menu item; it is edge-aligned when expanded and centred
+   in the 64px column when collapsed. */
+.ihub-sidenav {
+  padding-top: 44px;
+}
+
 .ihub-sidenav-toggle {
   position: absolute;
-  top: 10px;
-  width: 24px;
-  height: 24px;
-  background-color: var(--White, #ffffff);
-  border: var(--borderDefault, 1px solid rgba(44, 51, 58, 0.2));
-  border-radius: 50%;
+  top: 6px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  transition: transform 0.3s ease;
+  transition: background-color 0.16s ease, border-color 0.16s ease;
   color: var(--Gunmetal, #2c333a);
 }
 
+.ihub-sidenav-toggle svg {
+  margin: 0;
+}
+
+.ihub-sidenav-toggle:hover {
+  background-color: rgba(0, 131, 143, 0.08);
+  border-color: rgba(0, 131, 143, 0.2);
+}
+
 .ihub-sidenav-left .ihub-sidenav-toggle {
-  right: -12px;
-  transform: translateX(0);
-  background: transparent;
-  border: transparent;
+  right: 12px;
 }
 
 .ihub-sidenav-right .ihub-sidenav-toggle {
-  left: -12px;
-  transform: translateX(0);
+  left: 12px;
+}
+
+.ihub-sidenav-collapsed.ihub-sidenav-left .ihub-sidenav-toggle,
+.ihub-sidenav-collapsed.ihub-sidenav-right .ihub-sidenav-toggle {
+  left: 16px;
+  right: auto;
 }
 
 /* Remove the old toggle icon styles since we're using MUI icons now */
