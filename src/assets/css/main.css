@@ -814,6 +814,30 @@ small {
   border-radius: 50%;
 }
 /* -----LOADER */
+/* LoadingAnimate variant="inline": inside its container, never the
+   fixed full-viewport overlay (.react_loading). */
+.ihub-loading-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 0;
+}
+.ihub-loading-inline .lds-ellipsis {
+  height: 40px;
+}
+.ihub-loading-inline .lds-ellipsis div {
+  top: 13px;
+}
+.ihub-loading-inline__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 .lds-ellipsis {
   display: inline-block;
   position: relative;

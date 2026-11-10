@@ -1080,7 +1080,7 @@
   },
   {
     "name": "LoadingAnimate",
-    "description": "Loading animation component",
+    "description": "Three-dot loader: full-page overlay by default, variant=\"inline\" for a panel, card or table row",
     "category": "Theme",
     "repo_path": "src/components/theme/LoadingAnimate.tsx",
     "type": "component",
