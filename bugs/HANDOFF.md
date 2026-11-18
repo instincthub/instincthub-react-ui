@@ -1,4 +1,4 @@
-## 2026-11-18 - Calendar arrows submitted the surrounding form: FIXED (unreleased)
+## 2026-11-18 - Calendar arrows submitted the surrounding form: FIXED (0.6.1)
 
 ### Report
 Leadboard: editing a deal and browsing the Expected Close Date calendar saved
