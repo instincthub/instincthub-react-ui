@@ -374,12 +374,14 @@ export default function IhubFileUploader({
               {uploadStatus === "idle" && (
                 <>
                   <button
+                    type="button"
                     className="ihub-uploader-upload-btn ihub-important-btn"
                     onClick={handleUpload}
                   >
                     Upload
                   </button>
                   <button
+                    type="button"
                     className="ihub-uploader-cancel-btn outlined-btn"
                     onClick={handleCancel}
                   >
@@ -389,6 +391,7 @@ export default function IhubFileUploader({
               )}
               {uploadStatus === "uploading" && (
                 <button
+                  type="button"
                   className="ihub-uploader-cancel-btn outlined-btn"
                   onClick={handleCancel}
                 >
@@ -406,8 +409,8 @@ export default function IhubFileUploader({
               )}
               {uploadStatus === "error" && (
                 <>
-                  <button className="ihub-uploader-retry-btn ihub-important-btn" onClick={handleUpload}>Retry</button>
-                  <button className="ihub-uploader-cancel-btn outlined-btn" onClick={handleCancel}>Cancel</button>
+                  <button type="button" className="ihub-uploader-retry-btn ihub-important-btn" onClick={handleUpload}>Retry</button>
+                  <button type="button" className="ihub-uploader-cancel-btn outlined-btn" onClick={handleCancel}>Cancel</button>
                 </>
               )}
             </div>
@@ -459,7 +462,7 @@ export default function IhubFileUploader({
           <div className="ihub-uploader-lightbox" onClick={() => setLightboxIndex(null)}>
             <div className="ihub-uploader-lightbox-content" onClick={(e) => e.stopPropagation()}>
               {/* Close */}
-              <button className="ihub-uploader-lightbox-close" onClick={() => setLightboxIndex(null)}>
+              <button type="button" className="ihub-uploader-lightbox-close" onClick={() => setLightboxIndex(null)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -467,7 +470,7 @@ export default function IhubFileUploader({
 
               {/* Prev */}
               {lightboxIndex > 0 && (
-                <button className="ihub-uploader-lightbox-nav ihub-uploader-lightbox-prev" onClick={() => setLightboxIndex(lightboxIndex - 1)}>
+                <button type="button" className="ihub-uploader-lightbox-nav ihub-uploader-lightbox-prev" onClick={() => setLightboxIndex(lightboxIndex - 1)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                   </svg>
@@ -485,7 +488,7 @@ export default function IhubFileUploader({
 
               {/* Next */}
               {lightboxIndex < uploadedFiles.length - 1 && (
-                <button className="ihub-uploader-lightbox-nav ihub-uploader-lightbox-next" onClick={() => setLightboxIndex(lightboxIndex + 1)}>
+                <button type="button" className="ihub-uploader-lightbox-nav ihub-uploader-lightbox-next" onClick={() => setLightboxIndex(lightboxIndex + 1)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>

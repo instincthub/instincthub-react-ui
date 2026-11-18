@@ -126,6 +126,7 @@ export default function ActionCallbackDropdown({
       onKeyDown={handleKeyDown}
     >
       <button
+        type="button"
         className="ihub-dropdown-toggle"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="true"

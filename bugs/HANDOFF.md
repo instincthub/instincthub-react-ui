@@ -1,3 +1,29 @@
+## 2026-11-18 - Calendar arrows submitted the surrounding form: FIXED (unreleased)
+
+### Report
+Leadboard: editing a deal and browsing the Expected Close Date calendar saved
+the deal before a date was picked.
+
+### Finding
+`DateInputPicker` rendered its month/year arrows (`.ihub-calendar-nav`) as
+`<button>`s without `type`. A button inside a `<form>` defaults to
+`type="submit"`, so each arrow click submitted the consumer's form. The day
+cells are `div`s, so picking a day itself was fine. The same untyped buttons
+were in `ActionDropdown`, `ActionCallbackDropdown`, `UnsplashRandomImage` and
+`IhubFileUploader` (upload, cancel, retry, lightbox controls).
+
+### Fix
+`type="button"` on every non-submit button under `src/components/forms`.
+Test: `src/components/forms/__tests__/dateInputPickerForm.test.tsx`.
+
+### Follow-ups
+- Leadboard (`leadboard_nextjs_v2`) works around it with
+  `src/components/ui/FormDateInputPicker.tsx` (branch
+  `fix/date-picker-form-submit`). Remove the wrapper once this ships.
+- Untyped buttons remain outside `forms/` (IHubTable/IHubTableServer
+  pagination, ContentViewer, CodeDisplay, ChartConfigurator, navbars).
+  Harmless unless rendered inside a `<form>`.
+
 ## 2026-10-16 - AWS secret key read in browser code by the uploaders: FIXED (0.5.0, breaking)
 
 ### Report

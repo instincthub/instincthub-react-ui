@@ -504,6 +504,7 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
     days.push(
       <div className="ihub-calendar-header" key="header">
         <button
+          type="button"
           className="ihub-calendar-nav"
           onClick={prevYear}
           aria-label="Previous Year"
@@ -511,6 +512,7 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
           «
         </button>
         <button
+          type="button"
           className="ihub-calendar-nav"
           onClick={prevMonth}
           aria-label="Previous Month"
@@ -523,6 +525,7 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
           </span>
         </div>
         <button
+          type="button"
           className="ihub-calendar-nav"
           onClick={nextMonth}
           aria-label="Next Month"
@@ -530,6 +533,7 @@ const DateInputPicker: React.FC<DateInputPickerPropsType> = ({
           ›
         </button>
         <button
+          type="button"
           className="ihub-calendar-nav"
           onClick={nextYear}
           aria-label="Next Year"

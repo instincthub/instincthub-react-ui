@@ -184,7 +184,7 @@ const UnsplashRandomImage: React.FC<UnsplashRandomImageProps> = (props) => {
       {error && (
         <div className="ihub-unsplash-error">
           <p>{error}</p>
-          <button onClick={refreshImage} disabled={isFetching}>
+          <button type="button" onClick={refreshImage} disabled={isFetching}>
             Try Again
           </button>
         </div>
@@ -269,6 +269,7 @@ const UnsplashRandomImage: React.FC<UnsplashRandomImageProps> = (props) => {
 
       <div className="ihub-unsplash-actions">
         <button
+          type="button"
           className="ihub-unsplash-refresh"
           onClick={refreshImage}
           disabled={isFetching}

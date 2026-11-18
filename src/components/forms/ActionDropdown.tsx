@@ -105,7 +105,7 @@ export default function ActionDropdown(props: ActionCallbackDropdownProps) {
   return (
     <div className="ihub-react-action" ref={dropdownRef}>
       <div className="ctrl-dropdown">
-        <button className="outlined-btn" onClick={toggleDropdown}>
+        <button type="button" className="outlined-btn" onClick={toggleDropdown}>
           ...
         </button>
         {isOpen && (
@@ -118,7 +118,7 @@ export default function ActionDropdown(props: ActionCallbackDropdownProps) {
                     {option.label}
                   </Link>
                 ) : (
-                  <button onClick={() => handleItemClick(option)}>
+                  <button type="button" onClick={() => handleItemClick(option)}>
                     {option.icon}
                     {option.label}
                   </button>
