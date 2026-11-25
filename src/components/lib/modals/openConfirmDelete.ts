@@ -36,6 +36,21 @@ interface ApiErrorResponse {
  * @property {boolean} pop Whether to show a popup confirmation (default: true)
  * @returns Promise that resolves to boolean indicating success or failure
  */
+/**
+ * Escapes text for an HTML string. `message` is often a name someone else
+ * typed (a contact from a public web form, a team join request), and the modal
+ * is built with innerHTML, so it must never be read as markup.
+ * @param text Raw text
+ * @returns The text with &, <, >, " and ' escaped
+ */
+export const escapeHtml = (text: string): string =>
+  String(text ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export const openConfirmDelete = (
   message: string,
   token: string,
@@ -134,6 +149,9 @@ export const openConfirmDelete = (
       return;
     }
 
+    // Shown as text only; the typed confirmation still compares the raw value.
+    const safeMessage = escapeHtml(message);
+
     // Templates for the copy button states
     const copiedState = `
         <div class="ihub-copy-status ihub-copy-success">
@@ -170,12 +188,12 @@ export const openConfirmDelete = (
             </p>
             <p class="ihub-modal-description">
               This action cannot be undone. This will permanently delete the
-              <strong>${message}</strong> repository, feedbacks, schedules, and remove all team
+              <strong>${safeMessage}</strong> repository, feedbacks, schedules, and remove all team
               associations.
             </p>
   
             <div class="ihub-confirm-row">
-              <p class="ihub-confirm-instruction">Please type <strong class="ihub-confirm-value">${message}</strong> to confirm.</p>
+              <p class="ihub-confirm-instruction">Please type <strong class="ihub-confirm-value">${safeMessage}</strong> to confirm.</p>
               <button type="button" id="ihub-copy-btn" class="ihub-copy-btn" aria-label="Copy confirmation text">
                 ${unCopiedState}
               </button>
