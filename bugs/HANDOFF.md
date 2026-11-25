@@ -1,3 +1,27 @@
+## 2026-11-25 - redux-logger printed every action in production: FIXED (unreleased)
+
+### Report
+skill-application-ft production: Sentry breadcrumbs (SKILLSAPP-19N) showed
+"prev state / action / next state" console groups for every Redux action.
+
+### Finding
+`src/components/lib/redux/middleware.ts` always added `createLogger(...)`, and
+`reduxStore` concats it onto the default middleware. Its only guard was
+`typeof window !== 'undefined'`, so every app using `reduxStore` logged each
+action with the full state in the browser in production.
+
+### Fix
+`createMiddleware(nodeEnv = process.env.NODE_ENV)` returns `[]` in production
+and the logger otherwise; `middleware` is `createMiddleware()`. Rollup leaves
+`process.env.NODE_ENV` in `dist`, so the consuming app's bundler decides.
+Test: `src/components/lib/redux/__tests__/middleware.test.ts`.
+
+### Follow-ups
+- skill-application-ft (pinned `^0.1.47`) already avoids the logger via its own
+  `src/lib/appStore.ts` (`makeReduxStore()` in production). It can drop that
+  once it upgrades to a release with this fix.
+- Other apps on `reduxStore` stop logging only after they upgrade.
+
 ## 2026-11-18 - Calendar arrows submitted the surrounding form: FIXED (0.6.1)
 
 ### Report
