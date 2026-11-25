@@ -23,7 +23,7 @@ name test fails on the old code).
 - Any other helper that builds HTML from a caller's string needs the same
   treatment (`openConfirmModal` already uses `textContent`).
 
-## 2026-11-25 - redux-logger printed every action in production: FIXED (0.6.3)
+## 2026-11-25 - redux-logger printed every action in production: FIXED (0.6.2)
 
 ### Report
 skill-application-ft production: Sentry breadcrumbs (SKILLSAPP-19N) showed
