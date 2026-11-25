@@ -1,4 +1,29 @@
-## 2026-11-25 - redux-logger printed every action in production: FIXED (unreleased)
+## 2026-11-25 - openConfirmDelete put the item name into HTML unescaped: FIXED (0.6.3)
+
+### Report
+Leadboard security review of team join requests: the Decline action passed the
+requester's self-typed name to `openConfirmDelete`.
+
+### Finding
+`src/components/lib/modals/openConfirmDelete.ts` builds the dialog as an HTML
+string (`modalContainer.innerHTML`) and dropped `message` into it twice. A name
+like `<img src=x onerror=...>` ran script in the admin's session when they
+opened the dialog. Leadboard passes names other people typed: contacts from
+public web forms (`LeadActionHandlers`, `GroupMembersTable`), webhooks, team
+invites. The toast is safe (it uses `textContent`).
+
+### Fix
+`escapeHtml()` (exported) escapes & < > " '; the template uses the escaped
+text, the typed confirmation still compares the raw value. Test:
+`src/components/lib/modals/__tests__/openConfirmDelete.test.ts` (the hostile
+name test fails on the old code).
+
+### Follow-ups
+- Apps are protected only after they upgrade to the release with this fix.
+- Any other helper that builds HTML from a caller's string needs the same
+  treatment (`openConfirmModal` already uses `textContent`).
+
+## 2026-11-25 - redux-logger printed every action in production: FIXED (0.6.3)
 
 ### Report
 skill-application-ft production: Sentry breadcrumbs (SKILLSAPP-19N) showed
